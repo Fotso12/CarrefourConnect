@@ -76,6 +76,11 @@
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-spatial</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.locationtech.jts</groupId>
+			<artifactId>jts-core</artifactId>
+			<version>1.19.0</version>
+		</dependency>
 		<!-- Pour le mapping DTO <-> Entity (futur) -->
 		<dependency>
 			<groupId>org.mapstruct</groupId>
