@@ -50,4 +50,7 @@ public class Offre {
     @Enumerated(EnumType.STRING)
     @Column(length = 32, nullable = false)
     private StatutOffre statut;
+
+    @Column(length = 64, unique = true)
+    private String reference;
 }

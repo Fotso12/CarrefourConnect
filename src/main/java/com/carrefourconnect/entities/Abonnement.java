@@ -42,4 +42,7 @@ public class Abonnement {
     @Enumerated(EnumType.STRING)
     @Column(length = 32, nullable = false)
     private StatutAbonnement statut;
+
+    @Column(length = 64, unique = true)
+    private String reference;
 }

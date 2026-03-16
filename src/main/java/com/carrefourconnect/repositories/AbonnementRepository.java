@@ -11,4 +11,5 @@ import java.util.UUID;
 @Repository
 public interface AbonnementRepository extends JpaRepository<Abonnement, UUID> {
     List<Abonnement> findByStatut(StatutAbonnement statut);
+    boolean existsByReference(String reference);
 }

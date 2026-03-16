@@ -13,6 +13,7 @@ import java.util.UUID;
 public interface OffreRepository extends JpaRepository<Offre, UUID> {
     List<Offre> findByCommerce_Idcommerce(UUID idCommerce);
     List<Offre> findByStatut(StatutOffre statut);
+    boolean existsByReference(String reference);
     
     @org.springframework.data.jpa.repository.Query("SELECT o FROM Offre o WHERE o.dateDebut <= CURRENT_TIMESTAMP AND o.dateFin >= CURRENT_TIMESTAMP AND o.statut = 'ACTIVE'")
     List<Offre> findActiveOffres();

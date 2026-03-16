@@ -72,4 +72,7 @@ public class Commerce {
 
     @ManyToMany(mappedBy = "favoris", fetch = FetchType.LAZY)
     private Set<Utilisateur> utilisateursFavoris = new HashSet<>();
+
+    @Column(length = 64, unique = true)
+    private String reference;
 }
