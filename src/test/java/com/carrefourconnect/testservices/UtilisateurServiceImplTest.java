@@ -1,5 +1,6 @@
 package com.carrefourconnect.testservices;
 
+import com.carrefourconnect.dtos.CommercantDTO;
 import com.carrefourconnect.dtos.UtilisateurDTO;
 import com.carrefourconnect.dtos.VisiteurDTO;
 import com.carrefourconnect.entities.Commerce;
