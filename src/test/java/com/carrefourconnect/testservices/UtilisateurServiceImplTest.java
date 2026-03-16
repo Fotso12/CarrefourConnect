@@ -89,8 +89,23 @@ class UtilisateurServiceImplTest {
         
         when(visiteurMapper.toEntity(any())).thenReturn(visiteurEntity);
         when(visiteurRepository.save(any())).thenReturn(visiteurEntity);
-        when(visiteurMapper.toDto(any())).thenReturn(new UtilisateurDTO());
+        when(visiteurMapper.toDto(any())).thenReturn(new VisiteurDTO());
         
         assertNotNull(service.registerVisiteur(visiteurDto));
+    }
+
+    @Test
+    void testRegisterCommercant() {
+        CommercantDTO commercantDto = new CommercantDTO();
+        commercantDto.setEmail("test@ex.com");
+        commercantDto.setNumeroRegistreCommerce("RC123");
+
+        com.carrefourconnect.entities.Commercant entity = new com.carrefourconnect.entities.Commercant();
+        
+        when(commercantMapper.toEntity(any())).thenReturn(entity);
+        when(commercantRepository.save(any())).thenReturn(entity);
+        when(commercantMapper.toDto(any())).thenReturn(new CommercantDTO());
+        
+        assertNotNull(service.registerCommercant(commercantDto));
     }
 }
