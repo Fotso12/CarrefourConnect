@@ -1,0 +1,20 @@
+package com.carrefourconnect.services.interfaces;
+
+import com.carrefourconnect.dtos.CommerceDTO;
+import com.carrefourconnect.utils.enums.StatutCommerce;
+import java.util.List;
+import java.util.UUID;
+
+public interface CommerceService {
+    CommerceDTO findById(UUID id);
+    List<CommerceDTO> findAll();
+    CommerceDTO save(CommerceDTO dto);
+    CommerceDTO update(UUID id, CommerceDTO dto);
+    void delete(UUID id);
+    
+    // Méthodes avancées
+    List<CommerceDTO> findByCategorie(UUID categorieId);
+    List<CommerceDTO> findByCommercant(UUID commercantId);
+    List<CommerceDTO> searchByName(String name);
+    List<CommerceDTO> findByStatut(StatutCommerce statut);
+}

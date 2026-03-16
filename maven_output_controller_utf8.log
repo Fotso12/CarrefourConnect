@@ -1,0 +1,110 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------< com.carrefourconnect:carrefourconnect >----------------
+[INFO] Building carrefourconnect 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ carrefourconnect ---
+[INFO] Deleting C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ carrefourconnect ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.14.1:compile (default-compile) @ carrefourconnect ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 81 source files with javac [debug parameters release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[WARNING] COMPILATION WARNING : 
+[INFO] -------------------------------------------------------------
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/entities/Commerce.java:[68,18] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/entities/Commerce.java:[74,30] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/entities/Abonnement.java:[40,24] @Builder will ignore the initializing expression entirely. If you want the initializing expression to serve as default, add @Builder.Default. If it is not supposed to be settable during building, make the field final.
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/mappers/CommercantMapper.java:[14,16] Unmapped target properties: "password, favoris".
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/mappers/CommerceMapper.java:[18,14] Unmapped target property: "utilisateursFavoris".
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/mappers/VisiteurMapper.java:[14,14] Unmapped target properties: "password, favoris".
+[WARNING] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/mappers/AdministrateurMapper.java:[14,20] Unmapped target properties: "password, favoris".
+[INFO] 7 warnings 
+[INFO] -------------------------------------------------------------
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[9,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[10,10] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[11,25] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[11,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[12,36] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[12,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[16,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[22,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[23,5] cannot find symbol
+  symbol:   class UtilisateurDTO
+  location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/repositories/AvisRepository.java:[13,41] cannot find symbol
+  symbol: class JpaRepository
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/repositories/AvisRepository.java:[12,2] cannot find symbol
+  symbol: class Repository
+[INFO] 11 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  23.476 s
+[INFO] Finished at: 2026-03-16T22:11:08+01:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.1:compile (default-compile) on project carrefourconnect: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[9,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[10,10] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[11,25] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[11,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[12,36] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[12,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[16,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[22,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/services/interfaces/UtilisateurService.java:[23,5] cannot find symbol
+[ERROR]   symbol:   class UtilisateurDTO
+[ERROR]   location: interface com.carrefourconnect.services.interfaces.UtilisateurService
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/repositories/AvisRepository.java:[13,41] cannot find symbol
+[ERROR]   symbol: class JpaRepository
+[ERROR] /C:/Users/Darryl/Desktop/ProjetTutore/carrefourconnect/src/main/java/com/carrefourconnect/repositories/AvisRepository.java:[12,2] cannot find symbol
+[ERROR]   symbol: class Repository
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
