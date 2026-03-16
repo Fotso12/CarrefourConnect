@@ -7,6 +7,7 @@ import com.carrefourconnect.repositories.PaiementRepository;
 import com.carrefourconnect.services.interfaces.PaiementService;
 import com.carrefourconnect.utils.enums.StatutPaiement;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class PaiementServiceImpl implements PaiementService {
 
     private final PaiementRepository repository;
@@ -24,6 +26,7 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public PaiementDTO findById(UUID id) {
+        log.debug("Récupération paiement ID: {}", id);
         return repository.findById(id)
                 .map(mapper::toDto)
                 .orElse(null);
@@ -31,6 +34,7 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public List<PaiementDTO> findAll() {
+        log.debug("Récupération de tous les paiements");
         return repository.findAll().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
@@ -38,28 +42,35 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public PaiementDTO save(PaiementDTO dto) {
+        log.info("Enregistrement opération de paiement: {}", dto.getReference());
         Paiement entity = mapper.toEntity(dto);
         return mapper.toDto(repository.save(entity));
     }
 
     @Override
     public PaiementDTO update(UUID id, PaiementDTO dto) {
+        log.info("Mise à jour paiement ID: {}", id);
         return repository.findById(id).map(existing -> {
             existing.setMontant(dto.getMontant());
             existing.setModePaiement(dto.getModePaiement());
             existing.setStatut(dto.getStatut());
             existing.setReference(dto.getReference());
             return mapper.toDto(repository.save(existing));
-        }).orElse(null);
+        }).orElseGet(() -> {
+            log.error("Paiement non trouvé pour mise à jour: {}", id);
+            return null;
+        });
     }
 
     @Override
     public void delete(UUID id) {
+        log.info("Suppression paiement ID: {}", id);
         repository.deleteById(id);
     }
 
     @Override
     public List<PaiementDTO> findByAbonnement(UUID abonnementId) {
+        log.debug("Recherche paiements abonnement ID: {}", abonnementId);
         return repository.findByAbonnement_Idabonnement(abonnementId).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
@@ -67,6 +78,7 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public PaiementDTO findByReference(String reference) {
+        log.debug("Recherche paiement référence: {}", reference);
         return repository.findByReference(reference)
                 .map(mapper::toDto)
                 .orElse(null);
@@ -74,6 +86,7 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public PaiementDTO findByNumeroPaiement(String numeroPaiement) {
+        log.debug("Recherche paiement numéro: {}", numeroPaiement);
         return repository.findByNumeroPaiement(numeroPaiement)
                 .map(mapper::toDto)
                 .orElse(null);
@@ -81,6 +94,7 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public List<PaiementDTO> findByStatut(StatutPaiement statut) {
+        log.debug("Filtrage paiements statut: {}", statut);
         return repository.findByStatut(statut).stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());

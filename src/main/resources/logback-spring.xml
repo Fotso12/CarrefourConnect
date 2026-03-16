@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Définition du chemin des logs -->
+    <property name="LOGS" value="./logs" />
+
+    <!-- Configuration de l'affichage sur la console -->
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <!-- Configuration du fichier avec rotation journalière -->
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/carrefourconnect.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Archivage journalier avec compression -->
+            <fileNamePattern>${LOGS}/archived/carrefourconnect-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- Garder 30 jours d'historique -->
+            <maxHistory>30</maxHistory>
+            <!-- Limite totale de taille des archives -->
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Niveau de log pour l'application -->
+    <root level="INFO">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+    </root>
+
+    <!-- Log spécifique pour le package com.carrefourconnect -->
+    <logger name="com.carrefourconnect" level="DEBUG" additivity="false">
+        <appender-ref ref="RollingFile" />
+        <appender-ref ref="Console" />
+    </logger>
+
+</configuration>

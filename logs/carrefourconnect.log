@@ -1,0 +1,670 @@
+2026-03-16 22:34:49 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:34:49 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:34:49 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:34:50 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:34:50 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:34:50 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:34:50 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:34:50 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:34:50 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:34:50 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1532 ms
+2026-03-16 22:34:50 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:34:50 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:34:50 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:34:50 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-17 - Starting...
+2026-03-16 22:34:50 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-17 - Added connection org.postgresql.jdbc.PgConnection@58df5f59
+2026-03-16 22:34:50 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-17 - Start completed.
+2026-03-16 22:34:50 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:34:50 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-17)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:34:50 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:34:50 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:34:50 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:34:50 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:34:51 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:34:51 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:34:51 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 22:34:51 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 22:34:51 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 22:34:51 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 22:34:51 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 22:34:51 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 3.153 seconds (process running for 3428.722)
+2026-03-16 22:34:51 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 22:34:59 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 7 class path changes (7 additions, 0 deletions, 0 modifications)
+2026-03-16 22:34:59 [Thread-83] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 22:34:59 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 22:34:59 [Thread-83] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:34:59 [Thread-83] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-17 - Shutdown initiated...
+2026-03-16 22:34:59 [Thread-83] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-17 - Shutdown completed.
+2026-03-16 22:34:59 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:34:59 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:34:59 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:35:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:35:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 3 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:35:00 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:35:00 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:35:00 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:35:00 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:35:00 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 772 ms
+2026-03-16 22:35:00 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:35:00 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:35:00 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:35:00 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-18 - Starting...
+2026-03-16 22:35:01 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-18 - Added connection org.postgresql.jdbc.PgConnection@799d9402
+2026-03-16 22:35:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-18 - Start completed.
+2026-03-16 22:35:01 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:35:01 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-18)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:35:01 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:35:01 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:35:01 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:35:01 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:35:01 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:35:01 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:35:01 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 22:35:01 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:35:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-18 - Shutdown initiated...
+2026-03-16 22:35:01 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-18 - Shutdown completed.
+2026-03-16 22:35:01 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 22:35:01 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 22:35:01 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.carrefourconnect.controllers.AbonnementController required a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' in your configuration.
+
+2026-03-16 22:40:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:40:05 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:40:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:40:06 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:40:06 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:40:06 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:40:06 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:40:06 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:40:06 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:40:06 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1378 ms
+2026-03-16 22:40:06 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:40:06 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:40:06 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:40:06 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-19 - Starting...
+2026-03-16 22:40:07 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-19 - Added connection org.postgresql.jdbc.PgConnection@195a320d
+2026-03-16 22:40:07 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-19 - Start completed.
+2026-03-16 22:40:07 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:40:07 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-19)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:40:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:07 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:40:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:07 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:40:07 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:40:07 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 22:40:07 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 22:40:07 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 22:40:08 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 22:40:08 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 22:40:08 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 3.365 seconds (process running for 3745.13)
+2026-03-16 22:40:08 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 22:40:14 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 7 class path changes (7 additions, 0 deletions, 0 modifications)
+2026-03-16 22:40:14 [Thread-88] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 22:40:14 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 22:40:14 [Thread-88] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:40:14 [Thread-88] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-19 - Shutdown initiated...
+2026-03-16 22:40:14 [Thread-88] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-19 - Shutdown completed.
+2026-03-16 22:40:15 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:40:15 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:40:15 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 2 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:40:15 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:40:15 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:40:15 [restartedMain] INFO  o.a.c.c.C.[Tomcat-1].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 627 ms
+2026-03-16 22:40:15 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:40:15 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:40:15 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:40:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-20 - Starting...
+2026-03-16 22:40:15 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-20 - Added connection org.postgresql.jdbc.PgConnection@cb61e7b
+2026-03-16 22:40:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-20 - Start completed.
+2026-03-16 22:40:15 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:40:15 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-20)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:40:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:40:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:40:15 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:40:15 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:40:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-20 - Shutdown initiated...
+2026-03-16 22:40:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-20 - Shutdown completed.
+2026-03-16 22:40:15 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 22:40:15 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 22:40:15 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.carrefourconnect.controllers.AbonnementController required a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' in your configuration.
+
+2026-03-16 22:41:54 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:41:54 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:41:54 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:41:54 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:41:54 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 0 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:41:55 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:41:55 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:41:55 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:41:55 [restartedMain] INFO  o.a.c.c.C.[Tomcat-2].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:41:55 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1195 ms
+2026-03-16 22:41:55 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:41:55 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:41:55 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:41:55 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-21 - Starting...
+2026-03-16 22:41:55 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-21 - Added connection org.postgresql.jdbc.PgConnection@776f5a49
+2026-03-16 22:41:55 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-21 - Start completed.
+2026-03-16 22:41:55 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:41:55 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-21)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:41:55 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:41:55 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:41:55 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:41:55 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:41:55 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:41:55 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:41:56 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 22:41:56 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 22:41:56 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 22:41:56 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 22:41:56 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 22:41:56 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 2.937 seconds (process running for 3853.836)
+2026-03-16 22:41:56 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 22:42:04 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 12 class path changes (12 additions, 0 deletions, 0 modifications)
+2026-03-16 22:42:04 [Thread-97] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 22:42:05 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 22:42:05 [Thread-97] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:42:05 [Thread-97] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-21 - Shutdown initiated...
+2026-03-16 22:42:05 [Thread-97] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-21 - Shutdown completed.
+2026-03-16 22:42:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:42:05 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:42:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:42:05 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:42:05 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:42:05 [restartedMain] INFO  o.a.c.c.C.[Tomcat-2].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 551 ms
+2026-03-16 22:42:05 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:42:05 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:42:05 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:42:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-22 - Starting...
+2026-03-16 22:42:05 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-22 - Added connection org.postgresql.jdbc.PgConnection@5e027298
+2026-03-16 22:42:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-22 - Start completed.
+2026-03-16 22:42:05 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:42:05 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-22)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:42:05 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:42:05 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:42:05 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:42:05 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:42:05 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: No qualifying bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:42:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-22 - Shutdown initiated...
+2026-03-16 22:42:05 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-22 - Shutdown completed.
+2026-03-16 22:42:05 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 22:42:05 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 22:42:05 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 0 of constructor in com.carrefourconnect.controllers.AbonnementController required a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.services.interfaces.AbonnementService' in your configuration.
+
+2026-03-16 22:45:38 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:45:38 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:45:38 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:45:39 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:45:39 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 1 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:45:40 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:45:40 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:45:40 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:45:40 [restartedMain] INFO  o.a.c.c.C.[Tomcat-3].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:45:40 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1353 ms
+2026-03-16 22:45:40 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:45:40 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:45:40 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:45:40 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-23 - Starting...
+2026-03-16 22:45:40 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-23 - Added connection org.postgresql.jdbc.PgConnection@4ee4e33b
+2026-03-16 22:45:40 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-23 - Start completed.
+2026-03-16 22:45:40 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:45:40 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-23)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:45:40 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:40 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:45:40 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:40 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:40 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:45:40 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:45:41 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 22:45:41 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 22:45:41 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 22:45:41 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 22:45:41 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 22:45:41 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 2.812 seconds (process running for 4078.493)
+2026-03-16 22:45:41 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 22:45:50 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 102 class path changes (102 additions, 0 deletions, 0 modifications)
+2026-03-16 22:45:50 [Thread-106] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 22:45:50 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 22:45:50 [Thread-106] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:45:50 [Thread-106] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-23 - Shutdown initiated...
+2026-03-16 22:45:50 [Thread-106] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-23 - Shutdown completed.
+2026-03-16 22:45:50 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:45:50 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:45:50 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:45:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:45:51 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 65 ms. Found 13 JPA repository interfaces.
+2026-03-16 22:45:51 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:45:51 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:45:51 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:45:51 [restartedMain] INFO  o.a.c.c.C.[Tomcat-3].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:45:51 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 890 ms
+2026-03-16 22:45:51 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:45:51 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:45:51 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:45:51 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-24 - Starting...
+2026-03-16 22:45:51 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-24 - Added connection org.postgresql.jdbc.PgConnection@1ece0ce
+2026-03-16 22:45:51 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-24 - Start completed.
+2026-03-16 22:45:51 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:45:51 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-24)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:45:51 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:51 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:45:51 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:51 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:45:52 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:45:52 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:45:52 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'abonnementServiceImpl' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\services\implementations\AbonnementServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'com.carrefourconnect.mappers.AbonnementMapper' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 22:45:52 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:45:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-24 - Shutdown initiated...
+2026-03-16 22:45:52 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-24 - Shutdown completed.
+2026-03-16 22:45:52 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 22:45:52 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 22:45:52 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in com.carrefourconnect.services.implementations.AbonnementServiceImpl required a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' in your configuration.
+
+2026-03-16 22:56:28 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:56:28 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:56:28 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:56:29 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:56:29 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:56:29 [restartedMain] INFO  o.a.c.c.C.[Tomcat-4].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1492 ms
+2026-03-16 22:56:29 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:56:29 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:56:29 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:56:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-25 - Starting...
+2026-03-16 22:56:29 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-25 - Added connection org.postgresql.jdbc.PgConnection@61e552db
+2026-03-16 22:56:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-25 - Start completed.
+2026-03-16 22:56:29 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:56:29 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-25)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:56:29 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:56:29 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:29 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:29 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:56:29 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:56:30 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 22:56:30 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 22:56:30 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 22:56:30 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 22:56:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 22:56:30 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 2.587 seconds (process running for 4727.538)
+2026-03-16 22:56:30 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 22:56:43 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 102 class path changes (102 additions, 0 deletions, 0 modifications)
+2026-03-16 22:56:43 [Thread-115] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 22:56:44 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 22:56:44 [Thread-115] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:56:44 [Thread-115] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-25 - Shutdown initiated...
+2026-03-16 22:56:44 [Thread-115] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-25 - Shutdown completed.
+2026-03-16 22:56:44 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 22:56:44 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 22:56:44 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 22:56:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 22:56:45 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 61 ms. Found 13 JPA repository interfaces.
+2026-03-16 22:56:45 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 22:56:45 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 22:56:45 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 22:56:45 [restartedMain] INFO  o.a.c.c.C.[Tomcat-4].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 22:56:45 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1005 ms
+2026-03-16 22:56:45 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 22:56:45 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 22:56:45 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 22:56:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-26 - Starting...
+2026-03-16 22:56:45 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-26 - Added connection org.postgresql.jdbc.PgConnection@155c8e55
+2026-03-16 22:56:45 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-26 - Start completed.
+2026-03-16 22:56:45 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 22:56:45 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-26)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 22:56:45 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:45 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 22:56:45 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:45 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 22:56:46 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 22:56:46 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:56:46 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'abonnementServiceImpl' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\services\implementations\AbonnementServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'com.carrefourconnect.mappers.AbonnementMapper' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 22:56:46 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 22:56:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-26 - Shutdown initiated...
+2026-03-16 22:56:46 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-26 - Shutdown completed.
+2026-03-16 22:56:46 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 22:56:46 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 22:56:46 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in com.carrefourconnect.services.implementations.AbonnementServiceImpl required a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' in your configuration.
+
+2026-03-16 23:00:13 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 23:00:13 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 23:00:13 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 23:00:14 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 23:00:14 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 23:00:14 [restartedMain] INFO  o.a.c.c.C.[Tomcat-5].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1454 ms
+2026-03-16 23:00:14 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 23:00:14 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 23:00:14 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 23:00:14 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-27 - Starting...
+2026-03-16 23:00:14 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-27 - Added connection org.postgresql.jdbc.PgConnection@1e64dabd
+2026-03-16 23:00:14 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-27 - Start completed.
+2026-03-16 23:00:14 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 23:00:14 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-27)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 23:00:14 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 23:00:14 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:14 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:14 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 23:00:14 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:00:15 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 23:00:15 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 23:00:15 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 23:00:15 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 23:00:15 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 23:00:15 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 2.652 seconds (process running for 4952.575)
+2026-03-16 23:00:15 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 23:00:26 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 102 class path changes (102 additions, 0 deletions, 0 modifications)
+2026-03-16 23:00:26 [Thread-124] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 23:00:27 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 23:00:27 [Thread-124] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:00:27 [Thread-124] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-27 - Shutdown initiated...
+2026-03-16 23:00:27 [Thread-124] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-27 - Shutdown completed.
+2026-03-16 23:00:27 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 23:00:27 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 23:00:27 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 23:00:28 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 23:00:28 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 72 ms. Found 13 JPA repository interfaces.
+2026-03-16 23:00:28 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 23:00:28 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 23:00:28 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 23:00:28 [restartedMain] INFO  o.a.c.c.C.[Tomcat-5].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 23:00:28 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 845 ms
+2026-03-16 23:00:28 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 23:00:28 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 23:00:28 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 23:00:28 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-28 - Starting...
+2026-03-16 23:00:28 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-28 - Added connection org.postgresql.jdbc.PgConnection@54fa0e87
+2026-03-16 23:00:28 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-28 - Start completed.
+2026-03-16 23:00:28 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 23:00:28 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-28)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 23:00:28 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:28 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 23:00:28 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:28 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:00:28 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 23:00:29 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:00:29 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'abonnementController' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\controllers\AbonnementController.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'abonnementServiceImpl' defined in file [C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes\com\carrefourconnect\services\implementations\AbonnementServiceImpl.class]: Unsatisfied dependency expressed through constructor parameter 1: No qualifying bean of type 'com.carrefourconnect.mappers.AbonnementMapper' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {}
+2026-03-16 23:00:29 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:00:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-28 - Shutdown initiated...
+2026-03-16 23:00:29 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-28 - Shutdown completed.
+2026-03-16 23:00:29 [restartedMain] INFO  o.a.catalina.core.StandardService - Stopping service [Tomcat]
+2026-03-16 23:00:29 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-03-16 23:00:29 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Parameter 1 of constructor in com.carrefourconnect.services.implementations.AbonnementServiceImpl required a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' that could not be found.
+
+
+Action:
+
+Consider defining a bean of type 'com.carrefourconnect.mappers.AbonnementMapper' in your configuration.
+
+2026-03-16 23:09:23 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 23:09:23 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 23:09:23 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 23:09:26 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 23:09:26 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 32 ms. Found 0 JPA repository interfaces.
+2026-03-16 23:09:26 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 23:09:26 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 23:09:26 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 23:09:27 [restartedMain] INFO  o.a.c.c.C.[Tomcat-6].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 23:09:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3701 ms
+2026-03-16 23:09:27 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 23:09:27 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 23:09:27 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 23:09:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-29 - Starting...
+2026-03-16 23:09:27 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-29 - Added connection org.postgresql.jdbc.PgConnection@4b69e7ec
+2026-03-16 23:09:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-29 - Start completed.
+2026-03-16 23:09:27 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 23:09:27 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-29)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 23:09:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 23:09:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:27 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 23:09:27 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:09:28 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 23:09:28 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 23:09:29 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 23:09:29 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 23:09:29 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 23:09:29 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 6.3 seconds (process running for 5506.513)
+2026-03-16 23:09:29 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-16 23:09:50 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 118 class path changes (118 additions, 0 deletions, 0 modifications)
+2026-03-16 23:09:50 [Thread-133] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-16 23:09:51 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-16 23:09:51 [Thread-133] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:09:51 [Thread-133] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-29 - Shutdown initiated...
+2026-03-16 23:09:51 [Thread-133] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-29 - Shutdown completed.
+2026-03-16 23:09:52 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 7128 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-16 23:09:52 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.5.12-SNAPSHOT, Spring v6.2.17
+2026-03-16 23:09:52 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-16 23:09:53 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-16 23:09:53 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 425 ms. Found 13 JPA repository interfaces.
+2026-03-16 23:09:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-16 23:09:54 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-16 23:09:54 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.52]
+2026-03-16 23:09:54 [restartedMain] INFO  o.a.c.c.C.[Tomcat-6].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-16 23:09:54 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2104 ms
+2026-03-16 23:09:54 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-16 23:09:54 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-16 23:09:54 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-16 23:09:54 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-30 - Starting...
+2026-03-16 23:09:54 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-30 - Added connection org.postgresql.jdbc.PgConnection@53a6f5e2
+2026-03-16 23:09:54 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-30 - Start completed.
+2026-03-16 23:09:54 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-16 23:09:54 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-30)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-16 23:09:54 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:54 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-16 23:09:54 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:54 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-16 23:09:54 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-16 23:09:55 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-16 23:09:55 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-16 23:09:56 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-16 23:09:56 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-16 23:09:56 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-16 23:09:56 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-16 23:09:56 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 4.578 seconds (process running for 5533.543)
+2026-03-16 23:09:56 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged

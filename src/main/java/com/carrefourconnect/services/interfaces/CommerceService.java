@@ -17,4 +17,5 @@ public interface CommerceService {
     List<CommerceDTO> findByCommercant(UUID commercantId);
     List<CommerceDTO> searchByName(String name);
     List<CommerceDTO> findByStatut(StatutCommerce statut);
+    List<CommerceDTO> findNearby(double latitude, double longitude, double distanceInKm);
 }
