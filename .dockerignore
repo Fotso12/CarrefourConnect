@@ -1,0 +1,13 @@
+target/
+.mvn/
+mvnw
+mvnw.cmd
+.git/
+.gitignore
+*.md
+.gemini/
+Dockerfile
+.dockerignore
+logs/
+bin/
+obj/
