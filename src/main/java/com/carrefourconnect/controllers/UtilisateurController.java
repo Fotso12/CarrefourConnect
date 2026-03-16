@@ -11,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
@@ -24,47 +21,75 @@ public class UtilisateurController {
 
     @GetMapping
     @Operation(summary = "Liste tous les utilisateurs")
-    public List<UtilisateurDTO> getAll() {
-        return service.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(service.findAll());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un utilisateur par son ID")
-    public ResponseEntity<UtilisateurDTO> getById(@PathVariable UUID id) {
-        UtilisateurDTO dto = service.findById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+        try {
+            UtilisateurDTO dto = service.findById(id);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/inscription/visiteur")
     @Operation(summary = "Inscrit un nouveau visiteur")
-    public ResponseEntity<UtilisateurDTO> registerVisiteur(@RequestBody VisiteurDTO dto) {
-        return new ResponseEntity<>(service.registerVisiteur(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> registerVisiteur(@RequestBody VisiteurDTO dto) {
+        try {
+            return new ResponseEntity<>(service.registerVisiteur(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/inscription/commercant")
     @Operation(summary = "Inscrit un nouveau commerçant")
-    public ResponseEntity<UtilisateurDTO> registerCommercant(@RequestBody CommercantDTO dto) {
-        return new ResponseEntity<>(service.registerCommercant(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> registerCommercant(@RequestBody CommercantDTO dto) {
+        try {
+            return new ResponseEntity<>(service.registerCommercant(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un utilisateur")
-    public ResponseEntity<UtilisateurDTO> update(@PathVariable UUID id, @RequestBody UtilisateurDTO dto) {
-        UtilisateurDTO updated = service.update(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody UtilisateurDTO dto) {
+        try {
+            UtilisateurDTO updated = service.update(id, dto);
+            return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un utilisateur")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/email/{email}")
     @Operation(summary = "Recherche un utilisateur par email")
-    public ResponseEntity<UtilisateurDTO> getByEmail(@PathVariable String email) {
-        UtilisateurDTO dto = service.findByEmail(email);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+        try {
+            UtilisateurDTO dto = service.findByEmail(email);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

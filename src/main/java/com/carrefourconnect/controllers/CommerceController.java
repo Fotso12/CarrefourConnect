@@ -10,9 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/commerces")
 @RequiredArgsConstructor
@@ -23,58 +20,94 @@ public class CommerceController {
 
     @GetMapping
     @Operation(summary = "Liste tous les commerces")
-    public List<CommerceDTO> getAll() {
-        return service.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(service.findAll());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un commerce par son ID")
-    public ResponseEntity<CommerceDTO> getById(@PathVariable UUID id) {
-        CommerceDTO dto = service.findById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+        try {
+            CommerceDTO dto = service.findById(id);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
     @Operation(summary = "Crée un nouveau commerce")
-    public ResponseEntity<CommerceDTO> create(@RequestBody CommerceDTO dto) {
-        return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody CommerceDTO dto) {
+        try {
+            return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un commerce")
-    public ResponseEntity<CommerceDTO> update(@PathVariable UUID id, @RequestBody CommerceDTO dto) {
-        CommerceDTO updated = service.update(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody CommerceDTO dto) {
+        try {
+            CommerceDTO updated = service.update(id, dto);
+            return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un commerce")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/categorie/{categorieId}")
     @Operation(summary = "Liste les commerces par catégorie")
-    public List<CommerceDTO> getByCategorie(@PathVariable UUID categorieId) {
-        return service.findByCategorie(categorieId);
+    public ResponseEntity<?> getByCategorie(@PathVariable java.util.UUID categorieId) {
+        try {
+            return ResponseEntity.ok(service.findByCategorie(categorieId));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/commercant/{commercantId}")
     @Operation(summary = "Liste les commerces d'un commerçant")
-    public List<CommerceDTO> getByCommercant(@PathVariable UUID commercantId) {
-        return service.findByCommercant(commercantId);
+    public ResponseEntity<?> getByCommercant(@PathVariable java.util.UUID commercantId) {
+        try {
+            return ResponseEntity.ok(service.findByCommercant(commercantId));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/recherche")
     @Operation(summary = "Recherche des commerces par nom")
-    public List<CommerceDTO> searchByName(@RequestParam String nom) {
-        return service.searchByName(nom);
+    public ResponseEntity<?> searchByName(@RequestParam String nom) {
+        try {
+            return ResponseEntity.ok(service.searchByName(nom));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les commerces par statut")
-    public List<CommerceDTO> getByStatut(@PathVariable StatutCommerce statut) {
-        return service.findByStatut(statut);
+    public ResponseEntity<?> getByStatut(@PathVariable StatutCommerce statut) {
+        try {
+            return ResponseEntity.ok(service.findByStatut(statut));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

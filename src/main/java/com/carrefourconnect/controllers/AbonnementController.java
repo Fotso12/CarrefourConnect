@@ -10,9 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/abonnements")
 @RequiredArgsConstructor
@@ -23,40 +20,64 @@ public class AbonnementController {
 
     @GetMapping
     @Operation(summary = "Liste tous les abonnements")
-    public List<AbonnementDTO> getAll() {
-        return service.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(service.findAll());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un abonnement par son ID")
-    public ResponseEntity<AbonnementDTO> getById(@PathVariable UUID id) {
-        AbonnementDTO dto = service.findById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+        try {
+            AbonnementDTO dto = service.findById(id);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
     @Operation(summary = "Crée un nouvel abonnement")
-    public ResponseEntity<AbonnementDTO> create(@RequestBody AbonnementDTO dto) {
-        return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody AbonnementDTO dto) {
+        try {
+            return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un abonnement")
-    public ResponseEntity<AbonnementDTO> update(@PathVariable UUID id, @RequestBody AbonnementDTO dto) {
-        AbonnementDTO updated = service.update(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody AbonnementDTO dto) {
+        try {
+            AbonnementDTO updated = service.update(id, dto);
+            return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un abonnement")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les abonnements par statut")
-    public List<AbonnementDTO> getByStatut(@PathVariable StatutAbonnement statut) {
-        return service.findByStatut(statut);
+    public ResponseEntity<?> getByStatut(@PathVariable StatutAbonnement statut) {
+        try {
+            return ResponseEntity.ok(service.findByStatut(statut));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

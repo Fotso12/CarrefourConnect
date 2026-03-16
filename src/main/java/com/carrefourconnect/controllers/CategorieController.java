@@ -9,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -22,41 +19,65 @@ public class CategorieController {
 
     @GetMapping
     @Operation(summary = "Liste toutes les catégories")
-    public List<CategorieDTO> getAll() {
-        return service.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(service.findAll());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une catégorie par son ID")
-    public ResponseEntity<CategorieDTO> getById(@PathVariable UUID id) {
-        CategorieDTO dto = service.findById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+        try {
+            CategorieDTO dto = service.findById(id);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
     @Operation(summary = "Crée une nouvelle catégorie")
-    public ResponseEntity<CategorieDTO> create(@RequestBody CategorieDTO dto) {
-        return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody CategorieDTO dto) {
+        try {
+            return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une catégorie")
-    public ResponseEntity<CategorieDTO> update(@PathVariable UUID id, @RequestBody CategorieDTO dto) {
-        CategorieDTO updated = service.update(id, dto);
-        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody CategorieDTO dto) {
+        try {
+            CategorieDTO updated = service.update(id, dto);
+            return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une catégorie")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/nom/{nom}")
     @Operation(summary = "Recherche une catégorie par son nom")
-    public ResponseEntity<CategorieDTO> getByNom(@PathVariable String nom) {
-        CategorieDTO dto = service.findByNom(nom);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getByNom(@PathVariable String nom) {
+        try {
+            CategorieDTO dto = service.findByNom(nom);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

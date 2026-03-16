@@ -10,9 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/api/avis")
 @RequiredArgsConstructor
@@ -23,45 +20,73 @@ public class AvisController {
 
     @GetMapping
     @Operation(summary = "Liste tous les avis")
-    public List<AvisDTO> getAll() {
-        return service.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.ok(service.findAll());
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un avis par son ID")
-    public ResponseEntity<AvisDTO> getById(@PathVariable UUID id) {
-        AvisDTO dto = service.findById(id);
-        return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+        try {
+            AvisDTO dto = service.findById(id);
+            return dto != null ? ResponseEntity.ok(dto) : ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping
     @Operation(summary = "Publie un nouvel avis")
-    public ResponseEntity<AvisDTO> create(@RequestBody AvisDTO dto) {
-        return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+    public ResponseEntity<?> create(@RequestBody AvisDTO dto) {
+        try {
+            return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un avis")
-    public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les avis d'un commerce")
-    public List<AvisDTO> getByCommerce(@PathVariable UUID commerceId) {
-        return service.findByCommerce(commerceId);
+    public ResponseEntity<?> getByCommerce(@PathVariable java.util.UUID commerceId) {
+        try {
+            return ResponseEntity.ok(service.findByCommerce(commerceId));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/visiteur/{visiteurId}")
     @Operation(summary = "Liste les avis publiés par un visiteur")
-    public List<AvisDTO> getByVisiteur(@PathVariable UUID visiteurId) {
-        return service.findByVisiteur(visiteurId);
+    public ResponseEntity<?> getByVisiteur(@PathVariable java.util.UUID visiteurId) {
+        try {
+            return ResponseEntity.ok(service.findByVisiteur(visiteurId));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les avis par statut")
-    public List<AvisDTO> getByStatut(@PathVariable StatutAvis statut) {
-        return service.findByStatus(statut);
+    public ResponseEntity<?> getByStatut(@PathVariable StatutAvis statut) {
+        try {
+            return ResponseEntity.ok(service.findByStatus(statut));
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
