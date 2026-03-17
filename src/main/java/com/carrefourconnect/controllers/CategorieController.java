@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des catégories de commerces.
+ * Permet de créer, consulter et gérer les types de commerces (Restaurant, Boulangerie, etc.).
+ */
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -21,6 +25,11 @@ public class CategorieController {
 
     private final CategorieService service;
 
+    /**
+     * Retourne la liste de toutes les catégories disponibles.
+     *
+     * @return 200 OK avec la liste des catégories, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste toutes les catégories")
     public ResponseEntity<?> getAll() {
@@ -33,6 +42,12 @@ public class CategorieController {
         }
     }
 
+    /**
+     * Récupère une catégorie par son identifiant unique.
+     *
+     * @param id L'UUID de la catégorie recherchée.
+     * @return 200 OK avec la catégorie, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une catégorie par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -46,6 +61,12 @@ public class CategorieController {
         }
     }
 
+    /**
+     * Crée une nouvelle catégorie de commerce dans le système.
+     *
+     * @param dto Les informations de la catégorie à créer.
+     * @return 201 Created avec la catégorie créée, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Crée une nouvelle catégorie")
     public ResponseEntity<?> save(@RequestBody CategorieDTO dto) {
@@ -58,6 +79,13 @@ public class CategorieController {
         }
     }
 
+    /**
+     * Met à jour une catégorie existante.
+     *
+     * @param id  L'UUID de la catégorie à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec la catégorie modifiée, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une catégorie")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody CategorieDTO dto) {
@@ -71,6 +99,12 @@ public class CategorieController {
         }
     }
 
+    /**
+     * Supprime définitivement une catégorie du système.
+     *
+     * @param id L'UUID de la catégorie à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une catégorie")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -84,6 +118,12 @@ public class CategorieController {
         }
     }
 
+    /**
+     * Recherche les catégories dont le nom correspond au terme fourni.
+     *
+     * @param nom Le terme de recherche sur le nom de la catégorie.
+     * @return 200 OK avec la liste des catégories correspondantes, ou 400 en cas d'erreur.
+     */
     @GetMapping("/recherche")
     @Operation(summary = "Recherche une catégorie par nom")
     public ResponseEntity<?> searchByName(@RequestParam String nom) {

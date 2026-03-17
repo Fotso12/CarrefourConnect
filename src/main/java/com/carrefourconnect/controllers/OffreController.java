@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des offres et promotions.
+ * Permet aux commerçants de publier des offres spéciales associées à leurs commerces.
+ */
 @RestController
 @RequestMapping("/api/offres")
 @RequiredArgsConstructor
@@ -22,6 +26,11 @@ public class OffreController {
 
     private final OffreService service;
 
+    /**
+     * Retourne la liste de toutes les offres du système.
+     *
+     * @return 200 OK avec la liste des offres, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste toutes les offres")
     public ResponseEntity<?> getAll() {
@@ -34,6 +43,12 @@ public class OffreController {
         }
     }
 
+    /**
+     * Récupère une offre spécifique par son identifiant unique.
+     *
+     * @param id L'UUID de l'offre à récupérer.
+     * @return 200 OK avec l'offre, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une offre par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -47,6 +62,12 @@ public class OffreController {
         }
     }
 
+    /**
+     * Crée une nouvelle offre ou promotion pour un commerce.
+     *
+     * @param dto Les informations de l'offre à créer (titre, description, dates, etc.).
+     * @return 201 Created avec l'offre créée, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Crée une nouvelle offre")
     public ResponseEntity<?> save(@RequestBody OffreDTO dto) {
@@ -59,6 +80,13 @@ public class OffreController {
         }
     }
 
+    /**
+     * Met à jour les informations d'une offre existante.
+     *
+     * @param id  L'UUID de l'offre à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec l'offre modifiée, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une offre")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody OffreDTO dto) {
@@ -72,6 +100,12 @@ public class OffreController {
         }
     }
 
+    /**
+     * Supprime définitivement une offre du système.
+     *
+     * @param id L'UUID de l'offre à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une offre")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -85,6 +119,12 @@ public class OffreController {
         }
     }
 
+    /**
+     * Retourne toutes les offres publiées par un commerce donné.
+     *
+     * @param commerceId L'UUID du commerce dont on veut les offres.
+     * @return 200 OK avec la liste des offres du commerce, ou 400 en cas d'erreur.
+     */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les offres d'un commerce")
     public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
@@ -97,6 +137,11 @@ public class OffreController {
         }
     }
 
+    /**
+     * Retourne toutes les offres actuellement actives (non expirées).
+     *
+     * @return 200 OK avec la liste des offres actives, ou 400 en cas d'erreur.
+     */
     @GetMapping("/active")
     @Operation(summary = "Liste toutes les offres actives")
     public ResponseEntity<?> getActiveOffres() {
@@ -109,6 +154,12 @@ public class OffreController {
         }
     }
 
+    /**
+     * Filtre les offres selon leur statut (ACTIVE, EXPIREE, EN_ATTENTE).
+     *
+     * @param statut Le statut à utiliser comme filtre.
+     * @return 200 OK avec la liste des offres filtrées, ou 400 en cas d'erreur.
+     */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les offres par statut")
     public ResponseEntity<?> getByStatut(@PathVariable StatutOffre statut) {

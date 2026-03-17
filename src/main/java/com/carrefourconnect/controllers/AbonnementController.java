@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des abonnements.
+ * Permet de créer, consulter, modifier et filtrer les forfaits des commerçants.
+ */
 @RestController
 @RequestMapping("/api/abonnements")
 @RequiredArgsConstructor
@@ -22,6 +26,11 @@ public class AbonnementController {
 
     private final AbonnementService service;
 
+    /**
+     * Retourne la liste de tous les abonnements enregistrés.
+     *
+     * @return 200 OK avec la liste des abonnements, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste tous les abonnements")
     public ResponseEntity<?> getAll() {
@@ -34,6 +43,12 @@ public class AbonnementController {
         }
     }
 
+    /**
+     * Récupère un abonnement par son identifiant unique.
+     *
+     * @param id L'UUID de l'abonnement recherché.
+     * @return 200 OK avec l'abonnement, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un abonnement par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -47,6 +62,12 @@ public class AbonnementController {
         }
     }
 
+    /**
+     * Crée un nouvel abonnement pour un commerçant.
+     *
+     * @param dto Les informations de l'abonnement à créer.
+     * @return 201 Created avec l'abonnement créé, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Crée un nouvel abonnement")
     public ResponseEntity<?> save(@RequestBody AbonnementDTO dto) {
@@ -59,6 +80,13 @@ public class AbonnementController {
         }
     }
 
+    /**
+     * Met à jour les données d'un abonnement existant.
+     *
+     * @param id  L'UUID de l'abonnement à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec l'abonnement modifié, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un abonnement")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody AbonnementDTO dto) {
@@ -72,6 +100,12 @@ public class AbonnementController {
         }
     }
 
+    /**
+     * Supprime définitivement un abonnement du système.
+     *
+     * @param id L'UUID de l'abonnement à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un abonnement")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -85,6 +119,12 @@ public class AbonnementController {
         }
     }
 
+    /**
+     * Filtre et retourne les abonnements selon leur statut (ACTIF, EXPIRE, etc.).
+     *
+     * @param statut Le statut à utiliser comme filtre.
+     * @return 200 OK avec la liste des abonnements filtrés, ou 400 en cas d'erreur.
+     */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les abonnements par statut")
     public ResponseEntity<?> getByStatut(@PathVariable StatutAbonnement statut) {

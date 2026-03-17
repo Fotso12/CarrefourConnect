@@ -12,6 +12,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Contrôleur REST pour la gestion des utilisateurs.
+ * Expose les endpoints pour l'inscription, la consultation et la gestion des favoris.
+ */
 @RestController
 @RequestMapping("/api/utilisateurs")
 @RequiredArgsConstructor
@@ -21,6 +25,11 @@ public class UtilisateurController {
 
     private final UtilisateurService service;
 
+    /**
+     * Retourne la liste complète de tous les utilisateurs enregistrés.
+     *
+     * @return 200 OK avec la liste des utilisateurs, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste tous les utilisateurs")
     public ResponseEntity<?> getAll() {
@@ -33,6 +42,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Récupère un utilisateur spécifique par son identifiant unique.
+     *
+     * @param id L'UUID de l'utilisateur à récupérer.
+     * @return 200 OK avec l'utilisateur, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un utilisateur par son ID")
     public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
@@ -46,6 +61,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Inscrit un nouveau visiteur dans le système.
+     *
+     * @param dto Les informations du visiteur à inscrire.
+     * @return 201 Created avec le visiteur créé, ou 400 si les données sont invalides.
+     */
     @PostMapping("/inscription/visiteur")
     @Operation(summary = "Inscrit un nouveau visiteur")
     public ResponseEntity<?> registerVisiteur(@RequestBody VisiteurDTO dto) {
@@ -58,6 +79,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Inscrit un nouveau commerçant dans le système.
+     *
+     * @param dto Les informations du commerçant à inscrire.
+     * @return 201 Created avec le commerçant créé, ou 400 si les données sont invalides.
+     */
     @PostMapping("/inscription/commercant")
     @Operation(summary = "Inscrit un nouveau commerçant")
     public ResponseEntity<?> registerCommercant(@RequestBody CommercantDTO dto) {
@@ -70,6 +97,13 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Met à jour les informations d'un utilisateur existant.
+     *
+     * @param id  L'UUID de l'utilisateur à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec l'utilisateur modifié, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un utilisateur")
     public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody UtilisateurDTO dto) {
@@ -83,6 +117,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Supprime définitivement un utilisateur du système.
+     *
+     * @param id L'UUID de l'utilisateur à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un utilisateur")
     public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
@@ -96,6 +136,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Recherche un utilisateur par son adresse email.
+     *
+     * @param email L'email de l'utilisateur à rechercher.
+     * @return 200 OK avec l'utilisateur trouvé, 404 si aucun résultat, ou 400 en cas d'erreur.
+     */
     @GetMapping("/email/{email}")
     @Operation(summary = "Recherche un utilisateur par email")
     public ResponseEntity<?> getByEmail(@PathVariable String email) {
@@ -109,6 +155,13 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Ajoute un commerce à la liste des favoris d'un utilisateur.
+     *
+     * @param userId     L'UUID de l'utilisateur.
+     * @param commerceId L'UUID du commerce à ajouter en favori.
+     * @return 200 OK si l'ajout réussit, ou 400 en cas d'erreur.
+     */
     @PostMapping("/{userId}/favoris/{commerceId}")
     @Operation(summary = "Ajoute un commerce aux favoris de l'utilisateur")
     public ResponseEntity<?> addFavorite(@PathVariable java.util.UUID userId, @PathVariable java.util.UUID commerceId) {
@@ -122,6 +175,13 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Retire un commerce de la liste des favoris d'un utilisateur.
+     *
+     * @param userId     L'UUID de l'utilisateur.
+     * @param commerceId L'UUID du commerce à retirer des favoris.
+     * @return 200 OK si le retrait réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{userId}/favoris/{commerceId}")
     @Operation(summary = "Retire un commerce des favoris de l'utilisateur")
     public ResponseEntity<?> removeFavorite(@PathVariable java.util.UUID userId, @PathVariable java.util.UUID commerceId) {
@@ -135,6 +195,12 @@ public class UtilisateurController {
         }
     }
 
+    /**
+     * Retourne la liste des commerces favoris d'un utilisateur.
+     *
+     * @param userId L'UUID de l'utilisateur dont on veut les favoris.
+     * @return 200 OK avec la liste des IDs de commerces favoris, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{userId}/favoris")
     @Operation(summary = "Liste les IDs des commerces favoris d'un utilisateur")
     public ResponseEntity<?> getFavorites(@PathVariable java.util.UUID userId) {

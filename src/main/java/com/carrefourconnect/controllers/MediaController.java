@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des médias.
+ * Permet d'associer des fichiers (images, vidéos) aux commerces.
+ */
 @RestController
 @RequestMapping("/api/medias")
 @RequiredArgsConstructor
@@ -21,6 +25,11 @@ public class MediaController {
 
     private final MediaService service;
 
+    /**
+     * Retourne la liste de tous les médias enregistrés dans le système.
+     *
+     * @return 200 OK avec la liste des médias, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste tous les médias")
     public ResponseEntity<?> getAll() {
@@ -33,6 +42,12 @@ public class MediaController {
         }
     }
 
+    /**
+     * Récupère un média spécifique par son identifiant unique.
+     *
+     * @param id L'UUID du média à récupérer.
+     * @return 200 OK avec le média, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un média par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -46,6 +61,12 @@ public class MediaController {
         }
     }
 
+    /**
+     * Ajoute un nouveau média et l'associe à un commerce.
+     *
+     * @param dto Les informations du média à ajouter (nom, URL, type, etc.).
+     * @return 201 Created avec le média créé, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Ajoute un nouveau média")
     public ResponseEntity<?> save(@RequestBody MediaDTO dto) {
@@ -58,6 +79,13 @@ public class MediaController {
         }
     }
 
+    /**
+     * Met à jour les informations d'un média existant.
+     *
+     * @param id  L'UUID du média à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec le média modifié, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un média")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody MediaDTO dto) {
@@ -71,6 +99,12 @@ public class MediaController {
         }
     }
 
+    /**
+     * Supprime définitivement un média du système.
+     *
+     * @param id L'UUID du média à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un média")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -84,6 +118,12 @@ public class MediaController {
         }
     }
 
+    /**
+     * Retourne tous les médias associés à un commerce donné.
+     *
+     * @param commerceId L'UUID du commerce dont on veut les médias.
+     * @return 200 OK avec la liste des médias du commerce, ou 400 en cas d'erreur.
+     */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les médias d'un commerce")
     public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {

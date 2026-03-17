@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des avis.
+ * Permet aux visiteurs de soumettre des avis sur les commerces et à l'admin de les modérer.
+ */
 @RestController
 @RequestMapping("/api/avis")
 @RequiredArgsConstructor
@@ -22,6 +26,11 @@ public class AvisController {
 
     private final AvisService service;
 
+    /**
+     * Retourne la liste de tous les avis enregistrés dans le système.
+     *
+     * @return 200 OK avec la liste des avis, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste tous les avis")
     public ResponseEntity<?> getAll() {
@@ -34,6 +43,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Récupère un avis spécifique par son identifiant unique.
+     *
+     * @param id L'UUID de l'avis à récupérer.
+     * @return 200 OK avec l'avis, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un avis par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -47,6 +62,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Enregistre un nouvel avis d'un visiteur pour un commerce.
+     *
+     * @param dto Les informations de l'avis à enregistrer (note, commentaire, etc.).
+     * @return 201 Created avec l'avis enregistré, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Enregistre un nouvel avis")
     public ResponseEntity<?> save(@RequestBody AvisDTO dto) {
@@ -59,6 +80,13 @@ public class AvisController {
         }
     }
 
+    /**
+     * Met à jour un avis existant (ex. lors de la modération par un administrateur).
+     *
+     * @param id  L'UUID de l'avis à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec l'avis modifié, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un avis")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody AvisDTO dto) {
@@ -72,6 +100,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Supprime définitivement un avis du système.
+     *
+     * @param id L'UUID de l'avis à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un avis")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -85,6 +119,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Retourne tous les avis associés à un commerce donné.
+     *
+     * @param commerceId L'UUID du commerce dont on veut consulter les avis.
+     * @return 200 OK avec la liste des avis du commerce, ou 400 en cas d'erreur.
+     */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les avis d'un commerce")
     public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
@@ -97,6 +137,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Retourne tous les avis rédigés par un visiteur donné.
+     *
+     * @param visiteurId L'UUID du visiteur dont on veut consulter les avis.
+     * @return 200 OK avec la liste des avis du visiteur, ou 400 en cas d'erreur.
+     */
     @GetMapping("/visiteur/{visiteurId}")
     @Operation(summary = "Liste les avis d'un visiteur")
     public ResponseEntity<?> getByVisiteur(@PathVariable UUID visiteurId) {
@@ -109,6 +155,12 @@ public class AvisController {
         }
     }
 
+    /**
+     * Filtre les avis selon leur statut de modération (EN_ATTENTE, APPROUVE, REJETE).
+     *
+     * @param status Le statut à utiliser comme filtre.
+     * @return 200 OK avec la liste des avis filtrés, ou 400 en cas d'erreur.
+     */
     @GetMapping("/statut/{status}")
     @Operation(summary = "Filtre les avis par statut")
     public ResponseEntity<?> getByStatus(@PathVariable StatutAvis status) {

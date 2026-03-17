@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+/**
+ * Contrôleur REST pour la gestion des localisations.
+ * Permet d'associer des adresses et coordonnées géographiques aux commerces.
+ */
 @RestController
 @RequestMapping("/api/localisations")
 @RequiredArgsConstructor
@@ -21,6 +25,11 @@ public class LocalisationController {
 
     private final LocalisationService service;
 
+    /**
+     * Retourne la liste de toutes les localisations enregistrées.
+     *
+     * @return 200 OK avec la liste des localisations, ou 400 en cas d'erreur.
+     */
     @GetMapping
     @Operation(summary = "Liste toutes les localisations")
     public ResponseEntity<?> getAll() {
@@ -33,6 +42,12 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Récupère une localisation par son identifiant unique.
+     *
+     * @param id L'UUID de la localisation à récupérer.
+     * @return 200 OK avec la localisation, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une localisation par son ID")
     public ResponseEntity<?> getById(@PathVariable UUID id) {
@@ -46,6 +61,12 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Crée une nouvelle localisation et l'associe à un commerce.
+     *
+     * @param dto Les informations de la localisation à créer (adresse, coordonnées GPS, etc.).
+     * @return 201 Created avec la localisation créée, ou 400 si les données sont invalides.
+     */
     @PostMapping
     @Operation(summary = "Enregistre une nouvelle localisation")
     public ResponseEntity<?> save(@RequestBody LocalisationDTO dto) {
@@ -58,6 +79,13 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Met à jour une localisation existante (ex. changement d'adresse d'un commerce).
+     *
+     * @param id  L'UUID de la localisation à modifier.
+     * @param dto Les nouvelles données à appliquer.
+     * @return 200 OK avec la localisation modifiée, 404 si introuvable, ou 400 en cas d'erreur.
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une localisation")
     public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody LocalisationDTO dto) {
@@ -71,6 +99,12 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Supprime définitivement une localisation du système.
+     *
+     * @param id L'UUID de la localisation à supprimer.
+     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une localisation")
     public ResponseEntity<?> delete(@PathVariable UUID id) {
@@ -84,6 +118,12 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Retourne toutes les localisations associées à un commerce donné.
+     *
+     * @param commerceId L'UUID du commerce dont on veut les localisations.
+     * @return 200 OK avec la liste des localisations du commerce, ou 400 en cas d'erreur.
+     */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les localisations d'un commerce")
     public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
@@ -96,6 +136,12 @@ public class LocalisationController {
         }
     }
 
+    /**
+     * Retourne toutes les localisations situées dans une ville donnée.
+     *
+     * @param ville Le nom de la ville à utiliser comme filtre.
+     * @return 200 OK avec la liste des localisations de la ville, ou 400 en cas d'erreur.
+     */
     @GetMapping("/ville/{ville}")
     @Operation(summary = "Liste les localisations d'une ville")
     public ResponseEntity<?> getByVille(@PathVariable String ville) {
