@@ -51,7 +51,7 @@ public class CommerceController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un commerce par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer le commerce ID: {}", id);
         try {
             CommerceDTO dto = service.findById(id);
@@ -89,7 +89,7 @@ public class CommerceController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un commerce")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody CommerceDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody CommerceDTO dto) {
         log.info("Requête de mise à jour commerce ID: {}", id);
         try {
             CommerceDTO updated = service.update(id, dto);
@@ -108,7 +108,7 @@ public class CommerceController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un commerce")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Requête de suppression commerce ID: {}", id);
         try {
             service.delete(id);
@@ -127,7 +127,7 @@ public class CommerceController {
      */
     @GetMapping("/categorie/{categorieId}")
     @Operation(summary = "Liste les commerces par catégorie")
-    public ResponseEntity<?> getByCategorie(@PathVariable UUID categorieId) {
+    public ResponseEntity<?> getByCategorie(@PathVariable("categorieId") UUID categorieId) {
         log.info("Recherche commerces par catégorie: {}", categorieId);
         try {
             return ResponseEntity.ok(service.findByCategorie(categorieId));
@@ -145,7 +145,7 @@ public class CommerceController {
      */
     @GetMapping("/commercant/{commercantId}")
     @Operation(summary = "Liste les commerces d'un commerçant")
-    public ResponseEntity<?> getByCommercant(@PathVariable UUID commercantId) {
+    public ResponseEntity<?> getByCommercant(@PathVariable("commercantId") UUID commercantId) {
         log.info("Recherche commerces par commerçant: {}", commercantId);
         try {
             return ResponseEntity.ok(service.findByCommercant(commercantId));
@@ -163,7 +163,7 @@ public class CommerceController {
      */
     @GetMapping("/recherche")
     @Operation(summary = "Recherche un commerce par nom")
-    public ResponseEntity<?> searchByName(@RequestParam String nom) {
+    public ResponseEntity<?> searchByName(@RequestParam("nom") String nom) {
         log.info("Recherche commerce par nom: {}", nom);
         try {
             return ResponseEntity.ok(service.searchByName(nom));
@@ -181,7 +181,7 @@ public class CommerceController {
      */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les commerces par statut")
-    public ResponseEntity<?> getByStatut(@PathVariable StatutCommerce statut) {
+    public ResponseEntity<?> getByStatut(@PathVariable("statut") StatutCommerce statut) {
         log.info("Filtrage commerces par statut: {}", statut);
         try {
             return ResponseEntity.ok(service.findByStatut(statut));
@@ -201,7 +201,7 @@ public class CommerceController {
      */
     @GetMapping("/proximite")
     @Operation(summary = "Recherche des commerces par proximité (lat, lon, distance en km)")
-    public ResponseEntity<?> findNearby(@RequestParam double lat, @RequestParam double lon, @RequestParam double distance) {
+    public ResponseEntity<?> findNearby(@RequestParam("lat") double lat, @RequestParam("lon") double lon, @RequestParam("distance") double distance) {
         log.info("Recherche de proximité: lat={}, lon={}, dist={}km", lat, lon, distance);
         try {
             return ResponseEntity.ok(service.findNearby(lat, lon, distance));

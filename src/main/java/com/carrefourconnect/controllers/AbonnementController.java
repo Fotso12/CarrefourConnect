@@ -51,7 +51,7 @@ public class AbonnementController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un abonnement par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer l'abonnement ID: {}", id);
         try {
             AbonnementDTO dto = service.findById(id);
@@ -89,7 +89,7 @@ public class AbonnementController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un abonnement")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody AbonnementDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody AbonnementDTO dto) {
         log.info("Requête de mise à jour d'abonnement ID: {}", id);
         try {
             AbonnementDTO updated = service.update(id, dto);
@@ -108,7 +108,7 @@ public class AbonnementController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un abonnement")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Requête de suppression d'abonnement ID: {}", id);
         try {
             service.delete(id);
@@ -127,7 +127,7 @@ public class AbonnementController {
      */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les abonnements par statut")
-    public ResponseEntity<?> getByStatut(@PathVariable StatutAbonnement statut) {
+    public ResponseEntity<?> getByStatut(@PathVariable("statut") StatutAbonnement statut) {
         log.info("Filtrage des abonnements par statut: {}", statut);
         try {
             return ResponseEntity.ok(service.findByStatut(statut));

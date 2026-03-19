@@ -50,7 +50,7 @@ public class UtilisateurController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un utilisateur par son ID")
-    public ResponseEntity<?> getById(@PathVariable java.util.UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") java.util.UUID id) {
         log.info("Requête pour récupérer l'utilisateur ID: {}", id);
         try {
             UtilisateurDTO dto = service.findById(id);
@@ -106,7 +106,7 @@ public class UtilisateurController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un utilisateur")
-    public ResponseEntity<?> update(@PathVariable java.util.UUID id, @RequestBody UtilisateurDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") java.util.UUID id, @RequestBody UtilisateurDTO dto) {
         log.info("Requête de mise à jour pour l'utilisateur ID: {}", id);
         try {
             UtilisateurDTO updated = service.update(id, dto);
@@ -125,7 +125,7 @@ public class UtilisateurController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un utilisateur")
-    public ResponseEntity<?> delete(@PathVariable java.util.UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") java.util.UUID id) {
         log.info("Requête de suppression pour l'utilisateur ID: {}", id);
         try {
             service.delete(id);
@@ -144,7 +144,7 @@ public class UtilisateurController {
      */
     @GetMapping("/email/{email}")
     @Operation(summary = "Recherche un utilisateur par email")
-    public ResponseEntity<?> getByEmail(@PathVariable String email) {
+    public ResponseEntity<?> getByEmail(@PathVariable("email") String email) {
         log.info("Requête de recherche par email: {}", email);
         try {
             UtilisateurDTO dto = service.findByEmail(email);
@@ -164,7 +164,7 @@ public class UtilisateurController {
      */
     @PostMapping("/{userId}/favoris/{commerceId}")
     @Operation(summary = "Ajoute un commerce aux favoris de l'utilisateur")
-    public ResponseEntity<?> addFavorite(@PathVariable java.util.UUID userId, @PathVariable java.util.UUID commerceId) {
+    public ResponseEntity<?> addFavorite(@PathVariable("userId") java.util.UUID userId, @PathVariable("commerceId") java.util.UUID commerceId) {
         log.info("Ajout du commerce {} aux favoris de l'utilisateur {}", commerceId, userId);
         try {
             service.addFavorite(userId, commerceId);
@@ -184,7 +184,7 @@ public class UtilisateurController {
      */
     @DeleteMapping("/{userId}/favoris/{commerceId}")
     @Operation(summary = "Retire un commerce des favoris de l'utilisateur")
-    public ResponseEntity<?> removeFavorite(@PathVariable java.util.UUID userId, @PathVariable java.util.UUID commerceId) {
+    public ResponseEntity<?> removeFavorite(@PathVariable("userId") java.util.UUID userId, @PathVariable("commerceId") java.util.UUID commerceId) {
         log.info("Retrait du commerce {} des favoris de l'utilisateur {}", commerceId, userId);
         try {
             service.removeFavorite(userId, commerceId);
@@ -203,7 +203,7 @@ public class UtilisateurController {
      */
     @GetMapping("/{userId}/favoris")
     @Operation(summary = "Liste les IDs des commerces favoris d'un utilisateur")
-    public ResponseEntity<?> getFavorites(@PathVariable java.util.UUID userId) {
+    public ResponseEntity<?> getFavorites(@PathVariable("userId") java.util.UUID userId) {
         log.info("Récupération des favoris pour l'utilisateur ID: {}", userId);
         try {
             return ResponseEntity.ok(service.getFavorites(userId));

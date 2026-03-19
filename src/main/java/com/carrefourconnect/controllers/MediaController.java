@@ -50,7 +50,7 @@ public class MediaController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un média par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer le média ID: {}", id);
         try {
             MediaDTO dto = service.findById(id);
@@ -88,7 +88,7 @@ public class MediaController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un média")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody MediaDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody MediaDTO dto) {
         log.info("Requête de mise à jour média ID: {}", id);
         try {
             MediaDTO updated = service.update(id, dto);
@@ -107,7 +107,7 @@ public class MediaController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un média")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Requête de suppression média ID: {}", id);
         try {
             service.delete(id);
@@ -126,7 +126,7 @@ public class MediaController {
      */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les médias d'un commerce")
-    public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
+    public ResponseEntity<?> getByCommerce(@PathVariable("commerceId") UUID commerceId) {
         log.info("Récupération médias pour commerce: {}", commerceId);
         try {
             return ResponseEntity.ok(service.findByCommerce(commerceId));

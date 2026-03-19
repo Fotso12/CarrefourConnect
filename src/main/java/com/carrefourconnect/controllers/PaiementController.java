@@ -51,7 +51,7 @@ public class PaiementController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un paiement par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer le paiement ID: {}", id);
         try {
             PaiementDTO dto = service.findById(id);
@@ -89,7 +89,7 @@ public class PaiementController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un paiement")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody PaiementDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody PaiementDTO dto) {
         log.info("Mise à jour du paiement ID: {}", id);
         try {
             PaiementDTO updated = service.update(id, dto);
@@ -108,7 +108,7 @@ public class PaiementController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un paiement")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Suppression du paiement ID: {}", id);
         try {
             service.delete(id);
@@ -127,7 +127,7 @@ public class PaiementController {
      */
     @GetMapping("/abonnement/{abonnementId}")
     @Operation(summary = "Liste les paiements d'un abonnement")
-    public ResponseEntity<?> getByAbonnement(@PathVariable UUID abonnementId) {
+    public ResponseEntity<?> getByAbonnement(@PathVariable("abonnementId") UUID abonnementId) {
         log.info("Récupération paiements pour l'abonnement: {}", abonnementId);
         try {
             return ResponseEntity.ok(service.findByAbonnement(abonnementId));
@@ -145,7 +145,7 @@ public class PaiementController {
      */
     @GetMapping("/reference/{reference}")
     @Operation(summary = "Récupère un paiement par sa référence")
-    public ResponseEntity<?> getByReference(@PathVariable String reference) {
+    public ResponseEntity<?> getByReference(@PathVariable("reference") String reference) {
         log.info("Recherche paiement par référence: {}", reference);
         try {
             PaiementDTO dto = service.findByReference(reference);
@@ -164,7 +164,7 @@ public class PaiementController {
      */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les paiements par statut")
-    public ResponseEntity<?> getByStatut(@PathVariable StatutPaiement statut) {
+    public ResponseEntity<?> getByStatut(@PathVariable("statut") StatutPaiement statut) {
         log.info("Filtrage des paiements par statut: {}", statut);
         try {
             return ResponseEntity.ok(service.findByStatut(statut));

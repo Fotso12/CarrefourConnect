@@ -50,7 +50,7 @@ public class CategorieController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une catégorie par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer la catégorie ID: {}", id);
         try {
             CategorieDTO dto = service.findById(id);
@@ -88,7 +88,7 @@ public class CategorieController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une catégorie")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody CategorieDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody CategorieDTO dto) {
         log.info("Requête de mise à jour catégorie ID: {}", id);
         try {
             CategorieDTO updated = service.update(id, dto);
@@ -107,7 +107,7 @@ public class CategorieController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une catégorie")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Requête de suppression catégorie ID: {}", id);
         try {
             service.delete(id);
@@ -126,7 +126,7 @@ public class CategorieController {
      */
     @GetMapping("/recherche")
     @Operation(summary = "Recherche une catégorie par nom")
-    public ResponseEntity<?> searchByName(@RequestParam String nom) {
+    public ResponseEntity<?> searchByName(@RequestParam("nom") String nom) {
         log.info("Recherche catégorie par nom: {}", nom);
         try {
             return ResponseEntity.ok(service.findByNom(nom));

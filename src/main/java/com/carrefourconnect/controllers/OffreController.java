@@ -51,7 +51,7 @@ public class OffreController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une offre par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer l'offre ID: {}", id);
         try {
             OffreDTO dto = service.findById(id);
@@ -89,7 +89,7 @@ public class OffreController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une offre")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody OffreDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody OffreDTO dto) {
         log.info("Requête de mise à jour d'offre ID: {}", id);
         try {
             OffreDTO updated = service.update(id, dto);
@@ -108,7 +108,7 @@ public class OffreController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une offre")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Requête de suppression d'offre ID: {}", id);
         try {
             service.delete(id);
@@ -127,7 +127,7 @@ public class OffreController {
      */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les offres d'un commerce")
-    public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
+    public ResponseEntity<?> getByCommerce(@PathVariable("commerceId") UUID commerceId) {
         log.info("Récupération des offres pour le commerce: {}", commerceId);
         try {
             return ResponseEntity.ok(service.findByCommerce(commerceId));
@@ -162,7 +162,7 @@ public class OffreController {
      */
     @GetMapping("/statut/{statut}")
     @Operation(summary = "Filtre les offres par statut")
-    public ResponseEntity<?> getByStatut(@PathVariable StatutOffre statut) {
+    public ResponseEntity<?> getByStatut(@PathVariable("statut") StatutOffre statut) {
         log.info("Filtrage des offres par statut: {}", statut);
         try {
             return ResponseEntity.ok(service.findByStatut(statut));

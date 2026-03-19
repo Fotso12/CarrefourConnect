@@ -51,7 +51,7 @@ public class AvisController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un avis par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer l'avis ID: {}", id);
         try {
             AvisDTO dto = service.findById(id);
@@ -89,7 +89,7 @@ public class AvisController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un avis")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody AvisDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody AvisDTO dto) {
         log.info("Mise à jour de l'avis ID: {}", id);
         try {
             AvisDTO updated = service.update(id, dto);
@@ -108,7 +108,7 @@ public class AvisController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un avis")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Suppression de l'avis ID: {}", id);
         try {
             service.delete(id);
@@ -127,7 +127,7 @@ public class AvisController {
      */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les avis d'un commerce")
-    public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
+    public ResponseEntity<?> getByCommerce(@PathVariable("commerceId") UUID commerceId) {
         log.info("Récupération des avis pour le commerce: {}", commerceId);
         try {
             return ResponseEntity.ok(service.findByCommerce(commerceId));
@@ -145,7 +145,7 @@ public class AvisController {
      */
     @GetMapping("/visiteur/{visiteurId}")
     @Operation(summary = "Liste les avis d'un visiteur")
-    public ResponseEntity<?> getByVisiteur(@PathVariable UUID visiteurId) {
+    public ResponseEntity<?> getByVisiteur(@PathVariable("visiteurId") UUID visiteurId) {
         log.info("Récupération des avis pour le visiteur: {}", visiteurId);
         try {
             return ResponseEntity.ok(service.findByVisiteur(visiteurId));
@@ -163,7 +163,7 @@ public class AvisController {
      */
     @GetMapping("/statut/{status}")
     @Operation(summary = "Filtre les avis par statut")
-    public ResponseEntity<?> getByStatus(@PathVariable StatutAvis status) {
+    public ResponseEntity<?> getByStatus(@PathVariable("status") StatutAvis status) {
         log.info("Filtrage des avis par statut: {}", status);
         try {
             return ResponseEntity.ok(service.findByStatus(status));

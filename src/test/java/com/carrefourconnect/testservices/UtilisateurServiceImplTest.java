@@ -11,14 +11,17 @@ import com.carrefourconnect.mappers.UtilisateurMapper;
 import com.carrefourconnect.mappers.VisiteurMapper;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.repositories.CommercantRepository;
+import com.carrefourconnect.repositories.RoleRepository;
 import com.carrefourconnect.repositories.UtilisateurRepository;
 import com.carrefourconnect.repositories.VisiteurRepository;
 import com.carrefourconnect.services.implementations.UtilisateurServiceImpl;
+import com.carrefourconnect.entities.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -44,6 +47,10 @@ class UtilisateurServiceImplTest {
     private VisiteurMapper visiteurMapper;
     @Mock
     private CommercantMapper commercantMapper;
+    @Mock
+    private RoleRepository roleRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UtilisateurServiceImpl service;
@@ -92,6 +99,10 @@ class UtilisateurServiceImplTest {
         when(visiteurRepository.save(any())).thenReturn(visiteurEntity);
         when(visiteurMapper.toDto(any())).thenReturn(new VisiteurDTO());
         
+        Role role = new Role();
+        role.setNom("VISITEUR");
+        when(roleRepository.findByNom("VISITEUR")).thenReturn(Optional.of(role));
+        
         assertNotNull(service.registerVisiteur(visiteurDto));
     }
 
@@ -106,6 +117,10 @@ class UtilisateurServiceImplTest {
         when(commercantMapper.toEntity(any())).thenReturn(entity);
         when(commercantRepository.save(any())).thenReturn(entity);
         when(commercantMapper.toDto(any())).thenReturn(new CommercantDTO());
+        
+        Role role = new Role();
+        role.setNom("COMMERCANT");
+        when(roleRepository.findByNom("COMMERCANT")).thenReturn(Optional.of(role));
         
         assertNotNull(service.registerCommercant(commercantDto));
     }

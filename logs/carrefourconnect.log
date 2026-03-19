@@ -4,3 +4,860 @@
 2026-03-19 06:40:31 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
 2026-03-19 06:40:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
 2026-03-19 06:40:31 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-19 06:40:33 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:40:34 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 344 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:40:35 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:40:35 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:40:35 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:40:35 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:40:35 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:40:35 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3935 ms
+2026-03-19 06:40:36 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:40:36 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2026-03-19 06:40:36 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:40:36 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:40:36 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-19 06:40:36 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@79190a20
+2026-03-19 06:40:36 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-19 06:40:36 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:40:37 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:40:37 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:40:37 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:40:37 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:40:37 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:40:39 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:40:39 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:40:39 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:40:40 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:40:40 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:40:40 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-19 06:40:41 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:40:41 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:40:42 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:40:42 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:40:42 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:40:42 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:40:42 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 11.653 seconds (process running for 12.289)
+2026-03-19 06:41:10 [http-nio-0.0.0.0-8084-exec-1] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-19 06:41:10 [http-nio-0.0.0.0-8084-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-19 06:41:10 [http-nio-0.0.0.0-8084-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 6 ms
+2026-03-19 06:41:13 [http-nio-0.0.0.0-8084-exec-9] INFO  o.s.api.AbstractOpenApiResource - Init duration for springdoc-openapi is: 1204 ms
+2026-03-19 06:44:22 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-19 06:44:22 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-19 06:45:52 [http-nio-0.0.0.0-8084-exec-3] ERROR c.c.security.AuthEntryPointJwt - Erreur d'accès non autorisé : Full authentication is required to access this resource
+2026-03-19 06:45:52 [http-nio-0.0.0.0-8084-exec-3] ERROR c.c.security.AuthEntryPointJwt - Erreur d'accès non autorisé : Full authentication is required to access this resource
+2026-03-19 06:50:48 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 41 class path changes (0 additions, 0 deletions, 41 modifications)
+2026-03-19 06:50:49 [Thread-6] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:50:49 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:50:50 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:50:50 [Thread-6] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:50:50 [Thread-6] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:50:50 [Thread-6] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-19 06:50:50 [Thread-6] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-19 06:50:52 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:50:52 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:50:52 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:51:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:51:00 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 239 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:51:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:51:01 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:01 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:51:01 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:51:01 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:51:01 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 9203 ms
+2026-03-19 06:51:02 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:51:02 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:51:02 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:51:02 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Starting...
+2026-03-19 06:51:02 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-2 - Added connection org.postgresql.jdbc.PgConnection@46703f71
+2026-03-19 06:51:02 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Start completed.
+2026-03-19 06:51:02 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:51:02 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-2)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:51:02 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:02 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:51:02 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:03 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:03 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:51:03 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:51:04 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:51:04 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:51:04 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:51:05 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:51:06 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:51:07 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:51:07 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:51:08 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:08 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:51:08 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 16.293 seconds (process running for 637.564)
+2026-03-19 06:51:08 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:51:09 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 129 class path changes (0 additions, 0 deletions, 129 modifications)
+2026-03-19 06:51:09 [Thread-8] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:51:09 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:10 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:51:10 [Thread-8] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:10 [Thread-8] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:51:10 [Thread-8] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown initiated...
+2026-03-19 06:51:10 [Thread-8] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-2 - Shutdown completed.
+2026-03-19 06:51:10 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:51:10 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:51:10 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:51:11 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:51:11 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 108 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:51:12 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:51:12 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:12 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:51:12 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:51:12 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:51:12 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1983 ms
+2026-03-19 06:51:12 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:51:12 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:51:12 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:51:12 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Starting...
+2026-03-19 06:51:13 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-3 - Added connection org.postgresql.jdbc.PgConnection@549439e7
+2026-03-19 06:51:13 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Start completed.
+2026-03-19 06:51:13 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:51:13 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-3)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:51:13 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:13 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:51:13 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:13 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:51:13 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:51:13 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:51:14 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:51:14 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:51:14 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:51:16 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:51:17 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:51:17 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:51:19 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:51:19 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:51:19 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:51:19 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 8.839 seconds (process running for 648.635)
+2026-03-19 06:51:19 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:52:00 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-03-19 06:52:00 [main] INFO  c.c.CarrefourconnectApplicationTests - Starting CarrefourconnectApplicationTests using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:00 [main] DEBUG c.c.CarrefourconnectApplicationTests - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:00 [main] INFO  c.c.CarrefourconnectApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:06 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:52:07 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 581 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:52:09 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:52:09 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2026-03-19 06:52:09 [main] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:52:10 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:52:10 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-19 06:52:11 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21ba0d33
+2026-03-19 06:52:11 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-19 06:52:11 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:52:11 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:52:11 [main] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:52:11 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:52:11 [main] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:52:12 [main] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:52:14 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:52:14 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:52:16 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:52:16 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:52:16 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-19 06:52:20 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:52:21 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:52:22 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:24 [main] INFO  c.c.CarrefourconnectApplicationTests - Started CarrefourconnectApplicationTests in 24.343 seconds (process running for 26.697)
+2026-03-19 06:52:25 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.AbonnementControllerTest]: AbonnementControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:25 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.AbonnementControllerTest
+2026-03-19 06:52:25 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:25 [main] INFO  c.c.c.AbonnementControllerTest - Starting AbonnementControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:25 [main] DEBUG c.c.c.AbonnementControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:25 [main] INFO  c.c.c.AbonnementControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:27 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:27 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:27 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:27 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 4 ms
+2026-03-19 06:52:27 [main] INFO  c.c.c.AbonnementControllerTest - Started AbonnementControllerTest in 2.22 seconds (process running for 30.304)
+2026-03-19 06:52:28 [main] INFO  c.c.controllers.AbonnementController - Requête de création d'abonnement pour: null
+2026-03-19 06:52:28 [main] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-19 06:52:28 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.AvisControllerTest]: AvisControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:28 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.AvisControllerTest
+2026-03-19 06:52:28 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:29 [main] INFO  c.c.controllers.AvisControllerTest - Starting AvisControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:29 [main] DEBUG c.c.controllers.AvisControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:29 [main] INFO  c.c.controllers.AvisControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:31 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:31 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:31 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:31 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 20 ms
+2026-03-19 06:52:31 [main] INFO  c.c.controllers.AvisControllerTest - Started AvisControllerTest in 2.298 seconds (process running for 33.811)
+2026-03-19 06:52:31 [main] INFO  c.c.controllers.AvisController - Nouvel avis pour le commerce: null
+2026-03-19 06:52:31 [main] INFO  c.c.controllers.AvisController - Requête pour lister tous les avis
+2026-03-19 06:52:31 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.CategorieControllerTest]: CategorieControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:31 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.CategorieControllerTest
+2026-03-19 06:52:31 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:31 [main] INFO  c.c.c.CategorieControllerTest - Starting CategorieControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:31 [main] DEBUG c.c.c.CategorieControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:31 [main] INFO  c.c.c.CategorieControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:33 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:33 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:33 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:33 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 6 ms
+2026-03-19 06:52:33 [main] INFO  c.c.c.CategorieControllerTest - Started CategorieControllerTest in 1.972 seconds (process running for 36.229)
+2026-03-19 06:52:33 [main] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-19 06:52:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.CommerceControllerTest]: CommerceControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.CommerceControllerTest
+2026-03-19 06:52:33 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:33 [main] INFO  c.c.c.CommerceControllerTest - Starting CommerceControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:33 [main] DEBUG c.c.c.CommerceControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:33 [main] INFO  c.c.c.CommerceControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:35 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:35 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:52:35 [main] INFO  c.c.c.CommerceControllerTest - Started CommerceControllerTest in 1.389 seconds (process running for 37.855)
+2026-03-19 06:52:35 [main] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-19 06:52:35 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.LocalisationControllerTest]: LocalisationControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:35 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.LocalisationControllerTest
+2026-03-19 06:52:35 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:35 [main] INFO  c.c.c.LocalisationControllerTest - Starting LocalisationControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:35 [main] DEBUG c.c.c.LocalisationControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:35 [main] INFO  c.c.c.LocalisationControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:37 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:37 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-03-19 06:52:37 [main] INFO  c.c.c.LocalisationControllerTest - Started LocalisationControllerTest in 1.715 seconds (process running for 39.77)
+2026-03-19 06:52:37 [main] INFO  c.c.c.LocalisationController - Requête pour lister toutes les localisations
+2026-03-19 06:52:37 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.MediaControllerTest]: MediaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:37 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.MediaControllerTest
+2026-03-19 06:52:37 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:37 [main] INFO  c.c.controllers.MediaControllerTest - Starting MediaControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:37 [main] DEBUG c.c.controllers.MediaControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:37 [main] INFO  c.c.controllers.MediaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:38 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:38 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:38 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:38 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:52:38 [main] INFO  c.c.controllers.MediaControllerTest - Started MediaControllerTest in 1.242 seconds (process running for 41.205)
+2026-03-19 06:52:38 [main] INFO  c.c.controllers.MediaController - Requête pour lister tous les médias
+2026-03-19 06:52:38 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.OffreControllerTest]: OffreControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:38 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.OffreControllerTest
+2026-03-19 06:52:38 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:38 [main] INFO  c.c.controllers.OffreControllerTest - Starting OffreControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:38 [main] DEBUG c.c.controllers.OffreControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:38 [main] INFO  c.c.controllers.OffreControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:40 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:40 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:40 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:40 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2026-03-19 06:52:40 [main] INFO  c.c.controllers.OffreControllerTest - Started OffreControllerTest in 1.729 seconds (process running for 43.131)
+2026-03-19 06:52:40 [main] INFO  c.c.controllers.OffreController - Récupération de toutes les offres actives
+2026-03-19 06:52:40 [main] INFO  c.c.controllers.OffreController - Requête pour lister toutes les offres
+2026-03-19 06:52:40 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.PaiementControllerTest]: PaiementControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:40 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.PaiementControllerTest
+2026-03-19 06:52:40 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:40 [main] INFO  c.c.c.PaiementControllerTest - Starting PaiementControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:40 [main] DEBUG c.c.c.PaiementControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:40 [main] INFO  c.c.c.PaiementControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:42 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:42 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:42 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:42 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2026-03-19 06:52:42 [main] INFO  c.c.c.PaiementControllerTest - Started PaiementControllerTest in 1.872 seconds (process running for 45.246)
+2026-03-19 06:52:42 [main] INFO  c.c.controllers.PaiementController - Nouveau paiement pour l'abonnement: null
+2026-03-19 06:52:42 [main] INFO  c.c.controllers.PaiementController - Requête pour lister tous les paiements
+2026-03-19 06:52:42 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.UtilisateurControllerTest]: UtilisateurControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:52:42 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.UtilisateurControllerTest
+2026-03-19 06:52:42 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:52:42 [main] INFO  c.c.c.UtilisateurControllerTest - Starting UtilisateurControllerTest using Java 17.0.15 with PID 4232 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:52:42 [main] DEBUG c.c.c.UtilisateurControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:52:42 [main] INFO  c.c.c.UtilisateurControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:52:43 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:52:43 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:52:43 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:52:43 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2026-03-19 06:52:44 [main] INFO  c.c.c.UtilisateurControllerTest - Started UtilisateurControllerTest in 1.149 seconds (process running for 46.634)
+2026-03-19 06:52:44 [main] INFO  c.c.c.UtilisateurController - Requête d'inscription pour un nouveau visiteur: null
+2026-03-19 06:52:44 [main] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-19 06:52:45 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Filtrage des abonnements par statut: ACTIF
+2026-03-19 06:52:45 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-19 06:52:45 [main] INFO  c.c.s.i.AbonnementServiceImpl - Création d'un nouvel abonnement type: null
+2026-03-19 06:52:45 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération abonnement ID: cdaf518e-ec31-4269-9cfb-0a8a7428fc46
+2026-03-19 06:52:45 [main] INFO  c.c.s.i.AbonnementServiceImpl - Suppression de l'abonnement ID: a7b15a14-27dc-4236-90b4-22863e09cb21
+2026-03-19 06:52:45 [main] INFO  c.c.s.i.AbonnementServiceImpl - Mise à jour de l'abonnement ID: 372b6f6a-d382-43e1-972f-064713b8bf0a
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.AvisServiceImpl - Nouvel avis pour commerce ID: 05dcd7b0-6b0e-4b08-a411-daf9ef1bf982
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.AvisServiceImpl - Recalcul de la note globale pour le commerce: 05dcd7b0-6b0e-4b08-a411-daf9ef1bf982
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.AvisServiceImpl - Recherche avis commerce ID: e7736cf1-bc39-492d-9be9-aba6f1ce5f78
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.AvisServiceImpl - Récupération avis ID: 2b49c28c-cb9d-4cc1-8ca3-63c55470e29c
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.AvisServiceImpl - Suppression avis ID: f878dac9-3ea9-4aea-b002-2b0717662db3
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.AvisServiceImpl - Recalcul de la note globale pour le commerce: 76fc7e2f-154e-4071-bb35-fd61891fc243
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.CategorieServiceImpl - Enregistrement catégorie: null
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.CategorieServiceImpl - Récupération catégorie ID: 11f69a05-064b-448d-9cfc-38da2ca20f8e
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.CategorieServiceImpl - Suppression catégorie ID: ebb72c7f-e9cc-4205-b72c-9d9bce66b369
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.CategorieServiceImpl - Mise à jour catégorie ID: 3fb02697-434f-4a66-9db4-9608849b0ce0
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.CommerceServiceImpl - Enregistrement d'un nouveau commerce: null
+2026-03-19 06:52:46 [main] INFO  c.c.s.i.CommerceServiceImpl - Recherche géo: lat=0.0, lon=0.0, dist=10.0km
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 204e2fe9-c9f5-4f6f-8b7c-aad8c12c768d
+2026-03-19 06:52:46 [main] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par nom contenant: test
+2026-03-19 06:52:47 [main] INFO  c.c.s.i.LocalisationServiceImpl - Enregistrement localisation pour commerce: null
+2026-03-19 06:52:47 [main] DEBUG c.c.s.i.LocalisationServiceImpl - Récupération localisation ID: 4ae6d614-3424-43e8-921f-4a3ac416db41
+2026-03-19 06:52:47 [main] DEBUG c.c.s.i.LocalisationServiceImpl - Recherche localisations ville: Paris
+2026-03-19 06:52:47 [main] INFO  c.c.s.i.MediaServiceImpl - Enregistrement média: null
+2026-03-19 06:52:47 [main] DEBUG c.c.s.i.MediaServiceImpl - Recherche médias commerce ID: 9c4e7478-db92-4341-8a84-bbd143a6759c
+2026-03-19 06:52:47 [main] DEBUG c.c.s.i.MediaServiceImpl - Récupération média ID: 4188254a-db52-4ca9-82a6-5b98a59caaad
+2026-03-19 06:52:48 [main] INFO  c.c.s.i.OffreServiceImpl - Création d'une nouvelle offre: null
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.OffreServiceImpl - Récupération offre ID: 505bdba3-8ec3-4afe-a40d-77a948004877
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.OffreServiceImpl - Recherche des offres actives
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.PaiementServiceImpl - Filtrage paiements statut: VALIDE
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.PaiementServiceImpl - Récupération de tous les paiements
+2026-03-19 06:52:48 [main] INFO  c.c.s.i.PaiementServiceImpl - Enregistrement opération de paiement: null
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.PaiementServiceImpl - Recherche paiement référence: REF123
+2026-03-19 06:52:48 [main] DEBUG c.c.s.i.PaiementServiceImpl - Récupération paiement ID: fa5a7e6c-5e5e-46a5-a0dc-b9e2f88423b9
+2026-03-19 06:52:48 [main] INFO  c.c.s.i.PaiementServiceImpl - Suppression paiement ID: 5f8c2528-9104-460e-80b0-5947c94116cd
+2026-03-19 06:52:48 [main] INFO  c.c.s.i.PaiementServiceImpl - Mise à jour paiement ID: b35bddd2-e365-4571-bff2-91aaf9280a2b
+2026-03-19 06:52:50 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Ajout du favori: Utilisateur=3abbe05c-9f59-463b-8436-1dc41d36ac7a, Commerce=673b137d-81c6-4ed3-8e1d-94c7edfc4c23
+2026-03-19 06:52:50 [main] DEBUG c.c.s.i.UtilisateurServiceImpl - Recherche de l'utilisateur par ID: 101624d7-5818-458e-81d5-31d57ffc867f
+2026-03-19 06:52:50 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Inscription d'un nouveau visiteur: null
+2026-03-19 06:52:50 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Inscription d'un nouveau commerçant: test@ex.com
+2026-03-19 06:52:51 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:52:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-19 06:52:51 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-19 06:53:45 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2026-03-19 06:53:46 [Thread-13] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:53:46 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:46 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:53:46 [Thread-13] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:46 [Thread-13] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:53:46 [Thread-13] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown initiated...
+2026-03-19 06:53:46 [Thread-13] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-3 - Shutdown completed.
+2026-03-19 06:53:46 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:53:46 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:53:46 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:53:47 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:53:47 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 75 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:53:47 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:53:47 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:47 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:53:47 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:53:47 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:53:47 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1195 ms
+2026-03-19 06:53:48 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:53:48 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:53:48 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:53:48 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Starting...
+2026-03-19 06:53:48 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@200492a3
+2026-03-19 06:53:48 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Start completed.
+2026-03-19 06:53:48 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:53:48 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-4)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:53:48 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:48 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:53:48 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:48 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:48 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:53:48 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:53:48 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:53:48 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:53:48 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:53:49 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:53:50 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:53:50 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:53:50 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:53:50 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:50 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:53:50 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 4.156 seconds (process running for 800.303)
+2026-03-19 06:53:50 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:53:55 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-03-19 06:53:55 [Thread-18] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:53:55 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:55 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:53:55 [Thread-18] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:55 [Thread-18] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:53:55 [Thread-18] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown initiated...
+2026-03-19 06:53:56 [Thread-18] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-4 - Shutdown completed.
+2026-03-19 06:53:56 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:53:56 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:53:56 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:53:57 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:53:57 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 108 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:53:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:53:58 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:53:58 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:53:58 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:53:58 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:53:58 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1849 ms
+2026-03-19 06:53:58 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:53:58 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:53:58 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:53:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Starting...
+2026-03-19 06:53:58 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@674c1b19
+2026-03-19 06:53:58 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Start completed.
+2026-03-19 06:53:58 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:53:58 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:53:58 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:58 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:53:58 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:58 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:53:59 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:53:59 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:53:59 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:53:59 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:53:59 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:54:00 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:54:01 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:54:02 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:54:03 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:54:03 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:54:03 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 7.374 seconds (process running for 812.985)
+2026-03-19 06:54:03 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:54:04 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-03-19 06:54:04 [Thread-23] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:54:04 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:05 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:54:05 [Thread-23] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:05 [Thread-23] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:05 [Thread-23] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown initiated...
+2026-03-19 06:54:05 [Thread-23] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-5 - Shutdown completed.
+2026-03-19 06:54:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:54:05 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:54:05 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:54:06 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:54:06 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 89 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:54:06 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:54:06 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:06 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:54:06 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:54:06 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:54:06 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1186 ms
+2026-03-19 06:54:06 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:54:06 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:54:06 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:54:06 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Starting...
+2026-03-19 06:54:07 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-6 - Added connection org.postgresql.jdbc.PgConnection@2610cc1
+2026-03-19 06:54:07 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Start completed.
+2026-03-19 06:54:07 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:54:07 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-6)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:54:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:07 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:54:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:07 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:07 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:54:07 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:07 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:54:07 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:54:07 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:54:08 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:54:09 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:54:10 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:54:10 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:54:11 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:11 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:54:11 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 5.79 seconds (process running for 820.665)
+2026-03-19 06:54:11 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:54:12 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2026-03-19 06:54:12 [Thread-28] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:54:12 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:13 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:54:13 [Thread-28] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:13 [Thread-28] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:13 [Thread-28] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown initiated...
+2026-03-19 06:54:13 [Thread-28] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-6 - Shutdown completed.
+2026-03-19 06:54:13 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:54:13 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:54:13 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:54:14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:54:14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 101 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:54:14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:54:14 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:14 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:54:14 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:54:14 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:54:14 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1181 ms
+2026-03-19 06:54:14 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:54:14 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:54:14 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:54:14 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Starting...
+2026-03-19 06:54:15 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-7 - Added connection org.postgresql.jdbc.PgConnection@6c6cf2fc
+2026-03-19 06:54:15 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Start completed.
+2026-03-19 06:54:15 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:54:15 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-7)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:54:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:15 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:54:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:15 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:15 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:54:15 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:15 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:54:15 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:54:15 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:54:16 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:54:17 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:54:17 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:54:17 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:54:17 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:17 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:54:17 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 4.629 seconds (process running for 827.307)
+2026-03-19 06:54:17 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:54:23 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2026-03-19 06:54:23 [Thread-33] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:54:23 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:24 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:54:24 [Thread-33] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:24 [Thread-33] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:24 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Shutdown initiated...
+2026-03-19 06:54:24 [Thread-33] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-7 - Shutdown completed.
+2026-03-19 06:54:24 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:54:24 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:54:24 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:54:25 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:54:26 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 208 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:54:26 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:54:26 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:26 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:54:26 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:54:26 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:54:26 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2408 ms
+2026-03-19 06:54:27 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:54:27 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:54:27 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:54:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-8 - Starting...
+2026-03-19 06:54:27 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-8 - Added connection org.postgresql.jdbc.PgConnection@4708cf19
+2026-03-19 06:54:27 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-8 - Start completed.
+2026-03-19 06:54:27 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:54:27 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-8)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:54:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:27 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:54:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:27 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:28 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:54:28 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:28 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:54:28 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:54:28 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:54:29 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:54:30 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:54:31 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:54:33 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:54:33 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:33 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:54:33 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 8.799 seconds (process running for 842.647)
+2026-03-19 06:54:33 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:54:35 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2026-03-19 06:54:35 [Thread-38] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:54:35 [tomcat-shutdown] INFO  o.a.coyote.http11.Http11NioProtocol - Pausing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:36 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:54:36 [Thread-38] INFO  o.a.coyote.http11.Http11NioProtocol - Stopping ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:36 [Thread-38] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:36 [Thread-38] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-8 - Shutdown initiated...
+2026-03-19 06:54:36 [Thread-38] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-8 - Shutdown completed.
+2026-03-19 06:54:36 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 21160 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:54:36 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:54:36 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:54:37 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:54:37 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 129 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:54:38 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-19 06:54:38 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:38 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-19 06:54:38 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-19 06:54:38 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-19 06:54:38 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2119 ms
+2026-03-19 06:54:39 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:54:39 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:54:39 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:54:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Starting...
+2026-03-19 06:54:39 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-9 - Added connection org.postgresql.jdbc.PgConnection@6477419b
+2026-03-19 06:54:39 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Start completed.
+2026-03-19 06:54:39 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:54:39 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-9)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:54:39 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:39 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:54:39 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:39 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:54:39 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:54:39 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:54:40 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-19 06:54:40 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:54:40 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:54:41 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:54:42 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:54:42 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:54:43 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-19 06:54:43 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-19 06:54:43 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-19 06:54:43 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 7.103 seconds (process running for 853.095)
+2026-03-19 06:54:43 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2026-03-19 06:56:12 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-03-19 06:56:12 [main] INFO  c.c.CarrefourconnectApplicationTests - Starting CarrefourconnectApplicationTests using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:12 [main] DEBUG c.c.CarrefourconnectApplicationTests - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:12 [main] INFO  c.c.CarrefourconnectApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:15 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-19 06:56:16 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 449 ms. Found 13 JPA repository interfaces.
+2026-03-19 06:56:17 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-19 06:56:17 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2026-03-19 06:56:17 [main] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-19 06:56:18 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-19 06:56:18 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-19 06:56:18 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2aeb7c4c
+2026-03-19 06:56:18 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-19 06:56:18 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-19 06:56:19 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-19 06:56:19 [main] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:56:19 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-19 06:56:19 [main] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:56:20 [main] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-19 06:56:22 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-19 06:56:22 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:56:23 [main] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-19 06:56:23 [main] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-19 06:56:23 [main] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-19 06:56:25 [main] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-19 06:56:26 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-19 06:56:27 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:28 [main] INFO  c.c.CarrefourconnectApplicationTests - Started CarrefourconnectApplicationTests in 17.579 seconds (process running for 19.962)
+2026-03-19 06:56:29 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.AbonnementControllerTest]: AbonnementControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:29 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.AbonnementControllerTest
+2026-03-19 06:56:29 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:30 [main] INFO  c.c.c.AbonnementControllerTest - Starting AbonnementControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:30 [main] DEBUG c.c.c.AbonnementControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:30 [main] INFO  c.c.c.AbonnementControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:31 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:31 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:31 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:31 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 9 ms
+2026-03-19 06:56:32 [main] INFO  c.c.c.AbonnementControllerTest - Started AbonnementControllerTest in 2.145 seconds (process running for 23.262)
+2026-03-19 06:56:32 [main] INFO  c.c.controllers.AbonnementController - Requête pour récupérer l'abonnement ID: c2c9a3a1-a3c3-402c-8be3-bab71aad5b5f
+2026-03-19 06:56:32 [main] INFO  c.c.controllers.AbonnementController - Requête de création d'abonnement pour: null
+2026-03-19 06:56:32 [main] INFO  c.c.controllers.AbonnementController - Requête pour récupérer l'abonnement ID: 64ab56e9-41f2-47e9-9bd6-df6c0f1f3985
+2026-03-19 06:56:32 [main] INFO  c.c.controllers.AbonnementController - Requête de suppression d'abonnement ID: 526866c4-bfe2-427f-ac4d-076f682db200
+2026-03-19 06:56:32 [main] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-19 06:56:33 [main] INFO  c.c.controllers.AbonnementController - Requête de mise à jour d'abonnement ID: c8bff5af-7a49-4f04-a573-5de643804d75
+2026-03-19 06:56:33 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.AvisControllerTest]: AvisControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:33 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.AvisControllerTest
+2026-03-19 06:56:33 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:33 [main] INFO  c.c.controllers.AvisControllerTest - Starting AvisControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:33 [main] DEBUG c.c.controllers.AvisControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:33 [main] INFO  c.c.controllers.AvisControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:34 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:34 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:34 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-03-19 06:56:34 [main] INFO  c.c.controllers.AvisControllerTest - Started AvisControllerTest in 1.353 seconds (process running for 25.883)
+2026-03-19 06:56:34 [main] INFO  c.c.controllers.AvisController - Nouvel avis pour le commerce: null
+2026-03-19 06:56:34 [main] INFO  c.c.controllers.AvisController - Récupération des avis pour le commerce: 5bcc26dd-f8a7-4ca7-8c1c-7770f25c0001
+2026-03-19 06:56:34 [main] INFO  c.c.controllers.AvisController - Requête pour lister tous les avis
+2026-03-19 06:56:34 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.CategorieControllerTest]: CategorieControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:34 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.CategorieControllerTest
+2026-03-19 06:56:34 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:35 [main] INFO  c.c.c.CategorieControllerTest - Starting CategorieControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:35 [main] DEBUG c.c.c.CategorieControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:35 [main] INFO  c.c.c.CategorieControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:35 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:35 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:35 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:56:35 [main] INFO  c.c.c.CategorieControllerTest - Started CategorieControllerTest in 0.867 seconds (process running for 26.925)
+2026-03-19 06:56:35 [main] INFO  c.c.controllers.CategorieController - Recherche catégorie par nom: test
+2026-03-19 06:56:35 [main] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-19 06:56:35 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.CommerceControllerTest]: CommerceControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:35 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.CommerceControllerTest
+2026-03-19 06:56:35 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:36 [main] INFO  c.c.c.CommerceControllerTest - Starting CommerceControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:36 [main] DEBUG c.c.c.CommerceControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:36 [main] INFO  c.c.c.CommerceControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:37 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:37 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:37 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:56:37 [main] INFO  c.c.c.CommerceControllerTest - Started CommerceControllerTest in 1.596 seconds (process running for 28.675)
+2026-03-19 06:56:37 [main] INFO  c.c.controllers.CommerceController - Recherche de proximité: lat=45.0, lon=5.0, dist=10.0km
+2026-03-19 06:56:37 [main] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-19 06:56:37 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.LocalisationControllerTest]: LocalisationControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:37 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.LocalisationControllerTest
+2026-03-19 06:56:37 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:37 [main] INFO  c.c.c.LocalisationControllerTest - Starting LocalisationControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:37 [main] DEBUG c.c.c.LocalisationControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:37 [main] INFO  c.c.c.LocalisationControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:38 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:38 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:38 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:38 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:56:38 [main] INFO  c.c.c.LocalisationControllerTest - Started LocalisationControllerTest in 0.796 seconds (process running for 29.601)
+2026-03-19 06:56:38 [main] INFO  c.c.c.LocalisationController - Récupération localisations ville: Paris
+2026-03-19 06:56:38 [main] INFO  c.c.c.LocalisationController - Requête pour lister toutes les localisations
+2026-03-19 06:56:38 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.MediaControllerTest]: MediaControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:38 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.MediaControllerTest
+2026-03-19 06:56:38 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:38 [main] INFO  c.c.controllers.MediaControllerTest - Starting MediaControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:38 [main] DEBUG c.c.controllers.MediaControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:38 [main] INFO  c.c.controllers.MediaControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:39 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:39 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:39 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:39 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2026-03-19 06:56:39 [main] INFO  c.c.controllers.MediaControllerTest - Started MediaControllerTest in 0.811 seconds (process running for 30.548)
+2026-03-19 06:56:39 [main] INFO  c.c.controllers.MediaController - Récupération médias pour commerce: d2fdda0e-0072-4b8c-a30d-10980e38872c
+2026-03-19 06:56:39 [main] INFO  c.c.controllers.MediaController - Requête pour lister tous les médias
+2026-03-19 06:56:39 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.OffreControllerTest]: OffreControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:39 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.OffreControllerTest
+2026-03-19 06:56:39 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:39 [main] INFO  c.c.controllers.OffreControllerTest - Starting OffreControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:39 [main] DEBUG c.c.controllers.OffreControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:39 [main] INFO  c.c.controllers.OffreControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:40 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:40 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:40 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:40 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 2 ms
+2026-03-19 06:56:40 [main] INFO  c.c.controllers.OffreControllerTest - Started OffreControllerTest in 0.652 seconds (process running for 31.296)
+2026-03-19 06:56:40 [main] INFO  c.c.controllers.OffreController - Récupération de toutes les offres actives
+2026-03-19 06:56:40 [main] INFO  c.c.controllers.OffreController - Requête pour lister toutes les offres
+2026-03-19 06:56:40 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.PaiementControllerTest]: PaiementControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:40 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.PaiementControllerTest
+2026-03-19 06:56:40 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:40 [main] INFO  c.c.c.PaiementControllerTest - Starting PaiementControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:40 [main] DEBUG c.c.c.PaiementControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:40 [main] INFO  c.c.c.PaiementControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:41 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:41 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:41 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:41 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2026-03-19 06:56:41 [main] INFO  c.c.c.PaiementControllerTest - Started PaiementControllerTest in 0.939 seconds (process running for 32.327)
+2026-03-19 06:56:41 [main] INFO  c.c.controllers.PaiementController - Nouveau paiement pour l'abonnement: null
+2026-03-19 06:56:41 [main] INFO  c.c.controllers.PaiementController - Requête pour récupérer le paiement ID: eb4e4861-2f5a-442f-a90e-6bdb1b529ac8
+2026-03-19 06:56:41 [main] INFO  c.c.controllers.PaiementController - Récupération paiements pour l'abonnement: 164b35e1-ffc6-4b28-beab-c96e10228b70
+2026-03-19 06:56:41 [main] INFO  c.c.controllers.PaiementController - Recherche paiement par référence: REF123
+2026-03-19 06:56:41 [main] INFO  c.c.controllers.PaiementController - Requête pour lister tous les paiements
+2026-03-19 06:56:41 [main] INFO  o.s.t.c.s.AnnotationConfigContextLoaderUtils - Could not detect default configuration classes for test class [com.carrefourconnect.controllers.UtilisateurControllerTest]: UtilisateurControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-03-19 06:56:41 [main] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Found @SpringBootConfiguration com.carrefourconnect.CarrefourconnectApplication for test class com.carrefourconnect.controllers.UtilisateurControllerTest
+2026-03-19 06:56:41 [main] INFO  o.s.b.d.r.RestartApplicationListener - Restart disabled due to context in which it is running
+2026-03-19 06:56:41 [main] INFO  c.c.c.UtilisateurControllerTest - Starting UtilisateurControllerTest using Java 17.0.15 with PID 6820 (started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect)
+2026-03-19 06:56:41 [main] DEBUG c.c.c.UtilisateurControllerTest - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-19 06:56:41 [main] INFO  c.c.c.UtilisateurControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-03-19 06:56:42 [main] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-19 06:56:42 [main] INFO  o.s.b.t.m.w.SpringBootMockServletContext - Initializing Spring TestDispatcherServlet ''
+2026-03-19 06:56:42 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2026-03-19 06:56:42 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 3 ms
+2026-03-19 06:56:42 [main] INFO  c.c.c.UtilisateurControllerTest - Started UtilisateurControllerTest in 1.189 seconds (process running for 33.778)
+2026-03-19 06:56:42 [main] INFO  c.c.c.UtilisateurController - Ajout du commerce eefeea53-2cb6-4528-82fa-b9d35e5636db aux favoris de l'utilisateur 82040404-121a-49d1-90b9-4c1f0f8ee063
+2026-03-19 06:56:42 [main] INFO  c.c.c.UtilisateurController - Requête d'inscription pour un nouveau visiteur: null
+2026-03-19 06:56:42 [main] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-19 06:56:43 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Filtrage des abonnements par statut: ACTIF
+2026-03-19 06:56:43 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-19 06:56:43 [main] INFO  c.c.s.i.AbonnementServiceImpl - Création d'un nouvel abonnement type: null
+2026-03-19 06:56:43 [main] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération abonnement ID: 31569172-be7f-4be4-8240-93d49b8418db
+2026-03-19 06:56:43 [main] INFO  c.c.s.i.AbonnementServiceImpl - Suppression de l'abonnement ID: da2bf615-7b6e-4934-bd6c-fe538dad189f
+2026-03-19 06:56:43 [main] INFO  c.c.s.i.AbonnementServiceImpl - Mise à jour de l'abonnement ID: 3a1b8fae-2d5e-4537-8bd0-33cca81332e0
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.AvisServiceImpl - Nouvel avis pour commerce ID: 8d7a4b9d-b01a-46d4-be4a-b93fa93c2871
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.AvisServiceImpl - Recalcul de la note globale pour le commerce: 8d7a4b9d-b01a-46d4-be4a-b93fa93c2871
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.AvisServiceImpl - Recherche avis commerce ID: 835be264-29da-4926-8044-84fcc7a429ac
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.AvisServiceImpl - Récupération avis ID: 3e0c96df-d583-4c3a-89d7-1591f5f8c2b0
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.AvisServiceImpl - Suppression avis ID: 7a5fb883-1a83-4dd9-948b-28f0484332be
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.AvisServiceImpl - Recalcul de la note globale pour le commerce: a6bb5aa8-5e3a-4b66-a7b4-7019ae3f40f5
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.CategorieServiceImpl - Enregistrement catégorie: null
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.CategorieServiceImpl - Récupération catégorie ID: 0dc283bf-4503-4c53-b24f-5776adb214c5
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.CategorieServiceImpl - Suppression catégorie ID: 24824266-63f5-412a-994d-068ee51341a4
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.CategorieServiceImpl - Mise à jour catégorie ID: fbfdcc4c-fa5b-405c-8e1d-d12f4303774a
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.CommerceServiceImpl - Enregistrement d'un nouveau commerce: null
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.CommerceServiceImpl - Recherche géo: lat=0.0, lon=0.0, dist=10.0km
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 16dd5755-8324-4b4e-b0a5-ee3bd16e6305
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par nom contenant: test
+2026-03-19 06:56:44 [main] INFO  c.c.s.i.LocalisationServiceImpl - Enregistrement localisation pour commerce: null
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.LocalisationServiceImpl - Récupération localisation ID: be54649f-67d9-472c-8992-c3833e75caee
+2026-03-19 06:56:44 [main] DEBUG c.c.s.i.LocalisationServiceImpl - Recherche localisations ville: Paris
+2026-03-19 06:56:45 [main] INFO  c.c.s.i.MediaServiceImpl - Enregistrement média: null
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.MediaServiceImpl - Recherche médias commerce ID: 3be03556-8847-485d-affc-2ef0cfcfca5d
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.MediaServiceImpl - Récupération média ID: 9699fa1a-63c7-45f6-a0c7-d3a681bfdaa5
+2026-03-19 06:56:45 [main] INFO  c.c.s.i.OffreServiceImpl - Création d'une nouvelle offre: null
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.OffreServiceImpl - Récupération offre ID: 5fb90ad6-9077-42da-970c-f3e35bbe3124
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.OffreServiceImpl - Recherche des offres actives
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.PaiementServiceImpl - Filtrage paiements statut: VALIDE
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.PaiementServiceImpl - Récupération de tous les paiements
+2026-03-19 06:56:45 [main] INFO  c.c.s.i.PaiementServiceImpl - Enregistrement opération de paiement: null
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.PaiementServiceImpl - Recherche paiement référence: REF123
+2026-03-19 06:56:45 [main] DEBUG c.c.s.i.PaiementServiceImpl - Récupération paiement ID: 23cc64ea-ac3f-4a0e-b12d-488feb05c471
+2026-03-19 06:56:45 [main] INFO  c.c.s.i.PaiementServiceImpl - Suppression paiement ID: 04bad068-f1e1-4d64-94b3-17b942a17f76
+2026-03-19 06:56:45 [main] INFO  c.c.s.i.PaiementServiceImpl - Mise à jour paiement ID: 2969cdf5-a2bc-4545-955e-0f84f1b46b5f
+2026-03-19 06:56:47 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Ajout du favori: Utilisateur=76c20084-5500-4711-af3d-1093df2b7bdf, Commerce=35aa3910-7847-4178-8052-27791b6d23b7
+2026-03-19 06:56:47 [main] DEBUG c.c.s.i.UtilisateurServiceImpl - Recherche de l'utilisateur par ID: 34957f4b-84d4-4c6d-99e6-cf734b5fc0b5
+2026-03-19 06:56:47 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Inscription d'un nouveau visiteur: null
+2026-03-19 06:56:47 [main] INFO  c.c.s.i.UtilisateurServiceImpl - Inscription d'un nouveau commerçant: test@ex.com
+2026-03-19 06:56:47 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:56:47 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-19 06:56:47 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-19 06:58:46 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-19 06:58:46 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-19 06:58:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-19 06:58:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Shutdown initiated...
+2026-03-19 06:58:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-9 - Shutdown completed.

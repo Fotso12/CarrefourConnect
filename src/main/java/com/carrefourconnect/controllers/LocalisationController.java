@@ -50,7 +50,7 @@ public class LocalisationController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère une localisation par son ID")
-    public ResponseEntity<?> getById(@PathVariable UUID id) {
+    public ResponseEntity<?> getById(@PathVariable("id") UUID id) {
         log.info("Requête pour récupérer la localisation ID: {}", id);
         try {
             LocalisationDTO dto = service.findById(id);
@@ -88,7 +88,7 @@ public class LocalisationController {
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour une localisation")
-    public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody LocalisationDTO dto) {
+    public ResponseEntity<?> update(@PathVariable("id") UUID id, @RequestBody LocalisationDTO dto) {
         log.info("Mise à jour de la localisation ID: {}", id);
         try {
             LocalisationDTO updated = service.update(id, dto);
@@ -107,7 +107,7 @@ public class LocalisationController {
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime une localisation")
-    public ResponseEntity<?> delete(@PathVariable UUID id) {
+    public ResponseEntity<?> delete(@PathVariable("id") UUID id) {
         log.info("Suppression de la localisation ID: {}", id);
         try {
             service.delete(id);
@@ -126,7 +126,7 @@ public class LocalisationController {
      */
     @GetMapping("/commerce/{commerceId}")
     @Operation(summary = "Liste les localisations d'un commerce")
-    public ResponseEntity<?> getByCommerce(@PathVariable UUID commerceId) {
+    public ResponseEntity<?> getByCommerce(@PathVariable("commerceId") UUID commerceId) {
         log.info("Récupération localisations commerce: {}", commerceId);
         try {
             return ResponseEntity.ok(service.findByCommerce(commerceId));
@@ -144,7 +144,7 @@ public class LocalisationController {
      */
     @GetMapping("/ville/{ville}")
     @Operation(summary = "Liste les localisations d'une ville")
-    public ResponseEntity<?> getByVille(@PathVariable String ville) {
+    public ResponseEntity<?> getByVille(@PathVariable("ville") String ville) {
         log.info("Récupération localisations ville: {}", ville);
         try {
             return ResponseEntity.ok(service.findByVille(ville));
