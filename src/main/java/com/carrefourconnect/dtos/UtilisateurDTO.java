@@ -16,7 +16,7 @@ public class UtilisateurDTO {
     private String prenom;
     private String email;
     private String telephone;
-    // Password is intentionally omitted from DTO
+    private String password;
     private java.time.LocalDateTime dateCreation;
     private String status;
 }

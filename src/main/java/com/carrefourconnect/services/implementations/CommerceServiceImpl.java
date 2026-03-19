@@ -6,23 +6,28 @@ import com.carrefourconnect.mappers.CommerceMapper;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.services.interfaces.CommerceService;
 import com.carrefourconnect.utils.enums.StatutCommerce;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class CommerceServiceImpl implements CommerceService {
+
+    private static final Logger log = LoggerFactory.getLogger(CommerceServiceImpl.class);
 
     private final CommerceRepository repository;
     private final CommerceMapper mapper;
+
+    public CommerceServiceImpl(CommerceRepository repository, CommerceMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public CommerceDTO findById(UUID id) {

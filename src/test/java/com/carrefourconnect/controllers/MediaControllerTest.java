@@ -1,8 +1,7 @@
-package com.carrefourconnect.testcontrollers;
+package com.carrefourconnect.controllers;
 
-import com.carrefourconnect.controllers.LocalisationController;
-import com.carrefourconnect.dtos.LocalisationDTO;
-import com.carrefourconnect.services.interfaces.LocalisationService;
+import com.carrefourconnect.dtos.MediaDTO;
+import com.carrefourconnect.services.interfaces.MediaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,41 +21,41 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(
-    controllers = LocalisationController.class,
+    controllers = MediaController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityFilterAutoConfiguration.class}
 )
-class LocalisationControllerTest {
+class MediaControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private LocalisationService service;
+    private MediaService service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private UUID id;
-    private LocalisationDTO dto;
+    private MediaDTO dto;
 
     @BeforeEach
     void setUp() {
         id = UUID.randomUUID();
-        dto = new LocalisationDTO();
-        dto.setIdlocalisation(id);
+        dto = new MediaDTO();
+        dto.setIdmedia(id);
     }
 
     @Test
     void testGetAll() throws Exception {
         when(service.findAll()).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/localisations"))
+        mockMvc.perform(get("/api/medias"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testGetByVille() throws Exception {
-        when(service.findByVille(any())).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/localisations/ville/Paris"))
+    void testGetByCommerce() throws Exception {
+        when(service.findByCommerce(any())).thenReturn(Collections.singletonList(dto));
+        mockMvc.perform(get("/api/medias/commerce/{commerceId}", UUID.randomUUID()))
                 .andExpect(status().isOk());
     }
 }

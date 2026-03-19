@@ -1,9 +1,7 @@
-package com.carrefourconnect.testcontrollers;
+package com.carrefourconnect.controllers;
 
-import com.carrefourconnect.controllers.UtilisateurController;
-import com.carrefourconnect.dtos.UtilisateurDTO;
-import com.carrefourconnect.dtos.VisiteurDTO;
-import com.carrefourconnect.services.interfaces.UtilisateurService;
+import com.carrefourconnect.dtos.AbonnementDTO;
+import com.carrefourconnect.services.interfaces.AbonnementService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,55 +17,83 @@ import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(
-    controllers = UtilisateurController.class,
+    controllers = AbonnementController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityFilterAutoConfiguration.class}
 )
-class UtilisateurControllerTest {
+class AbonnementControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private UtilisateurService service;
+    private AbonnementService service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private UUID id;
-    private UtilisateurDTO dto;
+    private AbonnementDTO dto;
 
     @BeforeEach
     void setUp() {
         id = UUID.randomUUID();
-        dto = new UtilisateurDTO();
-        dto.setIduser(id);
+        dto = new AbonnementDTO();
     }
 
     @Test
     void testGetAll() throws Exception {
         when(service.findAll()).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/utilisateurs"))
+
+        mockMvc.perform(get("/api/abonnements"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray());
+    }
+
+    @Test
+    void testGetById() throws Exception {
+        when(service.findById(id)).thenReturn(dto);
+
+        mockMvc.perform(get("/api/abonnements/{id}", id))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testRegisterVisiteur() throws Exception {
-        VisiteurDTO visiteurDto = new VisiteurDTO();
-        when(service.registerVisiteur(any())).thenReturn(dto);
-        mockMvc.perform(post("/api/utilisateurs/inscription/visiteur")
+    void testGetByIdNotFound() throws Exception {
+        when(service.findById(id)).thenReturn(null);
+
+        mockMvc.perform(get("/api/abonnements/{id}", id))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testSave() throws Exception {
+        when(service.save(any(AbonnementDTO.class))).thenReturn(dto);
+
+        mockMvc.perform(post("/api/abonnements")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(visiteurDto)))
+                .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    void testAddFavorite() throws Exception {
-        mockMvc.perform(post("/api/utilisateurs/{userId}/favoris/{commerceId}", id, UUID.randomUUID()))
+    void testUpdate() throws Exception {
+        when(service.update(eq(id), any(AbonnementDTO.class))).thenReturn(dto);
+
+        mockMvc.perform(put("/api/abonnements/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDelete() throws Exception {
+        mockMvc.perform(delete("/api/abonnements/{id}", id))
+                .andExpect(status().isNoContent());
     }
 }

@@ -6,23 +6,28 @@ import com.carrefourconnect.mappers.AbonnementMapper;
 import com.carrefourconnect.repositories.AbonnementRepository;
 import com.carrefourconnect.services.interfaces.AbonnementService;
 import com.carrefourconnect.utils.enums.StatutAbonnement;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class AbonnementServiceImpl implements AbonnementService {
+
+    private static final Logger log = LoggerFactory.getLogger(AbonnementServiceImpl.class);
 
     private final AbonnementRepository repository;
     private final AbonnementMapper mapper;
+
+    public AbonnementServiceImpl(AbonnementRepository repository, AbonnementMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public AbonnementDTO findById(UUID id) {

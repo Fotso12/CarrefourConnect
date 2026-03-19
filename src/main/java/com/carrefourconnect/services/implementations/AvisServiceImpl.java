@@ -2,16 +2,15 @@ package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.AvisDTO;
 import com.carrefourconnect.entities.Avis;
-import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.mappers.AvisMapper;
 import com.carrefourconnect.repositories.AvisRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.services.interfaces.AvisService;
 import com.carrefourconnect.utils.enums.StatutAvis;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,14 +18,20 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class AvisServiceImpl implements AvisService {
+
+    private static final Logger log = LoggerFactory.getLogger(AvisServiceImpl.class);
 
     private final AvisRepository repository;
     private final CommerceRepository commerceRepository;
     private final AvisMapper mapper;
+
+    public AvisServiceImpl(AvisRepository repository, CommerceRepository commerceRepository, AvisMapper mapper) {
+        this.repository = repository;
+        this.commerceRepository = commerceRepository;
+        this.mapper = mapper;
+    }
 
     @Override
     public AvisDTO findById(UUID id) {

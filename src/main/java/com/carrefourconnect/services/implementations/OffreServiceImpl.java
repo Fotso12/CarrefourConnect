@@ -6,23 +6,28 @@ import com.carrefourconnect.mappers.OffreMapper;
 import com.carrefourconnect.repositories.OffreRepository;
 import com.carrefourconnect.services.interfaces.OffreService;
 import com.carrefourconnect.utils.enums.StatutOffre;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class OffreServiceImpl implements OffreService {
+
+    private static final Logger log = LoggerFactory.getLogger(OffreServiceImpl.class);
 
     private final OffreRepository repository;
     private final OffreMapper mapper;
+
+    public OffreServiceImpl(OffreRepository repository, OffreMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public OffreDTO findById(UUID id) {

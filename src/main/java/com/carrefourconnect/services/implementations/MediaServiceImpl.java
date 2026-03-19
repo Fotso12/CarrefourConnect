@@ -5,23 +5,28 @@ import com.carrefourconnect.entities.Media;
 import com.carrefourconnect.mappers.MediaMapper;
 import com.carrefourconnect.repositories.MediaRepository;
 import com.carrefourconnect.services.interfaces.MediaService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class MediaServiceImpl implements MediaService {
+
+    private static final Logger log = LoggerFactory.getLogger(MediaServiceImpl.class);
 
     private final MediaRepository repository;
     private final MediaMapper mapper;
+
+    public MediaServiceImpl(MediaRepository repository, MediaMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public MediaDTO findById(UUID id) {

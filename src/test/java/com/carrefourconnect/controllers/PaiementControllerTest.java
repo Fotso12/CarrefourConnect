@@ -1,6 +1,5 @@
-package com.carrefourconnect.testcontrollers;
+package com.carrefourconnect.controllers;
 
-import com.carrefourconnect.controllers.PaiementController;
 import com.carrefourconnect.dtos.PaiementDTO;
 import com.carrefourconnect.services.interfaces.PaiementService;
 import com.fasterxml.jackson.databind.ObjectMapper;

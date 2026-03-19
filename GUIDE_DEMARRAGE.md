@@ -105,7 +105,30 @@ Toutes les autres routes nécessitent un token `Authorization: Bearer <token>`.
 
 ---
 
-## 3. Configuration JWT (`application.properties`)
+## 3. Inscription d'un nouvel utilisateur
+
+L'inscription se fait via `UtilisateurController`. Le mot de passe est **automatiquement haché** en BCrypt et le rôle est attribué par défaut.
+
+| Route | Rôle attribué |
+|-------|---------------|
+| `POST /api/utilisateurs/inscription/visiteur` | `VISITEUR` |
+| `POST /api/utilisateurs/inscription/commercant` | `COMMERCANT` |
+
+**Exemple de requête (Visiteur) :**
+```json
+{
+  "nom": "Dupont",
+  "prenom": "Jean",
+  "email": "jean.dupont@email.com",
+  "telephone": "0601020304",
+  "password": "MonMotDePasseSecurise",
+  "preference": "Gastronomie, Sport"
+}
+```
+
+---
+
+## 4. Configuration JWT (`application.properties`)
 
 Tu peux personnaliser ces propriétés dans ton `application.properties` :
 
@@ -129,6 +152,13 @@ VALUES (gen_random_uuid(), 'ADMIN', 'Administrateur de la plateforme')
 ON CONFLICT DO NOTHING;
 ```
 
+### Étape 1 — Insérer le rôle ADMIN
+
+```sql
+INSERT INTO role (idrole, nom, description)
+VALUES (gen_random_uuid(), 'ADMIN', 'Administrateur de la plateforme');
+```
+
 ### Étape 2 — Générer un hash BCrypt
 
 Tu **dois** envoyer un mot de passe hashé avec BCrypt, pas en clair.  
@@ -136,35 +166,32 @@ Utilise un outil en ligne : [bcrypt-generator.com](https://bcrypt-generator.com)
 
 Le hash ressemble à : `$2a$10$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
 
-### Étape 3 — Insérer l'administrateur en base
+### Étape 3 — Insérer l'utilisateur administrateur
+
+Remplace `$2a$10$REMPLACE_PAR_TON_HASH_BCRYPT` par le hash généré à l'étape 2 :
 
 ```sql
-DO $$
-DECLARE
-  v_role_id UUID;
-  v_user_id UUID := gen_random_uuid();
-BEGIN
-  -- Récupère l'UUID du rôle ADMIN
-  SELECT idrole INTO v_role_id FROM role WHERE nom = 'ADMIN' LIMIT 1;
+INSERT INTO utilisateur (iduser, idrole, nom, prenom, email, telephone, password, datecreation, status)
+SELECT
+  gen_random_uuid(),
+  r.idrole,
+  'Admin',
+  'Super',
+  'admin@carrefourconnect.com',
+  '0600000000',
+  '$2a$10$REMPLACE_PAR_TON_HASH_BCRYPT',
+  NOW(),
+  'ACTIF'
+FROM role r
+WHERE r.nom = 'ADMIN'
+LIMIT 1;
+```
 
-  -- Insère dans la table parente utilisateur
-  INSERT INTO utilisateur (iduser, idrole, nom, prenom, email, telephone, password, datecreation, status)
-  VALUES (
-    v_user_id,
-    v_role_id,
-    'Admin',
-    'Super',
-    'admin@carrefourconnect.com',
-    '0600000000',
-    '$2a$10$REMPLACE_PAR_TON_HASH_BCRYPT',
-    NOW(),
-    'ACTIF'
-  );
+### Étape 4 — Lier à la table administrateur (héritage JOINED)
 
-  -- Insère dans la table fille administrateur (héritage JOINED)
-  INSERT INTO administrateur (iduser)
-  VALUES (v_user_id);
-END $$;
+```sql
+INSERT INTO administrateur (iduser)
+SELECT iduser FROM utilisateur WHERE email = 'admin@carrefourconnect.com';
 ```
 
 ### Étape 4 — Se connecter via l'API

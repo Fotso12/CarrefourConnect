@@ -11,32 +11,53 @@ import com.carrefourconnect.mappers.CommercantMapper;
 import com.carrefourconnect.mappers.UtilisateurMapper;
 import com.carrefourconnect.mappers.VisiteurMapper;
 import com.carrefourconnect.repositories.CommerceRepository;
-import com.carrefourconnect.repositories.CommercantRepository;
-import com.carrefourconnect.repositories.UtilisateurRepository;
-import com.carrefourconnect.repositories.VisiteurRepository;
+import com.carrefourconnect.repositories.*;
 import com.carrefourconnect.services.interfaces.UtilisateurService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class UtilisateurServiceImpl implements UtilisateurService {
+
+    private static final Logger log = LoggerFactory.getLogger(UtilisateurServiceImpl.class);
 
     private final UtilisateurRepository repository;
     private final VisiteurRepository visiteurRepository;
     private final CommercantRepository commercantRepository;
     private final CommerceRepository commerceRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     private final UtilisateurMapper mapper;
     private final VisiteurMapper visiteurMapper;
     private final CommercantMapper commercantMapper;
+
+    public UtilisateurServiceImpl(UtilisateurRepository repository,
+                                  VisiteurRepository visiteurRepository,
+                                  CommercantRepository commercantRepository,
+                                  CommerceRepository commerceRepository,
+                                  RoleRepository roleRepository,
+                                  PasswordEncoder passwordEncoder,
+                                  UtilisateurMapper mapper,
+                                  VisiteurMapper visiteurMapper,
+                                  CommercantMapper commercantMapper) {
+        this.repository = repository;
+        this.visiteurRepository = visiteurRepository;
+        this.commercantRepository = commercantRepository;
+        this.commerceRepository = commerceRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+        this.visiteurMapper = visiteurMapper;
+        this.commercantMapper = commercantMapper;
+    }
 
     @Override
     public UtilisateurDTO findById(UUID id) {
@@ -126,6 +147,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public UtilisateurDTO registerVisiteur(VisiteurDTO dto) {
         log.info("Inscription d'un nouveau visiteur: {}", dto.getEmail());
         Visiteur entity = visiteurMapper.toEntity(dto);
+        
+        // Hashage du mot de passe avant sauvegarde
+        if (dto.getPassword() != null) {
+            entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        
+        entity.setStatus("ACTIF");
+        
+        // Attribution du rôle VISITEUR par défaut
+        roleRepository.findByNom("VISITEUR")
+                .ifPresent(entity::setRole);
+                
         return visiteurMapper.toDto(visiteurRepository.save(entity));
     }
 
@@ -133,6 +166,18 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public UtilisateurDTO registerCommercant(CommercantDTO dto) {
         log.info("Inscription d'un nouveau commerçant: {}", dto.getEmail());
         Commercant entity = commercantMapper.toEntity(dto);
+        
+        // Hashage du mot de passe avant sauvegarde
+        if (dto.getPassword() != null) {
+            entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+        
+        entity.setStatus("ACTIF");
+        
+        // Attribution du rôle COMMERCANT par défaut
+        roleRepository.findByNom("COMMERCANT")
+                .ifPresent(entity::setRole);
+                
         return commercantMapper.toDto(commercantRepository.save(entity));
     }
 }

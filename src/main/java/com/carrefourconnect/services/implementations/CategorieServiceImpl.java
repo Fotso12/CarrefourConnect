@@ -5,23 +5,28 @@ import com.carrefourconnect.entities.Categorie;
 import com.carrefourconnect.mappers.CategorieMapper;
 import com.carrefourconnect.repositories.CategorieRepository;
 import com.carrefourconnect.services.interfaces.CategorieService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class CategorieServiceImpl implements CategorieService {
+
+    private static final Logger log = LoggerFactory.getLogger(CategorieServiceImpl.class);
 
     private final CategorieRepository repository;
     private final CategorieMapper mapper;
+
+    public CategorieServiceImpl(CategorieRepository repository, CategorieMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public CategorieDTO findById(UUID id) {

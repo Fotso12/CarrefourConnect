@@ -1,8 +1,8 @@
-package com.carrefourconnect.testcontrollers;
+package com.carrefourconnect.controllers;
 
-import com.carrefourconnect.controllers.MediaController;
-import com.carrefourconnect.dtos.MediaDTO;
-import com.carrefourconnect.services.interfaces.MediaService;
+import com.carrefourconnect.dtos.UtilisateurDTO;
+import com.carrefourconnect.dtos.VisiteurDTO;
+import com.carrefourconnect.services.interfaces.UtilisateurService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,41 +23,50 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(
-    controllers = MediaController.class,
+    controllers = UtilisateurController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityFilterAutoConfiguration.class}
 )
-class MediaControllerTest {
+class UtilisateurControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private MediaService service;
+    private UtilisateurService service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private UUID id;
-    private MediaDTO dto;
+    private UtilisateurDTO dto;
 
     @BeforeEach
     void setUp() {
         id = UUID.randomUUID();
-        dto = new MediaDTO();
-        dto.setIdmedia(id);
+        dto = new UtilisateurDTO();
+        dto.setIduser(id);
     }
 
     @Test
     void testGetAll() throws Exception {
         when(service.findAll()).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/medias"))
+        mockMvc.perform(get("/api/utilisateurs"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testGetByCommerce() throws Exception {
-        when(service.findByCommerce(any())).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/medias/commerce/{commerceId}", UUID.randomUUID()))
+    void testRegisterVisiteur() throws Exception {
+        VisiteurDTO visiteurDto = new VisiteurDTO();
+        when(service.registerVisiteur(any())).thenReturn(dto);
+        mockMvc.perform(post("/api/utilisateurs/inscription/visiteur")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(visiteurDto)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    void testAddFavorite() throws Exception {
+        mockMvc.perform(post("/api/utilisateurs/{userId}/favoris/{commerceId}", id, UUID.randomUUID()))
                 .andExpect(status().isOk());
     }
 }

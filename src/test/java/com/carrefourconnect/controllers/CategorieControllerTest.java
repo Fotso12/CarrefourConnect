@@ -1,8 +1,7 @@
-package com.carrefourconnect.testcontrollers;
+package com.carrefourconnect.controllers;
 
-import com.carrefourconnect.controllers.AvisController;
-import com.carrefourconnect.dtos.AvisDTO;
-import com.carrefourconnect.services.interfaces.AvisService;
+import com.carrefourconnect.dtos.CategorieDTO;
+import com.carrefourconnect.services.interfaces.CategorieService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -23,50 +22,42 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(
-    controllers = AvisController.class,
+    controllers = CategorieController.class,
     excludeAutoConfiguration = {SecurityAutoConfiguration.class, SecurityFilterAutoConfiguration.class}
 )
-class AvisControllerTest {
+class CategorieControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockitoBean
-    private AvisService service;
+    private CategorieService service;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private UUID id;
-    private AvisDTO dto;
+    private CategorieDTO dto;
 
     @BeforeEach
     void setUp() {
         id = UUID.randomUUID();
-        dto = new AvisDTO();
-        dto.setIdavis(id);
+        dto = new CategorieDTO();
+        dto.setIdcategorie(id);
+        dto.setNom("Test Category");
     }
 
     @Test
     void testGetAll() throws Exception {
         when(service.findAll()).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/avis"))
+        mockMvc.perform(get("/api/categories"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void testGetByCommerce() throws Exception {
-        when(service.findByCommerce(any())).thenReturn(Collections.singletonList(dto));
-        mockMvc.perform(get("/api/avis/commerce/{commerceId}", UUID.randomUUID()))
+    void testSearchByName() throws Exception {
+        when(service.findByNom(any())).thenReturn(dto);
+        mockMvc.perform(get("/api/categories/recherche").param("nom", "test"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    void testSave() throws Exception {
-        when(service.save(any())).thenReturn(dto);
-        mockMvc.perform(post("/api/avis")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isCreated());
     }
 }

@@ -5,23 +5,28 @@ import com.carrefourconnect.entities.Localisation;
 import com.carrefourconnect.mappers.LocalisationMapper;
 import com.carrefourconnect.repositories.LocalisationRepository;
 import com.carrefourconnect.services.interfaces.LocalisationService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class LocalisationServiceImpl implements LocalisationService {
+
+    private static final Logger log = LoggerFactory.getLogger(LocalisationServiceImpl.class);
 
     private final LocalisationRepository repository;
     private final LocalisationMapper mapper;
+
+    public LocalisationServiceImpl(LocalisationRepository repository, LocalisationMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
 
     @Override
     public LocalisationDTO findById(UUID id) {

@@ -4,13 +4,11 @@ import com.carrefourconnect.repositories.AbonnementRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.repositories.OffreRepository;
 import com.carrefourconnect.repositories.PaiementRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
-@AllArgsConstructor
 @Service
 public class CodeGenerator {
 
@@ -18,6 +16,16 @@ public class CodeGenerator {
     private final CommerceRepository commerceRepository;
     private final OffreRepository offreRepository;
     private final PaiementRepository paiementRepository;
+
+    public CodeGenerator(AbonnementRepository abonnementRepository, 
+                         CommerceRepository commerceRepository, 
+                         OffreRepository offreRepository, 
+                         PaiementRepository paiementRepository) {
+        this.abonnementRepository = abonnementRepository;
+        this.commerceRepository = commerceRepository;
+        this.offreRepository = offreRepository;
+        this.paiementRepository = paiementRepository;
+    }
 
     public String generate(String entityType) {
         String prefix = switch (entityType.toUpperCase()) {
