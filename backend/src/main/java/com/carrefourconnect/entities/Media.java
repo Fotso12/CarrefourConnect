@@ -35,4 +35,7 @@ public class Media {
 
     @Column(name = "taillefichier", nullable = false)
     private Long tailleFichier;
+
+    @Column(name = "estprincipale", nullable = false)
+    private boolean estPrincipale = false;
 }

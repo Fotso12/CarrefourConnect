@@ -59,6 +59,7 @@ public class MediaServiceImpl implements MediaService {
             existing.setUrl(dto.getUrl());
             existing.setTypeContenu(dto.getTypeContenu());
             existing.setTailleFichier(dto.getTailleFichier());
+            existing.setEstPrincipale(dto.isEstPrincipale());
             return mapper.toDto(repository.save(existing));
         }).orElseGet(() -> {
             log.error("Média non trouvé pour mise à jour: {}", id);

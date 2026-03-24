@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,4 +31,7 @@ public class CommerceDTO {
     private LocalDateTime dateCreation;
     private Long nombreVues;
     private BigDecimal noteGlobale;
+    private LocalTime heureOuverture;
+    private LocalTime heureFermeture;
+    private List<LocalisationDTO> localisations;
 }

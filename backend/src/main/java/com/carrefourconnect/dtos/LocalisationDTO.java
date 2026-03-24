@@ -20,4 +20,5 @@ public class LocalisationDTO {
     private String quartier;
     private LocalDateTime dateMiseAJour;
     private Point geolocalisation;
+    private String adresse;
 }

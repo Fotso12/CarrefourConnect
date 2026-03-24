@@ -39,4 +39,7 @@ public class Localisation {
 
     @Column(columnDefinition = "geography(Point, 4326)")
     private Point geolocalisation;
+
+    @Column(length = 256)
+    private String adresse;
 }

@@ -18,4 +18,5 @@ public class MediaDTO {
     private String nom;
     private String typeContenu;
     private Long tailleFichier;
+    private boolean estPrincipale;
 }

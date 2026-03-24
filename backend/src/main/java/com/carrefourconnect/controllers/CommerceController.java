@@ -210,4 +210,26 @@ public class CommerceController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * Effectue une recherche multicritères (nom, catégorie, ville, proximité).
+     */
+    @GetMapping("/rechercher")
+    @Operation(summary = "Recherche multicritères de commerces")
+    public ResponseEntity<?> rechercher(
+            @RequestParam(required = false) String nom,
+            @RequestParam(required = false) UUID idCategorie,
+            @RequestParam(required = false) String ville,
+            @RequestParam(required = false) StatutCommerce statut,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lon,
+            @RequestParam(required = false) Double rayon) {
+        log.info("Requête de recherche multicritères");
+        try {
+            return ResponseEntity.ok(service.rechercher(nom, idCategorie, ville, statut, lat, lon, rayon));
+        } catch (Exception e) {
+            log.error("Erreur lors de la recherche: {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

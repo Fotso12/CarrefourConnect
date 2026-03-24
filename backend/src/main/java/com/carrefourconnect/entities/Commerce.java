@@ -10,7 +10,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -75,4 +78,13 @@ public class Commerce {
 
     @Column(length = 64, unique = true)
     private String reference;
+
+    @Column(name = "heureouverture")
+    private LocalTime heureOuverture;
+
+    @Column(name = "heurefermeture")
+    private LocalTime heureFermeture;
+
+    @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Localisation> localisations = new ArrayList<>();
 }
