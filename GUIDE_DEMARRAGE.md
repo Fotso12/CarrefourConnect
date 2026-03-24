@@ -1,6 +1,19 @@
 # 📚 Guide de démarrage — CarrefourConnect
 
-Ce document explique l'architecture du projet, l'ordre de création des tables en base de données, le fonctionnement de la sécurité JWT, et comment créer le premier utilisateur administrateur.
+Ce document explique la structure du projet, l'architecture du backend, et comment démarrer les différents modules.
+
+---
+
+## 0. Structure du projet (Monorepo)
+
+Le projet est maintenant organisé en "Monorepo" pour regrouper le backend et les frontends :
+
+- `backend/` : API Spring Boot (Java).
+- `frontend-web/` : Application Web.
+- `frontend-mobile/` : Application Mobile.
+
+> [!IMPORTANT]
+> Pour toute commande Maven (ex: `./mvnw`), vous devez d'abord vous déplacer dans le dossier backend : `cd backend`.
 
 ---
 
