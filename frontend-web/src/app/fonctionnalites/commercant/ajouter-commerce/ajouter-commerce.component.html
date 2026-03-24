@@ -1,0 +1,177 @@
+<div class="max-w-4xl mx-auto pb-20">
+  
+  <!-- Stepper Header -->
+  <div class="mb-12">
+    <div class="flex items-center justify-between relative">
+      <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 -z-10"></div>
+      <div class="absolute top-1/2 left-0 h-1 bg-[#F78F1E] -translate-y-1/2 -z-10 transition-all duration-500" [style.width.%]="(step-1)*33.33"></div>
+      
+      <div *ngFor="let s of [1,2,3,4]" 
+           class="h-12 w-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-500 shadow-lg"
+           [class.bg-[#F78F1E]]="step >= s" [class.text-white]="step >= s"
+           [class.bg-white]="step < s" [class.text-gray-300]="step < s">
+        {{ s }}
+      </div>
+    </div>
+    <div class="flex justify-between mt-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 px-2">
+      <span [class.text-[#003B71]]="step >= 1">Informations</span>
+      <span [class.text-[#003B71]]="step >= 2">Catégorie</span>
+      <span [class.text-[#003B71]]="step >= 3">Localisation</span>
+      <span [class.text-[#003B71]]="step >= 4">Médias</span>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-[40px] shadow-2xl shadow-blue-900/5 p-10 min-h-[500px] flex flex-col border border-gray-50">
+    
+    <!-- ÉTAPE 1 : INFOS DE BASE -->
+    <div *ngIf="step === 1" class="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+      <div>
+        <h2 class="text-2xl font-black text-[#003B71] mb-2">Parlez-nous de votre établissement</h2>
+        <p class="text-gray-400 text-sm mb-8 font-medium">Ces informations seront visibles par tous vos futurs clients.</p>
+      </div>
+
+      <div class="space-y-5">
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nom de l'établissement</label>
+          <input type="text" [(ngModel)]="commerce.nom" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Description</label>
+          <textarea [(ngModel)]="commerce.description" rows="4" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all" placeholder="Dites-en plus sur vos services..."></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-5">
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Téléphone</label>
+                <input type="tel" [(ngModel)]="commerce.telephone1" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Site Web (optionnel)</label>
+                <input type="url" [(ngModel)]="commerce.siteweb" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm">
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 2 : CATÉGORIE -->
+    <div *ngIf="step === 2" class="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+      <div>
+        <h2 class="text-2xl font-black text-[#003B71] mb-2">Quelle est votre spécialité ?</h2>
+        <p class="text-gray-400 text-sm mb-8 font-medium">Choisissez la catégorie qui correspond le mieux à votre activité.</p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div *ngFor="let cat of categories" 
+             (click)="commerce.idcategorie = cat.id; showAddCategory = false"
+             [class.border-[#F78F1E]]="commerce.idcategorie === cat.id"
+             [class.bg-orange-50]="commerce.idcategorie === cat.id"
+             class="p-6 border-2 border-gray-100 rounded-3xl cursor-pointer hover:border-[#F78F1E] flex flex-col items-center gap-3 transition-all group">
+          <div class="h-12 w-12 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:bg-[#F78F1E]/10 group-hover:text-[#F78F1E] transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-[#003B71]">{{ cat.nom }}</span>
+        </div>
+
+        <!-- Bouton Ajouter Catégorie -->
+        <div (click)="showAddCategory = true" 
+             class="p-6 border-2 border-dashed border-gray-200 rounded-3xl cursor-pointer hover:bg-gray-50 flex flex-col items-center justify-center gap-2">
+          <span class="text-2xl text-gray-400">+</span>
+          <span class="text-xs font-bold text-gray-400">Autre catégorie</span>
+        </div>
+      </div>
+
+      <!-- Formulaire Ajout Catégorie -->
+      <div *ngIf="showAddCategory" class="mt-8 p-8 bg-blue-50 rounded-[32px] border border-blue-100 animate-in zoom-in duration-300">
+        <h4 class="font-bold text-[#003B71] mb-4">Créer une nouvelle catégorie</h4>
+        <div class="space-y-4">
+          <input type="text" [(ngModel)]="nouvelleCategorie.nom" placeholder="Nom de la catégorie (ex: Garage)" class="w-full bg-white border-none rounded-xl px-4 py-3 text-sm">
+          <button (click)="creerCategorie()" class="bg-[#003B71] text-white px-6 py-2 rounded-xl text-xs font-bold hover:bg-[#00ADEF]">Ajouter à la liste</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 : LOCALISATION -->
+    <div *ngIf="step === 3" class="animate-in fade-in slide-in-from-right-4 duration-500 h-full flex flex-col space-y-6">
+      <div>
+        <h2 class="text-2xl font-black text-[#003B71] mb-2">Où se trouve votre commerce ?</h2>
+        <p class="text-gray-400 text-sm mb-4 font-medium">Placez le curseur précisément sur la carte.</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 mb-4">
+          <input type="text" [(ngModel)]="commerce.ville" placeholder="Ville" class="bg-gray-50 border-none rounded-xl px-4 py-3 text-sm">
+          <input type="text" [(ngModel)]="commerce.quartier" placeholder="Quartier" class="bg-gray-50 border-none rounded-xl px-4 py-3 text-sm">
+      </div>
+
+      <div class="flex-1 min-h-[300px] rounded-3xl overflow-hidden shadow-inner border border-gray-100 relative">
+        <!-- Address input + geolocation -->
+        <div class="absolute top-4 left-4 z-[1000] p-3 bg-white/90 rounded-2xl shadow-sm flex gap-2 items-center">
+          <input type="text" [(ngModel)]="commerce.adresse" placeholder="Adresse complète (optionnel)" class="px-3 py-2 rounded-xl bg-gray-50 text-sm" />
+          <button (click)="useGeolocation()" class="px-3 py-2 bg-[#003B71] text-white rounded-xl text-xs">Ma position</button>
+        </div>
+
+        <!-- Carte Interactive -->
+        <app-carte [points]="[]" [minHeight]="320" (mapClick)="onMapClick($event)"></app-carte>
+        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur p-3 rounded-2xl shadow-xl z-[1000] text-[10px] font-bold text-[#003B71]">
+            Lat: {{ commerce.lat | number:'1.4-4' }} | Lon: {{ commerce.lon | number:'1.4-4' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 : MÉDIAS -->
+    <div *ngIf="step === 4" class="animate-in fade-in slide-in-from-right-4 duration-500 space-y-6">
+      <div>
+        <h2 class="text-2xl font-black text-[#003B71] mb-2">Mettez votre vitrine en valeur</h2>
+        <p class="text-gray-400 text-sm mb-8 font-medium">Les commerces avec photos reçoivent 3x plus de visites.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="border-4 border-dashed border-gray-100 rounded-[40px] p-12 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-all group" (click)="fileInput.click()">
+            <div class="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center text-[#00ADEF] mb-4 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+            </div>
+            <span class="text-sm font-bold text-gray-400">Cliquez pour uploader le logo ou une photo</span>
+            <input #fileInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
+        </div>
+
+        <!-- Preview thumbnails -->
+        <div *ngIf="commerce.images && commerce.images.length > 0" class="flex gap-3 flex-wrap">
+          <div *ngFor="let img of commerce.images; let i = index" class="w-24 h-24 rounded-xl overflow-hidden relative border">
+            <img [src]="img.url || img.urlPreview || ''" class="w-full h-full object-cover" alt="image" />
+            <button (click)="removeImage(i)" class="absolute top-1 right-1 bg-white rounded-full p-1 text-xs">×</button>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+            <h4 class="text-xs font-black text-[#003B71] uppercase tracking-widest">Conseils photos</h4>
+            <ul class="space-y-3">
+                <li class="flex items-start gap-3 text-sm text-gray-500">
+                    <span class="text-[#F78F1E]">•</span> Une photo de la façade pour aider les clients à vous trouver.
+                </li>
+                <li class="flex items-start gap-3 text-sm text-gray-500">
+                    <span class="text-[#F78F1E]">•</span> Des photos nettes et bien éclairées de vos produits phares.
+                </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation du Wizard -->
+    <div class="mt-auto pt-10 flex justify-between">
+      <button *ngIf="step > 1" (click)="prevStep()" class="text-gray-400 font-bold px-8 py-3 hover:text-[#003B71] transition-all">
+        ← Retour
+      </button>
+      <div class="flex-1"></div>
+      <button *ngIf="step < 4" (click)="nextStep()" 
+              class="bg-[#003B71] text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#00ADEF] transition-all">
+        Continuer
+      </button>
+      <button *ngIf="step === 4" (click)="enregistrer()" 
+              class="bg-[#F78F1E] text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:bg-orange-600 transition-all">
+        Finaliser l'inscription
+      </button>
+    </div>
+  </div>
+</div>

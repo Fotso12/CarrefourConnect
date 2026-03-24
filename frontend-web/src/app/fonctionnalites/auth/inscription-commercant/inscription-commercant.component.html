@@ -1,0 +1,98 @@
+<div class="min-h-screen bg-[#003B71] flex items-center justify-center p-4">
+  <div class="max-w-4xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col md:flex-row">
+    
+    <!-- Image et Message (Gauche) -->
+    <div class="md:w-5/12 bg-gradient-to-br from-[#003B71] to-[#00ADEF] p-12 text-white flex flex-col justify-center">
+      <img src="/logo.png" alt="Logo" class="h-20 w-20 mb-8 brightness-0 invert">
+      <h2 class="text-3xl font-bold mb-4">Devenez partenaire CarrefourConnect</h2>
+      <p class="text-blue-100 mb-8">Boostez la visibilité de votre commerce et touchez plus de clients locaux dès aujourd'hui.</p>
+      
+      <div class="space-y-4">
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">✓</div>
+          <span class="text-sm font-medium">Inscription simple et rapide</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">✓</div>
+          <span class="text-sm font-medium">Gestion facilitée de votre vitrine</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="h-8 w-8 rounded-full bg-white/20 flex items-center justify-center">✓</div>
+          <span class="text-sm font-medium">Réception directe des avis clients</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire (Droite) -->
+    <div class="md:w-7/12 p-12">
+      <div class="mb-10 text-center md:text-left">
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Inscription Commerçant</h1>
+        <p class="text-gray-500 text-sm">Créez votre compte pour commencer à gérer vos établissements.</p>
+      </div>
+
+      <div *ngIf="error" class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-r-lg text-sm">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="space-y-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Nom</label>
+            <input type="text" name="nom" [(ngModel)]="user.nom" required
+                   class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Prénom</label>
+            <input type="text" name="prenom" [(ngModel)]="user.prenom" required
+                   class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Email Professionnel</label>
+          <input type="email" name="email" [(ngModel)]="user.email" required 
+                 class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Téléphone</label>
+          <input type="tel" name="telephone" [(ngModel)]="user.telephone" required
+                 class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all"
+                 placeholder="+237 ...">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Numéro Registre du Commerce (RCCM)</label>
+          <input type="text" name="numeroRegistreCommerce" [(ngModel)]="user.numeroRegistreCommerce" required
+                 class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all"
+                 placeholder="RC/DLA/...">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Mot de passe</label>
+            <input type="password" name="password" [(ngModel)]="user.password" required
+                   class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Confirmer</label>
+            <input type="password" name="confirmPassword" [(ngModel)]="user.confirmPassword" required
+                   class="w-full bg-gray-50 border-none rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E] transition-all">
+          </div>
+        </div>
+
+        <div class="pt-4">
+          <button type="submit" [disabled]="!registerForm.valid || loading"
+                  class="w-full bg-[#F78F1E] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-500/30 hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50">
+            {{ loading ? 'Inscription en cours...' : 'Créer mon compte commerçant' }}
+          </button>
+        </div>
+
+        <p class="text-center text-sm text-gray-500 mt-6">
+          Déjà un compte ? 
+          <a routerLink="/connexion" class="text-[#003B71] font-bold hover:underline">Se connecter</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

@@ -43,8 +43,8 @@ public class AuthController {
      * @return 200 OK avec un {@link JwtResponse} contenant le token Bearer et les infos utilisateur,
      *         ou 401 Unauthorized si les identifiants sont invalides.
      */
-    @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+        @PostMapping(value = {"/login", "/signin"})
+        public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         // Authentifier l'utilisateur avec ses identifiants (email + mot de passe)
         Authentication authentication = authenticationManager.authenticate(

@@ -1,0 +1,68 @@
+<div class="flex h-screen bg-[#F8FAFC] overflow-hidden">
+  
+  <!-- Sidebar -->
+  <aside [class.w-72]="isSidebarOpen" [class.w-20]="!isSidebarOpen" 
+         class="bg-[#003B71] text-white transition-all duration-300 flex flex-col shadow-2xl z-50">
+    
+    <!-- Header Sidebar -->
+    <div class="h-20 flex items-center px-6 gap-3 border-b border-white/10">
+      <img src="/logo.png" alt="Logo" class="h-10 w-10 brightness-0 invert shrink-0">
+      <span *ngIf="isSidebarOpen" class="text-xl font-black tracking-tight whitespace-nowrap">Merchant Hub</span>
+    </div>
+
+    <!-- Menu Items -->
+    <nav class="flex-1 py-6 px-4 space-y-2">
+      <a *ngFor="let item of menuItems" 
+         [routerLink]="item.link" 
+         routerLinkActive="bg-[#F78F1E] text-white shadow-lg shadow-orange-500/30"
+         class="flex items-center gap-4 px-4 py-3.5 rounded-2xl text-blue-100 hover:bg-white/10 hover:text-white transition-all group overflow-hidden">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
+        </svg>
+        <span *ngIf="isSidebarOpen" class="font-bold text-sm whitespace-nowrap">{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <!-- Footer Sidebar (User) -->
+    <div class="p-4 border-t border-white/10">
+      <div class="flex items-center gap-3 p-3 rounded-2xl bg-white/5 hover:bg-white/10 cursor-pointer transition-all">
+        <div class="h-10 w-10 rounded-xl bg-[#F78F1E] flex items-center justify-center font-bold text-lg">{{ displayName ? (displayName.charAt(0) || 'D') : 'D' }}</div>
+        <div *ngIf="isSidebarOpen" class="flex-1 min-w-0">
+          <p class="text-sm font-bold truncate">{{ displayName || 'Mon Compte' }}</p>
+          <p class="text-[10px] text-blue-300 truncate">{{ displayRole ? (displayRole.replace('ROLE_', '') ) : 'Commerçant' }}</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Contenu Principal -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    
+    <!-- Top Bar -->
+    <header class="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-8 shrink-0">
+      <button (click)="toggleSidebar()" class="p-2.5 bg-gray-50 rounded-xl text-gray-400 hover:text-[#003B71] transition-all">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+
+      <div class="flex items-center gap-6">
+        <div class="flex flex-col items-end hidden sm:flex">
+          <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Dernière visite</span>
+          <span class="text-xs font-bold text-[#003B71]">Aujourd'hui, 11:45</span>
+        </div>
+        <button class="relative p-2.5 bg-gray-50 rounded-xl text-gray-400 hover:text-[#F78F1E] transition-all">
+          <div class="absolute top-2 right-2.5 h-2 w-2 bg-red-500 rounded-full border-2 border-white"></div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Zone de Contenu Dynamique -->
+    <main class="flex-1 overflow-y-auto p-8 bg-[#F8FAFC]">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

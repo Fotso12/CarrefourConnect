@@ -1,0 +1,39 @@
+<div class="space-y-8">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-black text-slate-800">Modération des Commerces</h1>
+      <p class="text-slate-400 font-medium">Validez les nouveaux établissements pour les rendre publics</p>
+    </div>
+    <div class="bg-[#00ADEF]/10 text-[#00ADEF] px-4 py-2 rounded-xl text-sm font-bold">
+        {{ commercesAttente.length }} en attente
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="space-y-4">
+      <div *ngFor="let i of [1,2,3]" class="h-24 bg-white rounded-3xl animate-pulse"></div>
+  </div>
+
+  <div *ngIf="!loading && commercesAttente.length === 0" class="bg-white p-20 rounded-[40px] text-center border-2 border-dashed border-gray-100">
+      <p class="text-slate-400 font-medium">Aucun commerce en attente de validation pour le moment.</p>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4">
+    <div *ngFor="let commerce of commercesAttente" 
+         class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500">
+      <div class="flex items-center gap-6">
+          <div class="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
+              <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100'" class="w-full h-full object-cover">
+          </div>
+          <div>
+              <h3 class="font-bold text-slate-800">{{ commerce.nom }}</h3>
+              <p class="text-xs text-slate-400">{{ commerce.ville }} • {{ commerce.categorie?.nom }}</p>
+          </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+          <button (click)="rejeter(commerce.id)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
+          <button (click)="valider(commerce.id)" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm">Valider l'établissement</button>
+      </div>
+    </div>
+  </div>
+</div>
