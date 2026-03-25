@@ -18,6 +18,7 @@ import * as L from 'leaflet';
 })
 export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() points: any[] = []; // Liste des coordonnées et infos à afficher
+  @Input() routePoints: any[] = []; // Points pour tracer une ligne (ex: itinéraire)
   @Input() minHeight: number = 240;
   @Output() mapClick: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild('mapContainer', { static: true }) mapContainer!: ElementRef<HTMLDivElement>;
@@ -46,6 +47,22 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private initMap(): void {
     // Create the map inside the container element (avoid fixed IDs)
+    // Correction des icônes par défaut de Leaflet
+    const iconRetinaUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png';
+    const iconUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png';
+    const shadowUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
+    const iconDefault = L.icon({
+      iconRetinaUrl,
+      iconUrl,
+      shadowUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      tooltipAnchor: [16, -28],
+      shadowSize: [41, 41]
+    });
+    L.Marker.prototype.options.icon = iconDefault;
+
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [4.0511, 9.7679],
       zoom: 13
@@ -77,20 +94,41 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
   private updateMarkers(): void {
     if (!this.map) return;
 
-    // Remove existing markers
+    // Remove existing markers and polylines
     (this.map as any).eachLayer((layer: any) => {
-      if (layer instanceof L.Marker) {
+      if (layer instanceof L.Marker || layer instanceof L.Polyline) {
         this.map?.removeLayer(layer);
       }
     });
+
+    // Dessiner l'itinéraire si présent
+    if (this.routePoints && this.routePoints.length >= 2) {
+      const path = this.routePoints.map(p => [p.lat, p.lon] as L.LatLngExpression);
+      // Tracé principal (Bleu Carrefour Connect)
+      L.polyline(path, { 
+        color: '#00ADEF', 
+        weight: 6, 
+        opacity: 0.8, 
+        lineJoin: 'round' 
+      }).addTo(this.map);
+      
+      this.map.fitBounds(L.polyline(path).getBounds(), { padding: [50, 50] });
+    }
 
     this.points.forEach(point => {
       const lat = point.lat ?? point.latitude ?? point.latitud;
       const lon = point.lon ?? point.longitude ?? point.lng;
       if (lat != null && lon != null && this.map) {
-        L.marker([lat, lon])
+        const marker = L.marker([lat, lon])
           .addTo(this.map)
           .bindPopup(`<b>${point.nom || ''}</b><br>${point.adresse || ''}`);
+          
+        if (point.isUser) {
+          marker.setIcon(L.divIcon({
+            className: 'user-marker',
+            html: '<div class="w-4 h-4 bg-[#00ADEF] border-2 border-white rounded-full shadow-lg pulse"></div>'
+          }));
+        }
       }
     });
   }

@@ -11,6 +11,9 @@ import com.carrefourconnect.repositories.MediaRepository;
 import com.carrefourconnect.mappers.MediaMapper;
 import com.carrefourconnect.services.interfaces.CommerceService;
 import com.carrefourconnect.utils.enums.StatutCommerce;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -73,13 +76,21 @@ public class CommerceServiceImpl implements CommerceService {
                             log.debug("Image principale trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
                         },
                         () -> {
-                            // Sinon prendre la première disponible
                             if (!mediaDtos.isEmpty()) {
                                 dto.setImagePrincipale(mediaDtos.get(0).getUrl());
-                                log.debug("Image fallback trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
                             }
                         }
                     );
+            
+            // Enrichir les localisations avec lat/lon pour le frontend
+            if (dto.getLocalisations() != null) {
+                dto.getLocalisations().forEach(loc -> {
+                    if (loc.getGeolocalisation() != null) {
+                        loc.setLat(loc.getGeolocalisation().getY());
+                        loc.setLon(loc.getGeolocalisation().getX());
+                    }
+                });
+            }
         }
     }
 
@@ -157,6 +168,15 @@ public class CommerceServiceImpl implements CommerceService {
                 loc.setVille(locDto.getVille());
                 loc.setQuartier(locDto.getQuartier());
                 loc.setAdresse(locDto.getAdresse());
+                
+                // Conversion lat/lon -> Point JTS
+                if (locDto.getLat() != null && locDto.getLon() != null) {
+                    GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
+                    loc.setGeolocalisation(factory.createPoint(new Coordinate(locDto.getLon(), locDto.getLat())));
+                } else {
+                    loc.setGeolocalisation(locDto.getGeolocalisation());
+                }
+                
                 loc.setCommerce(entity);
                 // Si vous avez un mapper pour Localisation, utilisez-le ici, ou faites-le manuellement
                 entity.getLocalisations().add(loc);
@@ -192,6 +212,21 @@ public class CommerceServiceImpl implements CommerceService {
             }
             if (dto.getIduser() != null) {
                 commercantRepository.findById(dto.getIduser()).ifPresent(existingEntity::setCommercant);
+            }
+            
+            // Mise à jour des coordonnées si présentes
+            if (dto.getLocalisations() != null && !dto.getLocalisations().isEmpty() && !existingEntity.getLocalisations().isEmpty()) {
+                com.carrefourconnect.dtos.LocalisationDTO locDto = dto.getLocalisations().get(0);
+                com.carrefourconnect.entities.Localisation existingLoc = existingEntity.getLocalisations().get(0);
+                
+                existingLoc.setVille(locDto.getVille());
+                existingLoc.setQuartier(locDto.getQuartier());
+                existingLoc.setAdresse(locDto.getAdresse());
+                
+                if (locDto.getLat() != null && locDto.getLon() != null) {
+                    GeometryFactory factory = new GeometryFactory(new PrecisionModel(), 4326);
+                    existingLoc.setGeolocalisation(factory.createPoint(new Coordinate(locDto.getLon(), locDto.getLat())));
+                }
             }
             
             CommerceDTO updatedDto = mapper.toDto(repository.save(existingEntity));

@@ -66,16 +66,22 @@ export class AjouterCommerceComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
-      this.commerceService.getById(id).subscribe(data => {
-        Object.assign(this.commerce, data);
-        if (data.idcategorie) this.commerce.idcategorie = data.idcategorie;
-        if (data.localisations && data.localisations.length > 0) {
-          const loc = data.localisations[0];
-          this.commerce.ville = loc.ville;
-          this.commerce.quartier = loc.quartier;
-          this.commerce.adresse = loc.adresse;
-          this.commerce.lat = loc.lat;
-          this.commerce.lon = loc.lon;
+      this.commerce.idcommerce = id; // Sécuriser l'ID immédiatement
+      this.commerceService.getById(id).subscribe({
+        next: (data) => {
+          Object.assign(this.commerce, data);
+          if (data.idcategorie) this.commerce.idcategorie = data.idcategorie;
+          if (data.localisations && data.localisations.length > 0) {
+            const loc = data.localisations[0];
+            this.commerce.ville = loc.ville;
+            this.commerce.quartier = loc.quartier;
+            this.commerce.adresse = loc.adresse;
+            this.commerce.lat = loc.lat;
+            this.commerce.lon = loc.lon;
+          }
+        },
+        error: (err) => {
+          console.error("Erreur chargement commerce, utilisation de l'ID de l'URL", err);
         }
       });
     }
@@ -145,6 +151,30 @@ export class AjouterCommerceComponent implements OnInit {
     }, (err) => {
       console.error('Geolocation error', err);
     }, { enableHighAccuracy: true, timeout: 10000 });
+  }
+
+  /**
+   * Cherche les coordonnées GPS à partir de la ville et du quartier
+   */
+  localiserQuartier(): void {
+    const query = `${this.commerce.quartier}, ${this.commerce.ville}, Cameroun`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(results => {
+        if (results && results.length > 0) {
+          this.commerce.lat = parseFloat(results[0].lat);
+          this.commerce.lon = parseFloat(results[0].lon);
+          this.cdr.detectChanges();
+        } else {
+          alert("Lieu introuvable. Veuillez placer le marqueur manuellement.");
+        }
+      })
+      .catch(err => {
+        console.error("Erreur Nominatim:", err);
+        alert("Erreur lors de la recherche du quartier.");
+      });
   }
 
   /**

@@ -4,6 +4,10 @@ import { AccueilComponent } from './fonctionnalites/accueil/accueil.component';
 export const routes: Routes = [
   { path: '', component: AccueilComponent },
   { 
+    path: 'commerce/:id', 
+    loadComponent: () => import('./fonctionnalites/accueil/detail-commerce/detail-commerce.component').then(m => m.DetailCommerceComponent)
+  },
+  { 
     path: 'connexion', 
     loadComponent: () => import('./fonctionnalites/auth/connexion/connexion.component').then(m => m.ConnexionComponent) 
   },

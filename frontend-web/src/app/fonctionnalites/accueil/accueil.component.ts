@@ -37,7 +37,23 @@ export class AccueilComponent implements OnInit {
 
   ngOnInit(): void {
     this.chargerCategories();
-    this.rechercher();
+    this.rechercher(); // Chargement immédiat de TOUS les commerces
+    this.initGeolocalisation();
+  }
+
+  /**
+   * Tente de récupérer la position de l'utilisateur sans forcer le filtrage immédiat
+   */
+  initGeolocalisation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          (this.filtres as any).lat = pos.coords.latitude;
+          (this.filtres as any).lon = pos.coords.longitude;
+          // On ne relance pas rechercher() ici pour ne pas restreindre la liste subitement
+        }
+      );
+    }
   }
 
   /**

@@ -21,13 +21,21 @@
             <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nom }}</option>
           </select>
           <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
+          <input 
+            type="text" 
+            [(ngModel)]="filtres.ville"
+            (keyup.enter)="rechercher()"
+            placeholder="Ville (ex: Douala)" 
+            class="bg-transparent border-none focus:ring-0 py-2 text-sm text-gray-600 w-32"
+          >
+          <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
           <div class="flex items-center gap-2 px-2">
             <span class="text-[10px] text-gray-400 font-bold uppercase">Rayon</span>
             <input 
               type="number" 
               [(ngModel)]="filtres.rayon"
               (change)="rechercher()"
-              class="w-16 bg-transparent border-none focus:ring-0 py-2 text-sm font-bold text-[#003B71]"
+              class="w-12 bg-transparent border-none focus:ring-0 py-2 text-sm font-bold text-[#003B71]"
               min="1" max="100"
             >
             <span class="text-[10px] text-gray-400 font-bold">km</span>
@@ -51,28 +59,21 @@
   </div>
 
   <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
-    <!-- Liste des Commerces (Section Gauche) -->
-    <div class="w-full md:w-[450px] lg:w-[500px] bg-white p-6 overflow-y-auto border-r border-gray-100 shadow-xl z-10">
+    <!-- Liste des Commerces (Section Principale - Élargie) -->
+    <div class="flex-1 bg-white p-6 overflow-y-auto border-r border-gray-100 shadow-sm z-10">
       <div class="flex items-center justify-between mb-8">
         <div>
-          <h2 class="text-2xl font-black text-[#003B71]">Commerces</h2>
-          <p class="text-gray-400 text-sm font-medium">{{ commerces.length }} établissements trouvés</p>
-        </div>
-        <div class="flex gap-2">
-            <button class="p-2 bg-gray-50 rounded-lg hover:bg-gray-100 text-gray-400 transition-all">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                </svg>
-            </button>
+          <h2 class="text-3xl font-black text-[#003B71]">Découvrir</h2>
+          <p class="text-gray-400 text-sm font-medium">{{ commerces.length }} pépites locales à explorer</p>
         </div>
       </div>
 
-      <!-- Grille de Cartes -->
-      <div class="space-y-6">
+      <!-- Grille de Cartes - Plus large -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div *ngFor="let commerce of commerces" 
-             class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer relative">
+             class="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-50 group cursor-pointer relative">
           <!-- Zone Image / Carrousel -->
-          <div class="h-44 bg-gray-200 relative overflow-hidden group/image">
+          <div class="h-48 bg-gray-200 relative overflow-hidden group/image">
             <ng-container *ngIf="commerce.images && commerce.images.length > 0; else placeholder">
               <img [src]="commerce.images[commerce.currentImg].url" 
                    alt="Image du commerce" 
@@ -87,13 +88,6 @@
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
                 </button>
               </div>
-
-              <!-- Indicateurs -->
-              <div *ngIf="commerce.images.length > 1" class="absolute bottom-2 inset-x-0 flex justify-center gap-1.5">
-                <div *ngFor="let img of commerce.images; let i = index" 
-                     [class]="i === commerce.currentImg ? 'w-4 bg-white' : 'w-1.5 bg-white/50'"
-                     class="h-1.5 rounded-full transition-all"></div>
-              </div>
             </ng-container>
 
             <ng-template #placeholder>
@@ -101,27 +95,23 @@
                    class="w-full h-full object-cover grayscale opacity-50">
             </ng-template>
 
-            <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
-            <div class="absolute bottom-4 left-4">
-                <span class="bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+            <div class="absolute top-4 left-4">
+                <span class="bg-white/80 backdrop-blur text-[#003B71] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
                     {{ commerce.categorie?.nom }}
                 </span>
             </div>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-[#003B71] mb-2 group-hover:text-[#F78F1E] transition-colors line-clamp-1">{{ commerce.nom }}</h3>
-            <p class="text-gray-500 text-xs leading-relaxed mb-6 line-clamp-2 h-8">{{ commerce.description }}</p>
+            <h3 class="text-lg font-black text-[#003B71] mb-2 group-hover:text-[#F78F1E] transition-colors line-clamp-1">{{ commerce.nom }}</h3>
+            <p class="text-gray-400 text-[11px] leading-relaxed mb-6 line-clamp-2 h-8 font-medium">{{ commerce.description }}</p>
             
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <div class="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-[#00ADEF]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                    </svg>
-                </div>
-                <span class="text-gray-500 text-xs font-bold">{{ commerce.ville }}</span>
+              <div class="flex items-center gap-2 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+                <span class="text-[11px] font-bold">{{ commerce.ville }}</span>
               </div>
-              <button class="bg-[#003B71] text-white px-5 py-2 rounded-xl text-xs font-bold hover:bg-[#00ADEF] transition-all shadow-md">
+              <button [routerLink]="['/commerce', commerce.idcommerce]" 
+                      class="bg-[#003B71] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black hover:bg-[#00ADEF] transition-all shadow-lg shadow-blue-900/10">
                 Détails
               </button>
             </div>
@@ -130,15 +120,29 @@
       </div>
     </div>
 
-    <!-- Carte (Section Droite) -->
-    <div class="flex-1 relative bg-gray-100">
-      <app-carte [points]="pointsCarte" class="h-full"></app-carte>
+    <!-- Carte (Section Droite - Réduite) -->
+    <div class="w-full md:w-[320px] lg:w-[380px] relative bg-gray-50 border-l border-gray-100 flex flex-col">
+      <div class="h-[250px] md:h-full relative">
+        <app-carte [points]="pointsCarte" class="h-full"></app-carte>
+      </div>
+      
+      <!-- Bouton Inscription Rapide sous la map (desktop) -->
+      <div class="hidden md:block p-6 mt-auto">
+        <div class="bg-gradient-to-br from-[#003B71] to-[#00ADEF] rounded-3xl p-6 text-white shadow-xl">
+           <p class="text-xs font-black uppercase tracking-widest mb-2 opacity-80">Vous êtes commerçant ?</p>
+           <h4 class="text-lg font-black mb-4">Rejoignez l'annuaire dès aujourd'hui</h4>
+           <button routerLink="/inscription-commercant" 
+                   class="w-full bg-white text-[#003B71] py-3 rounded-xl font-black text-xs hover:bg-orange-50 transition-all">
+             Inscrire mon commerce
+           </button>
+        </div>
+      </div>
+    </div>
       <!-- Bouton Flottant (Vue Mobile) -->
       <button class="absolute bottom-8 right-8 md:hidden bg-[#003B71] text-white p-4 rounded-full shadow-2xl z-50">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
         </svg>
       </button>
-    </div>
   </main>
 </div>

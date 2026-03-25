@@ -1,0 +1,110 @@
+<div class="max-w-7xl mx-auto p-4 lg:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+  
+  <div *ngIf="loading" class="flex flex-col items-center justify-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#003B71]"></div>
+    <p class="mt-4 text-gray-400 font-medium italic">Chargement des secrets de l'établissement...</p>
+  </div>
+
+  <div *ngIf="!loading && commerce" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <!-- Colonne Gauche : Images et Infos -->
+    <div class="lg:col-span-2 space-y-8">
+      
+      <!-- Carrousel Premium -->
+      <div class="relative h-[400px] rounded-[40px] overflow-hidden shadow-2xl group">
+        <ng-container *ngIf="commerce.images && commerce.images.length > 0; else noImages">
+          <img [src]="commerce.images[currentImg].url" 
+               class="w-full h-full object-cover transition-all duration-1000 scale-100 group-hover:scale-105">
+          
+          <div *ngIf="commerce.images.length > 1" class="absolute inset-0 flex items-center justify-between px-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button (click)="prevImage()" class="h-14 w-14 rounded-full bg-white/90 backdrop-blur shadow-xl flex items-center justify-center text-[#003B71] hover:scale-110 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button (click)="nextImage()" class="h-14 w-14 rounded-full bg-white/90 backdrop-blur shadow-xl flex items-center justify-center text-[#003B71] hover:scale-110 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
+
+          <div class="absolute bottom-6 inset-x-0 flex justify-center gap-2">
+            <div *ngFor="let img of commerce.images; let i = index" 
+                 [class]="i === currentImg ? 'w-8 bg-white' : 'w-2 bg-white/40'"
+                 class="h-2 rounded-full transition-all duration-500"></div>
+          </div>
+        </ng-container>
+        <ng-template #noImages>
+          <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+          </div>
+        </ng-template>
+        
+        <div class="absolute top-6 left-6">
+          <span class="bg-[#F78F1E] text-white px-6 py-2 rounded-full text-sm font-black uppercase tracking-widest shadow-lg">
+            {{ commerce.categorie?.nom || 'Commerce' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Description et Contenu -->
+      <div class="bg-white rounded-[40px] p-10 shadow-sm border border-gray-50">
+        <h1 class="text-5xl font-black text-[#003B71] mb-6">{{ commerce.nom }}</h1>
+        <p class="text-gray-500 text-lg leading-relaxed mb-10">{{ commerce.description }}</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="flex items-center gap-4 group">
+            <div class="h-14 w-14 rounded-2xl bg-blue-50 flex items-center justify-center text-[#00ADEF] group-hover:bg-[#00ADEF] group-hover:text-white transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+            </div>
+            <div>
+              <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Téléphone</p>
+              <p class="text-lg font-bold text-[#003B71]">{{ commerce.telephone1 }}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 group">
+            <div class="h-14 w-14 rounded-2xl bg-orange-50 flex items-center justify-center text-[#F78F1E] group-hover:bg-[#F78F1E] group-hover:text-white transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <div>
+              <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Horaires</p>
+              <p class="text-lg font-bold text-[#003B71]">{{ commerce.heureOuverture || 'N/A' }} - {{ commerce.heureFermeture || 'N/A' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Colonne Droite : Map et Miniature -->
+    <div class="space-y-8">
+      
+      <!-- Carte avec Itinéraire -->
+      <div class="bg-white rounded-[40px] p-6 shadow-xl border border-gray-100 overflow-hidden">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-black text-[#003B71]">Localisation</h3>
+          <button (click)="obtenirItineraire()" class="bg-[#00ADEF] text-white px-4 py-2 rounded-xl text-xs font-bold hover:shadow-lg transition-all flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /></svg>
+            Itinéraire
+          </button>
+        </div>
+        
+        <div class="h-[300px] mb-6 rounded-3xl overflow-hidden border border-gray-50">
+          <app-carte [points]="pointsCarte" [routePoints]="routePoints" class="h-full"></app-carte>
+        </div>
+
+        <!-- Miniature (Tuile) -->
+        <div class="bg-gray-50 rounded-3xl p-4 flex items-center gap-4 border border-gray-100">
+           <div class="h-16 w-16 rounded-2xl overflow-hidden shadow-md">
+             <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100'" class="w-full h-full object-cover">
+           </div>
+           <div>
+             <p class="text-sm font-black text-[#003B71] leading-tight">{{ commerce.nom }}</p>
+             <p class="text-[10px] text-gray-400 font-bold uppercase">{{ commerce.ville }}</p>
+           </div>
+        </div>
+      </div>
+
+      <button routerLink="/" class="w-full bg-gray-50 text-gray-400 py-4 rounded-2xl font-bold hover:bg-gray-100 transition-all border border-gray-100">
+        ← Retour à l'annuaire
+      </button>
+    </div>
+
+  </div>
+</div>

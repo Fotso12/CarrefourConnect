@@ -19,6 +19,9 @@ public class LocalisationDTO {
     private String ville;
     private String quartier;
     private LocalDateTime dateMiseAJour;
+    private Double lat;
+    private Double lon;
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Point geolocalisation;
     private String adresse;
 }
