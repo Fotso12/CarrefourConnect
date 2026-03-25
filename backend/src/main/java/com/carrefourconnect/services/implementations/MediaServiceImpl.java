@@ -80,4 +80,38 @@ public class MediaServiceImpl implements MediaService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public MediaDTO upload(org.springframework.web.multipart.MultipartFile file, UUID commerceId, boolean estPrincipale) {
+        log.info("Upload de fichier pour commerce {}: {}", commerceId, file.getOriginalFilename());
+        try {
+            // Créer le dossier uploads s'il n'existe pas
+            java.nio.file.Path root = java.nio.file.Paths.get("uploads");
+            if (!java.nio.file.Files.exists(root)) {
+                java.nio.file.Files.createDirectories(root);
+            }
+
+            // Générer un nom unique
+            String filename = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+            java.nio.file.Path filePath = root.resolve(filename);
+            
+            // Sauvegarder le fichier sur le disque
+            java.nio.file.Files.copy(file.getInputStream(), filePath);
+
+            // Créer l'entité Media
+            Media media = Media.builder()
+                    .nom(file.getOriginalFilename())
+                    .url("/uploads/" + filename) // URL relative servie par Spring
+                    .typeContenu(file.getContentType())
+                    .tailleFichier(file.getSize())
+                    .estPrincipale(estPrincipale)
+                    .commerce(com.carrefourconnect.entities.Commerce.builder().idcommerce(commerceId).build())
+                    .build();
+
+            return mapper.toDto(repository.save(media));
+        } catch (Exception e) {
+            log.error("Erreur lors de l'upload du fichier: {}", e.getMessage());
+            throw new RuntimeException("Impossible de stocker le fichier", e);
+        }
+    }
 }

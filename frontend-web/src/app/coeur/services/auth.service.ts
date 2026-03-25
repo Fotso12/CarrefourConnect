@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 /**
  * URL de base de l'API d'authentification (Port 8084 configuré)
  */
-const AUTH_API = 'http://localhost:8084/api/auth/';
+const AUTH_API = 'http://localhost:8084/api/auth';
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
 
@@ -27,6 +27,11 @@ export class AuthService {
   constructor(private readonly http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem(USER_KEY) || '{}'));
     this.currentUser = this.currentUserSubject.asObservable();
+    
+    // Nettoyage de sécurité : si on a des restes de session mais qu'elle est invalide, on vide tout
+    if (!this.isLoggedIn() && (localStorage.getItem(USER_KEY) || localStorage.getItem(TOKEN_KEY))) {
+      this.logout();
+    }
   }
 
   public get currentUserValue(): any {
@@ -45,11 +50,10 @@ export class AuthService {
    * Stocke le token et les infos utilisateur en cas de succès
    */
   login(credentials: any): Observable<any> {
-    return this.http.post(AUTH_API + 'login', {
+    return this.http.post(`${AUTH_API}/login`, {
       email: credentials.email,
       password: credentials.password
     }, httpOptions).pipe(map((user: any) => {
-      // Backend may return token in different property names (token, accessToken, jwt)
       const token = user && (user.accessToken || user.token || user.jwt);
       if (user && token) {
         this.saveToken(token);
@@ -61,7 +65,7 @@ export class AuthService {
   }
 
   register(user: any): Observable<any> {
-    return this.http.post(AUTH_API + 'signup', {
+    return this.http.post(`${AUTH_API}/signup`, {
       username: user.username,
       email: user.email,
       password: user.password,
@@ -97,7 +101,9 @@ export class AuthService {
   }
 
   public isLoggedIn(): boolean {
-    const user = window.localStorage.getItem(USER_KEY);
-    return user !== null;
+    const user = this.getUser();
+    const token = this.getToken();
+    // Vrai uniquement si on a à la fois un token ET un utilisateur avec un identifiant
+    return !!(token && user && user.id);
   }
 }

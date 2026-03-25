@@ -11,4 +11,5 @@ public interface MediaService {
     MediaDTO update(UUID id, MediaDTO dto);
     void delete(UUID id);
     List<MediaDTO> findByCommerce(UUID commerceId);
+    MediaDTO upload(org.springframework.web.multipart.MultipartFile file, UUID commerceId, boolean estPrincipale);
 }

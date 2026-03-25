@@ -22,10 +22,9 @@ export class App {
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   ngOnInit(): void {
-    // Subscribe to current user to update header state
-    this.authService.currentUser.subscribe(user => {
-      // If user object has keys, consider logged in
-      this.isLoggedIn = user && Object.keys(user).length > 0;
+    // S'abonner à l'utilisateur actuel pour mettre à jour l'état du header
+    this.authService.currentUser.subscribe(() => {
+      this.isLoggedIn = this.authService.isLoggedIn();
     });
   }
 

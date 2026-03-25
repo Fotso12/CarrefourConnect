@@ -135,4 +135,22 @@ public class MediaController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * Upload un fichier et l'associe à un commerce.
+     */
+    @PostMapping(value = "/upload", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Upload un fichier pour un commerce")
+    public ResponseEntity<?> upload(
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file,
+            @RequestParam("commerceId") UUID commerceId,
+            @RequestParam(value = "estPrincipale", defaultValue = "false") boolean estPrincipale) {
+        log.info("Requête upload pour commerce: {}", commerceId);
+        try {
+            return new ResponseEntity<>(service.upload(file, commerceId, estPrincipale), HttpStatus.CREATED);
+        } catch (Exception e) {
+            log.error("Erreur upload: {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 /**
  * URL de base de l'API pour les commerces (Port 8084)
  */
-const API_URL = 'http://localhost:8084/api/commerces/';
+const API_URL = 'http://localhost:8084/api/commerces';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,7 @@ export class CommerceService {
    * Récupère un commerce par son ID.
    */
   getById(id: string): Observable<any> {
-    return this.http.get<any>(API_URL + id);
+    return this.http.get<any>(`${API_URL}/${id}`);
   }
 
   /**
@@ -42,14 +42,14 @@ export class CommerceService {
     if (filtres.lon) params = params.set('lon', filtres.lon.toString());
     if (filtres.rayon) params = params.set('rayon', filtres.rayon.toString());
 
-    return this.http.get<any[]>(API_URL + 'rechercher', { params });
+    return this.http.get<any[]>(`${API_URL}/rechercher`, { params });
   }
 
   /**
    * Recherche de proximité pure.
    */
   findNearby(lat: number, lon: number, distance: number): Observable<any[]> {
-    return this.http.get<any[]>(API_URL + 'proximite', {
+    return this.http.get<any[]>(`${API_URL}/proximite`, {
       params: new HttpParams()
         .set('lat', lat.toString())
         .set('lon', lon.toString())
@@ -61,10 +61,18 @@ export class CommerceService {
    * Crée un nouveau commerce pour le commerçant connecté.
    */
   create(commerce: any): Observable<any> {
-    // Prefer the registered AuthInterceptor to handle headers. As a fallback,
-    // attach Authorization header here using AuthService if present.
-    const token = this.authService.getToken();
-    const headers = token ? new HttpHeaders({ 'Authorization': `Bearer ${token}` }) : undefined;
-    return this.http.post<any>(API_URL, commerce, headers ? { headers } : {});
+    console.debug('[CommerceService] create() payload:', commerce);
+    return this.http.post<any>(API_URL, commerce);
+  }
+
+  /**
+   * Upload un média pour un commerce.
+   */
+  uploadMedia(file: File, commerceId: string, estPrincipale: boolean = false): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('commerceId', commerceId);
+    formData.append('estPrincipale', estPrincipale.toString());
+    return this.http.post<any>(`http://localhost:8084/api/medias/upload`, formData);
   }
 }

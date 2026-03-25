@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.UUID;
 
@@ -70,8 +71,15 @@ public class CommerceController {
      */
     @PostMapping
     @Operation(summary = "Crée un nouveau commerce")
-    public ResponseEntity<?> save(@RequestBody CommerceDTO dto) {
+    public ResponseEntity<?> save(@RequestBody CommerceDTO dto, HttpServletRequest request) {
         log.info("Requête de création commerce: {}", dto.getNom());
+        // Log temporaire pour debug : afficher l'en-tête Authorization reçu
+        try {
+            String authHeader = request.getHeader("Authorization");
+            log.debug("Authorization header reçu: {}", authHeader);
+        } catch (Exception e) {
+            log.warn("Impossible de lire l'en-tête Authorization: {}", e.getMessage());
+        }
         try {
             return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
         } catch (Exception e) {

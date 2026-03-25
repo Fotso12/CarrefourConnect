@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.http.HttpMethod;
 
 /**
  * Configuration principale de la sécurité de l'application.
@@ -64,12 +66,14 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/commerces", "/api/commerces/**").permitAll()
-                                .requestMatchers("/api/categories", "/api/categories/**").permitAll()
-                                .requestMatchers("/api/utilisateurs/inscription/**").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/test/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/commerces/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/categories/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/medias/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/utilisateurs/inscription/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/uploads/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**"), AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
                                 .anyRequest().authenticated()
                 );
 

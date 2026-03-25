@@ -143,11 +143,23 @@ export class AjouterCommerceComponent implements OnInit {
     this.commerceService.create(payload).subscribe({
       next: (created) => {
         console.log('Commerce créé', created);
+        const commerceId = created.idcommerce || created.id;
+        
+        // Upload des images s'il y en a
+        if (this.selectedFiles.length > 0 && commerceId) {
+          this.selectedFiles.forEach((file, index) => {
+            // La première image est marquée comme principale
+            this.commerceService.uploadMedia(file, commerceId, index === 0).subscribe({
+              next: () => console.log(`Image ${index + 1} uploadée`),
+              error: (err) => console.error(`Erreur upload image ${index + 1}`, err)
+            });
+          });
+        }
+        
         this.router.navigate(['/commercant/commerces']);
       },
       error: (err) => {
         console.error('Erreur création commerce', err);
-        // On reste sur la page et on peut afficher une erreur (à améliorer)
       }
     });
   }

@@ -63,14 +63,19 @@ public class JwtUtils {
             return true;
         } catch (SecurityException e) {
             logger.error("Signature JWT invalide : {}", e.getMessage());
+            logger.debug("Token reçu: {}", authToken);
         } catch (MalformedJwtException e) {
             logger.error("Token JWT invalide : {}", e.getMessage());
+            logger.debug("Token reçu: {}", authToken);
         } catch (ExpiredJwtException e) {
             logger.error("Token JWT expiré : {}", e.getMessage());
+            logger.debug("Token reçu: {}", authToken);
         } catch (UnsupportedJwtException e) {
             logger.error("Token JWT non supporté : {}", e.getMessage());
+            logger.debug("Token reçu: {}", authToken);
         } catch (IllegalArgumentException e) {
             logger.error("Claims JWT vides : {}", e.getMessage());
+            logger.debug("Token reçu: {}", authToken);
         }
 
         return false;
