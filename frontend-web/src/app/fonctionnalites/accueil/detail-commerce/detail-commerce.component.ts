@@ -18,6 +18,7 @@ export class DetailCommerceComponent implements OnInit {
   votrePosition: { lat: number, lon: number } | null = null;
   pointsCarte: any[] = [];
   routePoints: any[] = [];
+  routeInfo: { distance: number, duration: number } | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -99,12 +100,17 @@ export class DetailCommerceComponent implements OnInit {
               lat: c[1],
               lon: c[0]
             }));
+            this.routeInfo = {
+              distance: data.routes[0].distance, // en mètres
+              duration: data.routes[0].duration  // en secondes
+            };
           } else {
             // Fallback ligne droite
             this.routePoints = [
               { lat: userLat, lon: userLon },
               { lat: destLat, lon: destLon }
             ];
+            this.routeInfo = null;
           }
         })
         .catch(err => {

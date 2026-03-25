@@ -1718,3 +1718,13 @@
 2026-03-25 23:03:22 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
 2026-03-25 23:03:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
 2026-03-25 23:03:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=10.0km
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/b06f781a-5f0b-4fa1-bb2b-dd6bc1234fba_asta-black-clover-3840x2779-12455.jpeg
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-25 23:05:42 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-25 23:06:03 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-25 23:06:03 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-25 23:06:03 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg

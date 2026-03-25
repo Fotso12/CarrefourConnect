@@ -36,8 +36,8 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Si les points changent, on met à jour les marqueurs sur la carte
-    if (changes['points'] && this.map) {
+    // Si les points ou l'itinéraire changent, on met à jour les marqueurs sur la carte
+    if ((changes['points'] || changes['routePoints']) && this.map) {
       this.updateMarkers();
     }
   }
@@ -47,10 +47,10 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private initMap(): void {
     // Create the map inside the container element (avoid fixed IDs)
-    // Correction des icônes par défaut de Leaflet
-    const iconRetinaUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png';
-    const iconUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png';
-    const shadowUrl = 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png';
+    // Correction des icônes par défaut de Leaflet (utilisation des assets locaux)
+    const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
+    const iconUrl = 'assets/leaflet/marker-icon.png';
+    const shadowUrl = 'assets/leaflet/marker-shadow.png';
     const iconDefault = L.icon({
       iconRetinaUrl,
       iconUrl,
@@ -58,10 +58,12 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
-      tooltipAnchor: [16, -28],
       shadowSize: [41, 41]
     });
     L.Marker.prototype.options.icon = iconDefault;
+    
+    // Fallback pour les icônes par défaut
+    (L.Icon.Default.prototype as any)._getIconUrl = (name: string) => `assets/leaflet/marker-${name}.png`;
 
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [4.0511, 9.7679],
@@ -104,9 +106,9 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
     // Dessiner l'itinéraire si présent
     if (this.routePoints && this.routePoints.length >= 2) {
       const path = this.routePoints.map(p => [p.lat, p.lon] as L.LatLngExpression);
-      // Tracé principal (Bleu Carrefour Connect)
+      // Tracé principal (Orange thématique)
       L.polyline(path, { 
-        color: '#00ADEF', 
+        color: '#F78F1E', 
         weight: 6, 
         opacity: 0.8, 
         lineJoin: 'round' 
@@ -126,7 +128,9 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
         if (point.isUser) {
           marker.setIcon(L.divIcon({
             className: 'user-marker',
-            html: '<div class="w-4 h-4 bg-[#00ADEF] border-2 border-white rounded-full shadow-lg pulse"></div>'
+            html: '<div class="w-4 h-4 bg-[#00ADEF] border-2 border-white rounded-full shadow-lg pulse"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
           }));
         }
       }
