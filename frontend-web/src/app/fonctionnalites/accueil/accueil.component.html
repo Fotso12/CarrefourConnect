@@ -7,6 +7,7 @@
           <input 
             type="text" 
             [(ngModel)]="filtres.nom"
+            (ngModelChange)="onFilterChange()"
             (keyup.enter)="rechercher()"
             placeholder="Quel commerce cherchez-vous ?" 
             class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-2 text-sm"
@@ -14,6 +15,7 @@
           <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
           <select 
             [(ngModel)]="filtres.idCategorie"
+            (ngModelChange)="onFilterChange()"
             (change)="rechercher()"
             class="bg-transparent border-none focus:ring-0 py-2 text-sm text-gray-600 min-w-[150px]"
           >
@@ -24,6 +26,7 @@
           <input 
             type="text" 
             [(ngModel)]="filtres.ville"
+            (ngModelChange)="onFilterChange()"
             (keyup.enter)="rechercher()"
             placeholder="Ville (ex: Douala)" 
             class="bg-transparent border-none focus:ring-0 py-2 text-sm text-gray-600 w-32"
@@ -34,6 +37,7 @@
             <input 
               type="number" 
               [(ngModel)]="filtres.rayon"
+              (ngModelChange)="onFilterChange()"
               (change)="rechercher()"
               class="w-12 bg-transparent border-none focus:ring-0 py-2 text-sm font-bold text-[#003B71]"
               min="1" max="100"

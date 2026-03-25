@@ -34,13 +34,28 @@ export class CommerceService {
    */
   rechercher(filtres: any): Observable<any[]> {
     let params = new HttpParams();
-    // Construction dynamique des paramètres de requête
-    if (filtres.nom) params = params.set('nom', filtres.nom);
-    if (filtres.idCategorie) params = params.set('idCategorie', filtres.idCategorie);
-    if (filtres.ville) params = params.set('ville', filtres.ville);
-    if (filtres.lat) params = params.set('lat', filtres.lat.toString());
-    if (filtres.lon) params = params.set('lon', filtres.lon.toString());
-    if (filtres.rayon) params = params.set('rayon', filtres.rayon.toString());
+    
+    // Nettoyage des paramètres pour éviter l'envoi de "undefined" ou null
+    if (filtres.nom && filtres.nom.trim()) {
+      params = params.set('nom', filtres.nom);
+    }
+    
+    if (filtres.idCategorie && filtres.idCategorie !== 'undefined' && filtres.idCategorie !== 'null') {
+      params = params.set('idCategorie', filtres.idCategorie);
+    }
+    
+    if (filtres.ville && filtres.ville.trim()) {
+      params = params.set('ville', filtres.ville);
+    }
+    
+    if (filtres.lat && filtres.lon) {
+      params = params.set('lat', filtres.lat.toString());
+      params = params.set('lon', filtres.lon.toString());
+    }
+    
+    if (filtres.rayon != null && filtres.rayon !== undefined) {
+      params = params.set('rayon', filtres.rayon.toString());
+    }
 
     return this.http.get<any[]>(`${API_URL}/rechercher`, { params });
   }

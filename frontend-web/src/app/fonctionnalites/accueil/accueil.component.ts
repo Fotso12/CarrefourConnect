@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { CommerceService } from '../../coeur/services/commerce.service';
 import { CategorieService } from '../../coeur/services/categorie.service';
 import { CarteComponent } from '../../partages/composants/carte/carte.component';
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 /**
  * Composant de la page d'accueil
@@ -21,13 +22,14 @@ export class AccueilComponent implements OnInit {
   commerces: any[] = [];
   categories: any[] = [];
   pointsCarte: any[] = [];
+  private searchSubject = new Subject<void>();
 
   // Filtres de recherche
   filtres = {
     nom: '',
     idCategorie: '',
     ville: '',
-    rayon: 10 // Rayon par défaut en km
+    rayon: null as number | null // Pas de rayon par défaut
   };
 
   constructor(
@@ -37,8 +39,16 @@ export class AccueilComponent implements OnInit {
 
   ngOnInit(): void {
     this.chargerCategories();
-    this.rechercher(); // Chargement immédiat de TOUS les commerces
+    this.rechercher(); // Chargement immédiat
     this.initGeolocalisation();
+
+    // Configuration de la recherche temps réel débouncée
+    this.searchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.rechercher();
+    });
   }
 
   /**
@@ -50,7 +60,7 @@ export class AccueilComponent implements OnInit {
         (pos) => {
           (this.filtres as any).lat = pos.coords.latitude;
           (this.filtres as any).lon = pos.coords.longitude;
-          // On ne relance pas rechercher() ici pour ne pas restreindre la liste subitement
+          this.rechercher(); // Relancer pour appliquer le filtre de proximité si actif
         }
       );
     }
@@ -69,11 +79,21 @@ export class AccueilComponent implements OnInit {
    * Exécute la recherche avec les filtres actuels
    */
   rechercher(): void {
-    this.commerceService.rechercher(this.filtres).subscribe(data => {
-      // Initialise l'index de l'image courante pour le carrousel
-      this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
-      this.actualiserCarte(data);
+    this.commerceService.rechercher(this.filtres).subscribe({
+      next: (data) => {
+        // Initialise l'index de l'image courante pour le carrousel
+        this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
+        this.actualiserCarte(data);
+      },
+      error: (err) => console.error("Erreur de recherche:", err)
     });
+  }
+
+  /**
+   * Déclenche la recherche en temps réel quand un filtre change
+   */
+  onFilterChange(): void {
+    this.searchSubject.next();
   }
 
   /**
@@ -103,5 +123,15 @@ export class AccueilComponent implements OnInit {
       nom: c.nom,
       adresse: c.adresse || (c.localisations && c.localisations[0] ? c.localisations[0].adresse : '')
     })).filter(p => p.lat != null);
+
+    // Ajouter la position utilisateur pour se repérer
+    if ((this.filtres as any).lat && (this.filtres as any).lon) {
+      this.pointsCarte.push({
+        lat: (this.filtres as any).lat,
+        lon: (this.filtres as any).lon,
+        nom: "Ma position",
+        isUser: true
+      });
+    }
   }
 }

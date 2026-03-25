@@ -47,10 +47,10 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private initMap(): void {
     // Create the map inside the container element (avoid fixed IDs)
-    // Correction des icônes par défaut de Leaflet (utilisation des assets locaux)
-    const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';
-    const iconUrl = 'assets/leaflet/marker-icon.png';
-    const shadowUrl = 'assets/leaflet/marker-shadow.png';
+    // Correction des icônes par défaut de Leaflet (utilisation du dossier public)
+    const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
+    const iconUrl = 'leaflet/marker-icon.png';
+    const shadowUrl = 'leaflet/marker-shadow.png';
     const iconDefault = L.icon({
       iconRetinaUrl,
       iconUrl,
@@ -63,7 +63,7 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
     L.Marker.prototype.options.icon = iconDefault;
     
     // Fallback pour les icônes par défaut
-    (L.Icon.Default.prototype as any)._getIconUrl = (name: string) => `assets/leaflet/marker-${name}.png`;
+    (L.Icon.Default.prototype as any)._getIconUrl = (name: string) => `leaflet/marker-${name}.png`;
 
     this.map = L.map(this.mapContainer.nativeElement, {
       center: [4.0511, 9.7679],

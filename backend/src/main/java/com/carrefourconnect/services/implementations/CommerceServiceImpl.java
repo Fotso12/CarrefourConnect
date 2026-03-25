@@ -304,7 +304,14 @@ public class CommerceServiceImpl implements CommerceService {
 
         // Appliquer les autres filtres manuellement pour cette version (ou utiliser Specification plus tard)
         return resultats.stream()
-                .filter(c -> nom == null || c.getNom().toLowerCase().contains(nom.toLowerCase()))
+                .filter(c -> {
+                    if (nom == null || nom.trim().isEmpty()) return true;
+                    String search = nom.toLowerCase();
+                    boolean matchName = c.getNom() != null && c.getNom().toLowerCase().contains(search);
+                    boolean matchDesc = c.getDescription() != null && c.getDescription().toLowerCase().contains(search);
+                    boolean matchCat = c.getCategorie() != null && c.getCategorie().getNom().toLowerCase().contains(search);
+                    return matchName || matchDesc || matchCat;
+                })
                 .filter(c -> statut == null || c.getStatut().equals(statut))
                 .filter(c -> idCategorie == null || (c.getCategorie() != null && c.getCategorie().getIdcategorie().equals(idCategorie)))
                 // Note: La ville est dans Localisation, donc on filtre via les localisations du commerce
