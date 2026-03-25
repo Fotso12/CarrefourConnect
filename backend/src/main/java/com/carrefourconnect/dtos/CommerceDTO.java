@@ -35,4 +35,5 @@ public class CommerceDTO {
     private LocalTime heureFermeture;
     private List<LocalisationDTO> localisations;
     private String imagePrincipale;
+    private List<MediaDTO> images;
 }

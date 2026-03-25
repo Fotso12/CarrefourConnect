@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
+import { AuthService } from '../../../coeur/services/auth.service';
 
 /**
  * Composant pour la liste des commerces d'un commerçant
@@ -17,17 +18,51 @@ export class GestionCommerceComponent implements OnInit {
   commerces: any[] = [];
   loading = true;
 
-  constructor(private readonly commerceService: CommerceService) {}
+  constructor(
+    private readonly commerceService: CommerceService,
+    private readonly authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // Dans une vraie app, on filtrerait par l'ID du commerçant connecté
-    // Pour la démo, on récupère tout ou on simule
-    this.commerceService.getAll().subscribe({
+    this.refresh();
+  }
+
+  refresh(): void {
+    const user = this.authService.getUser();
+    if (!user) return;
+
+    this.loading = true;
+    this.commerceService.getByCommercant(user.id).subscribe({
       next: (data) => {
-        this.commerces = data;
+        this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
         this.loading = false;
       },
       error: () => this.loading = false
     });
+  }
+
+  nextImage(commerce: any, event: Event): void {
+    event.stopPropagation();
+    if (commerce.images && commerce.images.length > 1) {
+      commerce.currentImg = (commerce.currentImg + 1) % commerce.images.length;
+    }
+  }
+
+  prevImage(commerce: any, event: Event): void {
+    event.stopPropagation();
+    if (commerce.images && commerce.images.length > 1) {
+      commerce.currentImg = (commerce.currentImg - 1 + commerce.images.length) % commerce.images.length;
+    }
+  }
+
+  supprimer(commerce: any): void {
+    if (confirm(`Voulez-vous vraiment supprimer "${commerce.nom}" ?`)) {
+      this.commerceService.delete(commerce.idcommerce).subscribe({
+        next: () => {
+          this.commerces = this.commerces.filter(c => c.idcommerce !== commerce.idcommerce);
+        },
+        error: (err) => console.error('Erreur lors de la suppression', err)
+      });
+    }
   }
 }

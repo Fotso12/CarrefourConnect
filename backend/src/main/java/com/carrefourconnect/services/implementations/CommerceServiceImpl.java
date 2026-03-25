@@ -8,6 +8,7 @@ import com.carrefourconnect.repositories.CategorieRepository;
 import com.carrefourconnect.repositories.CommercantRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.repositories.MediaRepository;
+import com.carrefourconnect.mappers.MediaMapper;
 import com.carrefourconnect.services.interfaces.CommerceService;
 import com.carrefourconnect.utils.enums.StatutCommerce;
 import org.springframework.stereotype.Service;
@@ -31,41 +32,52 @@ public class CommerceServiceImpl implements CommerceService {
     private final AbonnementRepository abonnementRepository;
     private final CommercantRepository commercantRepository;
     private final MediaRepository mediaRepository;
+    private final MediaMapper mediaMapper;
 
     public CommerceServiceImpl(CommerceRepository repository, 
                                CommerceMapper mapper,
                                CategorieRepository categorieRepository,
                                AbonnementRepository abonnementRepository,
                                CommercantRepository commercantRepository,
-                               MediaRepository mediaRepository) {
+                               MediaRepository mediaRepository,
+                               MediaMapper mediaMapper) {
         this.repository = repository;
         this.mapper = mapper;
         this.categorieRepository = categorieRepository;
         this.abonnementRepository = abonnementRepository;
         this.commercantRepository = commercantRepository;
         this.mediaRepository = mediaRepository;
+        this.mediaMapper = mediaMapper;
     }
 
     private void enrichirDto(CommerceDTO dto) {
         if (dto != null && dto.getIdcommerce() != null) {
             String baseUrl = "http://localhost:8084";
-            // Chercher l'image principale
-            mediaRepository.findByCommerce_Idcommerce(dto.getIdcommerce()).stream()
-                    .filter(com.carrefourconnect.entities.Media::isEstPrincipale)
+            
+            // Récupérer tous les médias et les mapper
+            List<com.carrefourconnect.entities.Media> mediaEntities = mediaRepository.findByCommerce_Idcommerce(dto.getIdcommerce());
+            List<com.carrefourconnect.dtos.MediaDTO> mediaDtos = mediaEntities.stream()
+                    .map(mediaMapper::toDto)
+                    .peek(m -> m.setUrl(baseUrl + m.getUrl()))
+                    .collect(Collectors.toList());
+            
+            dto.setImages(mediaDtos);
+
+            // Chercher l'image principale pour l'aperçu
+            mediaDtos.stream()
+                    .filter(com.carrefourconnect.dtos.MediaDTO::isEstPrincipale)
                     .findFirst()
                     .ifPresentOrElse(
                         m -> {
-                            dto.setImagePrincipale(baseUrl + m.getUrl());
-                            log.info("Image principale trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
+                            dto.setImagePrincipale(m.getUrl());
+                            log.debug("Image principale trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
                         },
                         () -> {
-                            // Sinon prendre la première image disponible
-                            mediaRepository.findByCommerce_Idcommerce(dto.getIdcommerce()).stream()
-                                    .findFirst()
-                                    .ifPresent(m -> {
-                                        dto.setImagePrincipale(baseUrl + m.getUrl());
-                                        log.info("Image fallback trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
-                                    });
+                            // Sinon prendre la première disponible
+                            if (!mediaDtos.isEmpty()) {
+                                dto.setImagePrincipale(mediaDtos.get(0).getUrl());
+                                log.debug("Image fallback trouvée pour {}: {}", dto.getNom(), dto.getImagePrincipale());
+                            }
                         }
                     );
         }
@@ -165,7 +177,9 @@ public class CommerceServiceImpl implements CommerceService {
             existingEntity.setTelephone2(dto.getTelephone2());
             existingEntity.setEmail(dto.getEmail());
             existingEntity.setSiteweb(dto.getSiteweb());
-            existingEntity.setStatut(dto.getStatut());
+            if (dto.getStatut() != null) {
+                existingEntity.setStatut(dto.getStatut());
+            }
             existingEntity.setHeureOuverture(dto.getHeureOuverture());
             existingEntity.setHeureFermeture(dto.getHeureFermeture());
             
@@ -198,25 +212,37 @@ public class CommerceServiceImpl implements CommerceService {
     @Override
     public List<CommerceDTO> findByCategorie(UUID categorieId) {
         log.debug("Recherche par catégorie ID: {}", categorieId);
-        return repository.findByCategorie_Idcategorie(categorieId).stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findByCategorie_Idcategorie(categorieId).stream()
+                .map(mapper::toDto)
+                .peek(this::enrichirDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CommerceDTO> findByCommercant(UUID commercantId) {
         log.debug("Recherche par commerçant ID: {}", commercantId);
-        return repository.findByCommercant_Iduser(commercantId).stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findByCommercant_Iduser(commercantId).stream()
+                .map(mapper::toDto)
+                .peek(this::enrichirDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CommerceDTO> searchByName(String name) {
         log.debug("Recherche par nom contenant: {}", name);
-        return repository.findByNomContainingIgnoreCase(name).stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findByNomContainingIgnoreCase(name).stream()
+                .map(mapper::toDto)
+                .peek(this::enrichirDto)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<CommerceDTO> findByStatut(StatutCommerce statut) {
         log.debug("Filtrage par statut: {}", statut);
-        return repository.findByStatut(statut).stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findByStatut(statut).stream()
+                .map(mapper::toDto)
+                .peek(this::enrichirDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -224,6 +250,7 @@ public class CommerceServiceImpl implements CommerceService {
         log.info("Recherche géo: lat={}, lon={}, dist={}km", latitude, longitude, distanceInKm);
         return repository.findNearby(latitude, longitude, distanceInKm * 1000).stream()
                 .map(mapper::toDto)
+                .peek(this::enrichirDto)
                 .collect(Collectors.toList());
     }
 

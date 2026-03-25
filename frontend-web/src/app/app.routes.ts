@@ -23,6 +23,10 @@ export const routes: Routes = [
         path: 'ajouter-commerce', 
         loadComponent: () => import('./fonctionnalites/commercant/ajouter-commerce/ajouter-commerce.component').then(m => m.AjouterCommerceComponent) 
       },
+      { 
+        path: 'modifier-commerce/:id', 
+        loadComponent: () => import('./fonctionnalites/commercant/ajouter-commerce/ajouter-commerce.component').then(m => m.AjouterCommerceComponent) 
+      },
       { path: '', redirectTo: 'commerces', pathMatch: 'full' }
     ]
   },

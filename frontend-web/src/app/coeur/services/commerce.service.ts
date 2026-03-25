@@ -75,4 +75,25 @@ export class CommerceService {
     formData.append('estPrincipale', estPrincipale.toString());
     return this.http.post<any>(`http://localhost:8084/api/medias/upload`, formData);
   }
+
+  /**
+   * Recupère les commerces d'un commerçant spécifique.
+   */
+  getByCommercant(commercantId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/commercant/${commercantId}`);
+  }
+
+  /**
+   * Met à jour un commerce existant.
+   */
+  update(id: string, commerce: any): Observable<any> {
+    return this.http.put<any>(`${API_URL}/${id}`, commerce);
+  }
+
+  /**
+   * Supprime un commerce.
+   */
+  delete(id: string): Observable<any> {
+    return this.http.delete<any>(`${API_URL}/${id}`);
+  }
 }

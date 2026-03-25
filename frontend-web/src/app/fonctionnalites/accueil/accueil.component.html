@@ -71,10 +71,36 @@
       <div class="space-y-6">
         <div *ngFor="let commerce of commerces" 
              class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 border border-gray-100 group cursor-pointer relative">
-          <div class="h-44 bg-gray-200 relative overflow-hidden">
-            <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400'" 
-                 alt="Image du commerce" 
-                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+          <!-- Zone Image / Carrousel -->
+          <div class="h-44 bg-gray-200 relative overflow-hidden group/image">
+            <ng-container *ngIf="commerce.images && commerce.images.length > 0; else placeholder">
+              <img [src]="commerce.images[commerce.currentImg].url" 
+                   alt="Image du commerce" 
+                   class="w-full h-full object-cover transition-all duration-700">
+              
+              <!-- Contrôles Carrousel -->
+              <div *ngIf="commerce.images.length > 1" class="absolute inset-0 flex items-center justify-between px-3">
+                <button (click)="prevImage(commerce, $event)" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center text-[#003B71] hover:bg-white transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button (click)="nextImage(commerce, $event)" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center text-[#003B71] hover:bg-white transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+
+              <!-- Indicateurs -->
+              <div *ngIf="commerce.images.length > 1" class="absolute bottom-2 inset-x-0 flex justify-center gap-1.5">
+                <div *ngFor="let img of commerce.images; let i = index" 
+                     [class]="i === commerce.currentImg ? 'w-4 bg-white' : 'w-1.5 bg-white/50'"
+                     class="h-1.5 rounded-full transition-all"></div>
+              </div>
+            </ng-container>
+
+            <ng-template #placeholder>
+              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400" 
+                   class="w-full h-full object-cover grayscale opacity-50">
+            </ng-template>
+
             <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent"></div>
             <div class="absolute bottom-4 left-4">
                 <span class="bg-white/20 backdrop-blur-md border border-white/30 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">

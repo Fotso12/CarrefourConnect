@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { CategorieService } from '../../../coeur/services/categorie.service';
 import { AuthService } from '../../../coeur/services/auth.service';
@@ -20,19 +20,26 @@ import { CarteComponent } from '../../../partages/composants/carte/carte.compone
 export class AjouterCommerceComponent implements OnInit {
   step = 1;
   categories: any[] = [];
+  isEdit = false;
+  showSuccessModal = false;
   
   commerce = {
+    idcommerce: '',
     nom: '',
     description: '',
     idcategorie: '',
     telephone1: '',
+    telephone2: '',
     email: '',
     siteweb: '',
+    heureOuverture: '',
+    heureFermeture: '',
     ville: 'Douala',
     quartier: '',
     adresse: '',
     lat: 4.0483,
     lon: 9.7144,
+    statut: '',
     images: [] as any[]
   };
 
@@ -48,13 +55,30 @@ export class AjouterCommerceComponent implements OnInit {
   constructor(
     private readonly commerceService: CommerceService,
     private readonly categorieService: CategorieService,
-    private readonly router: Router,
+    public readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
     private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.chargerCategories();
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.isEdit = true;
+      this.commerceService.getById(id).subscribe(data => {
+        Object.assign(this.commerce, data);
+        if (data.idcategorie) this.commerce.idcategorie = data.idcategorie;
+        if (data.localisations && data.localisations.length > 0) {
+          const loc = data.localisations[0];
+          this.commerce.ville = loc.ville;
+          this.commerce.quartier = loc.quartier;
+          this.commerce.adresse = loc.adresse;
+          this.commerce.lat = loc.lat;
+          this.commerce.lon = loc.lon;
+        }
+      });
+    }
   }
 
   chargerCategories(): void {
@@ -124,43 +148,54 @@ export class AjouterCommerceComponent implements OnInit {
   }
 
   /**
-   * Finalisation de l'ajout
+   * Finalisation de l'ajout ou modification
    */
   enregistrer(): void {
-    // Appel réel au service pour créer le commerce puis redirection
-    // Build payload compatible with backend DTO
     const payload: any = {
+      idcommerce: this.commerce.idcommerce || undefined,
       idcategorie: this.commerce.idcategorie,
       iduser: this.authService.getUser()?.id,
       nom: this.commerce.nom,
       description: this.commerce.description,
       telephone1: this.commerce.telephone1,
+      telephone2: this.commerce.telephone2,
       email: this.commerce.email,
       siteweb: this.commerce.siteweb,
-      localisations: [{ ville: this.commerce.ville, quartier: this.commerce.quartier, adresse: this.commerce.adresse, lat: this.commerce.lat, lon: this.commerce.lon }]
+      statut: this.commerce.statut || undefined,
+      heureOuverture: this.commerce.heureOuverture,
+      heureFermeture: this.commerce.heureFermeture,
+      localisations: [{ 
+        ville: this.commerce.ville, 
+        quartier: this.commerce.quartier, 
+        adresse: this.commerce.adresse, 
+        lat: this.commerce.lat, 
+        lon: this.commerce.lon 
+      }]
     };
 
-    this.commerceService.create(payload).subscribe({
-      next: (created) => {
-        console.log('Commerce créé', created);
-        const commerceId = created.idcommerce || created.id;
+    const action = this.isEdit 
+      ? this.commerceService.update(this.commerce.idcommerce, payload)
+      : this.commerceService.create(payload);
+
+    action.subscribe({
+      next: (result) => {
+        const commerceId = result.idcommerce || result.id;
         
         // Upload des images s'il y en a
         if (this.selectedFiles.length > 0 && commerceId) {
           this.selectedFiles.forEach((file, index) => {
-            // La première image est marquée comme principale
-            this.commerceService.uploadMedia(file, commerceId, index === 0).subscribe({
-              next: () => console.log(`Image ${index + 1} uploadée`),
-              error: (err) => console.error(`Erreur upload image ${index + 1}`, err)
-            });
+            this.commerceService.uploadMedia(file, commerceId, index === 0).subscribe();
           });
         }
         
-        this.router.navigate(['/commercant/commerces']);
+        this.showSuccessModal = true;
       },
-      error: (err) => {
-        console.error('Erreur création commerce', err);
-      }
+      error: (err) => console.error('Erreur lors de l\'enregistrement', err)
     });
+  }
+
+  fermerModal(): void {
+    this.showSuccessModal = false;
+    this.router.navigate(['/commercant/commerces']);
   }
 }

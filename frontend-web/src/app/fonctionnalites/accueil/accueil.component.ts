@@ -54,9 +54,27 @@ export class AccueilComponent implements OnInit {
    */
   rechercher(): void {
     this.commerceService.rechercher(this.filtres).subscribe(data => {
-      this.commerces = data;
+      // Initialise l'index de l'image courante pour le carrousel
+      this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
       this.actualiserCarte(data);
     });
+  }
+
+  /**
+   * Navigation carrousel
+   */
+  prevImage(commerce: any, event: Event): void {
+    event.stopPropagation();
+    if (commerce.images && commerce.images.length > 1) {
+      commerce.currentImg = (commerce.currentImg - 1 + commerce.images.length) % commerce.images.length;
+    }
+  }
+
+  nextImage(commerce: any, event: Event): void {
+    event.stopPropagation();
+    if (commerce.images && commerce.images.length > 1) {
+      commerce.currentImg = (commerce.currentImg + 1) % commerce.images.length;
+    }
   }
 
   /**

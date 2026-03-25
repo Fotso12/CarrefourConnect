@@ -1,11 +1,36 @@
 # IDEs
 .idea/
 .vscode/
+*.swp
+*.swo
 
 # OS
 Thumbs.db
 .DS_Store
 
-# Temporary files
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/wrapper/*.jar
+
+# Node / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/.cache/
+**/npm-debug.log*
+**/yarn-error.log*
+
+# Project Specific
+**/uploads/
+**/logs/
+backend/logs/
+backend/uploads/
 *.log
-tmp/
+
+# Environment
+.env
+.env.local
