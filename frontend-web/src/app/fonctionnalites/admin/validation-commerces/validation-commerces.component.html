@@ -5,7 +5,7 @@
       <p class="text-slate-400 font-medium">Validez les nouveaux établissements pour les rendre publics</p>
     </div>
     <div class="bg-[#00ADEF]/10 text-[#00ADEF] px-4 py-2 rounded-xl text-sm font-bold">
-        {{ commercesAttente.length }} en attente
+        {{ commerces.length }} établissement(s)
     </div>
   </div>
 
@@ -13,26 +13,38 @@
       <div *ngFor="let i of [1,2,3]" class="h-24 bg-white rounded-3xl animate-pulse"></div>
   </div>
 
-  <div *ngIf="!loading && commercesAttente.length === 0" class="bg-white p-20 rounded-[40px] text-center border-2 border-dashed border-gray-100">
-      <p class="text-slate-400 font-medium">Aucun commerce en attente de validation pour le moment.</p>
+  <div *ngIf="!loading && commerces.length === 0" class="bg-white p-20 rounded-[40px] text-center border-2 border-dashed border-gray-100">
+      <p class="text-slate-400 font-medium">Aucun commerce à afficher pour le moment.</p>
   </div>
 
   <div class="grid grid-cols-1 gap-4">
-    <div *ngFor="let commerce of commercesAttente" 
+    <div *ngFor="let commerce of commerces" 
          class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500">
       <div class="flex items-center gap-6">
           <div class="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
               <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100'" class="w-full h-full object-cover">
           </div>
           <div>
-              <h3 class="font-bold text-slate-800">{{ commerce.nom }}</h3>
+              <div class="flex items-center gap-2">
+                <h3 class="font-bold text-slate-800">{{ commerce.nom }}</h3>
+                <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-600">En attente</span>
+                <span *ngIf="commerce.statut === 'VALIDE'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-600">Validé</span>
+              </div>
               <p class="text-xs text-slate-400">{{ commerce.ville }} • {{ commerce.categorie?.nom }}</p>
           </div>
       </div>
 
       <div class="flex items-center gap-3">
-          <button (click)="openSuspend(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-orange-50 hover:text-orange-500 transition-all">Suspendre / Rejeter</button>
-          <button (click)="valider(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm">Valider l'établissement</button>
+          <!-- Action si EN_ATTENTE -->
+          <ng-container *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'">
+            <button (click)="openReject(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
+            <button (click)="valider(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm">Valider l'établissement</button>
+          </ng-container>
+
+          <!-- Action si VALIDE -->
+          <ng-container *ngIf="commerce.statut === 'VALIDE'">
+            <button (click)="openSuspend(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all border border-amber-100">Suspendre</button>
+          </ng-container>
       </div>
     </div>
   </div>
@@ -55,15 +67,46 @@
   </div>
   <div modal-body class="space-y-4">
     <p class="text-sm font-medium text-slate-600">
-      Veuillez fournir un motif pour ce refus/cette suspension. Ce motif sera envoyé au commerçant.
+      Veuillez fournir un motif pour cette suspension. Le commerce sera masqué pour les utilisateurs.
     </p>
     <div>
       <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
       <textarea 
-        [(ngModel)]="motifSuspension"
+        [(ngModel)]="motifAction"
         rows="4"
         class="w-full bg-slate-50 border-0 text-slate-600 text-sm font-bold rounded-2xl px-6 py-4 focus:ring-4 focus:ring-red-500/10 placeholder-slate-300 resize-none transition-all"
-        placeholder="Expliquez pourquoi le commerce n'est pas validé...">
+        placeholder="Expliquez pourquoi le commerce est suspendu...">
+      </textarea>
+    </div>
+  </div>
+</app-modal>
+
+<!-- Modal Rejet -->
+<app-modal 
+  [isOpen]="showRejectModal" 
+  title="Rejeter le commerce" 
+  subtitle="Modération de l'inscription"
+  iconBg="from-red-500 to-red-600"
+  btnBg="bg-red-500 shadow-red-500/20"
+  confirmLabel="Rejeter"
+  (onConfirm)="confirmerReject()"
+  (onCancel)="closeReject()">
+  <div modal-icon>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  </div>
+  <div modal-body class="space-y-4">
+    <p class="text-sm font-medium text-slate-600">
+      Veuillez fournir un motif pour ce rejet. Ce motif sera envoyé au commerçant par email.
+    </p>
+    <div>
+      <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
+      <textarea 
+        [(ngModel)]="motifAction"
+        rows="4"
+        class="w-full bg-slate-50 border-0 text-slate-600 text-sm font-bold rounded-2xl px-6 py-4 focus:ring-4 focus:ring-red-500/10 placeholder-slate-300 resize-none transition-all"
+        placeholder="Expliquez pourquoi la demande d'inscription est rejetée...">
       </textarea>
     </div>
   </div>

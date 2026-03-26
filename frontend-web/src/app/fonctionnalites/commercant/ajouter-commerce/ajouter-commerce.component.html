@@ -4,9 +4,9 @@
   <div class="mb-12">
     <div class="flex items-center justify-between relative">
       <div class="absolute top-1/2 left-0 w-full h-1 bg-gray-100 -translate-y-1/2 -z-10"></div>
-      <div class="absolute top-1/2 left-0 h-1 bg-[#F78F1E] -translate-y-1/2 -z-10 transition-all duration-500" [style.width.%]="(step-1)*33.33"></div>
+      <div class="absolute top-1/2 left-0 h-1 bg-[#F78F1E] -translate-y-1/2 -z-10 transition-all duration-500" [style.width.%]="(step-1)*25"></div>
       
-      <div *ngFor="let s of [1,2,3,4]" 
+      <div *ngFor="let s of [1,2,3,4,5]" 
            class="h-12 w-12 rounded-2xl flex items-center justify-center font-bold transition-all duration-500 shadow-lg"
            [class.bg-[#F78F1E]]="step >= s" [class.text-white]="step >= s"
            [class.bg-white]="step < s" [class.text-gray-300]="step < s">
@@ -14,10 +14,11 @@
       </div>
     </div>
     <div class="flex justify-between mt-4 text-[10px] font-bold uppercase tracking-widest text-gray-400 px-2">
-      <span [class.text-[#003B71]]="step >= 1">Informations</span>
+      <span [class.text-[#003B71]]="step >= 1">Infos</span>
       <span [class.text-[#003B71]]="step >= 2">Catégorie</span>
-      <span [class.text-[#003B71]]="step >= 3">Localisation</span>
+      <span [class.text-[#003B71]]="step >= 3">Lieu</span>
       <span [class.text-[#003B71]]="step >= 4">Médias</span>
+      <span [class.text-[#003B71]]="step >= 5">Forfait</span>
     </div>
   </div>
 
@@ -63,6 +64,46 @@
         <div>
           <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Heure de fermeture</label>
           <input type="time" [(ngModel)]="commerce.heureFermeture" class="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 text-sm">
+        </div>
+        
+        <!-- Toggle Offres Spéciales -->
+        <div class="md:col-span-2 pt-6 border-t border-gray-100 mt-2">
+          <label class="flex items-center gap-3 cursor-pointer mb-2 w-max">
+            <input type="checkbox" [(ngModel)]="hasSpecialOffer" class="w-5 h-5 rounded text-[#003B71] border-gray-300 focus:ring-[#003B71] transition-all">
+            <span class="text-sm font-bold text-gray-700">Ajouter une offre spéciale ? (Promotion, Vente Flash...)</span>
+          </label>
+          
+          <div *ngIf="hasSpecialOffer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-6 bg-orange-50/50 rounded-3xl border border-orange-100 animate-in fade-in zoom-in duration-300">
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Titre de l'offre</label>
+              <input type="text" [(ngModel)]="offreSpeciale.titre" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E]" placeholder="Ex: -50% sur tous nos articles d'hiver">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Description</label>
+              <textarea [(ngModel)]="offreSpeciale.description" rows="2" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E]" placeholder="Détails de la promotion..."></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Type d'offre</label>
+              <select [(ngModel)]="offreSpeciale.type" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E]">
+                 <option value="PROMOTION">Promotion</option>
+                 <option value="VENTE_FLASH">Vente Flash</option>
+                 <option value="SOLDE">Solde</option>
+                 <option value="OFFRE_SPECIALE">Offre Spéciale</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Réduction (%)</label>
+              <input type="number" [(ngModel)]="offreSpeciale.reduction" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Date début</label>
+              <input type="date" [(ngModel)]="offreSpeciale.dateDebut" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Date fin</label>
+              <input type="date" [(ngModel)]="offreSpeciale.dateFin" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm">
+            </div>
+          </div>
         </div>
       </div>
       </div>
@@ -185,6 +226,43 @@
       </div>
     </div>
 
+    <!-- ÉTAPE 5 : ABONNEMENT -->
+    <div *ngIf="step === 5" class="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
+      <div class="text-center max-w-lg mx-auto mb-8">
+        <h2 class="text-3xl font-black text-[#003B71] mb-2">Choisissez votre forfait</h2>
+        <p class="text-gray-400 text-sm font-medium">Développez votre visibilité en choisissant le forfait adapté.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div *ngFor="let ab of abonnements"
+             (click)="selectedAbonnement = ab"
+             [class.border-[#F78F1E]]="selectedAbonnement?.idabonnement === ab.idabonnement"
+             [class.ring-4]="selectedAbonnement?.idabonnement === ab.idabonnement"
+             [class.ring-orange-100]="selectedAbonnement?.idabonnement === ab.idabonnement"
+             [class.scale-105]="selectedAbonnement?.idabonnement === ab.idabonnement"
+             class="bg-white border-2 border-gray-100 rounded-[32px] p-8 cursor-pointer transition-all duration-300 relative flex flex-col group hover:shadow-xl">
+            
+            <div *ngIf="ab.nom === 'Premium'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00ADEF] py-1 px-4 rounded-full text-[10px] font-bold text-white uppercase tracking-widest shadow-md">Populaire</div>
+            
+            <h3 class="text-xl font-black text-[#003B71] mb-1 uppercase tracking-tight">{{ ab.nom }}</h3>
+            <div class="flex items-baseline gap-1 mb-6">
+                <span class="text-4xl font-black text-[#F78F1E] tracking-tighter">{{ ab.prixAffiche }}</span>
+                <span class="text-xs font-bold text-gray-400">FCFA</span>
+            </div>
+            
+            <p class="text-xs text-gray-500 mb-8 flex-1 leading-relaxed">{{ ab.description || 'Boostez votre commerce avec ce plan unique.' }}</p>
+            
+            <button [class.bg-[#F78F1E]]="selectedAbonnement?.idabonnement === ab.idabonnement"
+                    [class.text-white]="selectedAbonnement?.idabonnement === ab.idabonnement"
+                    [class.bg-gray-50]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.text-gray-400]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    class="w-full py-4 rounded-2xl font-bold transition-all text-sm group-hover:bg-[#F78F1E] group-hover:text-white">
+                Sélectionner
+            </button>
+        </div>
+      </div>
+    </div>
+
     <div class="mt-auto pt-10 flex justify-between gap-4">
       <div class="flex gap-4">
         <button (click)="router.navigate(['/commercant/commerces'])" class="text-gray-400 font-bold px-6 py-3 hover:text-red-500 transition-all border border-transparent hover:border-red-100 rounded-2xl">
@@ -195,13 +273,13 @@
         </button>
       </div>
       <div class="flex-1"></div>
-      <button *ngIf="step < 4" (click)="nextStep()" 
+      <button *ngIf="step < 5" (click)="nextStep()" 
               class="bg-[#003B71] text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#00ADEF] transition-all">
         Continuer
       </button>
-      <button *ngIf="step === 4" (click)="enregistrer()" 
+      <button *ngIf="step === 5" (click)="preparerPaiement()" 
               class="bg-[#F78F1E] text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:bg-orange-600 transition-all">
-        Finaliser l'inscription
+        Procéder au paiement
       </button>
     </div>
   </div>
@@ -223,4 +301,62 @@
       </button>
     </div>
   </div>
+
+  <!-- Modal de Paiement Mobile -->
+  <app-modal 
+    [isOpen]="showPaymentModal" 
+    title="Paiement Sécurisé" 
+    subtitle="Validez votre abonnement"
+    iconBg="from-[#F78F1E] to-[#FFB75E]"
+    btnBg="bg-[#003B71] shadow-blue-900/20"
+    confirmLabel="Confirmer le paiement"
+    (onConfirm)="validerPaiement()"
+    (onCancel)="showPaymentModal = false">
+    
+    <div modal-icon>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+    </div>
+
+    <div modal-body class="space-y-6">
+      
+      <!-- Erreur de validation -->
+      <div *ngIf="paymentError" class="p-4 bg-red-50 text-red-500 rounded-2xl text-xs font-bold border border-red-100 animate-in fade-in">
+        {{ paymentError }}
+      </div>
+
+      <!-- Mode de paiement -->
+      <div class="grid grid-cols-2 gap-4">
+        <div (click)="paymentMode = 'OM'" 
+             [class.ring-2]="paymentMode === 'OM'" [class.ring-[#F78F1E]]="paymentMode === 'OM'"
+             class="border border-gray-100 p-4 rounded-2xl cursor-pointer hover:bg-orange-50 transition-all text-center">
+             <div class="h-10 bg-orange-500 rounded-lg w-full flex items-center justify-center text-white font-black text-sm mb-2 shadow-sm">OM</div>
+             <span class="text-xs font-bold text-gray-600 block">Orange Money</span>
+        </div>
+        <div (click)="paymentMode = 'MOMO'" 
+             [class.ring-2]="paymentMode === 'MOMO'" [class.ring-[#F78F1E]]="paymentMode === 'MOMO'"
+             class="border border-gray-100 p-4 rounded-2xl cursor-pointer hover:bg-yellow-50 transition-all text-center">
+             <div class="h-10 bg-yellow-400 rounded-lg w-full flex items-center justify-center text-white font-black text-sm mb-2 shadow-sm">MoMo</div>
+             <span class="text-xs font-bold text-gray-600 block">Mobile Money</span>
+        </div>
+      </div>
+
+      <div *ngIf="paymentMode" class="space-y-4 pt-4 border-t border-gray-100 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Montant à payer (FCFA)</label>
+            <div class="relative">
+              <input type="text" [(ngModel)]="paymentAmountStr" class="w-full bg-slate-50 border-none rounded-2xl pl-6 pr-16 py-4 text-sm font-black focus:ring-2 focus:ring-[#F78F1E]" placeholder="Saisissez exactement le prix du forfait">
+              <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs">FCFA</span>
+            </div>
+            <p class="text-[10px] text-gray-400 mt-2">Valable : Pas de virgule ou point. Montant exact exigé.</p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">N° de téléphone payeur</label>
+            <input type="tel" [(ngModel)]="paymentPhone" class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 text-sm font-bold focus:ring-2 focus:ring-[#F78F1E]" placeholder="Ex: 6xx xxx xxx">
+            <p class="text-[10px] text-gray-400 mt-2">Veuillez entrer un numéro à 9 chiffres commençant par 6.</p>
+          </div>
+      </div>
+    </div>
+  </app-modal>
 </div>

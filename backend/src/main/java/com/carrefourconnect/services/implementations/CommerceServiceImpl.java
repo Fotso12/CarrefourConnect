@@ -359,6 +359,24 @@ public class CommerceServiceImpl implements CommerceService {
     }
 
     @Override
+    public void rejeter(UUID id, String motif) {
+        log.info("Rejet du commerce ID: {} pour motif: {}", id, motif);
+        repository.findById(id).ifPresent(c -> {
+            c.setStatut(StatutCommerce.REJETE);
+            c.setMotifSuspension(motif);
+            repository.save(c);
+
+            // Envoyer une notification au commerçant
+            notificationService.send(NotificationDTO.builder()
+                    .iduser(c.getCommercant().getIduser())
+                    .titre("Inscription de Commerce Rejetée")
+                    .message("Votre demande d'inscription pour le commerce '" + c.getNom() + "' a été rejetée pour le motif suivant : " + motif)
+                    .type("REJET")
+                    .build());
+        });
+    }
+
+    @Override
     public void valider(UUID id) {
         log.info("Validation du commerce ID: {}", id);
         repository.findById(id).ifPresent(c -> {

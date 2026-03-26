@@ -16,8 +16,12 @@ export class StatsAdminComponent implements OnInit {
     totalCommerces: 0,
     commercesEnAttente: 0,
     totalUtilisateurs: 0,
-    totalCategories: 0
+    totalCategories: 0,
+    totalVues: 0
   };
+  
+  topCommercesVues: any[] = [];
+  
   loading = true;
 
   constructor(
@@ -41,6 +45,16 @@ export class StatsAdminComponent implements OnInit {
         this.stats.commercesEnAttente = data.commerces.filter((c: any) => c.statut === 'EN_ATTENTE_VALIDATION' || !c.statut).length;
         this.stats.totalUtilisateurs = data.utilisateurs.length;
         this.stats.totalCategories = data.categories.length;
+        
+        // Calcul des vues
+        this.stats.totalVues = data.commerces.reduce((acc: number, current: any) => acc + (current.nombreVues || 0), 0);
+        
+        // Top 5 les plus vus
+        this.topCommercesVues = [...data.commerces]
+           .filter(c => c.statut === 'VALIDE')
+           .sort((a, b) => (b.nombreVues || 0) - (a.nombreVues || 0))
+           .slice(0, 5);
+
         this.loading = false;
       },
       error: (err) => {

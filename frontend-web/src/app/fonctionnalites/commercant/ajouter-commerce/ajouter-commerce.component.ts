@@ -5,7 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { CategorieService } from '../../../coeur/services/categorie.service';
 import { AuthService } from '../../../coeur/services/auth.service';
+import { AbonnementService } from '../../../coeur/services/abonnement.service';
 import { CarteComponent } from '../../../partages/composants/carte/carte.component';
+import { ModalComponent } from '../../../partages/composants/modal/modal.component';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Composant Wizard pour l'ajout d'un commerce
@@ -13,13 +16,16 @@ import { CarteComponent } from '../../../partages/composants/carte/carte.compone
 @Component({
   selector: 'app-ajouter-commerce',
   standalone: true,
-  imports: [CommonModule, FormsModule, CarteComponent],
+  imports: [CommonModule, FormsModule, CarteComponent, ModalComponent],
   templateUrl: './ajouter-commerce.component.html',
   styleUrl: './ajouter-commerce.component.css'
 })
 export class AjouterCommerceComponent implements OnInit {
   step = 1;
   categories: any[] = [];
+  abonnements: any[] = [];
+  selectedAbonnement: any = null;
+  
   isEdit = false;
   showSuccessModal = false;
   
@@ -40,8 +46,27 @@ export class AjouterCommerceComponent implements OnInit {
     lat: 4.0483,
     lon: 9.7144,
     statut: '',
+    idabonnement: '',
     images: [] as any[]
   };
+
+  // Offre Spéciale
+  hasSpecialOffer = false;
+  offreSpeciale = {
+    titre: '',
+    description: '',
+    type: 'PROMOTION',
+    reduction: 0,
+    dateDebut: '',
+    dateFin: ''
+  };
+
+  // Paiement
+  showPaymentModal = false;
+  paymentMode: 'OM' | 'MOMO' | '' = '';
+  paymentPhone = '';
+  paymentAmountStr = '';
+  paymentError = '';
 
   nouvelleCategorie = {
     nom: '',
@@ -55,6 +80,8 @@ export class AjouterCommerceComponent implements OnInit {
   constructor(
     private readonly commerceService: CommerceService,
     private readonly categorieService: CategorieService,
+    private readonly abonnementService: AbonnementService,
+    private readonly http: HttpClient,
     public readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
@@ -63,6 +90,7 @@ export class AjouterCommerceComponent implements OnInit {
 
   ngOnInit(): void {
     this.chargerCategories();
+    this.chargerAbonnements();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEdit = true;
@@ -91,8 +119,25 @@ export class AjouterCommerceComponent implements OnInit {
     this.categorieService.getAll().subscribe(data => this.categories = data);
   }
 
+  chargerAbonnements(): void {
+    this.abonnementService.getAll().subscribe({
+      next: (data) => {
+        // Associe le bon tarif aux niveaux en se basant sur le nom ou le forfait de l'abonnement
+        this.abonnements = data.map(ab => {
+          let prix = 0;
+          if (ab.nom?.toLowerCase() === 'basique') prix = 5000;
+          else if (ab.nom?.toLowerCase() === 'premium') prix = 10000;
+          else if (ab.nom?.toLowerCase() === 'gold') prix = 15000;
+          else prix = 5000; // default
+          return { ...ab, prixAffiche: prix };
+        });
+      },
+      error: (err) => console.error("Erreur abonnements", err)
+    });
+  }
+
   nextStep(): void {
-    if (this.step < 4) this.step++;
+    if (this.step < 5) this.step++;
   }
 
   prevStep(): void {
@@ -178,12 +223,68 @@ export class AjouterCommerceComponent implements OnInit {
   }
 
   /**
-   * Finalisation de l'ajout ou modification
+   * Déclenche la modale de paiement si tout est ok
+   */
+  preparerPaiement(): void {
+    if (!this.selectedAbonnement) {
+      alert("Veuillez choisir un abonnement avant de finaliser l'inscription.");
+      return;
+    }
+    
+    // Si l'édition a déjà un abonnement qui était payé ou si c'est une modif simple (optionnel de repayer)
+    // Mais pour la spec on demande la simulation.
+    this.commerce.idabonnement = this.selectedAbonnement.idabonnement;
+    this.paymentMode = '';
+    this.paymentPhone = '';
+    this.paymentAmountStr = '';
+    this.paymentError = '';
+    this.showPaymentModal = true;
+  }
+
+  /**
+   * Validation stricte du paiement selon les règles
+   */
+  validerPaiement(): void {
+    this.paymentError = '';
+    
+    // 1. Validation du téléphone (exactement 9 chiffres, commence par 6)
+    if (!/^6\d{8}$/.test(this.paymentPhone)) {
+      this.paymentError = "Le numéro de téléphone doit contenir exactement 9 chiffres et commencer par '6'.";
+      return;
+    }
+
+    // 2. Validation du montant (strictement des chiffres, pas de . ou , et pas négatif)
+    if (!/^\d+$/.test(this.paymentAmountStr)) {
+      this.paymentError = "Le montant doit être un nombre entier valide (sans lettres, ni virgule, ni point).";
+      return;
+    }
+
+    const amount = parseInt(this.paymentAmountStr, 10);
+    const requiredPrice = this.selectedAbonnement.prixAffiche;
+
+    if (amount < requiredPrice) {
+      this.paymentError = `Erreur : Le montant de ${amount} FCFA est insuffisant pour l'abonnement ${this.selectedAbonnement.nom} (${requiredPrice} FCFA).`;
+      return;
+    }
+
+    if (amount > requiredPrice) {
+      this.paymentError = `Erreur : Le montant est supérieur au prix de l'abonnement. Veuillez saisir exactement ${requiredPrice} FCFA.`;
+      return;
+    }
+
+    // Si tout est ok (amount === requiredPrice)
+    this.showPaymentModal = false;
+    this.enregistrer();
+  }
+
+  /**
+   * Finalisation de l'ajout ou modification après paiement
    */
   enregistrer(): void {
     const payload: any = {
       idcommerce: this.commerce.idcommerce || undefined,
       idcategorie: this.commerce.idcategorie,
+      idabonnement: this.commerce.idabonnement || undefined,
       iduser: this.authService.getUser()?.id,
       nom: this.commerce.nom,
       description: this.commerce.description,
@@ -218,6 +319,23 @@ export class AjouterCommerceComponent implements OnInit {
           });
         }
         
+        // Traitement de l'Offre Spéciale
+        if (this.hasSpecialOffer && commerceId) {
+          const offrePayload = {
+            idcommerce: commerceId,
+            titre: this.offreSpeciale.titre,
+            description: this.offreSpeciale.description,
+            type: this.offreSpeciale.type,
+            reduction: this.offreSpeciale.reduction,
+            dateDebut: this.offreSpeciale.dateDebut,
+            dateFin: this.offreSpeciale.dateFin
+          };
+          this.http.post('http://localhost:8084/api/offres', offrePayload).subscribe({
+            next: () => console.log("Offre spéciale créée"),
+            error: (e) => console.error("Erreur création offre:", e)
+          });
+        }
+
         this.showSuccessModal = true;
       },
       error: (err) => console.error('Erreur lors de l\'enregistrement', err)

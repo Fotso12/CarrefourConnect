@@ -254,6 +254,19 @@ public class CommerceController {
         }
     }
 
+    @PutMapping("/{id}/rejeter")
+    @Operation(summary = "Rejette un commerce avec un motif")
+    public ResponseEntity<?> rejeter(@PathVariable("id") UUID id, @RequestParam("motif") String motif) {
+        log.info("Requête de rejet commerce ID: {}", id);
+        try {
+            service.rejeter(id, motif);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur rejet commerce {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @PutMapping("/{id}/valider")
     @Operation(summary = "Valide un commerce")
     public ResponseEntity<?> valider(@PathVariable("id") UUID id) {

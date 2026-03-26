@@ -129,10 +129,26 @@ export class CommerceService {
   }
 
   /**
+   * Rejette un commerce avec un motif
+   */
+  rejeter(id: string, motif: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/rejeter`, {}, {
+      params: new HttpParams().set('motif', motif)
+    });
+  }
+
+  /**
    * Récupère les commerces par statut
    */
   getByStatut(statut: string): Observable<any[]> {
     return this.http.get<any[]>(`${API_URL}/statut/${statut}`);
+  }
+
+  /**
+   * Incrémente le nombre de vues
+   */
+  incrementerViews(id: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/vue`, {});
   }
 
   /**

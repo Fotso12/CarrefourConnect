@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
+import { AvisService } from '../../../coeur/services/avis.service';
+import { OffreService } from '../../../coeur/services/offre.service';
+import { AuthService } from '../../../coeur/services/auth.service';
 import { CarteComponent } from '../../../partages/composants/carte/carte.component';
+import { ModalComponent } from '../../../partages/composants/modal/modal.component';
 
 @Component({
   selector: 'app-detail-commerce',
   standalone: true,
-  imports: [CommonModule, RouterLink, CarteComponent],
+  imports: [CommonModule, RouterLink, CarteComponent, FormsModule, ModalComponent],
   templateUrl: './detail-commerce.component.html',
   styleUrl: './detail-commerce.component.css'
 })
@@ -20,20 +25,90 @@ export class DetailCommerceComponent implements OnInit {
   routePoints: any[] = [];
   routeInfo: { distance: number, duration: number } | null = null;
 
+  // Offres et Avis
+  offres: any[] = [];
+  avisList: any[] = [];
+  showAvisModal = false;
+  nouvelAvis = { note: 5, commentaire: '' };
+  moyenneNote = 0;
+  currentUser: any = null;
+
   constructor(
     private route: ActivatedRoute,
-    private commerceService: CommerceService
+    private commerceService: CommerceService,
+    private avisService: AvisService,
+    private offreService: OffreService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getUser();
+    
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
+      // 1. Incrémenter les vues
+      this.commerceService.incrementerViews(id).subscribe({
+        error: (e) => console.error("Could not increment views:", e)
+      });
+      
+      // 2. Récupérer le commerce
       this.commerceService.getById(id).subscribe(data => {
         this.commerce = data;
         this.loading = false;
         this.initialiserCarte();
       });
+
+      // 3. Charger les offres
+      this.offreService.getByCommerce(id).subscribe(data => {
+        this.offres = data;
+      });
+
+      // 4. Charger les avis
+      this.chargerAvis(id);
     }
+  }
+
+  chargerAvis(id: string): void {
+    this.avisService.getByCommerce(id).subscribe(data => {
+      this.avisList = data;
+      this.calculerMoyenne();
+    });
+  }
+
+  calculerMoyenne(): void {
+    if (this.avisList.length === 0) {
+      this.moyenneNote = 0;
+      return;
+    }
+    const sum = this.avisList.reduce((acc, current) => acc + current.note, 0);
+    this.moyenneNote = sum / this.avisList.length;
+  }
+
+  soumettreAvis(): void {
+    if (!this.commerce?.idcommerce) return;
+    if (!this.currentUser) {
+      alert("Veuillez vous connecter pour laisser un avis.");
+      return;
+    }
+
+    const payload = {
+      idcommerce: this.commerce.idcommerce,
+      idutilisateur: this.currentUser.id,
+      note: this.nouvelAvis.note,
+      commentaire: this.nouvelAvis.commentaire
+    };
+
+    this.avisService.create(payload).subscribe({
+      next: (res) => {
+        this.showAvisModal = false;
+        this.nouvelAvis = { note: 5, commentaire: '' };
+        this.chargerAvis(this.commerce.idcommerce);
+      },
+      error: (e) => {
+         console.error("Erreur avis", e);
+         alert("Impossible de soumettre l'avis.");
+      }
+    });
   }
 
   nextImage(): void {

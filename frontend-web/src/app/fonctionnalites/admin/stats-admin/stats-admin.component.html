@@ -5,9 +5,9 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-8">
         <!-- Users Card -->
-        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
             <div class="h-14 w-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Commerces Card -->
-        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
             <div class="h-14 w-14 bg-emerald-50 rounded-2xl flex items-center justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -29,7 +29,7 @@
         </div>
 
         <!-- Pending Card -->
-        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-orange-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-orange-100 hover:shadow-xl hover:-translate-y-1 transition-all">
             <div class="h-14 w-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -40,25 +40,78 @@
         </div>
 
         <!-- Categories Card -->
-        <div class="bg-white p-8 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
             <div class="h-14 w-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-6">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
             </div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Catégories</p>
-            <h3 class="text-4xl font-black text-slate-800">{{ stats.totalCategories }}</h3>
+            <h3 class="text-3xl font-black text-slate-800">{{ stats.totalCategories }}</h3>
+        </div>
+
+        <!-- Vues Card -->
+        <div class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all">
+            <div class="h-14 w-14 bg-red-50 rounded-2xl flex items-center justify-center mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+            </div>
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Vues Totales</p>
+            <h3 class="text-3xl font-black text-slate-800">{{ stats.totalVues }}</h3>
         </div>
     </div>
 
-    <!-- Actions Rapides -->
-    <div class="bg-[#1E293B] p-12 rounded-[40px] text-white overflow-hidden relative">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Actions Rapides -->
+        <div class="lg:col-span-1 bg-[#1E293B] p-10 rounded-[40px] text-white overflow-hidden relative flex flex-col justify-center">
         <div class="relative z-10 max-w-2xl">
             <h3 class="text-3xl font-black mb-4">Besoin de valider des commerces ?</h3>
             <p class="text-slate-400 font-medium mb-8">Il y a actuellement <span class="text-orange-400 font-bold">{{ stats.commercesEnAttente }} commerces</span> en attente de vérification par vos soins.</p>
             <button routerLink="/admin/validation" class="bg-[#00ADEF] text-white px-8 py-4 rounded-2xl font-black text-sm hover:bg-white hover:text-[#00ADEF] transition-all shadow-lg shadow-[#00ADEF]/20">Accéder à la modération</button>
         </div>
-        <!-- Décoration -->
-        <div class="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-white/5 pointer-events-none"></div>
+        
+        <!-- Top 5 Commerces -->
+        <div class="lg:col-span-2 bg-white rounded-[40px] p-10 shadow-sm border border-gray-50">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-black text-[#003B71]">Top 5 Commerces les plus vus</h3>
+                <span class="bg-orange-50 text-orange-500 font-bold px-4 py-1.5 rounded-full text-xs">Populaires</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                            <th class="pb-4 pr-4">Commerce</th>
+                            <th class="pb-4 px-4">Catégorie</th>
+                            <th class="pb-4 px-4">Ville</th>
+                            <th class="pb-4 pl-4 text-right">Vues</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-sm">
+                        <tr *ngFor="let c of topCommercesVues" class="border-b border-gray-50 hover:bg-slate-50 transition-colors group">
+                            <td class="py-4 pr-4">
+                                <div class="flex items-center gap-3">
+                                   <div class="h-10 w-10 rounded-xl overflow-hidden bg-gray-100 shadow-sm">
+                                      <img [src]="c.imagePrincipale || 'https://via.placeholder.com/150'" class="w-full h-full object-cover">
+                                   </div>
+                                   <p class="font-bold text-[#003B71]">{{ c.nom }}</p>
+                                </div>
+                            </td>
+                            <td class="py-4 px-4 text-gray-500 font-medium">{{ c.categorie?.nom || 'N/A' }}</td>
+                            <td class="py-4 px-4 text-gray-500 font-medium uppercase text-[10px]">{{ c.localisations?.[0]?.ville || 'N/A' }}</td>
+                            <td class="py-4 pl-4 text-right">
+                                <span class="bg-gray-100 text-gray-600 font-black px-3 py-1 rounded-lg group-hover:bg-[#F78F1E] group-hover:text-white transition-colors">
+                                    {{ c.nombreVues || 0 }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr *ngIf="topCommercesVues.length === 0">
+                            <td colspan="4" class="py-8 text-center text-gray-400 italic">Aucune donnée disponible.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>

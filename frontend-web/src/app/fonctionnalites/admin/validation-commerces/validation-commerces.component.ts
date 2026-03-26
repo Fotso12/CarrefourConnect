@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { ModalComponent } from '../../../partages/composants/modal/modal.component';
 
@@ -15,13 +16,14 @@ import { ModalComponent } from '../../../partages/composants/modal/modal.compone
   styleUrl: './validation-commerces.component.css'
 })
 export class ValidationCommercesComponent implements OnInit {
-  commercesAttente: any[] = [];
+  commerces: any[] = [];
   loading = true;
 
   // Modal State
   showSuspendModal = false;
+  showRejectModal = false;
   selectedCommerceId: string | null = null;
-  motifSuspension = '';
+  motifAction = '';
 
   constructor(private readonly commerceService: CommerceService) {}
 
@@ -30,9 +32,12 @@ export class ValidationCommercesComponent implements OnInit {
   }
 
   chargerCommerces(): void {
-    this.commerceService.getByStatut('EN_ATTENTE_VALIDATION').subscribe({
+    forkJoin({
+      attente: this.commerceService.getByStatut('EN_ATTENTE_VALIDATION'),
+      valide: this.commerceService.getByStatut('VALIDE')
+    }).subscribe({
       next: (data) => {
-        this.commercesAttente = data;
+        this.commerces = [...data.attente, ...data.valide];
         this.loading = false;
       },
       error: (err) => {
@@ -45,7 +50,8 @@ export class ValidationCommercesComponent implements OnInit {
   valider(id: string): void {
     this.commerceService.valider(id).subscribe({
       next: () => {
-        this.commercesAttente = this.commercesAttente.filter(c => c.idcommerce !== id);
+        // Au lieu de supprimer on recharge pour passer de "attente" à "valide" (plus simple)
+        this.chargerCommerces();
       },
       error: (err) => console.error('Erreur lors de la validation:', err)
     });
@@ -53,25 +59,49 @@ export class ValidationCommercesComponent implements OnInit {
 
   openSuspend(id: string): void {
     this.selectedCommerceId = id;
-    this.motifSuspension = '';
+    this.motifAction = '';
     this.showSuspendModal = true;
   }
 
   closeSuspend(): void {
     this.showSuspendModal = false;
     this.selectedCommerceId = null;
-    this.motifSuspension = '';
+    this.motifAction = '';
   }
 
   confirmerSuspension(): void {
-    if (!this.selectedCommerceId || !this.motifSuspension.trim()) return;
+    if (!this.selectedCommerceId || !this.motifAction.trim()) return;
 
-    this.commerceService.suspendre(this.selectedCommerceId, this.motifSuspension).subscribe({
+    this.commerceService.suspendre(this.selectedCommerceId, this.motifAction).subscribe({
       next: () => {
-        this.commercesAttente = this.commercesAttente.filter(c => c.idcommerce !== this.selectedCommerceId);
+        this.commerces = this.commerces.filter(c => c.idcommerce !== this.selectedCommerceId);
         this.closeSuspend();
       },
       error: (err) => console.error('Erreur lors de la suspension:', err)
+    });
+  }
+
+  openReject(id: string): void {
+    this.selectedCommerceId = id;
+    this.motifAction = '';
+    this.showRejectModal = true;
+  }
+
+  closeReject(): void {
+    this.showRejectModal = false;
+    this.selectedCommerceId = null;
+    this.motifAction = '';
+  }
+
+  confirmerReject(): void {
+    if (!this.selectedCommerceId || !this.motifAction.trim()) return;
+
+    this.commerceService.rejeter(this.selectedCommerceId, this.motifAction).subscribe({
+      next: () => {
+        this.commerces = this.commerces.filter(c => c.idcommerce !== this.selectedCommerceId);
+        this.closeReject();
+      },
+      error: (err) => console.error('Erreur lors du rejet:', err)
     });
   }
 }

@@ -130,6 +130,12 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.20</version>
 		</dependency>
+
+		<!-- Envoi d'emails (notifications admin) -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 	<dependencyManagement>
 		<dependencies>

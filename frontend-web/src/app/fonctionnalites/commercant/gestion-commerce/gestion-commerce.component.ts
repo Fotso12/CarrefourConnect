@@ -17,6 +17,11 @@ import { AuthService } from '../../../coeur/services/auth.service';
 export class GestionCommerceComponent implements OnInit {
   commerces: any[] = [];
   loading = true;
+  stats = {
+    total: 0,
+    actifs: 0,
+    vues: 0
+  };
 
   constructor(
     private readonly commerceService: CommerceService,
@@ -35,6 +40,12 @@ export class GestionCommerceComponent implements OnInit {
     this.commerceService.getByCommercant(user.id).subscribe({
       next: (data) => {
         this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
+        
+        // Calcul des KPI
+        this.stats.total = this.commerces.length;
+        this.stats.actifs = this.commerces.filter(c => c.statut === 'VALIDE' || c.statut === 'ACTIF').length;
+        this.stats.vues = this.commerces.reduce((acc, current) => acc + (current.nombreVues || 0), 0);
+
         this.loading = false;
       },
       error: () => this.loading = false

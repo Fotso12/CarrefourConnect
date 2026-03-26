@@ -34,6 +34,9 @@ export class TableauBordAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Appel direct pour charger les compteurs au démarrage
+    this.loadCounts();
+
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user || {};
       if (this.currentUser.iduser) {
