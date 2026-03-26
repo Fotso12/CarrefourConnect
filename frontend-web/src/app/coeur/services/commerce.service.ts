@@ -106,6 +106,13 @@ export class CommerceService {
   }
 
   /**
+   * Met à jour le statut d'un commerce (Validation Admin)
+   */
+  updateStatut(id: string, statut: string): Observable<any> {
+    return this.http.put<any>(`${API_URL}/${id}`, { statut });
+  }
+
+  /**
    * Supprime un commerce.
    */
   delete(id: string): Observable<any> {

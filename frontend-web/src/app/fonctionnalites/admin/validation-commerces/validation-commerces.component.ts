@@ -31,13 +31,22 @@ export class ValidationCommercesComponent implements OnInit {
   }
 
   valider(id: string): void {
-    // Appel API pour valider (à simuler ou implémenter)
-    console.log('Validation du commerce', id);
-    this.commercesAttente = this.commercesAttente.filter(c => c.id !== id);
+    this.commerceService.updateStatut(id, 'VALIDE').subscribe({
+      next: () => {
+        this.commercesAttente = this.commercesAttente.filter(c => c.idcommerce !== id);
+      },
+      error: (err) => console.error('Erreur lors de la validation:', err)
+    });
   }
 
   rejeter(id: string): void {
-    console.log('Rejet du commerce', id);
-    this.commercesAttente = this.commercesAttente.filter(c => c.id !== id);
+    if (confirm('Êtes-vous sûr de vouloir rejeter ce commerce ?')) {
+      this.commerceService.updateStatut(id, 'REJETE').subscribe({
+        next: () => {
+          this.commercesAttente = this.commercesAttente.filter(c => c.idcommerce !== id);
+        },
+        error: (err) => console.error('Erreur lors du rejet:', err)
+      });
+    }
   }
 }

@@ -19,4 +19,5 @@ public class UtilisateurDTO {
     private String password;
     private java.time.LocalDateTime dateCreation;
     private String status;
+    private String role;
 }

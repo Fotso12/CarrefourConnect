@@ -39,10 +39,22 @@ export const routes: Routes = [
     loadComponent: () => import('./fonctionnalites/admin/tableau-bord/tableau-bord-admin.component').then(m => m.TableauBordAdminComponent),
     children: [
       {
+        path: 'dashboard',
+        loadComponent: () => import('./fonctionnalites/admin/stats-admin/stats-admin.component').then(m => m.StatsAdminComponent)
+      },
+      {
         path: 'validation',
         loadComponent: () => import('./fonctionnalites/admin/validation-commerces/validation-commerces.component').then(m => m.ValidationCommercesComponent)
       },
-      { path: '', redirectTo: 'validation', pathMatch: 'full' }
+      {
+        path: 'utilisateurs',
+        loadComponent: () => import('./fonctionnalites/admin/gestion-utilisateurs/gestion-utilisateurs.component').then(m => m.GestionUtilisateursComponent)
+      },
+      {
+        path: 'categories',
+        loadComponent: () => import('./fonctionnalites/admin/gestion-categories/gestion-categories.component').then(m => m.GestionCategoriesComponent)
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '' }
