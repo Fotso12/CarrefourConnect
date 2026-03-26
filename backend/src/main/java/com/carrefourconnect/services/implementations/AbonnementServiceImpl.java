@@ -6,11 +6,13 @@ import com.carrefourconnect.mappers.AbonnementMapper;
 import com.carrefourconnect.repositories.AbonnementRepository;
 import com.carrefourconnect.services.interfaces.AbonnementService;
 import com.carrefourconnect.utils.enums.StatutAbonnement;
+import com.carrefourconnect.utils.enums.TypeAbonnement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -71,4 +73,20 @@ public class AbonnementServiceImpl implements AbonnementService {
         log.debug("Filtrage des abonnements par statut: {}", statut);
         return repository.findByStatut(statut).stream().map(mapper::toDto).collect(Collectors.toList());
     }
+
+    @Override
+    public void updatePrixParType(String type, BigDecimal prix) {
+        log.info("Mise à jour du prix pour le type d'abonnement: {} -> {} FCFA", type, prix);
+        TypeAbonnement typeEnum = TypeAbonnement.valueOf(type);
+        List<Abonnement> abonnements = repository.findAll().stream()
+                .filter(a -> typeEnum.equals(a.getType()))
+                .collect(Collectors.toList());
+        
+        abonnements.forEach(a -> {
+            a.setMontant(prix);
+            repository.save(a);
+        });
+        log.info("{} abonnement(s) mis à jour pour le type {}", abonnements.size(), type);
+    }
 }
+

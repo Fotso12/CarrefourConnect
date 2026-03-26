@@ -48,19 +48,10 @@ public class DataInitializer {
                 categorieRepository.save(cat);
             }
 
-            // Abonnement par défaut
-            if (abonnementRepository.count() == 0) {
-                log.info("Création d'un abonnement par défaut...");
-                Abonnement abo = Abonnement.builder()
-                        .type(TypeAbonnement.BASIQUE)
-                        .statut(StatutAbonnement.ACTIF)
-                        .montant(BigDecimal.ZERO)
-                        .dateDebut(LocalDateTime.now())
-                        .dateFin(LocalDateTime.now().plusYears(1))
-                        .reference("REF-BASIQUE-FREE")
-                        .build();
-                abonnementRepository.save(abo);
-            }
+            // Abonnements de référence (un par type)
+            initAbonnement(abonnementRepository, TypeAbonnement.BASIQUE,  new BigDecimal("0"),     "REF-BASIQUE-FREE");
+            initAbonnement(abonnementRepository, TypeAbonnement.PREMIUM,  new BigDecimal("5000"),  "REF-PREMIUM-DEFAULT");
+            initAbonnement(abonnementRepository, TypeAbonnement.GOLD,     new BigDecimal("10000"), "REF-GOLD-DEFAULT");
 
             log.info("Initialisation des données terminée.");
         };
@@ -74,6 +65,22 @@ public class DataInitializer {
                     .description(description)
                     .build();
             repository.save(role);
+        }
+    }
+
+    private void initAbonnement(AbonnementRepository repository, TypeAbonnement type, BigDecimal montant, String reference) {
+        boolean exists = repository.findAll().stream().anyMatch(a -> type.equals(a.getType()));
+        if (!exists) {
+            log.info("Création de l'abonnement de référence : {}", type);
+            Abonnement abo = Abonnement.builder()
+                    .type(type)
+                    .statut(StatutAbonnement.ACTIF)
+                    .montant(montant)
+                    .dateDebut(LocalDateTime.now())
+                    .dateFin(LocalDateTime.now().plusYears(99))
+                    .reference(reference)
+                    .build();
+            repository.save(abo);
         }
     }
 }

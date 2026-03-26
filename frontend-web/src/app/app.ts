@@ -21,6 +21,10 @@ export class App {
 
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
+  get currentUserRole(): string {
+    return this.authService.currentUserValue?.role || '';
+  }
+
   ngOnInit(): void {
     // S'abonner à l'utilisateur actuel pour mettre à jour l'état du header
     this.authService.currentUser.subscribe(() => {

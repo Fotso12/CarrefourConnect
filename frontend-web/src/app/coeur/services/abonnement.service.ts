@@ -43,6 +43,13 @@ export class AbonnementService {
   }
 
   /**
+   * Met à jour le prix de tous les abonnements d'un type donné
+   */
+  updatePrixParType(type: string, prix: number): Observable<any> {
+    return this.http.put(`${API_URL}/tarif/${type}`, { prix }, { responseType: 'text' });
+  }
+
+  /**
    * Supprime un abonnement
    */
   delete(id: string): Observable<any> {

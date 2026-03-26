@@ -14,4 +14,5 @@ public interface AbonnementService {
     
     // Méthodes avancées
     List<AbonnementDTO> findByStatut(StatutAbonnement statut);
+    void updatePrixParType(String type, java.math.BigDecimal prix);
 }

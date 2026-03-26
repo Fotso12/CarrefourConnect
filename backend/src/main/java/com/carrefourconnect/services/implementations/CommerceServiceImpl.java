@@ -188,7 +188,16 @@ public class CommerceServiceImpl implements CommerceService {
             });
         }
 
-        return mapper.toDto(repository.save(entity));
+        Commerce savedEntity = repository.save(entity);
+
+        // Envoyer une notification aux administrateurs
+        notificationService.sendToAdmins(NotificationDTO.builder()
+                .titre("Demande d'inscription de commerce")
+                .message("Une nouvelle demande d'inscription pour le commerce '" + savedEntity.getNom() + "' a été soumise.")
+                .type("NOUVEAU_COMMERCE")
+                .build());
+
+        return mapper.toDto(savedEntity);
     }
 
     @Override

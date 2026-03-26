@@ -58,6 +58,10 @@ export const routes: Routes = [
         path: 'abonnements',
         loadComponent: () => import('./fonctionnalites/admin/gestion-abonnements/gestion-abonnements').then(m => m.GestionAbonnements)
       },
+      {
+        path: 'notifications',
+        loadComponent: () => import('./fonctionnalites/admin/gestion-notifications/gestion-notifications').then(m => m.GestionNotifications)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

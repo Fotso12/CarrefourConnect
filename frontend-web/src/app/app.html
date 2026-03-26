@@ -10,13 +10,12 @@
       
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-8">
-        <ng-container *ngIf="!isLoggedIn">
-          <a routerLink="/" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Accueil</a>
-          <a class="text-gray-500 font-medium hover:text-[#003B71] transition-colors cursor-pointer">Catégories</a>
-          <a class="text-gray-500 font-medium hover:text-[#003B71] transition-colors cursor-pointer">Aide</a>
-        </ng-container>
+        <a routerLink="/" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Accueil</a>
+        <a class="text-gray-500 font-medium hover:text-[#003B71] transition-colors cursor-pointer">Catégories</a>
+        
         <ng-container *ngIf="isLoggedIn">
-          <a routerLink="/commercant" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Mon espace</a>
+          <a *ngIf="currentUserRole === 'ADMIN' || currentUserRole === 'ROLE_ADMIN'" routerLink="/admin" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Mon espace Admin</a>
+          <a *ngIf="currentUserRole !== 'ADMIN' && currentUserRole !== 'ROLE_ADMIN'" routerLink="/commercant" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Mon espace</a>
         </ng-container>
       </nav>
 

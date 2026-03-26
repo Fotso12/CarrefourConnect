@@ -120,20 +120,32 @@ public class AbonnementController {
     }
 
     /**
-     * Filtre et retourne les abonnements selon leur statut (ACTIF, EXPIRE, etc.).
+     * Met à jour le prix de tous les abonnements d'un type donné (BASIQUE, PREMIUM, GOLD).
      *
-     * @param statut Le statut à utiliser comme filtre.
-     * @return 200 OK avec la liste des abonnements filtrés, ou 400 en cas d'erreur.
+     * @param type Le type d'abonnement (enum).
+     * @param body Map contenant le champ "prix".
+     * @return 200 OK si la mise à jour réussit, ou 400 en cas d'erreur.
      */
-    @GetMapping("/statut/{statut}")
-    @Operation(summary = "Filtre les abonnements par statut")
-    public ResponseEntity<?> getByStatut(@PathVariable("statut") StatutAbonnement statut) {
-        log.info("Filtrage des abonnements par statut: {}", statut);
+    @PutMapping("/tarif/{type}")
+    @Operation(summary = "Met à jour le prix de tous les abonnements d'un type donné")
+    public ResponseEntity<?> updatePrixParType(
+            @PathVariable("type") String type,
+            @RequestBody java.util.Map<String, java.math.BigDecimal> body) {
+        log.info("Mise à jour du prix pour le type: {}", type);
         try {
-            return ResponseEntity.ok(service.findByStatut(statut));
+            java.math.BigDecimal prix = body.get("prix");
+            if (prix == null) {
+                return new ResponseEntity<>("Le champ 'prix' est requis", HttpStatus.BAD_REQUEST);
+            }
+            service.updatePrixParType(type, prix);
+            return ResponseEntity.ok("Prix mis à jour avec succès pour le type: " + type);
+        } catch (IllegalArgumentException e) {
+            log.error("Type d'abonnement invalide: {}", type);
+            return new ResponseEntity<>("Type d'abonnement invalide: " + type, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
-            log.error("Erreur filtrage abonnements statut {}: {}", statut, e.getMessage());
+            log.error("Erreur mise à jour prix type {}: {}", type, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 }
+
