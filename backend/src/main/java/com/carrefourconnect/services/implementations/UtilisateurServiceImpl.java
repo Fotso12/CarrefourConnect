@@ -76,6 +76,15 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
     @Override
+    public List<UtilisateurDTO> findAllNonAdmins() {
+        log.debug("Récupération des utilisateurs non-administrateurs");
+        return repository.findAll().stream()
+                .filter(u -> u.getRole() != null && !u.getRole().getNom().equals("ADMIN") && !u.getRole().getNom().equals("ROLE_ADMIN"))
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UtilisateurDTO save(UtilisateurDTO dto) {
         log.warn("Tentative de sauvegarde directe d'un utilisateur abstrait");
         throw new UnsupportedOperationException("Utiliser registerVisiteur ou registerCommercant.");
@@ -90,6 +99,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             existing.setEmail(dto.getEmail());
             existing.setTelephone(dto.getTelephone());
             existing.setStatus(dto.getStatus());
+            existing.setMotifSuspension(dto.getMotifSuspension());
             return mapper.toDto(repository.save(existing));
         }).orElseGet(() -> {
             log.error("Utilisateur non trouvé pour mise à jour: {}", id);
@@ -101,6 +111,26 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void delete(UUID id) {
         log.info("Suppression de l'utilisateur ID: {}", id);
         repository.deleteById(id);
+    }
+
+    @Override
+    public void suspendre(UUID id, String motif) {
+        log.info("Suspension de l'utilisateur ID: {} pour motif: {}", id, motif);
+        repository.findById(id).ifPresent(u -> {
+            u.setStatus("SUSPENDU");
+            u.setMotifSuspension(motif);
+            repository.save(u);
+        });
+    }
+
+    @Override
+    public void activer(UUID id) {
+        log.info("Activation de l'utilisateur ID: {}", id);
+        repository.findById(id).ifPresent(u -> {
+            u.setStatus("ACTIF");
+            u.setMotifSuspension(null);
+            repository.save(u);
+        });
     }
 
     @Override

@@ -9,6 +9,7 @@ import java.util.UUID;
 public interface UtilisateurService {
     UtilisateurDTO findById(UUID id);
     List<UtilisateurDTO> findAll();
+    List<UtilisateurDTO> findAllNonAdmins();
     UtilisateurDTO save(UtilisateurDTO dto);
     UtilisateurDTO update(UUID id, UtilisateurDTO dto);
     void delete(UUID id);
@@ -22,4 +23,7 @@ public interface UtilisateurService {
     // Inscriptions
     UtilisateurDTO registerVisiteur(VisiteurDTO dto);
     UtilisateurDTO registerCommercant(CommercantDTO dto);
+
+    void suspendre(UUID id, String motif);
+    void activer(UUID id);
 }

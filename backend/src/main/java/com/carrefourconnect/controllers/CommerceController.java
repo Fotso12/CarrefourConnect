@@ -240,4 +240,30 @@ public class CommerceController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/{id}/suspendre")
+    @Operation(summary = "Suspend un commerce avec un motif")
+    public ResponseEntity<?> suspendre(@PathVariable("id") UUID id, @RequestParam("motif") String motif) {
+        log.info("Requête de suspension commerce ID: {}", id);
+        try {
+            service.suspendre(id, motif);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur suspension commerce {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}/valider")
+    @Operation(summary = "Valide un commerce")
+    public ResponseEntity<?> valider(@PathVariable("id") UUID id) {
+        log.info("Requête de validation commerce ID: {}", id);
+        try {
+            service.valider(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur validation commerce {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

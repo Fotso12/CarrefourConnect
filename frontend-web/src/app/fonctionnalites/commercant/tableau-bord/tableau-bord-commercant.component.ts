@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../coeur/services/auth.service';
+import { NotificationService } from '../../../coeur/services/notification.service';
 
 /**
  * Composant principal du Tableau de Bord Commerçant
@@ -25,8 +26,12 @@ export class TableauBordCommercantComponent implements OnInit {
   currentUser: any = {};
   displayName: string = '';
   displayRole: string = '';
+  unreadCount = 0;
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe(user => {
@@ -40,6 +45,17 @@ export class TableauBordCommercantComponent implements OnInit {
         this.displayName = '';
       }
       this.displayRole = this.currentUser.role || '';
+
+      if (this.currentUser.iduser) {
+        this.loadUnreadCount();
+      }
+    });
+  }
+
+  loadUnreadCount(): void {
+    this.notificationService.countUnread(this.currentUser.iduser).subscribe({
+      next: (count) => this.unreadCount = count,
+      error: (err) => console.error("Erreur chargement notifications:", err)
     });
   }
 

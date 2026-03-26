@@ -20,4 +20,5 @@ public class UtilisateurDTO {
     private java.time.LocalDateTime dateCreation;
     private String status;
     private String role;
+    private String motifSuspension;
 }

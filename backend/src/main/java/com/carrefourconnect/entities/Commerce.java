@@ -87,4 +87,7 @@ public class Commerce {
 
     @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Localisation> localisations = new ArrayList<>();
+
+    @Column(name = "motifsuspension", columnDefinition = "TEXT")
+    private String motifSuspension;
 }

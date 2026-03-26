@@ -54,6 +54,10 @@ export const routes: Routes = [
         path: 'categories',
         loadComponent: () => import('./fonctionnalites/admin/gestion-categories/gestion-categories.component').then(m => m.GestionCategoriesComponent)
       },
+      {
+        path: 'abonnements',
+        loadComponent: () => import('./fonctionnalites/admin/gestion-abonnements/gestion-abonnements').then(m => m.GestionAbonnements)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

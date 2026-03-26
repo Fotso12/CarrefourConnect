@@ -41,4 +41,27 @@ export class UtilisateurService {
   delete(id: string): Observable<any> {
     return this.http.delete<any>(`${API_URL}/${id}`);
   }
+
+  /**
+   * Récupère tous les utilisateurs sauf les administrateurs
+   */
+  getNonAdmins(): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/non-admins`);
+  }
+
+  /**
+   * Suspend un utilisateur avec un motif
+   */
+  suspendre(id: string, motif: string): Observable<any> {
+    const params = new URLSearchParams();
+    params.set('motif', motif);
+    return this.http.put(`${API_URL}/${id}/suspendre?${params.toString()}`, {});
+  }
+
+  /**
+   * Active un utilisateur suspendu
+   */
+  activer(id: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/activer`, {});
+  }
 }

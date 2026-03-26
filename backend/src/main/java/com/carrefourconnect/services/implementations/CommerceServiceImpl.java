@@ -14,6 +14,8 @@ import com.carrefourconnect.utils.enums.StatutCommerce;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
+import com.carrefourconnect.services.interfaces.NotificationService;
+import com.carrefourconnect.dtos.NotificationDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
@@ -36,6 +38,7 @@ public class CommerceServiceImpl implements CommerceService {
     private final CommercantRepository commercantRepository;
     private final MediaRepository mediaRepository;
     private final MediaMapper mediaMapper;
+    private final NotificationService notificationService;
 
     public CommerceServiceImpl(CommerceRepository repository, 
                                CommerceMapper mapper,
@@ -43,7 +46,8 @@ public class CommerceServiceImpl implements CommerceService {
                                AbonnementRepository abonnementRepository,
                                CommercantRepository commercantRepository,
                                MediaRepository mediaRepository,
-                               MediaMapper mediaMapper) {
+                               MediaMapper mediaMapper,
+                               NotificationService notificationService) {
         this.repository = repository;
         this.mapper = mapper;
         this.categorieRepository = categorieRepository;
@@ -51,6 +55,7 @@ public class CommerceServiceImpl implements CommerceService {
         this.commercantRepository = commercantRepository;
         this.mediaRepository = mediaRepository;
         this.mediaMapper = mediaMapper;
+        this.notificationService = notificationService;
     }
 
     private void enrichirDto(CommerceDTO dto) {
@@ -312,7 +317,11 @@ public class CommerceServiceImpl implements CommerceService {
                     boolean matchCat = c.getCategorie() != null && c.getCategorie().getNom().toLowerCase().contains(search);
                     return matchName || matchDesc || matchCat;
                 })
-                .filter(c -> statut == null || c.getStatut().equals(statut))
+                .filter(c -> {
+                    // Si un statut est spécifié, on le respecte, sinon on ne montre que les VALIDE pour le public
+                    if (statut != null) return c.getStatut().equals(statut);
+                    return c.getStatut().equals(StatutCommerce.VALIDE);
+                })
                 .filter(c -> idCategorie == null || (c.getCategorie() != null && c.getCategorie().getIdcategorie().equals(idCategorie)))
                 // Note: La ville est dans Localisation, donc on filtre via les localisations du commerce
                 // Pour simplifier ici, on accepte si au moins une localisation match
@@ -320,5 +329,41 @@ public class CommerceServiceImpl implements CommerceService {
                 .map(mapper::toDto)
                 .peek(this::enrichirDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void suspendre(UUID id, String motif) {
+        log.info("Suspension du commerce ID: {} pour motif: {}", id, motif);
+        repository.findById(id).ifPresent(c -> {
+            c.setStatut(StatutCommerce.SUSPENDU);
+            c.setMotifSuspension(motif);
+            repository.save(c);
+
+            // Envoyer une notification au commerçant
+            notificationService.send(NotificationDTO.builder()
+                    .iduser(c.getCommercant().getIduser())
+                    .titre("Commerce Suspendu")
+                    .message("Votre commerce '" + c.getNom() + "' a été suspendu pour le motif suivant : " + motif)
+                    .type("SUSPENSION")
+                    .build());
+        });
+    }
+
+    @Override
+    public void valider(UUID id) {
+        log.info("Validation du commerce ID: {}", id);
+        repository.findById(id).ifPresent(c -> {
+            c.setStatut(StatutCommerce.VALIDE);
+            c.setMotifSuspension(null);
+            repository.save(c);
+
+            // Notification
+            notificationService.send(NotificationDTO.builder()
+                    .iduser(c.getCommercant().getIduser())
+                    .titre("Commerce Validé")
+                    .message("Félicitations ! Votre commerce '" + c.getNom() + "' a été validé et est désormais visible sur la plateforme.")
+                    .type("VALIDATION")
+                    .build());
+        });
     }
 }

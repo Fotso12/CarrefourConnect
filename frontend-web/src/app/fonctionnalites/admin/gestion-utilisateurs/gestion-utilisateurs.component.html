@@ -33,22 +33,46 @@
                         </div>
                     </td>
                     <td class="px-10 py-8">
-                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider"
-                              [ngClass]="{
-                                'bg-blue-50 text-blue-600': user.role === 'ROLE_ADMIN',
-                                'bg-emerald-50 text-emerald-600': user.role === 'ROLE_COMMERCANT',
-                                'bg-slate-100 text-slate-500': user.role === 'ROLE_VISITEUR'
-                              }">
-                            {{ getRoleLabel(user.role) }}
-                        </span>
+                        <div class="flex flex-col gap-2">
+                            <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider inline-block w-fit"
+                                  [ngClass]="{
+                                    'bg-blue-50 text-blue-600': user.role === 'ROLE_ADMIN' || user.role === 'ADMIN',
+                                    'bg-emerald-50 text-emerald-600': user.role === 'ROLE_COMMERCANT' || user.role === 'COMMERCANT',
+                                    'bg-slate-100 text-slate-500': user.role === 'ROLE_VISITEUR' || user.role === 'VISITEUR'
+                                  }">
+                                {{ getRoleLabel(user.role) }}
+                            </span>
+                            <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider inline-block w-fit"
+                                  [ngClass]="{
+                                    'bg-green-50 text-green-600': user.status === 'ACTIF' || !user.status,
+                                    'bg-red-50 text-red-600': user.status === 'SUSPENDU'
+                                  }">
+                                {{ user.status === 'SUSPENDU' ? 'Suspendu' : 'Actif' }}
+                            </span>
+                        </div>
                     </td>
                     <td class="px-10 py-8 text-right">
                         <div class="flex items-center justify-end gap-3">
-                            <button (click)="supprimer(user.iduser)" 
-                                    class="p-3 text-slate-400 hover:bg-red-50 hover:text-red-500 rounded-xl transition-all"
-                                    title="Supprimer l'utilisateur">
+                            <button (click)="openDetails(user)" 
+                                    class="p-3 text-slate-400 hover:bg-blue-50 hover:text-blue-500 rounded-xl transition-all"
+                                    title="Détails de l'utilisateur">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                            <button *ngIf="user.status !== 'SUSPENDU'" (click)="openSuspend(user)" 
+                                    class="p-3 text-slate-400 hover:bg-orange-50 hover:text-orange-500 rounded-xl transition-all"
+                                    title="Suspendre l'utilisateur">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                            </button>
+                            <button *ngIf="user.status === 'SUSPENDU'" (click)="activer(user)" 
+                                    class="p-3 text-slate-400 hover:bg-green-50 hover:text-green-500 rounded-xl transition-all"
+                                    title="Activer l'utilisateur">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </button>
                         </div>
@@ -67,3 +91,79 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Détails -->
+<app-modal 
+  [isOpen]="showDetailsModal" 
+  title="Détails de l'utilisateur" 
+  subtitle="Informations complètes du compte"
+  iconBg="from-slate-500 to-slate-700"
+  btnBg="bg-slate-800"
+  confirmLabel="Fermer"
+  (onConfirm)="closeDetails()"
+  (onCancel)="closeDetails()">
+  <div *ngIf="selectedUser" modal-icon>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+    </svg>
+  </div>
+  <div *ngIf="selectedUser" modal-body class="space-y-4 text-sm font-medium text-slate-600">
+    <div class="grid grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+      <div class="text-slate-400">Nom complet</div>
+      <div class="col-span-2 font-bold text-slate-800">{{ selectedUser.prenom }} {{ selectedUser.nom }}</div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+      <div class="text-slate-400">Email</div>
+      <div class="col-span-2 font-bold text-slate-800">{{ selectedUser.email }}</div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+      <div class="text-slate-400">Téléphone</div>
+      <div class="col-span-2 font-bold text-slate-800">{{ selectedUser.telephone || 'Non renseigné' }}</div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 pb-4 border-b border-gray-100">
+      <div class="text-slate-400">Rôle</div>
+      <div class="col-span-2 font-bold">{{ getRoleLabel(selectedUser.role) }}</div>
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+      <div class="text-slate-400">Statut</div>
+      <div class="col-span-2 font-bold" [ngClass]="{'text-red-600': selectedUser.status === 'SUSPENDU', 'text-green-600': selectedUser.status !== 'SUSPENDU'}">
+        {{ selectedUser.status === 'SUSPENDU' ? 'Suspendu' : 'Actif' }}
+      </div>
+    </div>
+    <div *ngIf="selectedUser.status === 'SUSPENDU' && selectedUser.motifSuspension" class="mt-4 p-4 bg-red-50 text-red-700 rounded-xl">
+      <span class="font-bold block mb-1">Motif de suspension :</span>
+      {{ selectedUser.motifSuspension }}
+    </div>
+  </div>
+</app-modal>
+
+<!-- Modal Suspension -->
+<app-modal 
+  [isOpen]="showSuspendModal" 
+  title="Suspendre l'utilisateur" 
+  [subtitle]="selectedUser ? 'Compte de ' + selectedUser.prenom + ' ' + selectedUser.nom : ''"
+  iconBg="from-orange-500 to-red-500"
+  btnBg="bg-red-500 shadow-red-500/20"
+  confirmLabel="Confirmer la suspension"
+  (onConfirm)="confirmerSuspension()"
+  (onCancel)="closeSuspend()">
+  <div modal-icon>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+    </svg>
+  </div>
+  <div modal-body class="space-y-4">
+    <p class="text-sm font-medium text-slate-600">
+      Veuillez indiquer le motif de la suspension. Cette action empêchera l'utilisateur de se connecter à la plateforme.
+    </p>
+    <div>
+      <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
+      <textarea 
+        [(ngModel)]="motifSuspension"
+        rows="4"
+        class="w-full bg-slate-50 border-0 text-slate-600 text-sm font-bold rounded-2xl px-6 py-4 focus:ring-4 focus:ring-red-500/10 placeholder-slate-300 resize-none transition-all"
+        placeholder="Décrivez la raison de la suspension (ex: Non respect des CGU...)">
+      </textarea>
+    </div>
+  </div>
+</app-modal>

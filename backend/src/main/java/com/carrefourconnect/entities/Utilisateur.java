@@ -56,4 +56,7 @@ public abstract class Utilisateur {
         inverseJoinColumns = @JoinColumn(name = "idcommerce")
     )
     private Set<Commerce> favoris = new HashSet<>();
+
+    @Column(name = "motifsuspension", columnDefinition = "TEXT")
+    private String motifSuspension;
 }

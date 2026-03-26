@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AdministrateurMapper {
     @Mapping(source = "role.idrole", target = "idrole")
+    @Mapping(source = "role.nom", target = "role")
     AdministrateurDTO toDto(Administrateur administrateur);
 
     @Mapping(source = "idrole", target = "role.idrole")

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 /**
- * Service pour la gestion des notifications (Alertes, Avis, Validation)
+ * Service pour la gestion des notifications (Port 8084)
  */
 const API_URL = 'http://localhost:8084/api/notifications';
 
@@ -12,19 +12,33 @@ const API_URL = 'http://localhost:8084/api/notifications';
 })
 export class NotificationService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private readonly http: HttpClient) { }
 
   /**
    * Récupère les notifications d'un utilisateur
    */
-  getByUser(userId: string): Observable<any[]> {
-    return this.http.get<any[]>(`${API_URL}/utilisateur/${userId}`);
+  getByUser(iduser: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/user/${iduser}`);
   }
 
   /**
-   * Marqué une notification comme lue
+   * Marque une notification comme lue
    */
-  markAsRead(id: string): Observable<any> {
-    return this.http.put(`${API_URL}/${id}/lu`, {});
+  markAsRead(idnotification: string): Observable<any> {
+    return this.http.put(`${API_URL}/${idnotification}/lu`, {});
+  }
+
+  /**
+   * Compte les notifications non lues
+   */
+  countUnread(iduser: string): Observable<number> {
+    return this.http.get<number>(`${API_URL}/user/${iduser}/unread/count`);
+  }
+
+  /**
+   * Envoie une notification
+   */
+  send(notification: any): Observable<any> {
+    return this.http.post(`${API_URL}/send`, notification);
   }
 }

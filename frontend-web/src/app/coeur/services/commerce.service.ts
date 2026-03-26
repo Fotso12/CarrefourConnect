@@ -106,10 +106,33 @@ export class CommerceService {
   }
 
   /**
-   * Met à jour le statut d'un commerce (Validation Admin)
+   * Met à jour le statut d'un commerce (Validation Admin simple)
    */
   updateStatut(id: string, statut: string): Observable<any> {
     return this.http.put<any>(`${API_URL}/${id}`, { statut });
+  }
+
+  /**
+   * Valide un commerce
+   */
+  valider(id: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/valider`, {});
+  }
+
+  /**
+   * Suspend un commerce avec un motif
+   */
+  suspendre(id: string, motif: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/suspendre`, {}, {
+      params: new HttpParams().set('motif', motif)
+    });
+  }
+
+  /**
+   * Récupère les commerces par statut
+   */
+  getByStatut(statut: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/statut/${statut}`);
   }
 
   /**

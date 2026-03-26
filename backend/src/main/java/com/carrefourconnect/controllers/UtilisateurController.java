@@ -212,4 +212,42 @@ public class UtilisateurController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/non-admins")
+    @Operation(summary = "Liste tous les utilisateurs sauf les administrateurs")
+    public ResponseEntity<?> getAllNonAdmins() {
+        log.info("Requête pour lister les utilisateurs non-admins");
+        try {
+            return ResponseEntity.ok(service.findAllNonAdmins());
+        } catch (Exception e) {
+            log.error("Erreur lors de la récupération des utilisateurs: {}", e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}/suspendre")
+    @Operation(summary = "Suspend un utilisateur avec un motif")
+    public ResponseEntity<?> suspendre(@PathVariable("id") java.util.UUID id, @RequestParam("motif") String motif) {
+        log.info("Requête de suspension utilisateur ID: {}", id);
+        try {
+            service.suspendre(id, motif);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur suspension utilisateur {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}/activer")
+    @Operation(summary = "Active un utilisateur")
+    public ResponseEntity<?> activer(@PathVariable("id") java.util.UUID id) {
+        log.info("Requête d'activation utilisateur ID: {}", id);
+        try {
+            service.activer(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur activation utilisateur {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
