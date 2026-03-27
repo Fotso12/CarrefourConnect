@@ -12,22 +12,22 @@
          class="fixed inset-y-0 left-0 w-72 bg-[#1E293B] text-white flex flex-col shadow-2xl z-50 md:relative md:translate-x-0 transition-transform duration-300">
     <div class="h-20 flex items-center px-8 gap-3 border-b border-white/5">
       <div class="h-10 w-10 bg-[#00ADEF] rounded-xl flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-          </svg>
+          <i class="fa-solid fa-user-gear text-white text-xl"></i>
       </div>
       <span class="text-xl font-black tracking-tight text-white">Admin</span>
     </div>
 
     <nav class="flex-1 py-10 px-6 space-y-3">
       <a *ngFor="let item of menuItems" 
-         [routerLink]="item.link" 
+         [routerLink]="[item.link]" 
+         routerLinkActive="bg-[#003B71] text-white shadow-lg"
+         #rla="routerLinkActive"
+         [routerLinkActiveOptions]="{exact: true}"
          (click)="isSidebarOpen = false"
-         routerLinkActive="bg-white/10 text-[#00ADEF] border-l-4 border-[#00ADEF]"
-         class="flex items-center gap-4 px-4 py-4 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white transition-all group overflow-hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
-        </svg>
+         class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group hover:bg-slate-700/50">
+        <div class="flex items-center justify-center w-6 h-6">
+            <i [class]="item.icon + ' text-lg'" [class.text-white]="rla.isActive"></i>
+        </div>
         <span class="font-bold text-sm flex-1">{{ item.label }}</span>
         <span *ngIf="item.badge && pendingValidationsCount > 0" 
               class="bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg shadow-red-500/30 animate-pulse">
@@ -43,9 +43,7 @@
       <div class="flex items-center gap-4">
         <!-- Button Toggle (Mobile) -->
         <button (click)="toggleSidebar()" class="md:hidden p-2 bg-slate-50 rounded-xl text-slate-400 hover:text-[#00ADEF]">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
+          <i class="fa-solid fa-bars text-xl"></i>
         </button>
         <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:block">Back-office</h2>
       </div>
@@ -54,9 +52,7 @@
       <div class="flex items-center gap-4 md:gap-6">
         <!-- Notification Bell -->
         <a routerLink="/admin/notifications" class="relative p-2 text-slate-400 hover:text-[#00ADEF] transition-colors rounded-full hover:bg-slate-50 cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
+          <i class="fa-solid fa-bell text-xl"></i>
           <span *ngIf="unreadCount > 0" class="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center border-2 border-white">
             {{ unreadCount }}
           </span>
