@@ -1,6 +1,7 @@
 package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.CommerceDTO;
+import com.carrefourconnect.entities.Abonnement;
 import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.mappers.CommerceMapper;
 import com.carrefourconnect.repositories.AbonnementRepository;
@@ -462,7 +463,7 @@ public class CommerceServiceImpl implements CommerceService {
                 abonnementRepository.save(current);
             } else {
                 log.info("Création d'une nouvelle instance d'abonnement (Première fois ou migration)");
-                com.carrefourconnect.entities.Abonnement instance = com.carrefourconnect.entities.Abonnement.builder()
+                Abonnement instance = Abonnement.builder()
                         .type(template.getType())
                         .montant(template.getMontant())
                         .dateDebut(java.time.LocalDateTime.now())
