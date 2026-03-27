@@ -23,7 +23,9 @@ export class ValidationCommercesComponent implements OnInit {
   showSuspendModal = false;
   showRejectModal = false;
   selectedCommerceId: string | null = null;
+  selectedCommerce: any = null;
   motifAction = '';
+  showDetailModal = false;
 
   constructor(private readonly commerceService: CommerceService) {}
 
@@ -103,5 +105,15 @@ export class ValidationCommercesComponent implements OnInit {
       },
       error: (err) => console.error('Erreur lors du rejet:', err)
     });
+  }
+
+  openDetail(commerce: any): void {
+    this.selectedCommerce = commerce;
+    this.showDetailModal = true;
+  }
+
+  closeDetail(): void {
+    this.showDetailModal = false;
+    this.selectedCommerce = null;
   }
 }

@@ -20,7 +20,7 @@
             class="bg-transparent border-none focus:ring-0 py-2 text-sm text-gray-600 min-w-[150px]"
           >
             <option value="">Toutes catégories</option>
-            <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.nom }}</option>
+            <option *ngFor="let cat of categories" [value]="cat.idcategorie">{{ cat.nom }}</option>
           </select>
           <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
           <input 

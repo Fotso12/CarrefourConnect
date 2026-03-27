@@ -45,7 +45,7 @@ export class AccueilComponent implements OnInit {
 
     // Configuration de la recherche temps réel débouncée
     this.searchSubject.pipe(
-      debounceTime(400),
+      debounceTime(300),
       distinctUntilChanged()
     ).subscribe(() => {
       this.rechercher();
