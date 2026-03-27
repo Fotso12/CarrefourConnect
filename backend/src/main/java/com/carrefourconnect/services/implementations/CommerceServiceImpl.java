@@ -152,13 +152,14 @@ public class CommerceServiceImpl implements CommerceService {
         }
 
         if (dto.getIdabonnement() != null) {
-            abonnementRepository.findById(dto.getIdabonnement()).ifPresent(entity::setAbonnement);
+            lierAbonnement(entity, dto.getIdabonnement());
         }
         
         // Abonnement obligatoire
         if (entity.getAbonnement() == null) {
             log.info("Attribution de l'abonnement par défaut.");
-            abonnementRepository.findAll().stream().findFirst().ifPresent(entity::setAbonnement);
+            abonnementRepository.findAll().stream().findFirst()
+                    .ifPresent(template -> lierAbonnement(entity, template.getIdabonnement()));
         }
 
         if (dto.getIduser() != null) {
@@ -242,7 +243,13 @@ public class CommerceServiceImpl implements CommerceService {
                 categorieRepository.findById(dto.getIdcategorie()).ifPresent(existingEntity::setCategorie);
             }
             if (dto.getIdabonnement() != null) {
-                abonnementRepository.findById(dto.getIdabonnement()).ifPresent(existingEntity::setAbonnement);
+                // Créer une nouvelle instance si changement de forfait ou si l'actuel a des dates erronées (ex: 2125)
+                if (existingEntity.getAbonnement() == null || 
+                    !existingEntity.getAbonnement().getIdabonnement().equals(dto.getIdabonnement()) ||
+                    existingEntity.getAbonnement().getDateFin().getYear() > 2030) {
+                    
+                    lierAbonnement(existingEntity, dto.getIdabonnement());
+                }
             }
             if (dto.getIduser() != null) {
                 commercantRepository.findById(dto.getIduser()).ifPresent(existingEntity::setCommercant);
@@ -427,6 +434,25 @@ public class CommerceServiceImpl implements CommerceService {
             Long vues = c.getNombreVues();
             c.setNombreVues(vues != null ? vues + 1 : 1L);
             repository.save(c);
+        });
+    }
+
+    /**
+     * Crée ou met à jour une instance d'abonnement unique pour le commerce.
+     * Cette méthode garantit que le forfait dure exactement 1 mois à partir d'aujourd'hui.
+     */
+    private void lierAbonnement(Commerce entity, UUID idTemplate) {
+        abonnementRepository.findById(idTemplate).ifPresent(template -> {
+            log.info("Création d'une instance d'abonnement pour {} basée sur le type {}", entity.getNom(), template.getType());
+            com.carrefourconnect.entities.Abonnement instance = com.carrefourconnect.entities.Abonnement.builder()
+                    .type(template.getType())
+                    .montant(template.getMontant())
+                    .dateDebut(java.time.LocalDateTime.now())
+                    .dateFin(java.time.LocalDateTime.now().plusMonths(1))
+                    .statut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
+                    .reference("SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
+                    .build();
+            entity.setAbonnement(abonnementRepository.save(instance));
         });
     }
 }
