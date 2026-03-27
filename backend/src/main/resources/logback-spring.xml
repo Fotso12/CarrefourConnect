@@ -15,14 +15,13 @@
 
     <!-- Configuration du fichier avec rotation journalière -->
     <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOGS}/carrefourconnect.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- Archivage journalier avec compression -->
-            <fileNamePattern>${LOGS}/archived/carrefourconnect-%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <!-- Création d'un fichier par jour -->
+            <fileNamePattern>${LOGS}/carrefourconnect-%d{yyyy-MM-dd}.log</fileNamePattern>
             <!-- Garder 30 jours d'historique -->
             <maxHistory>30</maxHistory>
             <!-- Limite totale de taille des archives -->
