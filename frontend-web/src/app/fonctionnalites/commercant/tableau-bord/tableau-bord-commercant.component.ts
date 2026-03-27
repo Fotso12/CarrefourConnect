@@ -20,7 +20,7 @@ export class TableauBordCommercantComponent implements OnInit {
     { label: 'Avis Clients', icon: 'M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z', link: '/commercant/avis' }
   ];
 
-  isSidebarOpen = true;
+  isSidebarOpen = false;
   currentUser: any = {};
   displayName: string = '';
   displayRole: string = '';
@@ -32,6 +32,7 @@ export class TableauBordCommercantComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.isSidebarOpen = window.innerWidth > 1024;
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user || {};
       // Prefer nom + prenom, fallback to email
@@ -66,5 +67,11 @@ export class TableauBordCommercantComponent implements OnInit {
 
   toggleSidebar() {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  onNavItemClick() {
+    if (window.innerWidth <= 1024) {
+      this.isSidebarOpen = false;
+    }
   }
 }

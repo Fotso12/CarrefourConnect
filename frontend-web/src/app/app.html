@@ -19,8 +19,8 @@
         </ng-container>
       </nav>
 
-      <!-- Boutons d'Action -->
-      <div class="flex items-center space-x-4">
+      <!-- Boutons d'Action (Desktop) -->
+      <div class="hidden md:flex items-center space-x-4">
         <ng-container *ngIf="!isLoggedIn">
           <button [routerLink]="['/connexion']" class="text-[#003B71] font-bold px-4 py-2 hover:bg-gray-50 rounded-xl transition-colors">Connexion</button>
           <button [routerLink]="['/inscription-commercant']" class="bg-[#003B71] text-white px-6 py-2.5 rounded-xl font-bold shadow-lg shadow-blue-900/20 hover:scale-105 active:scale-95 transition-all">S'inscrire</button>
@@ -28,6 +28,43 @@
         <ng-container *ngIf="isLoggedIn">
           <button (click)="openLogout()" class="text-red-600 font-bold px-4 py-2 hover:bg-red-50 rounded-xl transition-colors">Déconnexion</button>
         </ng-container>
+      </div>
+
+      <!-- Hamburger Menu Button (Mobile) -->
+      <button (click)="toggleMobileMenu()" class="md:hidden p-2 text-[#003B71] hover:bg-gray-50 rounded-xl transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path *ngIf="!showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          <path *ngIf="showMobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu Drawer -->
+    <div *ngIf="showMobileMenu" class="md:hidden fixed inset-0 top-20 bg-white z-[1000] animate-in slide-in-from-top duration-300">
+      <div class="p-6 space-y-6">
+        <nav class="flex flex-col space-y-4">
+          <a routerLink="/" (click)="closeMobileMenu()" class="text-xl font-black text-[#003B71] p-4 bg-gray-50 rounded-2xl">Accueil</a>
+          <a routerLink="/a-propos" (click)="closeMobileMenu()" class="text-xl font-black text-[#003B71] p-4 bg-gray-50 rounded-2xl">À propos</a>
+          
+          <ng-container *ngIf="isLoggedIn">
+            <a *ngIf="currentUserRole === 'ADMIN' || currentUserRole === 'ROLE_ADMIN'" 
+               routerLink="/admin" (click)="closeMobileMenu()" 
+               class="text-xl font-black text-[#00ADEF] p-4 bg-[#00ADEF]/5 rounded-2xl">Mon espace Admin</a>
+            <a *ngIf="currentUserRole !== 'ADMIN' && currentUserRole !== 'ROLE_ADMIN'" 
+               routerLink="/commercant" (click)="closeMobileMenu()" 
+               class="text-xl font-black text-[#F78F1E] p-4 bg-[#F78F1E]/5 rounded-2xl">Mon espace Commerçant</a>
+          </ng-container>
+        </nav>
+
+        <div class="pt-6 border-t border-gray-100 flex flex-col gap-4">
+          <ng-container *ngIf="!isLoggedIn">
+            <button [routerLink]="['/connexion']" (click)="closeMobileMenu()" class="w-full text-[#003B71] font-bold py-4 bg-gray-50 rounded-2xl">Connexion</button>
+            <button [routerLink]="['/inscription-commercant']" (click)="closeMobileMenu()" class="w-full bg-[#003B71] text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-900/10">S'inscrire</button>
+          </ng-container>
+          <ng-container *ngIf="isLoggedIn">
+            <button (click)="openLogout(); closeMobileMenu()" class="w-full text-red-600 font-bold py-4 bg-red-50 rounded-2xl">Déconnexion</button>
+          </ng-container>
+        </div>
       </div>
     </div>
   </header>

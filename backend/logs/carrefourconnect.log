@@ -3419,3 +3419,21 @@
 2026-03-27 03:20:51 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.OffreServiceImpl - Récupération offres pour commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
 2026-03-27 03:20:51 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.AvisServiceImpl - Recherche avis commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
 2026-03-27 03:20:51 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 03:24:06 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 03:24:07 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg

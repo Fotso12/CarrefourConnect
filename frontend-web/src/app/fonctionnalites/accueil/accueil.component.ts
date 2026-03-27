@@ -24,13 +24,10 @@ export class AccueilComponent implements OnInit {
   pointsCarte: any[] = [];
   private searchSubject = new Subject<void>();
 
+  topCommerces: any[] = [];
   // Filtres de recherche
-  filtres = {
-    nom: '',
-    idCategorie: '',
-    ville: '',
-    rayon: null as number | null // Pas de rayon par défaut
-  };
+  filtres: any = { nom: '', idCategorie: '', ville: '', rayon: 10 };
+  showMapOnMobile = false;
 
   constructor(
     private commerceService: CommerceService,

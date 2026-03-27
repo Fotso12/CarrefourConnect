@@ -18,6 +18,7 @@ export class App {
   title = 'CarrefourConnect';
   isLoggedIn: boolean = false;
   showLogoutModal: boolean = false;
+  showMobileMenu: boolean = false;
 
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
@@ -54,5 +55,13 @@ export class App {
 
   cancelLogout(): void {
     this.showLogoutModal = false;
+  }
+
+  toggleMobileMenu(): void {
+    this.showMobileMenu = !this.showMobileMenu;
+  }
+
+  closeMobileMenu(): void {
+    this.showMobileMenu = false;
   }
 }

@@ -17,41 +17,41 @@
       <p class="text-slate-400 font-medium">Aucun commerce à afficher pour le moment.</p>
   </div>
 
-  <div class="grid grid-cols-1 gap-4">
+  <div class="grid grid-cols-1 gap-6">
     <div *ngFor="let commerce of commerces" 
-         class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500">
+         class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:shadow-xl transition-all duration-500">
       <div class="flex items-center gap-6">
           <div class="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
               <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100'" class="w-full h-full object-cover">
           </div>
-          <div>
-              <div class="flex items-center gap-2">
-                <h3 class="font-bold text-slate-800">{{ commerce.nom }}</h3>
+          <div class="min-w-0">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-bold text-slate-800 truncate">{{ commerce.nom }}</h3>
                 <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-600">En attente</span>
                 <span *ngIf="commerce.statut === 'VALIDE'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-600">Validé</span>
               </div>
-              <p class="text-xs text-slate-400">{{ commerce.ville }} • {{ commerce.categorie?.nom }}</p>
+              <p class="text-xs text-slate-400 truncate">{{ commerce.ville }} • {{ commerce.categorie?.nom }}</p>
           </div>
       </div>
 
-          <div class="flex items-center gap-2">
-            <button (click)="openDetail(commerce)" class="p-2.5 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-[#00ADEF] transition-all group/info" title="Voir les détails">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </button>
+      <div class="flex items-center gap-2 justify-end pt-4 sm:pt-0 border-t sm:border-t-0 border-gray-50">
+        <button (click)="openDetail(commerce)" class="p-2.5 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-[#00ADEF] transition-all group/info" title="Voir les détails">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </button>
 
-            <!-- Action si EN_ATTENTE -->
-            <ng-container *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'">
-              <button (click)="openReject(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
-              <button (click)="valider(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm">Valider</button>
-            </ng-container>
+        <!-- Action si EN_ATTENTE -->
+        <ng-container *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'">
+          <button (click)="openReject(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all flex-1 sm:flex-none">Rejeter</button>
+          <button (click)="valider(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm flex-1 sm:flex-none">Valider</button>
+        </ng-container>
 
-            <!-- Action si VALIDE -->
-            <ng-container *ngIf="commerce.statut === 'VALIDE'">
-              <button (click)="openSuspend(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all border border-amber-100">Suspendre</button>
-            </ng-container>
-          </div>
+        <!-- Action si VALIDE -->
+        <ng-container *ngIf="commerce.statut === 'VALIDE'">
+          <button (click)="openSuspend(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all border border-amber-100 flex-1 sm:flex-none">Suspendre</button>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>
