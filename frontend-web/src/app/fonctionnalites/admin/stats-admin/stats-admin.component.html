@@ -62,7 +62,7 @@
         </div>
 
         <!-- Revenus Card -->
-        <div class="bg-gradient-to-br from-[#10b981] to-[#059669] p-6 rounded-[32px] shadow-xl hover:-translate-y-1 transition-all text-white border-none">
+        <div class="bg-gradient-to-br from-[#10b981] to-[#059669] p-6 rounded-[32px] shadow-xl hover:-translate-y-1 transition-all text-white border-none lg:row-span-1">
             <div class="h-14 w-14 bg-white/20 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -72,6 +72,22 @@
             <div class="flex items-baseline gap-2">
                 <h3 class="text-4xl font-black text-white">{{ stats.totalRevenus | number:'1.0-0' }}</h3>
                 <span class="text-sm font-bold text-white/80">FCFA</span>
+            </div>
+        </div>
+
+        <!-- Subscription Breakdown Row (Small items) -->
+        <div class="xl:col-span-1 grid grid-cols-1 gap-4">
+            <div class="bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100 flex items-center justify-between">
+                <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Basique</span>
+                <span class="text-lg font-black text-slate-600">{{ stats.countBasique }}</span>
+            </div>
+            <div class="bg-purple-50 px-5 py-3 rounded-2xl border border-purple-100 flex items-center justify-between">
+                <span class="text-[9px] font-black text-purple-400 uppercase tracking-widest">Premium</span>
+                <span class="text-lg font-black text-purple-600">{{ stats.countPremium }}</span>
+            </div>
+            <div class="bg-amber-50 px-5 py-3 rounded-2xl border border-amber-100 flex items-center justify-between">
+                <span class="text-[9px] font-black text-amber-500 uppercase tracking-widest">Gold</span>
+                <span class="text-lg font-black text-amber-600">{{ stats.countGold }}</span>
             </div>
         </div>
     </div>

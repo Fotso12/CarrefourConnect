@@ -18,7 +18,10 @@ export class StatsAdminComponent implements OnInit {
     totalUtilisateurs: 0,
     totalCategories: 0,
     totalVues: 0,
-    totalRevenus: 0
+    totalRevenus: 0,
+    countBasique: 0,
+    countPremium: 0,
+    countGold: 0
   };
   
   topCommercesVues: any[] = [];
@@ -50,6 +53,11 @@ export class StatsAdminComponent implements OnInit {
         // Calcul des vues et revenus
         this.stats.totalVues = data.commerces.reduce((acc: number, current: any) => acc + (current.nombreVues || 0), 0);
         this.stats.totalRevenus = data.commerces.reduce((acc: number, current: any) => acc + (current.abonnement?.montant || 0), 0);
+        
+        // Comptage par type d'abonnement
+        this.stats.countBasique = data.commerces.filter((c: any) => c.abonnement?.type === 'BASIQUE').length;
+        this.stats.countPremium = data.commerces.filter((c: any) => c.abonnement?.type === 'PREMIUM').length;
+        this.stats.countGold = data.commerces.filter((c: any) => c.abonnement?.type === 'GOLD').length;
         
         // Top 5 les plus vus
         this.topCommercesVues = [...data.commerces]

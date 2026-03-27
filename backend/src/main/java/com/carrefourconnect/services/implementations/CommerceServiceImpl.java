@@ -443,16 +443,35 @@ public class CommerceServiceImpl implements CommerceService {
      */
     private void lierAbonnement(Commerce entity, UUID idTemplate) {
         abonnementRepository.findById(idTemplate).ifPresent(template -> {
-            log.info("Création d'une instance d'abonnement pour {} basée sur le type {}", entity.getNom(), template.getType());
-            com.carrefourconnect.entities.Abonnement instance = com.carrefourconnect.entities.Abonnement.builder()
-                    .type(template.getType())
-                    .montant(template.getMontant())
-                    .dateDebut(java.time.LocalDateTime.now())
-                    .dateFin(java.time.LocalDateTime.now().plusMonths(1))
-                    .statut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
-                    .reference("SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
-                    .build();
-            entity.setAbonnement(abonnementRepository.save(instance));
+            log.info("Gestion de l'abonnement pour {} basée sur le type {}", entity.getNom(), template.getType());
+            
+            // Si le commerce a déjà un abonnement qui lui est propre (non partagé), on le met à jour
+            // Sinon on en crée un nouveau.
+            Abonnement current = entity.getAbonnement();
+            
+            // On considère qu'un abonnement est propre au commerce s'il a une "reference" (SUB-...) 
+            // et que la date n'est pas le template 2125.
+            if (current != null && current.getReference() != null && current.getReference().startsWith("SUB-")) {
+                log.info("Mise à jour de l'instance d'abonnement existante {}", current.getReference());
+                current.setType(template.getType());
+                current.setMontant(template.getMontant());
+                // On ne change pas la date de début pour garder l'historique de commencement, 
+                // mais on corrige la date de fin si elle est erronée ou si le type a changé.
+                current.setDateFin(java.time.LocalDateTime.now().plusMonths(1));
+                current.setStatut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF);
+                abonnementRepository.save(current);
+            } else {
+                log.info("Création d'une nouvelle instance d'abonnement (Première fois ou migration)");
+                com.carrefourconnect.entities.Abonnement instance = com.carrefourconnect.entities.Abonnement.builder()
+                        .type(template.getType())
+                        .montant(template.getMontant())
+                        .dateDebut(java.time.LocalDateTime.now())
+                        .dateFin(java.time.LocalDateTime.now().plusMonths(1))
+                        .statut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
+                        .reference("SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
+                        .build();
+                entity.setAbonnement(abonnementRepository.save(instance));
+            }
         });
     }
 }
