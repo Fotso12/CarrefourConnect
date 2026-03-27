@@ -17,7 +17,8 @@ export class StatsAdminComponent implements OnInit {
     commercesEnAttente: 0,
     totalUtilisateurs: 0,
     totalCategories: 0,
-    totalVues: 0
+    totalVues: 0,
+    totalRevenus: 0
   };
   
   topCommercesVues: any[] = [];
@@ -46,8 +47,9 @@ export class StatsAdminComponent implements OnInit {
         this.stats.totalUtilisateurs = data.utilisateurs.length;
         this.stats.totalCategories = data.categories.length;
         
-        // Calcul des vues
+        // Calcul des vues et revenus
         this.stats.totalVues = data.commerces.reduce((acc: number, current: any) => acc + (current.nombreVues || 0), 0);
+        this.stats.totalRevenus = data.commerces.reduce((acc: number, current: any) => acc + (current.abonnement?.montant || 0), 0);
         
         // Top 5 les plus vus
         this.topCommercesVues = [...data.commerces]

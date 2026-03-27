@@ -2089,3 +2089,458 @@
 2026-03-27 02:08:56 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
 2026-03-27 02:08:56 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
 2026-03-27 02:08:56 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:14:13 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:14:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:05 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:06 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-3] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:32 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:16:33 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:17:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:17:15 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:02 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:03 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:12 [http-nio-0.0.0.0-8084-exec-6] ERROR c.c.security.AuthEntryPointJwt - Erreur d'accès non autorisé : Bad credentials
+2026-03-27 02:18:12 [http-nio-0.0.0.0-8084-exec-6] ERROR c.c.security.AuthEntryPointJwt - Erreur d'accès non autorisé : Full authentication is required to access this resource
+2026-03-27 02:18:22 [http-nio-0.0.0.0-8084-exec-3] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:18:22 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:18:22 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:34 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.NotificationServiceImpl - Récupération des notifications pour l'utilisateur: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:18:48 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:18:48 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:18:48 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-3] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:49 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:18:50 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.OffreController - Récupération des offres pour le commerce: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-3] INFO  c.c.controllers.CommerceController - Requête pour incrémenter les vues du commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.OffreServiceImpl - Récupération offres pour commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.CommerceServiceImpl - Incrémentation des vues pour le commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.AvisController - Récupération des avis pour le commerce: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.AvisServiceImpl - Recherche avis commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:18:54 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:00 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:19:00 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:00 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:19:00 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:00 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:19:01 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:09 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.AvisController - Récupération des avis pour le commerce: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.AvisServiceImpl - Recherche avis commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.controllers.CommerceController - Requête pour incrémenter les vues du commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Incrémentation des vues pour le commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.OffreController - Récupération des offres pour le commerce: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.OffreServiceImpl - Récupération offres pour commerce ID: 7e6d3d8a-9bc1-46cf-891f-ab024de545dd
+2026-03-27 02:19:11 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:14 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:19:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 3e5f2359-5636-46f9-b09c-67cfc04279ba
+2026-03-27 02:19:14 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:20 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:21 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Filtrage commerces par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Filtrage par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Récupération de tous les commerces
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:19:32 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:22:45 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-27 02:22:45 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-27 02:22:46 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-27 02:22:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-27 02:22:46 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-03-27 02:23:16 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-03-27 02:23:16 [restartedMain] INFO  c.c.CarrefourconnectApplication - Starting CarrefourconnectApplication using Java 17.0.15 with PID 9708 (C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\backend\target\classes started by Darryl in C:\Users\Darryl\Desktop\ProjetTutore\carrefourconnect\backend)
+2026-03-27 02:23:16 [restartedMain] DEBUG c.c.CarrefourconnectApplication - Running with Spring Boot v3.4.1, Spring v6.2.1
+2026-03-27 02:23:16 [restartedMain] INFO  c.c.CarrefourconnectApplication - No active profile set, falling back to 1 default profile: "default"
+2026-03-27 02:23:17 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2026-03-27 02:23:17 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2026-03-27 02:23:18 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-03-27 02:23:19 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 247 ms. Found 14 JPA repository interfaces.
+2026-03-27 02:23:20 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8084 (http)
+2026-03-27 02:23:20 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-27 02:23:20 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2026-03-27 02:23:20 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2026-03-27 02:23:20 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2026-03-27 02:23:20 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3528 ms
+2026-03-27 02:23:20 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-03-27 02:23:21 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.4.Final
+2026-03-27 02:23:21 [restartedMain] INFO  o.h.s.integration.SpatialService - HHH80000001: hibernate-spatial integration enabled : true
+2026-03-27 02:23:21 [restartedMain] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2026-03-27 02:23:21 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-03-27 02:23:21 [restartedMain] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@254abf80
+2026-03-27 02:23:21 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-03-27 02:23:21 [restartedMain] WARN  org.hibernate.orm.deprecation - HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-03-27 02:23:21 [restartedMain] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 17.4
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-03-27 02:23:21 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-27 02:23:21 [restartedMain] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-03-27 02:23:21 [restartedMain] INFO  org.hibernate.spatial - HHH80000003: hibernate-spatial adding type contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-27 02:23:22 [restartedMain] INFO  org.hibernate.spatial - HHH80000004: hibernate-spatial adding function contributions from : org.hibernate.spatial.dialect.postgis.PostgisDialectContributor
+2026-03-27 02:23:23 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-03-27 02:23:23 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-03-27 02:23:24 [restartedMain] DEBUG c.c.security.JwtAuthenticationFilter - Filter 'authenticationJwtTokenFilter' configured for use
+2026-03-27 02:23:24 [restartedMain] INFO  o.s.s.c.a.a.c.InitializeAuthenticationProviderBeanManagerConfigurer$InitializeAuthenticationProviderManagerConfigurer - Global AuthenticationManager configured with AuthenticationProvider bean with name authenticationProvider
+2026-03-27 02:23:24 [restartedMain] WARN  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used by Spring Security for automatically configuring username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider. If the current configuration is intentional, to turn off this warning, increase the logging level of 'org.springframework.security.config.annotation.authentication.configuration.InitializeUserDetailsBeanManagerConfigurer' to ERROR
+2026-03-27 02:23:24 [restartedMain] INFO  o.s.d.j.r.query.QueryEnhancerFactory - Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-03-27 02:23:25 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-03-27 02:23:26 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 1 endpoint beneath base path '/actuator'
+2026-03-27 02:23:26 [restartedMain] WARN  o.s.b.a.t.ThymeleafAutoConfiguration$DefaultTemplateResolverConfiguration - Cannot find template location: classpath:/templates/ (please add some templates, check your Thymeleaf configuration, or set spring.thymeleaf.check-template-location=false)
+2026-03-27 02:23:27 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2026-03-27 02:23:28 [restartedMain] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-0.0.0.0-8084"]
+2026-03-27 02:23:28 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8084 (http) with context path '/'
+2026-03-27 02:23:28 [restartedMain] INFO  c.c.CarrefourconnectApplication - Started CarrefourconnectApplication in 11.896 seconds (process running for 12.576)
+2026-03-27 02:23:28 [restartedMain] INFO  c.c.config.DataInitializer - Vérification et initialisation des données de base...
+2026-03-27 02:23:28 [restartedMain] INFO  c.c.config.DataInitializer - Initialisation des données terminée.
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 4 ms
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Récupération de tous les commerces
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Filtrage commerces par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:24:58 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Filtrage par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:24:59 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:25:09 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:25:09 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:25:09 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:25:09 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:10 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:25:22 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-27 02:25:27 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:35 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Requête de mise à jour commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-27 02:25:35 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.s.i.CommerceServiceImpl - Mise à jour du commerce ID: 4231da95-6446-4cf9-862b-6f8136f76b3f
+2026-03-27 02:25:35 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:46 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:25:46 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:25:47 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:25:47 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:25:47 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:47 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:25:47 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 4a8112a3-c993-4ab7-b937-bf09a0dd521a
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 4a8112a3-c993-4ab7-b937-bf09a0dd521a
+2026-03-27 02:25:52 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:06 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CommerceController - Requête de mise à jour commerce ID: 4a8112a3-c993-4ab7-b937-bf09a0dd521a
+2026-03-27 02:26:06 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.s.i.CommerceServiceImpl - Mise à jour du commerce ID: 4a8112a3-c993-4ab7-b937-bf09a0dd521a
+2026-03-27 02:26:06 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:08 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 8fb8d30e-eb13-415f-9ffe-9cb91e0cd63b
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 8fb8d30e-eb13-415f-9ffe-9cb91e0cd63b
+2026-03-27 02:26:11 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:19 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Requête de mise à jour commerce ID: 8fb8d30e-eb13-415f-9ffe-9cb91e0cd63b
+2026-03-27 02:26:19 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.s.i.CommerceServiceImpl - Mise à jour du commerce ID: 8fb8d30e-eb13-415f-9ffe-9cb91e0cd63b
+2026-03-27 02:26:19 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:20 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: d944b5af-e2dc-4f19-bfaa-98254ec399bb
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: d944b5af-e2dc-4f19-bfaa-98254ec399bb
+2026-03-27 02:26:24 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:30 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Requête de mise à jour commerce ID: d944b5af-e2dc-4f19-bfaa-98254ec399bb
+2026-03-27 02:26:30 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.s.i.CommerceServiceImpl - Mise à jour du commerce ID: d944b5af-e2dc-4f19-bfaa-98254ec399bb
+2026-03-27 02:26:30 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:31 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Requête pour récupérer le commerce ID: 146e7625-a7ed-42f6-8de6-2d7fae830e3a
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-6] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-3] INFO  c.c.controllers.AbonnementController - Requête pour lister tous les abonnements
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-6] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Récupération commerce ID: 146e7625-a7ed-42f6-8de6-2d7fae830e3a
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-3] DEBUG c.c.s.i.AbonnementServiceImpl - Récupération de tous les abonnements
+2026-03-27 02:26:34 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:44 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.controllers.CommerceController - Requête de mise à jour commerce ID: 146e7625-a7ed-42f6-8de6-2d7fae830e3a
+2026-03-27 02:26:44 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.s.i.CommerceServiceImpl - Mise à jour du commerce ID: 146e7625-a7ed-42f6-8de6-2d7fae830e3a
+2026-03-27 02:26:44 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CommerceController - Recherche commerces par commerçant: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Recherche par commerçant ID: 970bf815-4737-4edd-9bd7-70e66dfb666d
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:49 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Requête de recherche multicritères
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.s.i.CommerceServiceImpl - Recherche avancée: nom=null, ville=null, proximité=nullkm
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:26:52 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CommerceController - Filtrage commerces par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CommerceServiceImpl - Filtrage par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-8] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-8] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Récupération de tous les commerces
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:27:01 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-9] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Filtrage commerces par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-5] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Récupération de tous les commerces
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-5] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Filtrage par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-9] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:34:58 [http-nio-0.0.0.0-8084-exec-7] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:35:13 [http-nio-0.0.0.0-8084-exec-2] INFO  c.c.controllers.CommerceController - Filtrage commerces par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:35:13 [http-nio-0.0.0.0-8084-exec-2] DEBUG c.c.s.i.CommerceServiceImpl - Filtrage par statut: EN_ATTENTE_VALIDATION
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] INFO  c.c.controllers.CommerceController - Requête pour lister tous les commerces
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-10] INFO  c.c.c.UtilisateurController - Requête pour lister tous les utilisateurs
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Récupération de tous les commerces
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-1] INFO  c.c.controllers.CategorieController - Requête pour lister toutes les catégories
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-10] DEBUG c.c.s.i.UtilisateurServiceImpl - Récupération de tous les utilisateurs
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-1] DEBUG c.c.s.i.CategorieServiceImpl - Récupération de toutes les catégories
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour TopTop: http://localhost:8084/uploads/25aa0f87-7994-4aa7-a580-dc84a034de3d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour DotaShop: http://localhost:8084/uploads/bd5f61ff-616a-4d31-bb2d-cb2704d30fc3_koichi-haimawari-my-5120x2880-22404.jpg
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour JOA: http://localhost:8084/uploads/bc15d366-812f-4ca8-83a0-321d60160c3d_gon-freecss-hunter-4400x3646-10439.jpg
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour FreeBot: http://localhost:8084/uploads/e75b8e9b-9ea8-42ba-b0ff-360ee9e1780f_brabus-1400-r-3840x2160-24480.jpg
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Frozen: http://localhost:8084/uploads/e612490d-227e-418b-b274-8c251c0cc58d_straw-hat-luffy-one-5120x2880-22500.jpg
+2026-03-27 02:35:14 [http-nio-0.0.0.0-8084-exec-4] DEBUG c.c.s.i.CommerceServiceImpl - Image principale trouvée pour Ventoy: http://localhost:8084/uploads/54fd5d48-1f6a-4e4b-8992-fb3cc5f8dafa_the-last-of-us-2023-2560x1440-9422.jpg
+2026-03-27 02:35:36 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2026-03-27 02:35:36 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2026-03-27 02:35:36 [SpringApplicationShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-03-27 02:35:37 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-03-27 02:35:37 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.

@@ -5,8 +5,10 @@ import com.carrefourconnect.entities.Commerce;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {LocalisationMapper.class, CategorieMapper.class})
+@Mapper(componentModel = "spring", uses = {LocalisationMapper.class, CategorieMapper.class, AbonnementMapper.class})
 public interface CommerceMapper {
+    @Mapping(source = "categorie", target = "categorie")
+    @Mapping(source = "abonnement", target = "abonnement")
     @Mapping(source = "categorie.idcategorie", target = "idcategorie")
     @Mapping(source = "abonnement.idabonnement", target = "idabonnement")
     @Mapping(source = "commercant.iduser", target = "iduser")

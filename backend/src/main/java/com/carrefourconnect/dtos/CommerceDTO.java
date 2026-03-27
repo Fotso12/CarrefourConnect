@@ -21,6 +21,7 @@ public class CommerceDTO {
     private UUID idcategorie;
     private CategorieDTO categorie;
     private UUID idabonnement;
+    private AbonnementDTO abonnement;
     private UUID iduser; // ID du commercant
     private String nom;
     private String description;

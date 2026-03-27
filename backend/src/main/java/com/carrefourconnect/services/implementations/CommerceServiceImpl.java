@@ -99,6 +99,16 @@ public class CommerceServiceImpl implements CommerceService {
                     }
                 });
             }
+            // Recharger la catégorie si elle est manquante après le mapping auto
+            if (dto.getCategorie() == null && dto.getIdcategorie() != null) {
+                categorieRepository.findById(dto.getIdcategorie()).ifPresent(cat -> {
+                    dto.setCategorie(com.carrefourconnect.dtos.CategorieDTO.builder()
+                            .idcategorie(cat.getIdcategorie())
+                            .nom(cat.getNom())
+                            .description(cat.getDescription())
+                            .build());
+                });
+            }
         }
     }
 

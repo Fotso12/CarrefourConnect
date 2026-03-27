@@ -156,7 +156,7 @@ export class AjouterCommerceComponent implements OnInit {
     // Appel au service (à implémenter dans CategorieService)
     this.categorieService.create(this.nouvelleCategorie).subscribe(newCat => {
       this.categories.push(newCat);
-      this.commerce.idcategorie = newCat.id;
+      this.commerce.idcategorie = newCat.idcategorie;
       this.showAddCategory = false;
       this.nouvelleCategorie = { nom: '', description: '', icone: 'store' };
     });
