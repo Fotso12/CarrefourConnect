@@ -11,7 +11,7 @@
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-8">
         <a routerLink="/" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Accueil</a>
-        <a class="text-gray-500 font-medium hover:text-[#003B71] transition-colors cursor-pointer">Catégories</a>
+        <a routerLink="/a-propos" class="text-gray-500 font-medium hover:text-[#003B71] transition-colors cursor-pointer">À propos</a>
         
         <ng-container *ngIf="isLoggedIn">
           <a *ngIf="currentUserRole === 'ADMIN' || currentUserRole === 'ROLE_ADMIN'" routerLink="/admin" class="text-[#003B71] font-semibold hover:text-[#F78F1E] transition-colors">Mon espace Admin</a>

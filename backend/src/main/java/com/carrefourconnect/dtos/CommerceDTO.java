@@ -19,6 +19,7 @@ import java.util.UUID;
 public class CommerceDTO {
     private UUID idcommerce;
     private UUID idcategorie;
+    private CategorieDTO categorie;
     private UUID idabonnement;
     private UUID iduser; // ID du commercant
     private String nom;

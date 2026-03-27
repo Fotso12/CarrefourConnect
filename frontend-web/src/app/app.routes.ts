@@ -8,6 +8,10 @@ export const routes: Routes = [
     loadComponent: () => import('./fonctionnalites/accueil/detail-commerce/detail-commerce.component').then(m => m.DetailCommerceComponent)
   },
   { 
+    path: 'a-propos', 
+    loadComponent: () => import('./fonctionnalites/accueil/a-propos/a-propos.component').then(m => m.AproposComponent) 
+  },
+  { 
     path: 'connexion', 
     loadComponent: () => import('./fonctionnalites/auth/connexion/connexion.component').then(m => m.ConnexionComponent) 
   },
