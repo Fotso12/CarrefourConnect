@@ -242,9 +242,9 @@
              [class.scale-105]="selectedAbonnement?.idabonnement === ab.idabonnement"
              class="bg-white border-2 border-gray-100 rounded-[32px] p-8 cursor-pointer transition-all duration-300 relative flex flex-col group hover:shadow-xl">
             
-            <div *ngIf="ab.nom === 'Premium'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00ADEF] py-1 px-4 rounded-full text-[10px] font-bold text-white uppercase tracking-widest shadow-md">Populaire</div>
+            <div *ngIf="ab.nomAffiche === 'Premium'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00ADEF] py-1 px-4 rounded-full text-[10px] font-bold text-white uppercase tracking-widest shadow-md">Populaire</div>
             
-            <h3 class="text-xl font-black text-[#003B71] mb-1 uppercase tracking-tight">{{ ab.nom }}</h3>
+            <h3 class="text-xl font-black text-[#003B71] mb-1 uppercase tracking-tight">{{ ab.nomAffiche }}</h3>
             <div class="flex items-baseline gap-1 mb-6">
                 <span class="text-4xl font-black text-[#F78F1E] tracking-tighter">{{ ab.prixAffiche }}</span>
                 <span class="text-xs font-bold text-gray-400">FCFA</span>
@@ -273,10 +273,24 @@
         </button>
       </div>
       <div class="flex-1"></div>
-      <button *ngIf="step < 5" (click)="nextStep()" 
+      
+      <!-- Si on est en édition, étape 4: Mettre à jour VS Changer d'abonnement -->
+      <button *ngIf="step === 4 && isEdit" (click)="enregistrer()" 
+              class="bg-green-600 text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-green-900/10 hover:bg-green-700 transition-all mr-2">
+        Mettre à jour
+      </button>
+      <button *ngIf="step === 4 && isEdit" (click)="nextStep()" 
+              class="bg-blue-50 text-[#003B71] border border-[#003B71] px-6 py-4 rounded-2xl font-bold hover:bg-[#003B71] hover:text-white transition-all">
+        Changer d'abonnement
+      </button>
+
+      <!-- Si Création, étape 4 ou moins -->
+      <button *ngIf="step < 4 || (step === 4 && !isEdit)" (click)="nextStep()" 
               class="bg-[#003B71] text-white px-10 py-4 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#00ADEF] transition-all">
         Continuer
       </button>
+
+      <!-- Étape Paiement (Étape 5) -->
       <button *ngIf="step === 5" (click)="preparerPaiement()" 
               class="bg-[#F78F1E] text-white px-12 py-4 rounded-2xl font-bold shadow-xl shadow-orange-500/30 hover:bg-orange-600 transition-all">
         Procéder au paiement
@@ -346,10 +360,10 @@
           <div>
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Montant à payer (FCFA)</label>
             <div class="relative">
-              <input type="text" [(ngModel)]="paymentAmountStr" class="w-full bg-slate-50 border-none rounded-2xl pl-6 pr-16 py-4 text-sm font-black focus:ring-2 focus:ring-[#F78F1E]" placeholder="Saisissez exactement le prix du forfait">
+              <input type="text" [(ngModel)]="paymentAmountStr" readonly class="w-full bg-slate-50 border-none rounded-2xl pl-6 pr-16 py-4 text-sm font-black focus:ring-2 focus:ring-[#F78F1E] cursor-not-allowed text-gray-500" placeholder="Saisissez exactement le prix du forfait">
               <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs">FCFA</span>
             </div>
-            <p class="text-[10px] text-gray-400 mt-2">Valable : Pas de virgule ou point. Montant exact exigé.</p>
+            <p class="text-[10px] text-gray-400 mt-2">Le montant est calculé automatiquement.</p>
           </div>
           <div>
             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">N° de téléphone payeur</label>

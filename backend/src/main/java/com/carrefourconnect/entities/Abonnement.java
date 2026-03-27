@@ -36,6 +36,7 @@ public class Abonnement {
     @Column(name = "datefin", nullable = false)
     private LocalDateTime dateFin;
 
+    @Builder.Default
     @Column(precision = 15, scale = 2, nullable = false)
     private BigDecimal montant = BigDecimal.ZERO;
 

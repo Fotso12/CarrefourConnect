@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { AccueilComponent } from './fonctionnalites/accueil/accueil.component';
 
 export const routes: Routes = [
-  { path: '', component: AccueilComponent },
+  { path: '', component: AccueilComponent, pathMatch: 'full' },
   { 
     path: 'commerce/:id', 
     loadComponent: () => import('./fonctionnalites/accueil/detail-commerce/detail-commerce.component').then(m => m.DetailCommerceComponent)
@@ -30,6 +30,10 @@ export const routes: Routes = [
       { 
         path: 'modifier-commerce/:id', 
         loadComponent: () => import('./fonctionnalites/commercant/ajouter-commerce/ajouter-commerce.component').then(m => m.AjouterCommerceComponent) 
+      },
+      {
+        path: 'notifications',
+        loadComponent: () => import('./fonctionnalites/commercant/gestion-notifications/gestion-notifications').then(m => m.GestionNotificationsCommercant)
       },
       { path: '', redirectTo: 'commerces', pathMatch: 'full' }
     ]

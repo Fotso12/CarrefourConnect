@@ -36,6 +36,7 @@ public class Notification {
     @Column(name = "dateenvoi", nullable = false, updatable = false)
     private LocalDateTime dateEnvoi;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean lu = false;
 

@@ -30,7 +30,8 @@ export class TableauBordAdminComponent implements OnInit {
 
   constructor(
       private commerceService: CommerceService,
-      private authService: AuthService
+      private authService: AuthService,
+      private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +43,11 @@ export class TableauBordAdminComponent implements OnInit {
       if (this.currentUser.iduser) {
         this.loadCounts();
       }
+    });
+
+    // S'abonner aux rafraîchissements
+    this.notificationService.refresh$.subscribe(() => {
+      this.loadCounts();
     });
 
     setInterval(() => {
@@ -58,5 +64,14 @@ export class TableauBordAdminComponent implements OnInit {
       },
       error: (err) => console.error("Erreur chargement des commerces en attente:", err)
     });
+    
+    // Charger le nombre de notifications non lues pour l'admin
+    const user = this.authService.getUser();
+    if (user?.id) {
+      this.notificationService.countUnread(user.id).subscribe({
+        next: (count: number) => this.unreadCount = count,
+        error: () => {}
+      });
+    }
   }
 }

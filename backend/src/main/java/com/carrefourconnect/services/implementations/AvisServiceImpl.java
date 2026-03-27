@@ -5,6 +5,7 @@ import com.carrefourconnect.entities.Avis;
 import com.carrefourconnect.mappers.AvisMapper;
 import com.carrefourconnect.repositories.AvisRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
+import com.carrefourconnect.repositories.VisiteurRepository;
 import com.carrefourconnect.services.interfaces.AvisService;
 import com.carrefourconnect.utils.enums.StatutAvis;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,13 @@ public class AvisServiceImpl implements AvisService {
 
     private final AvisRepository repository;
     private final CommerceRepository commerceRepository;
+    private final VisiteurRepository visiteurRepository;
     private final AvisMapper mapper;
 
-    public AvisServiceImpl(AvisRepository repository, CommerceRepository commerceRepository, AvisMapper mapper) {
+    public AvisServiceImpl(AvisRepository repository, CommerceRepository commerceRepository, VisiteurRepository visiteurRepository, AvisMapper mapper) {
         this.repository = repository;
         this.commerceRepository = commerceRepository;
+        this.visiteurRepository = visiteurRepository;
         this.mapper = mapper;
     }
 
@@ -49,6 +52,12 @@ public class AvisServiceImpl implements AvisService {
     public AvisDTO save(AvisDTO dto) {
         log.info("Nouvel avis pour commerce ID: {}", dto.getIdcommerce());
         Avis entity = mapper.toEntity(dto);
+        if (dto.getIdcommerce() != null) {
+            entity.setCommerce(commerceRepository.findById(dto.getIdcommerce()).orElseThrow(() -> new RuntimeException("Commerce non trouvé")));
+        }
+        if (dto.getIduser() != null) {
+            entity.setVisiteur(visiteurRepository.findById(dto.getIduser()).orElseThrow(() -> new RuntimeException("Visiteur non trouvé")));
+        }
         Avis saved = repository.save(entity);
         updateCommerceRating(saved.getCommerce().getIdcommerce());
         return mapper.toDto(saved);

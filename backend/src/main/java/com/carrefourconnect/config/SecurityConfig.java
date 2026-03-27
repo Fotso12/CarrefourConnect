@@ -59,6 +59,7 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -66,14 +67,17 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/test/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/commerces/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/categories/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/medias/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/utilisateurs/inscription/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/uploads/**")).permitAll()
-                                .requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**"), AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
+                        auth.requestMatchers("/api/auth/**", "/api/test/**").permitAll()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/commerces/**").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/commerces/**").permitAll()
+                                .requestMatchers("/api/offres", "/api/offres/**").permitAll()
+                                .requestMatchers("/api/avis", "/api/avis/**").permitAll()
+                                .requestMatchers("/api/categories", "/api/categories/**").permitAll()
+                                .requestMatchers("/api/notifications/**").permitAll()
+                                .requestMatchers("/api/medias", "/api/medias/**").permitAll()
+                                .requestMatchers("/api/utilisateurs/inscription/**").permitAll()
+                                .requestMatchers("/uploads/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 

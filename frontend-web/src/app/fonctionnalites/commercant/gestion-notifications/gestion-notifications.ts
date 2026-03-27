@@ -4,13 +4,13 @@ import { NotificationService } from '../../../coeur/services/notification.servic
 import { AuthService } from '../../../coeur/services/auth.service';
 
 @Component({
-  selector: 'app-gestion-notifications',
+  selector: 'app-gestion-notifications-commercant',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './gestion-notifications.html',
   styleUrl: './gestion-notifications.css',
 })
-export class GestionNotifications implements OnInit {
+export class GestionNotificationsCommercant implements OnInit {
   notifications: any[] = [];
   loading = true;
 
@@ -73,6 +73,7 @@ export class GestionNotifications implements OnInit {
       case 'VALIDATION': return '✅';
       case 'REJET': return '❌';
       case 'SUSPENSION': return '⚠️';
+      case 'OFFRE': return '🎁';
       default: return '🔔';
     }
   }

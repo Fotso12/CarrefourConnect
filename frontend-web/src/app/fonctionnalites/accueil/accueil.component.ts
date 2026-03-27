@@ -38,6 +38,7 @@ export class AccueilComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log('[Accueil] Chargement de la page d\'accueil...');
     this.chargerCategories();
     this.rechercher(); // Chargement immédiat
     this.initGeolocalisation();

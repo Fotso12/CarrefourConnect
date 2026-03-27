@@ -88,6 +88,15 @@ public class Commerce {
     @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Localisation> localisations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Media> medias = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Offre> offres = new ArrayList<>();
+
+    @OneToMany(mappedBy = "commerce", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Avis> avis = new ArrayList<>();
+
     @Column(name = "motifsuspension", columnDefinition = "TEXT")
     private String motifSuspension;
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 /**
  * Service pour la gestion des notifications (Port 8084)
@@ -12,7 +12,17 @@ const API_URL = 'http://localhost:8084/api/notifications';
 })
 export class NotificationService {
 
+  private refreshSubject = new Subject<void>();
+  public refresh$ = this.refreshSubject.asObservable();
+
   constructor(private readonly http: HttpClient) { }
+
+  /**
+   * Notifie les abonnés qu'un changement a eu lieu (ex: marquage comme lu)
+   */
+  notifyRefresh(): void {
+    this.refreshSubject.next();
+  }
 
   /**
    * Récupère les notifications d'un utilisateur

@@ -22,4 +22,5 @@ public interface CommerceService {
     void suspendre(UUID id, String motif);
     void rejeter(UUID id, String motif);
     void valider(UUID id);
+    void incrementerViews(UUID id);
 }

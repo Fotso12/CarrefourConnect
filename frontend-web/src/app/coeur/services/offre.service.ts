@@ -17,4 +17,11 @@ export class OffreService {
   getByCommerce(commerceId: string): Observable<any[]> {
     return this.http.get<any[]>(`${API_URL}/commerce/${commerceId}`);
   }
+
+  /**
+   * Crée une nouvelle offre spéciale pour un commerce
+   */
+  create(offre: any): Observable<any> {
+    return this.http.post<any>(API_URL, offre);
+  }
 }

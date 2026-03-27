@@ -279,4 +279,17 @@ public class CommerceController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping("/{id}/vue")
+    @Operation(summary = "Incrémente le nombre de vues d'un commerce")
+    public ResponseEntity<?> incrementerViews(@PathVariable("id") UUID id) {
+        log.info("Requête pour incrémenter les vues du commerce ID: {}", id);
+        try {
+            service.incrementerViews(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur incrémentation vues commerce {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

@@ -39,6 +39,7 @@ public class CommerceServiceImpl implements CommerceService {
     private final MediaRepository mediaRepository;
     private final MediaMapper mediaMapper;
     private final NotificationService notificationService;
+    private final EmailService emailService;
 
     public CommerceServiceImpl(CommerceRepository repository, 
                                CommerceMapper mapper,
@@ -47,7 +48,8 @@ public class CommerceServiceImpl implements CommerceService {
                                CommercantRepository commercantRepository,
                                MediaRepository mediaRepository,
                                MediaMapper mediaMapper,
-                               NotificationService notificationService) {
+                               NotificationService notificationService,
+                               EmailService emailService) {
         this.repository = repository;
         this.mapper = mapper;
         this.categorieRepository = categorieRepository;
@@ -56,6 +58,7 @@ public class CommerceServiceImpl implements CommerceService {
         this.mediaRepository = mediaRepository;
         this.mediaMapper = mediaMapper;
         this.notificationService = notificationService;
+        this.emailService = emailService;
     }
 
     private void enrichirDto(CommerceDTO dto) {
@@ -196,6 +199,13 @@ public class CommerceServiceImpl implements CommerceService {
                 .message("Une nouvelle demande d'inscription pour le commerce '" + savedEntity.getNom() + "' a été soumise.")
                 .type("NOUVEAU_COMMERCE")
                 .build());
+
+        // Envoyer l'email aux administrateurs
+        if (savedEntity.getCommercant() != null) {
+            emailService.envoyerNotificationNouveauCommerce(savedEntity.getNom(),
+                    savedEntity.getCommercant().getNom() + " " + savedEntity.getCommercant().getPrenom(),
+                    savedEntity.getCommercant().getEmail());
+        }
 
         return mapper.toDto(savedEntity);
     }
@@ -355,6 +365,9 @@ public class CommerceServiceImpl implements CommerceService {
                     .message("Votre commerce '" + c.getNom() + "' a été suspendu pour le motif suivant : " + motif)
                     .type("SUSPENSION")
                     .build());
+                    
+            // Envoyer un email
+            emailService.envoyerEmailSuspensionCommerce(c.getCommercant().getEmail(), c.getNom(), motif);
         });
     }
 
@@ -373,6 +386,9 @@ public class CommerceServiceImpl implements CommerceService {
                     .message("Votre demande d'inscription pour le commerce '" + c.getNom() + "' a été rejetée pour le motif suivant : " + motif)
                     .type("REJET")
                     .build());
+                    
+            // Envoyer un email
+            emailService.envoyerEmailRejetCommerce(c.getCommercant().getEmail(), c.getNom(), motif);
         });
     }
 
@@ -384,13 +400,23 @@ public class CommerceServiceImpl implements CommerceService {
             c.setMotifSuspension(null);
             repository.save(c);
 
-            // Notification
+            // Notification (Email n'est pas envoyé par défaut pour la validation selon EmailService, on peut utiliser uniquement in-app)
             notificationService.send(NotificationDTO.builder()
                     .iduser(c.getCommercant().getIduser())
                     .titre("Commerce Validé")
                     .message("Félicitations ! Votre commerce '" + c.getNom() + "' a été validé et est désormais visible sur la plateforme.")
                     .type("VALIDATION")
                     .build());
+        });
+    }
+
+    @Override
+    public void incrementerViews(UUID id) {
+        log.debug("Incrémentation des vues pour le commerce ID: {}", id);
+        repository.findById(id).ifPresent(c -> {
+            Long vues = c.getNombreVues();
+            c.setNombreVues(vues != null ? vues + 1 : 1L);
+            repository.save(c);
         });
     }
 }

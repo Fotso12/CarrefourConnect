@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { AuthService } from '../../../coeur/services/auth.service';
+import { NotificationService } from '../../../coeur/services/notification.service';
 
 /**
  * Composant pour la liste des commerces d'un commerçant
@@ -23,14 +24,17 @@ export class GestionCommerceComponent implements OnInit {
     vues: 0
   };
 
+
   constructor(
     private readonly commerceService: CommerceService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
     this.refresh();
   }
+
 
   refresh(): void {
     const user = this.authService.getUser();

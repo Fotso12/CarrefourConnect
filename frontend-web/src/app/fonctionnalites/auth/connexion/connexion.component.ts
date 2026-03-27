@@ -44,9 +44,13 @@ export class ConnexionComponent {
         // Redirection après courte pause pour laisser le modal s'afficher
         setTimeout(() => {
           this.showSuccessModal = false;
-          if (this.credentials.email.includes('admin')) {
+          const role: string = (res.role || res.roles?.[0] || '').toUpperCase();
+          console.log('[Connexion] Rôle détecté:', role);
+          if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
+            console.log('[Connexion] Navigation vers /admin');
             this.router.navigate(['/admin']);
           } else {
+            console.log('[Connexion] Navigation vers /commercant');
             this.router.navigate(['/commercant']);
           }
         }, 900);

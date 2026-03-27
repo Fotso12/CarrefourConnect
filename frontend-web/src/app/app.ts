@@ -26,6 +26,16 @@ export class App {
   }
 
   ngOnInit(): void {
+    console.log('[App] Démarrage... URL actuelle:', window.location.pathname);
+    console.log('[App] Rôle actuel:', this.currentUserRole);
+    
+    // Pister tous les changements de route pour le diagnostic
+    this.router.events.subscribe(event => {
+      if (event.constructor.name === 'NavigationEnd') {
+        console.log('[App] Navigation terminée vers:', (event as any).url);
+      }
+    });
+
     // S'abonner à l'utilisateur actuel pour mettre à jour l'état du header
     this.authService.currentUser.subscribe(() => {
       this.isLoggedIn = this.authService.isLoggedIn();

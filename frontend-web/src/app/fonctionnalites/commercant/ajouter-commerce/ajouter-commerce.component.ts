@@ -9,6 +9,7 @@ import { AbonnementService } from '../../../coeur/services/abonnement.service';
 import { CarteComponent } from '../../../partages/composants/carte/carte.component';
 import { ModalComponent } from '../../../partages/composants/modal/modal.component';
 import { HttpClient } from '@angular/common/http';
+import { OffreService } from '../../../coeur/services/offre.service';
 
 /**
  * Composant Wizard pour l'ajout d'un commerce
@@ -67,6 +68,7 @@ export class AjouterCommerceComponent implements OnInit {
   paymentPhone = '';
   paymentAmountStr = '';
   paymentError = '';
+  amountToPay = 0; // Store exact price difference
 
   nouvelleCategorie = {
     nom: '',
@@ -85,7 +87,8 @@ export class AjouterCommerceComponent implements OnInit {
     public readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly cdr: ChangeDetectorRef,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly offreService: OffreService
   ) {}
 
   ngOnInit(): void {
@@ -122,14 +125,14 @@ export class AjouterCommerceComponent implements OnInit {
   chargerAbonnements(): void {
     this.abonnementService.getAll().subscribe({
       next: (data) => {
-        // Associe le bon tarif aux niveaux en se basant sur le nom ou le forfait de l'abonnement
         this.abonnements = data.map(ab => {
           let prix = 0;
-          if (ab.nom?.toLowerCase() === 'basique') prix = 5000;
-          else if (ab.nom?.toLowerCase() === 'premium') prix = 10000;
-          else if (ab.nom?.toLowerCase() === 'gold') prix = 15000;
+          const nomOuType = (ab.type || ab.nom || '').toLowerCase();
+          if (nomOuType.includes('basique')) prix = 5000;
+          else if (nomOuType.includes('premium')) prix = 10000;
+          else if (nomOuType.includes('gold')) prix = 15000;
           else prix = 5000; // default
-          return { ...ab, prixAffiche: prix };
+          return { ...ab, nomAffiche: ab.type || ab.nom, prixAffiche: prix };
         });
       },
       error: (err) => console.error("Erreur abonnements", err)
@@ -231,12 +234,27 @@ export class AjouterCommerceComponent implements OnInit {
       return;
     }
     
-    // Si l'édition a déjà un abonnement qui était payé ou si c'est une modif simple (optionnel de repayer)
-    // Mais pour la spec on demande la simulation.
+    let requiredPrice = this.selectedAbonnement.prixAffiche;
+
+    if (this.isEdit && this.commerce.idabonnement) {
+      // Find old abonnement
+      const oldAb = this.abonnements.find(a => a.idabonnement === this.commerce.idabonnement);
+      if (oldAb) {
+        if (requiredPrice > oldAb.prixAffiche) {
+          requiredPrice = requiredPrice - oldAb.prixAffiche; // Pay only the difference
+        } else if (requiredPrice <= oldAb.prixAffiche) {
+           this.commerce.idabonnement = this.selectedAbonnement.idabonnement;
+           this.enregistrer();
+           return;
+        }
+      }
+    }
+    
+    this.amountToPay = requiredPrice;
     this.commerce.idabonnement = this.selectedAbonnement.idabonnement;
     this.paymentMode = '';
     this.paymentPhone = '';
-    this.paymentAmountStr = '';
+    this.paymentAmountStr = requiredPrice.toString();
     this.paymentError = '';
     this.showPaymentModal = true;
   }
@@ -260,15 +278,15 @@ export class AjouterCommerceComponent implements OnInit {
     }
 
     const amount = parseInt(this.paymentAmountStr, 10);
-    const requiredPrice = this.selectedAbonnement.prixAffiche;
+    const requiredPrice = this.amountToPay;
 
     if (amount < requiredPrice) {
-      this.paymentError = `Erreur : Le montant de ${amount} FCFA est insuffisant pour l'abonnement ${this.selectedAbonnement.nom} (${requiredPrice} FCFA).`;
+      this.paymentError = `Erreur : Le montant de ${amount} FCFA est insuffisant. Vous devez payer ${requiredPrice} FCFA.`;
       return;
     }
 
     if (amount > requiredPrice) {
-      this.paymentError = `Erreur : Le montant est supérieur au prix de l'abonnement. Veuillez saisir exactement ${requiredPrice} FCFA.`;
+      this.paymentError = `Erreur : Le montant est supérieur au prix attendu. Veuillez saisir exactement ${requiredPrice} FCFA.`;
       return;
     }
 
@@ -330,7 +348,7 @@ export class AjouterCommerceComponent implements OnInit {
             dateDebut: this.offreSpeciale.dateDebut,
             dateFin: this.offreSpeciale.dateFin
           };
-          this.http.post('http://localhost:8084/api/offres', offrePayload).subscribe({
+          this.offreService.create(offrePayload).subscribe({
             next: () => console.log("Offre spéciale créée"),
             error: (e) => console.error("Erreur création offre:", e)
           });
