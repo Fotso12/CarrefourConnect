@@ -77,7 +77,7 @@ public class DataInitializer {
                     .statut(StatutAbonnement.ACTIF)
                     .montant(montant)
                     .dateDebut(LocalDateTime.now())
-                    .dateFin(LocalDateTime.now().plusYears(99))
+                    .dateFin(LocalDateTime.now().plusMonths(99))
                     .reference(reference)
                     .build();
             repository.save(abo);
