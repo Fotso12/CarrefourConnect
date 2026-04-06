@@ -1,0 +1,266 @@
+import 'package:flutter/material.dart';
+import '../models/commerce.dart';
+import '../services/api_service.dart';
+import '../widgets/commerce_card.dart';
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final ApiService _apiService = ApiService();
+  final TextEditingController _searchController = TextEditingController();
+  
+  List<Commerce> _commerces = [];
+  List<Categorie> _categories = [];
+  String? _selectedCategoryId;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    setState(() => _isLoading = true);
+    final results = await Future.wait([
+      _apiService.getCategories(),
+      _apiService.getCommerces(),
+    ]);
+    
+    if (mounted) {
+      setState(() {
+        _categories = results[0] as List<Categorie>;
+        _commerces = results[1] as List<Commerce>;
+        _isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _search() async {
+    setState(() => _isLoading = true);
+    final results = await _apiService.getCommerces(
+      nom: _searchController.text,
+      idCategorie: _selectedCategoryId,
+    );
+    if (mounted) {
+      setState(() {
+        _commerces = results;
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryBlue = Color(0xFF034D92);
+    const accentOrange = Color(0xFFF78F1E);
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: false,
+        title: RichText(
+          text: const TextSpan(
+            children: [
+              TextSpan(
+                text: 'Carrefour',
+                style: TextStyle(
+                  color: primaryBlue,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              TextSpan(
+                text: 'Connect',
+                style: TextStyle(
+                  color: accentOrange,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.notifications_none_rounded, color: primaryBlue),
+          ),
+          const SizedBox(width: 8),
+          const CircleAvatar(
+            radius: 18,
+            backgroundColor: primaryBlue,
+            child: Icon(Icons.person_rounded, color: Colors.white, size: 20),
+          ),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        color: accentOrange,
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          slivers: [
+            // Search Bar
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.03),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    onSubmitted: (_) => _search(),
+                    decoration: InputDecoration(
+                      hintText: 'Quel commerce recherchez-vous ?',
+                      hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
+                      border: InputBorder.none,
+                      icon: const Icon(Icons.search_rounded, color: Colors.grey),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.tune_rounded, color: accentOrange),
+                        onPressed: _search,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Categories
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  itemCount: _categories.length + 1,
+                  itemBuilder: (context, index) {
+                    final isAll = index == 0;
+                    final cat = isAll ? null : _categories[index - 1];
+                    final isSelected = isAll 
+                        ? _selectedCategoryId == null 
+                        : _selectedCategoryId == cat?.idcategorie;
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: ChoiceChip(
+                        label: Text(isAll ? 'Tous' : cat!.nom),
+                        selected: isSelected,
+                        onSelected: (selected) {
+                          setState(() {
+                            _selectedCategoryId = isAll ? null : cat?.idcategorie;
+                          });
+                          _search();
+                        },
+                        selectedColor: primaryBlue,
+                        labelStyle: TextStyle(
+                          color: isSelected ? Colors.white : Colors.grey[600],
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        backgroundColor: Colors.white,
+                        showCheckmark: false,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: isSelected ? primaryBlue : Colors.grey[200]!,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            // Grid Header
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  children: [
+                    const Icon(Icons.storefront_rounded, size: 16, color: primaryBlue),
+                    const SizedBox(width: 8),
+                    Text(
+                      '${_commerces.length} COMMERCES À PROXIMITÉ',
+                      style: const TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 2.0,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Grid Content
+            _isLoading
+                ? const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator(color: accentOrange)),
+                  )
+                : _commerces.isEmpty
+                    ? SliverFillRemaining(
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.search_off_rounded, size: 64, color: Colors.grey[300]),
+                              const SizedBox(height: 16),
+                              const Text('Aucun commerce trouvé', style: TextStyle(color: Colors.grey)),
+                            ],
+                          ),
+                        ),
+                      )
+                    : SliverPadding(
+                        padding: const EdgeInsets.all(16),
+                        sliver: SliverGrid(
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            childAspectRatio: 0.78,
+                          ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => CommerceCard(
+                              commerce: _commerces[index],
+                              onTap: () {
+                                // Transition vers détails plus tard
+                              },
+                            ),
+                            childCount: _commerces.length,
+                          ),
+                        ),
+                      ),
+            
+            // Bottom spacing
+            const SliverToBoxAdapter(child: SizedBox(height: 32)),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: accentOrange,
+        child: const Icon(Icons.map_rounded, color: Colors.white),
+      ),
+    );
+  }
+}
