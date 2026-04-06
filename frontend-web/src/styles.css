@@ -1,4 +1,6 @@
 @import "leaflet/dist/leaflet.css";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,8 +12,23 @@
 }
 
 body {
-  @apply antialiased text-slate-800 bg-gray-50;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  @apply antialiased text-slate-900 bg-[#f8fafc];
+  overflow-x: hidden;
 }
+
+.shop-card {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.shop-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(3, 77, 146, 0.1);
+}
+
+.custom-scroll::-webkit-scrollbar { width: 6px; }
+.custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
 @keyframes pulse {
   0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 0 0 rgba(0, 173, 239, 0.7); }

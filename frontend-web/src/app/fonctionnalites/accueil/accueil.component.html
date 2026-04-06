@@ -1,153 +1,114 @@
-<div class="flex flex-col h-[calc(100vh-80px)] overflow-hidden">
-  <!-- Section Barre de Recherche (Placée sous le Header Shell) -->
-  <div class="bg-white border-b border-gray-100 py-4 px-6 shadow-sm z-40">
-    <div class="max-w-7xl mx-auto">
-      <div class="bg-gray-50 p-1.5 rounded-[24px] flex flex-col md:flex-row items-stretch md:items-center gap-2 border border-gray-200">
-        <!-- Champ Recherche Nom -->
-        <input 
-          type="text" 
-          [(ngModel)]="filtres.nom"
-          (ngModelChange)="onFilterChange()"
-          (keyup.enter)="rechercher()"
-          placeholder="Commerce..." 
-          class="flex-1 bg-transparent border-none focus:ring-0 px-4 py-2.5 text-sm"
-        >
-        
-        <div class="flex flex-wrap md:flex-nowrap items-center gap-2 px-2 pb-2 md:pb-0">
-          <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
-          
-          <!-- Catégorie -->
-          <select 
-            [(ngModel)]="filtres.idCategorie"
-            (ngModelChange)="onFilterChange()"
-            (change)="rechercher()"
-            class="bg-transparent border-none focus:ring-0 py-2.5 text-xs text-gray-600 min-w-[120px] flex-1"
-          >
-            <option value="">Toutes catégories</option>
-            <option *ngFor="let cat of categories" [value]="cat.idcategorie">{{ cat.nom }}</option>
-          </select>
-          
-          <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
-          
-          <!-- Ville -->
-          <input 
-            type="text" 
-            [(ngModel)]="filtres.ville"
-            (ngModelChange)="onFilterChange()"
-            (keyup.enter)="rechercher()"
-            placeholder="Ville" 
-            class="bg-transparent border-none focus:ring-0 py-2.5 text-xs text-gray-600 w-24 flex-1"
-          >
-          
-          <div class="h-8 w-px bg-gray-200 hidden md:block"></div>
-          
-          <!-- Rayon -->
-          <div class="flex items-center gap-1">
-            <input 
-              type="number" 
-              [(ngModel)]="filtres.rayon"
-              (ngModelChange)="onFilterChange()"
-              (change)="rechercher()"
-              class="w-10 bg-transparent border-none focus:ring-0 py-2.5 text-xs font-bold text-[#003B71]"
-              min="1" max="100"
-            >
-            <span class="text-[9px] text-gray-400 font-bold">km</span>
-          </div>
-
-          <!-- Bouton Search -->
-          <button 
-            (click)="rechercher()"
-            class="bg-[#F78F1E] hover:bg-orange-600 text-white p-3 rounded-2xl transition-all shadow-md active:scale-95 ml-auto flex items-center justify-center w-11 h-11"
-          >
-            <i class="fa-solid fa-magnifying-glass text-lg"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
-    <!-- Liste des Commerces (Section Principale - Élargie) -->
-    <div class="flex-1 bg-white p-6 overflow-y-auto border-r border-gray-100 shadow-sm z-10">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h2 class="text-3xl font-black text-[#003B71]">Découvrir</h2>
-          <p class="text-gray-400 text-sm font-medium">{{ commerces.length }} pépites locales à explorer</p>
-        </div>
-      </div>
-
-      <!-- Grille de Cartes - Plus large -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let commerce of commerces" 
-             class="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-gray-50 group cursor-pointer relative">
-          <!-- Zone Image / Carrousel -->
-          <div class="h-48 bg-gray-200 relative overflow-hidden group/image">
-            <ng-container *ngIf="commerce.images && commerce.images.length > 0; else placeholder">
-              <img [src]="commerce.images[commerce.currentImg].url" 
-                   alt="Image du commerce" 
-                   class="w-full h-full object-cover transition-all duration-700">
-              
-              <!-- Contrôles Carrousel -->
-              <div *ngIf="commerce.images.length > 1" class="absolute inset-0 flex items-center justify-between px-3">
-                <button (click)="prevImage(commerce, $event)" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center text-[#003B71] hover:bg-white transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M15 19l-7-7 7-7" /></svg>
-                </button>
-                <button (click)="nextImage(commerce, $event)" class="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-md flex items-center justify-center text-[#003B71] hover:bg-white transition-all">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" /></svg>
-                </button>
-              </div>
-            </ng-container>
-
-            <ng-template #placeholder>
-              <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400" 
-                   class="w-full h-full object-cover grayscale opacity-50">
-            </ng-template>
-
-            <div class="absolute top-4 left-4">
-                <span class="bg-white/80 backdrop-blur text-[#003B71] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider">
-                    {{ commerce.categorie?.nom }}
-                </span>
+<main class="max-w-[1800px] mx-auto p-4 lg:p-6 w-full">
+    
+    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-6 w-full">
+        <div class="flex flex-wrap lg:flex-nowrap items-center gap-4">
+            <div class="relative flex-grow min-w-[250px]">
+                <i class="fa-solid fa-magnifying-glass absolute left-4 top-[18px] text-slate-400"></i>
+                <input type="text" 
+                    [(ngModel)]="filtres.nom"
+                    (ngModelChange)="onFilterChange()"
+                    (keyup.enter)="rechercher()"
+                    placeholder="Quel commerce recherchez-vous ?" 
+                    class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-12 text-sm focus:ring-2 focus:ring-[#034d92] transition-all outline-none">
             </div>
-          </div>
-          <div class="p-6">
-            <h3 class="text-lg font-black text-[#003B71] mb-2 group-hover:text-[#F78F1E] transition-colors line-clamp-1">{{ commerce.nom }}</h3>
-            <p class="text-gray-400 text-[11px] leading-relaxed mb-6 line-clamp-2 h-8 font-medium">{{ commerce.description }}</p>
             
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2 text-gray-400">
-                <i class="fa-solid fa-location-dot h-3.5 w-3.5"></i>
-                <span class="text-[11px] font-bold">{{ commerce.ville }}</span>
-              </div>
-              <button [routerLink]="['/commerce', commerce.idcommerce]" 
-                      class="bg-[#003B71] text-white px-5 py-2.5 rounded-2xl text-[11px] font-black hover:bg-[#00ADEF] transition-all shadow-lg shadow-blue-900/10">
-                Détails
-              </button>
+            <div class="relative min-w-[200px]">
+                <i class="fa-solid fa-layer-group absolute left-4 top-[18px] text-slate-400 text-xs"></i>
+                <select 
+                    [(ngModel)]="filtres.idCategorie"
+                    (ngModelChange)="onFilterChange()"
+                    (change)="rechercher()"
+                    class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-10 text-sm focus:ring-2 focus:ring-[#034d92] appearance-none outline-none text-slate-600 font-medium">
+                    <option value="">Toutes catégories</option>
+                    <option *ngFor="let cat of categories" [value]="cat.idcategorie">{{ cat.nom }}</option>
+                </select>
             </div>
-          </div>
+
+            <div class="flex items-center bg-slate-50 rounded-2xl px-4 py-1 space-x-3 border border-slate-100 h-[52px]">
+                <span class="text-[10px] font-black text-slate-400 uppercase">Rayon</span>
+                <input type="number" 
+                    [(ngModel)]="filtres.rayon"
+                    (ngModelChange)="onFilterChange()"
+                    (change)="rechercher()"
+                    class="w-12 bg-transparent font-bold text-[#034d92] outline-none text-center appearance-none m-0 p-0">
+                <span class="text-xs font-bold text-slate-400">km</span>
+            </div>
+
+            <button (click)="rechercher()" class="bg-[#f97316] text-white p-4 h-[52px] w-[52px] flex-shrink-0 rounded-2xl hover:bg-[#ea580c] transition shadow-lg shadow-orange-200 flex items-center justify-center">
+                <i class="fa-solid fa-sliders"></i>
+            </button>
         </div>
-      </div>
     </div>
 
-    <!-- Carte (Cachée sur mobile si on n'a pas basculé) -->
-    <div [class.hidden]="!showMapOnMobile" 
-         class="md:flex w-full md:w-[320px] lg:w-[420px] relative bg-gray-50 border-l border-gray-100 flex flex-col z-20 md:static fixed inset-0 top-[140px] md:top-0">
-      <div class="flex-1 relative">
-        <app-carte [points]="pointsCarte" class="h-full"></app-carte>
-      </div>
-      
-      <!-- Bouton Fermer Carte Mobile -->
-      <button (click)="showMapOnMobile = false" class="md:hidden absolute top-4 right-4 bg-white p-3 rounded-full shadow-xl text-[#003B71] z-[1002]">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
+    <div class="flex flex-col lg:flex-row gap-8 items-start">
+        
+        <div class="lg:w-3/4 w-full">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 flex items-center">
+                    <i class="fa-solid fa-store mr-2 text-[#034d92]"></i> {{ commerces.length }} commerces à proximité
+                </h2>
+                <button (click)="showMapOnMobile = !showMapOnMobile" 
+                        class="lg:hidden bg-white border border-slate-200 text-[#034d92] px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
+                  <i [class]="showMapOnMobile ? 'fa-solid fa-list' : 'fa-solid fa-map'"></i>
+                  {{ showMapOnMobile ? 'Vue Liste' : 'Vue Carte' }}
+                </button>
+            </div>
 
-    <!-- Bouton Flottant (Vue Mobile - Switch Carte/Liste) -->
-    <button (click)="showMapOnMobile = !showMapOnMobile" 
-            class="md:hidden fixed bottom-8 left-1/2 -translate-x-1/2 bg-[#003B71] text-white px-6 py-3 rounded-full shadow-2xl z-[50] flex items-center gap-2 font-black text-sm active:scale-95 transition-all">
-      <i [class]="showMapOnMobile ? 'fa-solid fa-list' : 'fa-solid fa-map-marked-alt'" class="text-base"></i>
-      {{ showMapOnMobile ? 'Voir la liste' : 'Voir la carte' }}
-    </button>
-  </main>
-</div>
+            <div [class.hidden]="showMapOnMobile" class="grid lg:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 custom-scroll overflow-y-auto pr-4" style="max-height: calc(100vh - 320px);">
+                
+                <div *ngFor="let commerce of commerces; let i = index" class="shop-card bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden flex flex-col group relative h-full">
+                    <div class="relative h-44 overflow-hidden bg-slate-100 shrink-0">
+                        <ng-container *ngIf="commerce.images && commerce.images.length > 0; else placeholder">
+                            <img [src]="commerce.images[commerce.currentImg || 0].url" 
+                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </ng-container>
+                        <ng-template #placeholder>
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=400" 
+                                class="w-full h-full object-cover grayscale opacity-50">
+                        </ng-template>
+
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+                            <span class="text-[10px] font-black uppercase text-[#034d92]">{{ commerce.categorie?.nom || 'Commerce' }}</span>
+                        </div>
+                        <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-300 hover:text-red-500 transition shadow-md">
+                            <i class="fa-solid fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="text-lg font-extrabold text-slate-800 line-clamp-1" [title]="commerce.nom">{{ commerce.nom }}</h3>
+                            <div class="flex items-center text-orange-400 text-xs ml-2 flex-shrink-0">
+                                <i class="fa-solid fa-star"></i>
+                                <span class="ml-1 font-bold text-slate-600">4.8</span>
+                            </div>
+                        </div>
+                        <p class="text-slate-500 text-sm mb-6 italic"><i class="fa-solid fa-location-dot mr-1 text-[#034d92]/70 hidden"></i> {{ commerce.ville || 'Littoral' }}, Douala</p>
+                        
+                        <div class="mt-auto pt-4">
+                            <button [routerLink]="['/commerce', commerce.idcommerce]" 
+                                    [ngClass]="i === 0 ? 'bg-[#034d92] text-white hover:bg-[#023a6e]' : 'bg-[#034d92]/10 text-[#034d92] hover:bg-[#034d92] hover:text-white'"
+                                    class="w-full py-3 rounded-2xl text-xs font-bold uppercase tracking-widest transition">
+                                Détails
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div [class.hidden]="!showMapOnMobile" class="lg:block lg:w-1/4 w-full sticky top-28 z-30">
+            <div class="bg-white p-2 rounded-[3rem] shadow-xl border border-slate-50 h-[580px] w-full">
+                <div class="w-full h-full rounded-[2.5rem] bg-slate-200 relative overflow-hidden">
+                    <app-carte [points]="pointsCarte" class="w-full h-full absolute inset-0"></app-carte>
+                    
+                    <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white z-40 pointer-events-none">
+                        <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Zone Actuelle</p>
+                        <p class="text-sm font-bold text-slate-800 line-clamp-1">Littoral, Douala</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>

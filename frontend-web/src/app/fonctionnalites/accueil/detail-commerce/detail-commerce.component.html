@@ -1,14 +1,14 @@
-<div class="max-w-7xl mx-auto p-4 lg:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+<div class="max-w-[1600px] mx-auto p-4 lg:p-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
   
   <div *ngIf="loading" class="flex flex-col items-center justify-center h-64">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-[#003B71]"></div>
     <p class="mt-4 text-gray-400 font-medium italic">Chargement des secrets de l'établissement...</p>
   </div>
 
-  <div *ngIf="!loading && commerce" class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+  <div *ngIf="!loading && commerce" class="grid grid-cols-1 lg:grid-cols-5 gap-8">
     
     <!-- Colonne Gauche : Images et Infos -->
-    <div class="lg:col-span-2 space-y-8">
+    <div class="lg:col-span-3 space-y-8">
       
       <!-- Carrousel Premium -->
       <div class="relative h-[400px] rounded-[40px] overflow-hidden shadow-2xl group">
@@ -147,7 +147,7 @@
     </div>
 
     <!-- Colonne Droite : Map et Miniature -->
-    <div class="space-y-8">
+    <div class="lg:col-span-2 space-y-8">
       
       <!-- Carte avec Itinéraire -->
       <div class="bg-white rounded-[40px] p-6 shadow-xl border border-gray-100 overflow-hidden">
@@ -159,7 +159,7 @@
           </button>
         </div>
         
-        <div class="h-[300px] mb-6 rounded-3xl overflow-hidden border border-gray-50 relative">
+        <div class="h-[500px] mb-6 rounded-3xl overflow-hidden border border-gray-50 relative">
           <app-carte [points]="pointsCarte" [routePoints]="routePoints" class="h-full"></app-carte>
           
           <!-- Route Info Overlay -->
