@@ -133,7 +133,9 @@ export class DetailCommerceComponent implements OnInit {
       lat: lat,
       lon: lon,
       nom: this.commerce.nom,
-      adresse: loc.adresse
+      adresse: loc.adresse,
+      image: (this.commerce.images && this.commerce.images.length > 0) ? this.commerce.images[0].url : this.commerce.imagePrincipale,
+      idcommerce: this.commerce.idcommerce
     }];
   }
 
@@ -159,7 +161,14 @@ export class DetailCommerceComponent implements OnInit {
       this.votrePosition = { lat: userLat, lon: userLon };
       
       this.pointsCarte = [
-        { lat: destLat, lon: destLon, nom: this.commerce.nom, adresse: loc.adresse },
+        { 
+          lat: destLat, 
+          lon: destLon, 
+          nom: this.commerce.nom, 
+          adresse: loc.adresse,
+          image: (this.commerce.images && this.commerce.images.length > 0) ? this.commerce.images[0].url : this.commerce.imagePrincipale,
+          idcommerce: this.commerce.idcommerce 
+        },
         { lat: userLat, lon: userLon, nom: "Ma Position", isUser: true }
       ];
 

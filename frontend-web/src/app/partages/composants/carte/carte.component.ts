@@ -121,9 +121,25 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
       const lat = point.lat ?? point.latitude ?? point.latitud;
       const lon = point.lon ?? point.longitude ?? point.lng;
       if (lat != null && lon != null && this.map) {
+        
+        let popupContent = `<div style="text-align: center; min-width: 140px; padding: 4px;">`;
+        if (point.image) {
+          popupContent += `<img src="${point.image}" style="width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">`;
+        }
+        popupContent += `<b style="font-size: 14px; color: #003B71; display: block; margin-bottom: 2px;">${point.nom || ''}</b><span style="color: #64748b; font-size: 11px;">${point.adresse || ''}</span>`;
+        popupContent += `</div>`;
+
         const marker = L.marker([lat, lon])
           .addTo(this.map)
-          .bindPopup(`<b>${point.nom || ''}</b><br>${point.adresse || ''}`);
+          .bindPopup(popupContent);
+          
+        if (!point.isUser) {
+           marker.bindTooltip(popupContent, {
+             direction: 'top',
+             className: 'custom-tooltip',
+             offset: [0, -40]
+           });
+        }
           
         if (point.isUser) {
           marker.setIcon(L.divIcon({

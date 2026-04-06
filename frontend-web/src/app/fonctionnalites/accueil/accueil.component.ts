@@ -115,12 +115,17 @@ export class AccueilComponent implements OnInit {
    * Met à jour les points sur la carte
    */
   private actualiserCarte(commerces: any[]): void {
-    this.pointsCarte = commerces.map(c => ({
-      lat: c.localisations && c.localisations[0] ? c.localisations[0].geolocalisation?.y : null,
-      lon: c.localisations && c.localisations[0] ? c.localisations[0].geolocalisation?.x : null,
-      nom: c.nom,
-      adresse: c.adresse || (c.localisations && c.localisations[0] ? c.localisations[0].adresse : '')
-    })).filter(p => p.lat != null);
+    this.pointsCarte = commerces.map(c => {
+      const loc = c.localisations && c.localisations.length > 0 ? c.localisations[0] : null;
+      return {
+        lat: loc ? (loc.geolocalisation?.y || loc.lat || loc.latitude) : null,
+        lon: loc ? (loc.geolocalisation?.x || loc.lon || loc.longitude) : null,
+        nom: c.nom,
+        adresse: c.adresse || (loc ? loc.adresse : ''),
+        image: (c.images && c.images.length > 0) ? c.images[0].url : c.imagePrincipale,
+        idcommerce: c.idcommerce
+      };
+    }).filter(p => p.lat != null);
 
     // Ajouter la position utilisateur pour se repérer
     if ((this.filtres as any).lat && (this.filtres as any).lon) {
