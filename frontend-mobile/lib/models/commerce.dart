@@ -39,6 +39,7 @@ class Commerce {
   final String? telephone;
   final Categorie? categorie;
   final List<Media> images;
+  final String? imagePrincipale;
 
   Commerce({
     this.idcommerce,
@@ -51,6 +52,7 @@ class Commerce {
     this.telephone,
     this.categorie,
     required this.images,
+    this.imagePrincipale,
   });
 
   factory Commerce.fromJson(Map<String, dynamic> json) {
@@ -80,6 +82,7 @@ class Commerce {
       images: (json['images'] as List? ?? [])
           .map((img) => Media.fromJson(img))
           .toList(),
+      imagePrincipale: json['imagePrincipale'],
     );
   }
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,7 +13,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _apiService = ApiService();
+  final _authService = AuthService();
   bool _obscurePassword = true;
+  bool _isLoggingIn = false;
 
   static const primaryBlue = Color(0xFF034D92);
   static const accentOrange = Color(0xFFF78F1E);
@@ -198,23 +203,42 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _isLoggingIn ? null : _handleLogin,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(vertical: 18),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        child: const Text(
-          'SE CONNECTER',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w900,
-            color: Colors.white,
-            letterSpacing: 1.5,
-          ),
-        ),
+        child: _isLoggingIn 
+          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+          : const Text(
+              'SE CONNECTER',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                letterSpacing: 1.5,
+              ),
+            ),
       ),
     );
+  }
+
+  Future<void> _handleLogin() async {
+    setState(() => _isLoggingIn = true);
+    final response = await _apiService.login(_emailController.text, _passwordController.text);
+    setState(() => _isLoggingIn = false);
+
+    if (response != null && response['token'] != null) {
+      await _authService.saveToken(response['token']);
+      if (mounted) Navigator.pop(context);
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email ou mot de passe incorrect')),
+        );
+      }
+    }
   }
 }

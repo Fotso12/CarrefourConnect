@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' hide Path;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:geolocator/geolocator.dart';
 import '../models/commerce.dart';
+import '../services/api_service.dart';
+import '../services/auth_service.dart';
+import 'full_map_screen.dart';
+import 'login_screen.dart';
 
 class CommerceDetailsScreen extends StatefulWidget {
   final Commerce commerce;
@@ -17,8 +22,211 @@ class CommerceDetailsScreen extends StatefulWidget {
 
 class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
   int _currentImageIndex = 0;
+  final ApiService _apiService = ApiService();
+  final AuthService _authService = AuthService();
+  List<dynamic> _avis = [];
+  bool _isLoadingAvis = true;
+  double _moyenne = 0;
+  List<String> _displayImages = [];
+  final MapController _miniMapController = MapController();
+
   static const primaryBlue = Color(0xFF034D92);
   static const accentOrange = Color(0xFFF78F1E);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAvis();
+    _prepareImages();
+  }
+
+  void _prepareImages() {
+    _displayImages = widget.commerce.images.map((img) => img.url).toList();
+    if (widget.commerce.imagePrincipale != null && !_displayImages.contains(widget.commerce.imagePrincipale)) {
+      _displayImages.insert(0, widget.commerce.imagePrincipale!);
+    }
+    
+    // Debug
+    print('DEBUG: Commerce ${widget.commerce.nom} has ${_displayImages.length} images.');
+    for (var url in _displayImages) {
+      print('DEBUG: Carousel URL: $url');
+    }
+  }
+
+  Future<void> _loadAvis() async {
+    if (widget.commerce.idcommerce == null) return;
+    final results = await _apiService.getAvisByCommerce(widget.commerce.idcommerce!);
+    if (mounted) {
+      setState(() {
+        _avis = results;
+        _isLoadingAvis = false;
+        if (_avis.isNotEmpty) {
+          double total = 0;
+          for (var a in _avis) {
+            total += (a['note'] ?? 0).toDouble();
+          }
+          _moyenne = total / _avis.length;
+        }
+      });
+    }
+  }
+
+  void _checkAuthAndRate() async {
+    bool isConnected = await _authService.isLoggedIn();
+
+    if (!isConnected) {
+      _showLoginRequiredModal();
+    } else {
+      _showRateDialog();
+    }
+  }
+
+  void _showLoginRequiredModal() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Connexion requise', style: TextStyle(fontWeight: FontWeight.bold, color: primaryBlue)),
+        content: const Text('Vous devez être connecté pour laisser un avis sur ce commerce.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: accentOrange, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+            child: const Text('Se connecter'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRateDialog() {
+    double rating = 5.0;
+    final commentController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: accentOrange,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: const Icon(Icons.star_rounded, color: Colors.white, size: 28),
+                    ),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Votre Expérience', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Color(0xFF1E293B))),
+                          Text('Aidez la communauté en partageant votre avis', style: TextStyle(fontSize: 13, color: Colors.grey, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                const Text('QUELLE NOTE DONNERIEZ-VOUS ?', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.grey, letterSpacing: 1.2)),
+                const SizedBox(height: 8),
+                Slider(
+                  value: rating,
+                  min: 1,
+                  max: 5,
+                  divisions: 4,
+                  activeColor: accentOrange,
+                  inactiveColor: Colors.grey[200],
+                  onChanged: (value) => setDialogState(() => rating = value),
+                ),
+                Text(
+                  '${rating.round()} / 5',
+                  style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: accentOrange),
+                ),
+                const SizedBox(height: 24),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text('VOTRE COMMENTAIRE', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w900, color: Colors.grey, letterSpacing: 1.2)),
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: commentController,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    hintText: 'Racontez-nous ce que vous avez aimé (ou moins aimé)...',
+                    hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
+                    filled: true,
+                    fillColor: const Color(0xFFF8FAFC),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
+                    contentPadding: const EdgeInsets.all(16),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Annuler', style: TextStyle(color: primaryBlue, fontWeight: FontWeight.w900, fontSize: 16)),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(colors: [accentOrange, Color(0xFFE67E22)]),
+                          boxShadow: [BoxShadow(color: accentOrange.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 5))],
+                        ),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final token = await _authService.getToken();
+                            final success = await _apiService.createAvis({
+                              'idcommerce': widget.commerce.idcommerce,
+                              'note': rating.round(),
+                              'commentaire': commentController.text,
+                            }, token); 
+                            if (mounted) {
+                              Navigator.pop(context);
+                              if (success) _loadAvis();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            shadowColor: Colors.transparent,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          ),
+                          child: const Text('Publier mon avis', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +255,10 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                       height: 1.6,
                     ),
                   ),
+                  const SizedBox(height: 32),
+                  _buildSectionTitle('AVIS CLIENTS'),
+                  const SizedBox(height: 12),
+                  _buildAvisList(),
                   const SizedBox(height: 32),
                   _buildSectionTitle('LOCALISATION'),
                   const SizedBox(height: 16),
@@ -81,16 +293,32 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
         background: Stack(
           children: [
             // Image Carousel
-            if (widget.commerce.images.isNotEmpty)
+            if (_displayImages.isNotEmpty)
               PageView.builder(
-                itemCount: widget.commerce.images.length,
+                itemCount: _displayImages.length,
                 onPageChanged: (index) => setState(() => _currentImageIndex = index),
                 itemBuilder: (context, index) {
                   return CachedNetworkImage(
-                    imageUrl: widget.commerce.images[index].url,
+                    imageUrl: _displayImages[index],
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(color: Color(0xFFF1F5F9)),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    placeholder: (context, url) => Container(
+                      color: const Color(0xFFF1F5F9),
+                      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                    ),
+                    errorWidget: (context, url, error) {
+                      print('IMAGE ERROR: Failed to load ${_displayImages[index]}');
+                      return Container(
+                        color: const Color(0xFFF1F5F9),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.broken_image_rounded, color: Colors.grey, size: 48),
+                            SizedBox(height: 8),
+                            Text('Image indisponible', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                          ],
+                        ),
+                      );
+                    },
                   );
                 },
               )
@@ -118,7 +346,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             ),
 
             // Image Indicators
-            if (widget.commerce.images.length > 1)
+            if (_displayImages.length > 1)
               Positioned(
                 bottom: 30,
                 left: 0,
@@ -126,7 +354,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
-                    widget.commerce.images.length,
+                    _displayImages.length,
                     (index) => AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -271,28 +499,64 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
-        child: FlutterMap(
-          options: MapOptions(
-            initialCenter: latlng,
-            initialZoom: 15.0,
-            interactionOptions: const InteractionOptions(flags: InteractiveFlag.none),
-          ),
+        child: Stack(
           children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            ),
-            MarkerLayer(
-              markers: [
-                Marker(
-                  point: latlng,
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_on_rounded, color: Colors.red, size: 40),
-                ),
-              ],
+            _buildFlutterMap(latlng),
+            _buildMapOverlayButtons(latlng),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFlutterMap(LatLng latlng) {
+    return FlutterMap(
+      mapController: _miniMapController,
+      options: MapOptions(
+        initialCenter: latlng,
+        initialZoom: 15.0,
+        interactionOptions: const InteractionOptions(flags: InteractiveFlag.all),
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'CarrefourConnectMobile/1.0 (contact@carrefourconnect.com)',
+        ),
+        MarkerLayer(
+          markers: [
+            Marker(
+              point: latlng,
+              width: 40,
+              height: 40,
+              child: const Icon(Icons.location_on_rounded, color: Colors.red, size: 40),
             ),
           ],
         ),
+      ],
+    );
+  }
+
+  Widget _buildMapOverlayButtons(LatLng latlng) {
+    return Positioned(
+      bottom: 10,
+      right: 10,
+      child: Column(
+        children: [
+          FloatingActionButton.small(
+            onPressed: () => _miniMapController.move(latlng, 15.0),
+            backgroundColor: Colors.white,
+            child: const Icon(Icons.storefront, color: primaryBlue),
+          ),
+          const SizedBox(height: 8),
+          FloatingActionButton.small(
+            onPressed: () async {
+              Position pos = await Geolocator.getCurrentPosition();
+              _miniMapController.move(LatLng(pos.latitude, pos.longitude), 15.0);
+            },
+            backgroundColor: Colors.white,
+            child: const Icon(Icons.my_location, color: primaryBlue),
+          ),
+        ],
       ),
     );
   }
@@ -300,19 +564,24 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
   Widget _buildBottomAction() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, -5),
-          ),
-        ],
-      ),
+      color: Colors.white,
       child: SafeArea(
         child: ElevatedButton(
-          onPressed: () {}, // TODO: Itinéraire
+          onPressed: () async {
+            Position pos = await Geolocator.getCurrentPosition();
+            if (mounted && widget.commerce.latitude != null) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FullScreenMapScreen(
+                    commerce: widget.commerce,
+                    userLat: pos.latitude,
+                    userLon: pos.longitude,
+                  ),
+                ),
+              );
+            }
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryBlue,
             foregroundColor: Colors.white,
@@ -324,6 +593,114 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
           child: const Text('VOIR L\'ITINÉRAIRE', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         ),
       ),
+    );
+  }
+
+  Future<void> _launchMap(double lat, double lng, String title) async {
+    final googleUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+    final appleUrl = 'https://maps.apple.com/?q=$lat,$lng';
+
+    if (await canLaunchUrl(Uri.parse(googleUrl))) {
+      await launchUrl(Uri.parse(googleUrl), mode: LaunchMode.externalApplication);
+    } else if (await canLaunchUrl(Uri.parse(appleUrl))) {
+      await launchUrl(Uri.parse(appleUrl), mode: LaunchMode.externalApplication);
+    } else {
+      throw 'Could not launch maps';
+    }
+  }
+
+  Widget _buildAvisList() {
+    if (_isLoadingAvis) return const Center(child: CircularProgressIndicator());
+    
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              _moyenne.toStringAsFixed(1),
+              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.w900, color: accentOrange),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: List.generate(5, (i) => Icon(
+                    Icons.star_rounded, 
+                    size: 18, 
+                    color: i < _moyenne.round() ? accentOrange : Colors.grey[300])),
+                ),
+                Text('${_avis.length} avis', style: const TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            const Spacer(),
+            ElevatedButton.icon(
+              onPressed: _checkAuthAndRate,
+              icon: const Icon(Icons.edit_rounded, size: 16),
+              label: const Text('Rédiger', style: TextStyle(fontWeight: FontWeight.w900)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF003B71),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 32),
+        if (_avis.isEmpty)
+          Center(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: Colors.grey[50], shape: BoxShape.circle),
+                  child: const Icon(Icons.chat_bubble_outline_rounded, color: Colors.grey, size: 30),
+                ),
+                const SizedBox(height: 12),
+                const Text('Aucun avis pour le moment.', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w600)),
+                const Text('Soyez le premier à partager votre expérience !', style: TextStyle(color: Colors.grey, fontSize: 12)),
+              ],
+            ),
+          )
+        else
+          ..._avis.map((a) {
+            final user = a['utilisateur'] ?? {};
+            final String initial = (user['nom'] ?? 'U').toString().substring(0, 1).toUpperCase();
+            return Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: primaryBlue.withOpacity(0.05), 
+                    child: Text(initial, style: const TextStyle(color: primaryBlue, fontWeight: FontWeight.w900))),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(user['nom'] ?? 'Anonyme', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 14, color: Color(0xFF1E293B))),
+                            Row(
+                              children: List.generate(5, (i) => Icon(Icons.star_rounded, size: 12, color: i < (a['note'] ?? 0) ? accentOrange : Colors.grey[200])),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Text(a['commentaire'] ?? '', style: TextStyle(color: Colors.grey[600], fontSize: 13, height: 1.4)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+      ],
     );
   }
 

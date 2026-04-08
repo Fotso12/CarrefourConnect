@@ -69,6 +69,22 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _centerOnUser() {
+    if (_currentPosition != null) {
+      _mapController.move(
+        LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+        15.0,
+      );
+    } else {
+      _determinePosition().then((pos) {
+        if (pos != null) {
+          setState(() => _currentPosition = pos);
+          _mapController.move(LatLng(pos.latitude, pos.longitude), 15.0);
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const primaryBlue = Color(0xFF034D92);
@@ -89,7 +105,7 @@ class _MapScreenState extends State<MapScreen> {
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.carrefourconnect.app',
+                userAgentPackageName: 'CarrefourConnectMobileApp/1.0 (contact@carrefourconnect.com)',
               ),
               MarkerLayer(
                 markers: [
@@ -197,18 +213,51 @@ class _MapScreenState extends State<MapScreen> {
                       onChangeEnd: (_) => _loadCommerces(),
                     ),
                   ),
-                  Text(
-                    '${_radius.round()} km',
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  SizedBox(
+                    width: 45,
+                    child: Text(
+                      '${_radius.round()} km',
+                      textAlign: TextAlign.end,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: primaryBlue),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
           
-          // Loading Indicator
+          // Loading Overlay (Intelligent)
           if (_isLoading)
-            const Center(child: CircularProgressIndicator(color: accentOrange)),
+            Positioned(
+              top: 100,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: accentOrange),
+                      ),
+                      SizedBox(width: 12),
+                      Text(
+                        'Actualisation des commerces...',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
           // Search / Filter overlay (optionnel)
           Positioned(
@@ -238,8 +287,9 @@ class _MapScreenState extends State<MapScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _loadCommerces,
+        onPressed: _centerOnUser,
         backgroundColor: Colors.white,
+        elevation: 4,
         child: const Icon(Icons.my_location_rounded, color: primaryBlue),
       ),
     );

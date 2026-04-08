@@ -54,4 +54,73 @@ class ApiService {
       return [];
     }
   }
+
+  // --- Avis ---
+  Future<List<dynamic>> getAvisByCommerce(String commerceId) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/avis/commerce/$commerceId'));
+      if (response.statusCode == 200) {
+        return json.decode(utf8.decode(response.bodyBytes));
+      }
+      return [];
+    } catch (e) {
+      print('Erreur getAvisByCommerce: $e');
+      return [];
+    }
+  }
+
+  Future<bool> createAvis(Map<String, dynamic> avisData, String? token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/avis'),
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: json.encode(avisData),
+      );
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      print('Erreur createAvis: $e');
+      return false;
+    }
+  }
+
+  // --- Authentification ---
+  Future<Map<String, dynamic>?> login(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/connexion'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'email': email, 'password': password}),
+      );
+      if (response.statusCode == 200) {
+        return json.decode(utf8.decode(response.bodyBytes));
+      }
+      return null;
+    } catch (e) {
+      print('Erreur login: $e');
+      return null;
+    }
+  }
+
+  Future<bool> register(String nom, String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/inscription-client'), // Assuming endpoint for clients
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'nom': nom,
+          'email': email,
+          'password': password,
+          'role': 'CLIENT'
+        }),
+      );
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      print('Erreur register: $e');
+      return false;
+    }
+  }
 }
+
