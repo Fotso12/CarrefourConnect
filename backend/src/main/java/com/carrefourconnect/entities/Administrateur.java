@@ -2,12 +2,14 @@ package com.carrefourconnect.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "administrateur")
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class Administrateur extends Utilisateur {
 

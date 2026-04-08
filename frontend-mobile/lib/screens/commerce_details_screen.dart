@@ -29,6 +29,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
   double _moyenne = 0;
   List<String> _displayImages = [];
   final MapController _miniMapController = MapController();
+  final PageController _pageController = PageController();
 
   static const primaryBlue = Color(0xFF034D92);
   static const accentOrange = Color(0xFFF78F1E);
@@ -36,6 +37,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    _moyenne = widget.commerce.noteGlobale ?? 0.0;
     _loadAvis();
     _prepareImages();
   }
@@ -319,11 +321,13 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             // Image Carousel
             if (_displayImages.isNotEmpty)
               PageView.builder(
+                controller: _pageController,
                 itemCount: _displayImages.length,
                 onPageChanged: (index) => setState(() => _currentImageIndex = index),
                 itemBuilder: (context, index) {
                   return Image.network(
                     _displayImages[index],
+                    key: ValueKey(_displayImages[index]),
                     fit: BoxFit.cover,
                     loadingBuilder: (context, child, loadingProgress) {
                       if (loadingProgress == null) return child;
@@ -373,7 +377,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             ),
 
             // Image Indicators
-            if (_displayImages.length > 1)
+            if (_displayImages.length > 1) ...[
               Positioned(
                 bottom: 30,
                 left: 0,
@@ -395,6 +399,33 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                   ),
                 ),
               ),
+              Positioned(
+                left: 10,
+                top: 150,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black.withOpacity(0.4),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+                    onPressed: _currentImageIndex > 0 ? () {
+                      _pageController.previousPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    } : null,
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 10,
+                top: 150,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black.withOpacity(0.4),
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 20),
+                    onPressed: _currentImageIndex < _displayImages.length - 1 ? () {
+                      _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+                    } : null,
+                  ),
+                ),
+              ),
+            ]
           ],
         ),
       ),
@@ -582,7 +613,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
           FloatingActionButton.small(
             heroTag: 'btn_center_user',
             onPressed: () async {
-              Position pos = await Geolocator.getCurrentPosition();
+              Position pos = await Geolocator.getLastKnownPosition() ?? await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
               _miniMapController.move(LatLng(pos.latitude, pos.longitude), 15.0);
             },
             backgroundColor: Colors.white,
@@ -600,7 +631,8 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
       child: SafeArea(
         child: ElevatedButton(
           onPressed: () async {
-            Position pos = await Geolocator.getCurrentPosition();
+            Position? maybePos = await Geolocator.getLastKnownPosition();
+            Position pos = maybePos ?? await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
             if (mounted && widget.commerce.latitude != null) {
               Navigator.push(
                 context,

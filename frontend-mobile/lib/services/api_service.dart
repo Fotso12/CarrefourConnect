@@ -104,10 +104,18 @@ class ApiService {
   Future<bool> toggleFavorite(String userId, String commerceId, bool isFavorite, String? token) async {
     try {
       final url = '$baseUrl/utilisateurs/$userId/favoris/$commerceId';
-      final response = isFavorite 
-        ? await http.delete(Uri.parse(url), headers: {if (token != null) 'Authorization': 'Bearer $token'})
-        : await http.post(Uri.parse(url), headers: {if (token != null) 'Authorization': 'Bearer $token'});
+      final headers = {
+        'Content-Type': 'application/json',
+        if (token != null) 'Authorization': 'Bearer $token'
+      };
       
+      final response = isFavorite 
+        ? await http.delete(Uri.parse(url), headers: headers)
+        : await http.post(Uri.parse(url), headers: headers, body: json.encode({}));
+      
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        print('Erreur toggleFavorite API response: ${response.statusCode} - ${response.body}');
+      }
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
       print('Erreur toggleFavorite: $e');
