@@ -60,49 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const primaryBlue = Color(0xFF034D92);
     const accentOrange = Color(0xFFF78F1E);
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: false,
-        title: RichText(
-          text: const TextSpan(
-            children: [
-              TextSpan(
-                text: 'Carrefour',
-                style: TextStyle(
-                  color: primaryBlue,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              TextSpan(
-                text: 'Connect',
-                style: TextStyle(
-                  color: accentOrange,
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.notifications_none_rounded, color: primaryBlue),
-          ),
-          const SizedBox(width: 8),
-          const CircleAvatar(
-            radius: 18,
-            backgroundColor: primaryBlue,
-            child: Icon(Icons.person_rounded, color: Colors.white, size: 20),
-          ),
-          const SizedBox(width: 16),
-        ],
-      ),
-      body: RefreshIndicator(
+    return RefreshIndicator(
         onRefresh: _loadData,
         color: accentOrange,
         child: CustomScrollView(
@@ -255,12 +213,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SliverToBoxAdapter(child: SizedBox(height: 32)),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: accentOrange,
-        child: const Icon(Icons.map_rounded, color: Colors.white),
-      ),
-    );
+      );
   }
 }
