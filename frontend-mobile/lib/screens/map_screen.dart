@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' hide Path;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import '../models/commerce.dart';
 import '../services/api_service.dart';
 import '../widgets/commerce_card.dart';
+import 'commerce_details_screen.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -19,16 +21,46 @@ class _MapScreenState extends State<MapScreen> {
   
   List<Commerce> _commerces = [];
   bool _isLoading = true;
+  Position? _currentPosition;
+  double _radius = 10.0; // km par défaut
 
   @override
   void initState() {
     super.initState();
-    _loadCommerces();
+    _determinePosition().then((pos) {
+      if (pos != null) {
+        setState(() => _currentPosition = pos);
+        _mapController.move(LatLng(pos.latitude, pos.longitude), 13.0);
+      }
+      _loadCommerces();
+    });
+  }
+
+  Future<Position?> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return null;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return null;
+    }
+    
+    if (permission == LocationPermission.deniedForever) return null;
+
+    return await Geolocator.getCurrentPosition();
   }
 
   Future<void> _loadCommerces() async {
     setState(() => _isLoading = true);
-    final results = await _apiService.getCommerces();
+    final results = await _apiService.getCommerces(
+      lat: _currentPosition?.latitude,
+      lon: _currentPosition?.longitude,
+      rayon: _radius,
+    );
     if (mounted) {
       setState(() {
         _commerces = results.where((c) => c.latitude != null && c.longitude != null).toList();
@@ -60,39 +92,118 @@ class _MapScreenState extends State<MapScreen> {
                 userAgentPackageName: 'com.carrefourconnect.app',
               ),
               MarkerLayer(
-                markers: _commerces.map((commerce) {
-                  return Marker(
-                    point: LatLng(commerce.latitude!, commerce.longitude!),
-                    width: 40,
-                    height: 40,
-                    child: GestureDetector(
-                      onTap: () => _showCommerceDetails(commerce),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: primaryBlue,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5),
+                markers: [
+                  // Position utilisateur
+                  if (_currentPosition != null)
+                    Marker(
+                      point: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
+                      width: 60,
+                      height: 60,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          Container(
+                            width: 12,
+                            height: 12,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  
+                  // Commerces
+                  ..._commerces.map((commerce) {
+                    return Marker(
+                      point: LatLng(commerce.latitude!, commerce.longitude!),
+                      width: 50,
+                      height: 50,
+                      child: GestureDetector(
+                        onTap: () => _showCommerceDetails(commerce),
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: primaryBlue,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.white, width: 2),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: const Icon(
+                                FontAwesomeIcons.store,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                            ),
+                            CustomPaint(
+                              painter: TrianglePainter(color: primaryBlue),
+                              size: const Size(10, 5),
                             ),
                           ],
                         ),
-                        child: const Center(
-                          child: Icon(
-                            FontAwesomeIcons.store,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }),
+                ],
               ),
             ],
+          ),
+          
+          // Slider de distance
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 80,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.radar_rounded, color: primaryBlue, size: 20),
+                  Expanded(
+                    child: Slider(
+                      value: _radius,
+                      min: 1,
+                      max: 50,
+                      divisions: 10,
+                      activeColor: primaryBlue,
+                      inactiveColor: Colors.grey[200],
+                      label: '${_radius.round()} km',
+                      onChanged: (value) {
+                        setState(() => _radius = value);
+                      },
+                      onChangeEnd: (_) => _loadCommerces(),
+                    ),
+                  ),
+                  Text(
+                    '${_radius.round()} km',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
           ),
           
           // Loading Indicator
@@ -146,11 +257,35 @@ class _MapScreenState extends State<MapScreen> {
             commerce: commerce,
             onTap: () {
               Navigator.pop(context);
-              // Aller aux détails
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CommerceDetailsScreen(commerce: commerce),
+                ),
+              );
             },
           ),
         );
       },
     );
   }
+}
+
+class TrianglePainter extends CustomPainter {
+  final Color color;
+  TrianglePainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final path = Path();
+    path.moveTo(0, 0);
+    path.lineTo(size.width, 0);
+    path.lineTo(size.width / 2, size.height);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

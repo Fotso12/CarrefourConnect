@@ -7,11 +7,20 @@ class ApiService {
   // Sur émulateur Android, utilisez 10.0.2.2
   static const String baseUrl = 'http://localhost:8084/api';
 
-  Future<List<Commerce>> getCommerces({String? nom, String? idCategorie}) async {
+  Future<List<Commerce>> getCommerces({
+    String? nom,
+    String? idCategorie,
+    double? lat,
+    double? lon,
+    double? rayon,
+  }) async {
     try {
       final queryParams = {
         if (nom != null && nom.isNotEmpty) 'nom': nom,
         if (idCategorie != null && idCategorie != 'null') 'idCategorie': idCategorie,
+        if (lat != null) 'lat': lat.toString(),
+        if (lon != null) 'lon': lon.toString(),
+        if (rayon != null) 'rayon': rayon.toString(),
       };
 
       final uri = Uri.parse('$baseUrl/commerces/rechercher').replace(queryParameters: queryParams);

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../screens/login_screen.dart';
+import '../screens/signup_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -24,7 +26,10 @@ class AppDrawer extends StatelessWidget {
                   title: 'Connexion',
                   onTap: () {
                     Navigator.pop(context);
-                    // TODO: Navigation vers Connexion
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    );
                   },
                 ),
                 _buildDrawerItem(
@@ -32,23 +37,10 @@ class AppDrawer extends StatelessWidget {
                   title: 'Inscription',
                   onTap: () {
                     Navigator.pop(context);
-                    // TODO: Navigation vers Inscription
-                  },
-                ),
-                const Divider(indent: 20, endIndent: 20, color: Color(0xFFF1F5F9)),
-                _buildDrawerItem(
-                  icon: FontAwesomeIcons.plusCircle,
-                  title: 'Ajouter un commerce',
-                  onTap: () {
-                    Navigator.pop(context);
-                    _launchUrl('https://great-rats-love.loca.lt/inscription-commercant');
-                  },
-                ),
-                _buildDrawerItem(
-                  icon: FontAwesomeIcons.headset,
-                  title: 'Support client',
-                  onTap: () {
-                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const SignupScreen()),
+                    );
                   },
                 ),
               ],
@@ -70,12 +62,20 @@ class AppDrawer extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(24),
               ),
-              child: const Icon(FontAwesomeIcons.store, color: primaryBlue, size: 40),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/icon.png',
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
             const SizedBox(height: 12),
             const Text(

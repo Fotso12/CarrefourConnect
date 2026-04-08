@@ -54,15 +54,28 @@ class Commerce {
   });
 
   factory Commerce.fromJson(Map<String, dynamic> json) {
+    double? lat;
+    double? lon;
+    String? addr;
+    String? city;
+
+    if (json['localisations'] != null && (json['localisations'] as List).isNotEmpty) {
+      final loc = json['localisations'][0];
+      lat = loc['lat'] != null ? double.tryParse(loc['lat'].toString()) : null;
+      lon = loc['lon'] != null ? double.tryParse(loc['lon'].toString()) : null;
+      addr = loc['adresse'];
+      city = loc['ville'];
+    }
+
     return Commerce(
       idcommerce: json['idcommerce']?.toString(),
       nom: json['nom'] ?? '',
       description: json['description'],
-      adresse: json['adresse'],
-      ville: json['ville'],
-      latitude: json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null,
-      longitude: json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null,
-      telephone: json['telephone'],
+      adresse: addr ?? json['adresse'],
+      ville: city ?? json['ville'],
+      latitude: lat ?? (json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null),
+      longitude: lon ?? (json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null),
+      telephone: json['telephone1'] ?? json['telephone'],
       categorie: json['categorie'] != null ? Categorie.fromJson(json['categorie']) : null,
       images: (json['images'] as List? ?? [])
           .map((img) => Media.fromJson(img))

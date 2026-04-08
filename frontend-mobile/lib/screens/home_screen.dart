@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/commerce.dart';
 import '../services/api_service.dart';
 import '../widgets/commerce_card.dart';
+import 'commerce_details_screen.dart';
+import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,18 +20,39 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Categorie> _categories = [];
   String? _selectedCategoryId;
   bool _isLoading = true;
+  Position? _currentPosition;
+  double _radius = 10.0; // km par défaut
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _initLocation().then((_) => _loadData());
+  }
+
+  Future<void> _initLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
+      if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+        final pos = await Geolocator.getCurrentPosition();
+        setState(() => _currentPosition = pos);
+      }
+    } catch (e) {
+      print('Erreur localisation: $e');
+    }
   }
 
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
     final results = await Future.wait([
       _apiService.getCategories(),
-      _apiService.getCommerces(),
+      _apiService.getCommerces(
+        lat: _currentPosition?.latitude,
+        lon: _currentPosition?.longitude,
+        rayon: _radius,
+      ),
     ]);
     
     if (mounted) {
@@ -46,6 +69,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final results = await _apiService.getCommerces(
       nom: _searchController.text,
       idCategorie: _selectedCategoryId,
+      lat: _currentPosition?.latitude,
+      lon: _currentPosition?.longitude,
+      rayon: _radius,
     );
     if (mounted) {
       setState(() {
@@ -54,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +174,43 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            
+            // Distance Slider
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.radar_rounded, color: primaryBlue, size: 20),
+                      const SizedBox(width: 8),
+                      const Text('Rayon:', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                      Expanded(
+                        child: Slider(
+                          value: _radius,
+                          min: 1,
+                          max: 50,
+                          divisions: 10,
+                          activeColor: primaryBlue,
+                          label: '${_radius.round()} km',
+                          onChanged: (value) {
+                            setState(() => _radius = value);
+                          },
+                          onChangeEnd: (_) => _search(),
+                        ),
+                      ),
+                      Text('${_radius.round()} km', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
             // Grid Header
             SliverToBoxAdapter(
@@ -201,7 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             (context, index) => CommerceCard(
                               commerce: _commerces[index],
                               onTap: () {
-                                // Transition vers détails plus tard
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CommerceDetailsScreen(commerce: _commerces[index]),
+                                  ),
+                                );
                               },
                             ),
                             childCount: _commerces.length,
