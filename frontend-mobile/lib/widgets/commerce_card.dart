@@ -38,11 +38,11 @@ class CommerceCard extends StatelessWidget {
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                   child: Image.network(
                     commerce.mainImageUrl,
-                    height: 140,
+                    height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
-                      height: 140,
+                      height: 130,
                       color: Colors.grey[200],
                       child: const Icon(Icons.store_rounded, color: Colors.grey, size: 40),
                     ),
@@ -126,7 +126,7 @@ class CommerceCard extends StatelessWidget {
                       fontStyle: FontStyle.italic,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(

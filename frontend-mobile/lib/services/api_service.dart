@@ -5,7 +5,7 @@ import '../models/commerce.dart';
 class ApiService {
   // Remplacez par l'IP de votre machine si vous testez sur un téléphone physique
   // Sur émulateur Android, utilisez 10.0.2.2
-  static const String baseUrl = 'http://192.168.1.100:8084/api';
+  static const String baseUrl = 'http://localhost:8084/api';
 
   Future<List<Commerce>> getCommerces({String? nom, String? idCategorie}) async {
     try {
