@@ -67,6 +67,11 @@ class ProfileScreen extends StatelessWidget {
                 // Info Cards
                 _buildInfoCard(Icons.email_rounded, 'Email', user['email'].toString(), primaryBlue),
                 const SizedBox(height: 16),
+                if (user['telephone'] != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: _buildInfoCard(Icons.phone_rounded, 'Téléphone', user['telephone'].toString(), primaryBlue),
+                  ),
                 _buildInfoCard(Icons.badge_rounded, 'Identifiant', user['id'].toString().substring(0, 8) + '...', primaryBlue),
                 const SizedBox(height: 16),
                 

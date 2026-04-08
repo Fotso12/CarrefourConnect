@@ -322,15 +322,18 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                 itemCount: _displayImages.length,
                 onPageChanged: (index) => setState(() => _currentImageIndex = index),
                 itemBuilder: (context, index) {
-                  return CachedNetworkImage(
-                    imageUrl: _displayImages[index],
+                  return Image.network(
+                    _displayImages[index],
                     fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: const Color(0xFFF1F5F9),
-                      child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                    ),
-                    errorWidget: (context, url, error) {
-                      print('IMAGE ERROR: Failed to load ${_displayImages[index]}');
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: const Color(0xFFF1F5F9),
+                        child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      print('IMAGE ERROR: Failed to load ${_displayImages[index]}: $error');
                       return Container(
                         color: const Color(0xFFF1F5F9),
                         child: const Column(
@@ -423,7 +426,10 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             const Spacer(),
             const Icon(Icons.star_rounded, color: Color(0xFFFFB800), size: 18),
             const SizedBox(width: 4),
-            const Text('4.8', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            Text(
+              widget.commerce.noteGlobale != null ? widget.commerce.noteGlobale!.toStringAsFixed(1) : '0.0', 
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
           ],
         ),
         const SizedBox(height: 16),

@@ -17,6 +17,6 @@ public interface AvisRepository extends JpaRepository<Avis, UUID> {
     List<Avis> findByVisiteur_Iduser(UUID idUser);
     List<Avis> findByStatus(StatutAvis status);
 
-    @Query("SELECT AVG(a.note) FROM Avis a WHERE a.commerce.idcommerce = :idCommerce AND a.status = 'VALIDE'")
+    @Query("SELECT AVG(a.note) FROM Avis a WHERE a.commerce.idcommerce = :idCommerce AND a.status = 'PUBLIE'")
     BigDecimal calculateAverageRating(@Param("idCommerce") UUID idCommerce);
 }

@@ -54,7 +54,7 @@ class _CommerceCardState extends State<CommerceCard> {
     setState(() => _isFavorite = !_isFavorite);
 
     final success = await _apiService.toggleFavorite(
-      userData['id'], 
+      userData['id'].toString(), 
       widget.commerce.idcommerce ?? '', 
       !_isFavorite, // The old state before setState was !_isFavorite
       token
@@ -169,13 +169,13 @@ class _CommerceCardState extends State<CommerceCard> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.star_rounded, color: Color(0xFFFFB800), size: 16),
-                          SizedBox(width: 4),
+                          const Icon(Icons.star_rounded, color: Color(0xFFFFB800), size: 16),
+                          const SizedBox(width: 4),
                           Text(
-                            '4.8',
-                            style: TextStyle(
+                            widget.commerce.noteGlobale != null ? widget.commerce.noteGlobale!.toStringAsFixed(1) : '0.0',
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
                               color: Color(0xFF475569),

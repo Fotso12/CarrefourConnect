@@ -22,7 +22,7 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> json) {
     return Media(
       idmedia: json['idmedia']?.toString(),
-      url: json['url'] ?? '',
+      url: (json['url'] ?? '').replaceAll('localhost', '192.168.6.95'),
       estPrincipale: json['estPrincipale'] ?? false,
     );
   }
@@ -40,6 +40,7 @@ class Commerce {
   final Categorie? categorie;
   final List<Media> images;
   final String? imagePrincipale;
+  final double? noteGlobale;
 
   Commerce({
     this.idcommerce,
@@ -53,6 +54,7 @@ class Commerce {
     this.categorie,
     required this.images,
     this.imagePrincipale,
+    this.noteGlobale,
   });
 
   factory Commerce.fromJson(Map<String, dynamic> json) {
@@ -82,7 +84,8 @@ class Commerce {
       images: (json['images'] as List? ?? [])
           .map((img) => Media.fromJson(img))
           .toList(),
-      imagePrincipale: json['imagePrincipale'],
+      imagePrincipale: json['imagePrincipale']?.replaceAll('localhost', '192.168.6.95'),
+      noteGlobale: json['noteGlobale'] != null ? double.tryParse(json['noteGlobale'].toString()) : null,
     );
   }
 

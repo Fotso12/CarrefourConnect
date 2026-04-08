@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isLoading = true;
   Position? _currentPosition;
   double _radius = 10.0; // km par défaut
+  String? _userName;
 
   final AuthService _authService = AuthService();
 
@@ -39,8 +40,17 @@ class _HomeScreenState extends State<HomeScreen> {
     if (token != null && userData != null) {
       final list = await _apiService.getFavorites(userData['id'].toString(), token);
       if (mounted) {
-        setState(() => _favoriteIds = list.toSet());
+        setState(() {
+          _favoriteIds = list.toSet();
+          _userName = userData['prenom'] ?? userData['nom'];
+        });
       }
+    } else {
+       if (mounted) {
+          setState(() {
+             _userName = null;
+          });
+       }
     }
   }
 
@@ -109,6 +119,39 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: accentOrange,
+                        radius: 16,
+                        child: Icon(Icons.person, size: 20, color: Colors.white),
+                      ),
+                      const SizedBox(width: 8),
+                      Text('Bonjour, ${_userName ?? "Visiteur"} !', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: primaryBlue)),
+                      const Spacer(),
+                      if (_userName != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.green.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.green),
+                          ),
+                          child: const Row(
+                            children: [
+                              Icon(Icons.check_circle, color: Colors.green, size: 14),
+                              SizedBox(width: 4),
+                              Text('Connecté', style: TextStyle(color: Colors.green, fontSize: 12, fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+              ),
             // Search Bar
             SliverToBoxAdapter(
               child: Padding(
