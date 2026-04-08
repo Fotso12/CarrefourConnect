@@ -5,6 +5,7 @@
     <application
         android:label="CarrefourConnect"
         android:usesCleartextTraffic="true"
+        android:enableOnBackInvokedCallback="true"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

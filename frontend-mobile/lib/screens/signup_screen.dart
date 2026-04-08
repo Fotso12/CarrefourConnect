@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import '../services/api_service.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -9,10 +10,14 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final _nameController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phoneController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
+  final ApiService _apiService = ApiService();
 
   static const primaryBlue = Color(0xFF034D92);
   static const accentOrange = Color(0xFFF78F1E);
@@ -54,12 +59,46 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
               const SizedBox(height: 48),
-              _buildLabel('NOM COMPLET'),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabel('PRÉNOM'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _firstNameController,
+                          hintText: 'John',
+                          icon: Icons.person_outline_rounded,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildLabel('NOM'),
+                        const SizedBox(height: 8),
+                        _buildTextField(
+                          controller: _lastNameController,
+                          hintText: 'Doe',
+                          icon: Icons.person_pin_outlined,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              _buildLabel('NUMÉRO DE TÉLÉPHONE'),
               const SizedBox(height: 8),
               _buildTextField(
-                controller: _nameController,
-                hintText: 'John Doe',
-                icon: Icons.person_outline_rounded,
+                controller: _phoneController,
+                hintText: '+237 6xx xxx xxx',
+                icon: Icons.phone_android_rounded,
               ),
               const SizedBox(height: 24),
               _buildLabel('EMAIL'),
@@ -79,7 +118,10 @@ class _SignupScreenState extends State<SignupScreen> {
                 isPassword: true,
               ),
               const SizedBox(height: 48),
-              _buildSignupButton(),
+              if (_isLoading)
+                const Center(child: CircularProgressIndicator(color: accentOrange))
+              else
+                _buildSignupButton(),
               const SizedBox(height: 32),
               Center(
                 child: Column(
@@ -161,6 +203,47 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
   }
+  void _handleSignup() async {
+    final prenom = _firstNameController.text.trim();
+    final nom = _lastNameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    final telephone = _phoneController.text.trim();
+
+    if (prenom.isEmpty || nom.isEmpty || email.isEmpty || password.isEmpty || telephone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Veuillez remplir tous les champs obligatoires')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    final success = await _apiService.register(nom, prenom, email, password, telephone);
+
+    if (mounted) {
+      setState(() => _isLoading = false);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Compte créé avec succès ! Connectez-vous.'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Échec de l'inscription. L'email est peut-être déjà utilisé."),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   Widget _buildSignupButton() {
     return Container(
@@ -181,7 +264,7 @@ class _SignupScreenState extends State<SignupScreen> {
         ],
       ),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: _handleSignup,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,

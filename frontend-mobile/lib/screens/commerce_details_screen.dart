@@ -115,11 +115,12 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => Dialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -220,7 +221,8 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                     ),
                   ],
                 ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -543,12 +545,14 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
       child: Column(
         children: [
           FloatingActionButton.small(
+            heroTag: 'btn_center_commerce',
             onPressed: () => _miniMapController.move(latlng, 15.0),
             backgroundColor: Colors.white,
             child: const Icon(Icons.storefront, color: primaryBlue),
           ),
           const SizedBox(height: 8),
           FloatingActionButton.small(
+            heroTag: 'btn_center_user',
             onPressed: () async {
               Position pos = await Geolocator.getCurrentPosition();
               _miniMapController.move(LatLng(pos.latitude, pos.longitude), 15.0);

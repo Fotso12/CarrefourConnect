@@ -26,6 +26,8 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
   String _distance = '';
   String _duration = '';
   bool _isLoading = true;
+  String _travelMode = 'driving'; // driving, moto, walking
+  final Map<String, dynamic> _routeCache = {};
 
   static const accentOrange = Color(0xFFF78F1E);
   final MapController _mapController = MapController();
@@ -39,12 +41,25 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
   }
 
   Future<void> _fetchRoute() async {
+    // 1. Vérifier si on a déjà ce trajet en cache
+    if (_routeCache.containsKey(_travelMode)) {
+      final cached = _routeCache[_travelMode]!;
+      setState(() {
+        _routePoints = cached['points'];
+        _distance = cached['distance'];
+        _duration = cached['duration'];
+        _isLoading = false;
+      });
+      return;
+    }
+
     final destLat = widget.commerce.latitude;
     final destLon = widget.commerce.longitude;
 
     if (destLat == null || destLon == null) return;
 
-    final url = 'https://router.project-osrm.org/route/v1/driving/${widget.userLon},${widget.userLat};$destLon,$destLat?overview=full&geometries=geojson';
+    final profile = _travelMode == 'walking' ? 'walking' : 'driving';
+    final url = 'https://router.project-osrm.org/route/v1/$profile/${widget.userLon},${widget.userLat};$destLon,$destLat?overview=full&geometries=geojson';
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -55,9 +70,42 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
           final List<dynamic> coords = route['geometry']['coordinates'];
           
           setState(() {
-            _routePoints = coords.map((c) => LatLng(c[1].toDouble(), c[0].toDouble())).toList();
-            _distance = (route['distance'] / 1000).toStringAsFixed(1);
-            _duration = (route['duration'] / 60).toStringAsFixed(0);
+            final points = coords.map((c) => LatLng(c[1].toDouble(), c[0].toDouble())).toList();
+            double distanceKm = (route['distance'] / 1000);
+            final distanceStr = distanceKm.toStringAsFixed(1);
+            String durationStr = '';
+            
+            if (_travelMode == 'walking') {
+              durationStr = (distanceKm * 13.1).toStringAsFixed(0);
+            } else {
+              double baseDurationSec = (route['duration']).toDouble();
+              final traffic = _getTrafficInfo();
+              
+              double factorMin = _travelMode == 'moto' ? 1.2 : 1.8;
+              double factorMax = _travelMode == 'moto' ? 2.5 : 4.0;
+              
+              if (traffic['intensity'] == 'dense') {
+                factorMin *= 1.5; factorMax *= 1.5;
+              } else if (traffic['intensity'] == 'fluide') {
+                factorMax *= 0.8;
+              }
+
+              int min = (baseDurationSec * factorMin / 60).round();
+              int max = (baseDurationSec * factorMax / 60).round();
+              durationStr = '$min - $max';
+            }
+            
+            _routePoints = points;
+            _distance = distanceStr;
+            _duration = durationStr;
+            
+            // Mettre en cache pour la prochaine fois
+            _routeCache[_travelMode] = {
+              'points': points,
+              'distance': distanceStr,
+              'duration': durationStr,
+            };
+            
             _isLoading = false;
           });
         }
@@ -65,6 +113,20 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
     } catch (e) {
       print('Erreur OSRM: $e');
       setState(() => _isLoading = false);
+    }
+  }
+
+  Map<String, String> _getTrafficInfo() {
+    final hour = DateTime.now().hour;
+    final minute = DateTime.now().minute;
+    final time = hour + (minute / 60.0);
+
+    if ((time >= 7.5 && time <= 9.5) || (time >= 16.5 && time <= 19.5)) {
+      return {'intensity': 'dense', 'label': 'Trafic dense', 'color': 'red'};
+    } else if (time >= 10.0 && time <= 16.0) {
+      return {'intensity': 'modere', 'label': 'Trafic modéré', 'color': 'orange'};
+    } else {
+      return {'intensity': 'fluide', 'label': 'Trafic fluide', 'color': 'green'};
     }
   }
 
@@ -124,6 +186,29 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
           if (_isLoading)
             const Center(child: CircularProgressIndicator(color: accentOrange)),
           
+          // Mode Selection
+          Positioned(
+            top: 10,
+            left: 20,
+            right: 20,
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildModeTab('driving', Icons.directions_car_rounded, 'Voiture'),
+                  _buildModeTab('moto', Icons.moped_rounded, 'Moto'),
+                  _buildModeTab('walking', Icons.directions_walk_rounded, 'Pied'),
+                ],
+              ),
+            ),
+          ),
+          
           // Info Overlay
           if (_distance.isNotEmpty)
             Positioned(
@@ -140,10 +225,61 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildRouteInfo(Icons.directions_car, 'Distance', '$_distance km'),
+                    _buildRouteInfo(
+                      _travelMode == 'driving' ? Icons.directions_car : 
+                      (_travelMode == 'moto' ? Icons.moped : Icons.directions_walk), 
+                      'Distance', 
+                      '$_distance km'
+                    ),
                     Container(width: 1, height: 40, color: Colors.grey[200]),
                     _buildRouteInfo(Icons.access_time_filled, 'Temps', '$_duration min'),
                   ],
+                ),
+              ),
+            ),
+          
+          // Traffic Status Badge
+          if (_travelMode != 'walking' && _distance.isNotEmpty)
+            Positioned(
+              bottom: 125,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: _getTrafficInfo()['color'] == 'red' ? Colors.red[50] :
+                           (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[50] : Colors.green[50]),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(
+                      color: _getTrafficInfo()['color'] == 'red' ? Colors.red[200]! :
+                             (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[200]! : Colors.green[200]!),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          color: _getTrafficInfo()['color'] == 'red' ? Colors.red :
+                                 (_getTrafficInfo()['color'] == 'orange' ? Colors.orange : Colors.green),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        _getTrafficInfo()['label']!,
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: _getTrafficInfo()['color'] == 'red' ? Colors.red[900] :
+                                 (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[900] : Colors.green[900]),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -172,6 +308,37 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
         Text(label, style: TextStyle(color: Colors.grey[400], fontSize: 10, fontWeight: FontWeight.bold)),
         Text(value, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xFF1E293B))),
       ],
+    );
+  }
+
+  Widget _buildModeTab(String mode, IconData icon, String label) {
+    final bool isSelected = _travelMode == mode;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _travelMode = mode;
+          _isLoading = true;
+        });
+        _fetchRoute();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? accentOrange : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: isSelected ? Colors.white : Colors.grey, size: 20),
+            if (isSelected) const SizedBox(width: 8),
+            if (isSelected)
+              Text(
+                label,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

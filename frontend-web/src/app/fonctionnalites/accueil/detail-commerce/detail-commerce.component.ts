@@ -24,6 +24,9 @@ export class DetailCommerceComponent implements OnInit {
   pointsCarte: any[] = [];
   routePoints: any[] = [];
   routeInfo: { distance: number, duration: number } | null = null;
+  routeDurationRange: string = '';
+  private routeCache: Map<string, any> = new Map();
+  travelMode: 'driving' | 'walking' | 'moto' = 'driving';
 
   // Offres et Avis
   offres: any[] = [];
@@ -139,7 +142,37 @@ export class DetailCommerceComponent implements OnInit {
     }];
   }
 
+  setTravelMode(mode: 'driving' | 'walking' | 'moto'): void {
+    this.travelMode = mode;
+    this.obtenirItineraire();
+  }
+
+  getTrafficInfo(): { intensity: string, label: string, color: string } {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const time = hour + (minute / 60.0);
+
+    if ((time >= 7.5 && time <= 9.5) || (time >= 16.5 && time <= 19.5)) {
+      return { intensity: 'dense', label: 'Trafic dense', color: '#ef4444' }; // red-500
+    } else if (time >= 10.0 && time <= 16.0) {
+      return { intensity: 'modere', label: 'Trafic modéré', color: '#f97316' }; // orange-500
+    } else {
+      return { intensity: 'fluide', label: 'Trafic fluide', color: '#22c55e' }; // green-500
+    }
+  }
+
   obtenirItineraire(): void {
+    // 1. Vérifier le cache
+    if (this.routeCache.has(this.travelMode)) {
+      const cached = this.routeCache.get(this.travelMode);
+      this.routePoints = cached.points;
+      this.routeInfo = cached.info;
+      this.routeDurationRange = cached.range;
+      this.pointsCarte = cached.markers;
+      return;
+    }
+
     const loc = this.commerce?.localisations?.[0];
     const destLat = loc?.geolocalisation?.y || loc?.lat;
     const destLon = loc?.geolocalisation?.x || loc?.lon;
@@ -172,8 +205,11 @@ export class DetailCommerceComponent implements OnInit {
         { lat: userLat, lon: userLon, nom: "Ma Position", isUser: true }
       ];
 
+      // Profil OSRM
+      const profile = this.travelMode === 'walking' ? 'walking' : 'driving';
+      
       // Appel API OSRM pour obtenir le tracé routier réel
-      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${userLon},${userLat};${destLon},${destLat}?overview=full&geometries=geojson`;
+      const osrmUrl = `https://router.project-osrm.org/route/v1/${profile}/${userLon},${userLat};${destLon},${destLat}?overview=full&geometries=geojson`;
       
       fetch(osrmUrl)
         .then(res => res.json())
@@ -184,10 +220,41 @@ export class DetailCommerceComponent implements OnInit {
               lat: c[1],
               lon: c[0]
             }));
+            
+            let duration = data.routes[0].duration;
+            const distanceKm = data.routes[0].distance / 1000;
+            
+            if (this.travelMode === 'walking') {
+              // Pied: 13.1 min / km
+              this.routeDurationRange = (distanceKm * 13.1).toFixed(0);
+            } else {
+              const traffic = this.getTrafficInfo();
+              let factorMin = this.travelMode === 'moto' ? 1.2 : 1.8;
+              let factorMax = this.travelMode === 'moto' ? 2.5 : 4.0;
+
+              if (traffic.intensity === 'dense') {
+                factorMin *= 1.5; factorMax *= 1.5;
+              } else if (traffic.intensity === 'fluide') {
+                factorMax *= 0.8;
+              }
+
+              const min = Math.round(duration * factorMin / 60);
+              const max = Math.round(duration * factorMax / 60);
+              this.routeDurationRange = `${min} - ${max}`;
+            }
+
             this.routeInfo = {
-              distance: data.routes[0].distance, // en mètres
-              duration: data.routes[0].duration  // en secondes
+              distance: data.routes[0].distance, 
+              duration: duration  
             };
+
+            // Mettre en cache
+            this.routeCache.set(this.travelMode, {
+              points: this.routePoints,
+              info: this.routeInfo,
+              range: this.routeDurationRange,
+              markers: [...this.pointsCarte]
+            });
           } else {
             // Fallback ligne droite
             this.routePoints = [

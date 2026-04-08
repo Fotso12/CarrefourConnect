@@ -232,7 +232,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (response != null && response['token'] != null) {
       await _authService.saveToken(response['token']);
-      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Connexion réussie ! Bienvenue'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.pop(context);
+      }
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

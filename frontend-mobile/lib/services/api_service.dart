@@ -90,33 +90,42 @@ class ApiService {
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/auth/connexion'),
+        Uri.parse('$baseUrl/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({'email': email, 'password': password}),
       );
       if (response.statusCode == 200) {
         return json.decode(utf8.decode(response.bodyBytes));
+      } else {
+        print('Erreur Login: ${response.statusCode} - ${response.body}');
+        return null;
       }
-      return null;
     } catch (e) {
       print('Erreur login: $e');
       return null;
     }
   }
 
-  Future<bool> register(String nom, String email, String password) async {
+  Future<bool> register(String nom, String prenom, String email, String password, String telephone) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/auth/inscription-client'), // Assuming endpoint for clients
+        Uri.parse('$baseUrl/utilisateurs/inscription/visiteur'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'nom': nom,
+          'prenom': prenom,
           'email': email,
           'password': password,
-          'role': 'CLIENT'
+          'telephone': telephone,
         }),
       );
-      return response.statusCode == 200 || response.statusCode == 201;
+      
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return true;
+      } else {
+        print('Erreur Inscription: ${response.statusCode} - ${response.body}');
+        return false;
+      }
     } catch (e) {
       print('Erreur register: $e');
       return false;
