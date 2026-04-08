@@ -232,14 +232,45 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (response != null && response['token'] != null) {
       await _authService.saveToken(response['token']);
+      await _authService.saveUserData(response);
+      
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Connexion réussie ! Bienvenue'),
-            backgroundColor: Colors.green,
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            title: const Column(
+              children: [
+                Icon(Icons.check_circle, color: Colors.green, size: 64),
+                SizedBox(height: 16),
+                Text('Bienvenue !', style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF1E293B))),
+              ],
+            ),
+            content: Text(
+              'Ravi de vous revoir, ${response['prenom']} ${response['nom']} ! Vous êtes maintenant connecté.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            actions: [
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Return home
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFF78F1E),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: const Text('Commencer', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
           ),
         );
-        Navigator.pop(context);
       }
     } else {
       if (mounted) {

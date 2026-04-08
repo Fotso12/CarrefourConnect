@@ -198,15 +198,37 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
+                            final userData = await _authService.getUserData();
                             final token = await _authService.getToken();
+                            if (userData == null || token == null) return;
+
                             final success = await _apiService.createAvis({
                               'idcommerce': widget.commerce.idcommerce,
+                              'iduser': userData['id'], // Fix: sending the userId
                               'note': rating.round(),
                               'commentaire': commentController.text,
+                              'status': 'PUBLIE', // Requirement for backend
                             }, token); 
+                            
                             if (mounted) {
-                              Navigator.pop(context);
-                              if (success) _loadAvis();
+                              Navigator.pop(context); // Close rate dialog
+                              if (success) {
+                                _loadAvis();
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                    title: const Icon(Icons.check_circle, color: Colors.green, size: 48),
+                                    content: const Text('Merci ! Votre avis a bien été enregistré.', textAlign: TextAlign.center),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(

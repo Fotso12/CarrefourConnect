@@ -1,11 +1,72 @@
 import 'package:flutter/material.dart';
 import '../models/commerce.dart';
+import '../services/api_service.dart';
+import '../services/auth_service.dart';
 
-class CommerceCard extends StatelessWidget {
+class CommerceCard extends StatefulWidget {
   final Commerce commerce;
   final VoidCallback? onTap;
+  final bool isFavorite;
 
-  const CommerceCard({super.key, required this.commerce, this.onTap});
+  const CommerceCard({
+    super.key, 
+    required this.commerce, 
+    this.onTap, 
+    this.isFavorite = false
+  });
+
+  @override
+  State<CommerceCard> createState() => _CommerceCardState();
+}
+
+class _CommerceCardState extends State<CommerceCard> {
+  late bool _isFavorite;
+  final ApiService _apiService = ApiService();
+  final AuthService _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    _isFavorite = widget.isFavorite;
+  }
+
+  @override
+  void didUpdateWidget(CommerceCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isFavorite != widget.isFavorite) {
+      _isFavorite = widget.isFavorite;
+    }
+  }
+
+  Future<void> _toggleFavorite() async {
+    final token = await _authService.getToken();
+    final userData = await _authService.getUserData();
+
+    if (token == null || userData == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Veuillez vous connecter pour ajouter des favoris')),
+        );
+      }
+      return;
+    }
+
+    setState(() => _isFavorite = !_isFavorite);
+
+    final success = await _apiService.toggleFavorite(
+      userData['id'], 
+      widget.commerce.idcommerce ?? '', 
+      !_isFavorite, // The old state before setState was !_isFavorite
+      token
+    );
+
+    if (!success && mounted) {
+      setState(() => _isFavorite = !_isFavorite); // Rollback
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erreur lors de la mise à jour des favoris')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,16 +74,16 @@ class CommerceCard extends StatelessWidget {
     const accentOrange = Color(0xFFF78F1E);
 
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       borderRadius: BorderRadius.circular(28),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+          border: Border.all(color: Colors.grey.withOpacity(0.1)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
+              color: Colors.black.withOpacity(0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -37,7 +98,7 @@ class CommerceCard extends StatelessWidget {
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
                   child: Image.network(
-                    commerce.mainImageUrl,
+                    widget.commerce.mainImageUrl,
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -55,11 +116,11 @@ class CommerceCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.9),
+                      color: Colors.white.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      commerce.categorie?.nom.toUpperCase() ?? 'COMMERCE',
+                      widget.commerce.categorie?.nom.toUpperCase() ?? 'COMMERCE',
                       style: const TextStyle(
                         color: primaryBlue,
                         fontSize: 9,
@@ -69,13 +130,20 @@ class CommerceCard extends StatelessWidget {
                   ),
                 ),
                 // Favorite Button
-                const Positioned(
+                Positioned(
                   top: 8,
                   right: 8,
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white24,
-                    radius: 18,
-                    child: Icon(Icons.favorite_border_rounded, color: Colors.white, size: 20),
+                  child: GestureDetector(
+                    onTap: _toggleFavorite,
+                    child: CircleAvatar(
+                      backgroundColor: Colors.white.withOpacity(0.8),
+                      radius: 18,
+                      child: Icon(
+                        _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded, 
+                        color: _isFavorite ? accentOrange : Colors.grey, 
+                        size: 20
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -91,7 +159,7 @@ class CommerceCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          commerce.nom,
+                          widget.commerce.nom,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w900,
@@ -119,7 +187,7 @@ class CommerceCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${commerce.ville ?? "Littoral"}, Douala',
+                    '${widget.commerce.ville ?? "Littoral"}, Douala',
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[500],
@@ -130,9 +198,9 @@ class CommerceCard extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: onTap,
+                      onPressed: widget.onTap,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryBlue.withValues(alpha: 0.1),
+                        backgroundColor: primaryBlue.withOpacity(0.1),
                         foregroundColor: primaryBlue,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 12),
@@ -159,3 +227,4 @@ class CommerceCard extends StatelessWidget {
     );
   }
 }
+

@@ -3,6 +3,7 @@ import '../models/commerce.dart';
 import '../services/api_service.dart';
 import '../widgets/commerce_card.dart';
 import 'commerce_details_screen.dart';
+import '../services/auth_service.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -18,15 +19,29 @@ class _HomeScreenState extends State<HomeScreen> {
   
   List<Commerce> _commerces = [];
   List<Categorie> _categories = [];
+  Set<String> _favoriteIds = {};
   String? _selectedCategoryId;
   bool _isLoading = true;
   Position? _currentPosition;
   double _radius = 10.0; // km par défaut
 
+  final AuthService _authService = AuthService();
+
   @override
   void initState() {
     super.initState();
     _initLocation().then((_) => _loadData());
+  }
+
+  Future<void> _loadFavorites() async {
+    final token = await _authService.getToken();
+    final userData = await _authService.getUserData();
+    if (token != null && userData != null) {
+      final list = await _apiService.getFavorites(userData['id'].toString(), token);
+      if (mounted) {
+        setState(() => _favoriteIds = list.toSet());
+      }
+    }
   }
 
   Future<void> _initLocation() async {
@@ -46,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
+    _loadFavorites();
     final results = await Future.wait([
       _apiService.getCategories(),
       _apiService.getCommerces(
@@ -262,17 +278,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             childAspectRatio: 0.65,
                           ),
                           delegate: SliverChildBuilderDelegate(
-                            (context, index) => CommerceCard(
-                              commerce: _commerces[index],
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CommerceDetailsScreen(commerce: _commerces[index]),
-                                  ),
-                                );
-                              },
-                            ),
+                            (context, index) {
+                              final commerce = _commerces[index];
+                              return CommerceCard(
+                                commerce: commerce,
+                                isFavorite: _favoriteIds.contains(commerce.idcommerce),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CommerceDetailsScreen(commerce: commerce),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             childCount: _commerces.length,
                           ),
                         ),

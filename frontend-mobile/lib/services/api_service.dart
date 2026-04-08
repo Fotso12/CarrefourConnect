@@ -39,6 +39,20 @@ class ApiService {
     }
   }
 
+  Future<List<Commerce>> getAllCommerces() async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/commerces'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+        return data.map((json) => Commerce.fromJson(json)).toList();
+      }
+      return [];
+    } catch (e) {
+      print('Erreur ApiService.getAllCommerces: $e');
+      return [];
+    }
+  }
+
   Future<List<Categorie>> getCategories() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/categories'));
@@ -83,6 +97,38 @@ class ApiService {
     } catch (e) {
       print('Erreur createAvis: $e');
       return false;
+    }
+  }
+
+  // --- Favoris ---
+  Future<bool> toggleFavorite(String userId, String commerceId, bool isFavorite, String? token) async {
+    try {
+      final url = '$baseUrl/utilisateurs/$userId/favoris/$commerceId';
+      final response = isFavorite 
+        ? await http.delete(Uri.parse(url), headers: {if (token != null) 'Authorization': 'Bearer $token'})
+        : await http.post(Uri.parse(url), headers: {if (token != null) 'Authorization': 'Bearer $token'});
+      
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      print('Erreur toggleFavorite: $e');
+      return false;
+    }
+  }
+
+  Future<List<String>> getFavorites(String userId, String? token) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/utilisateurs/$userId/favoris'),
+        headers: {if (token != null) 'Authorization': 'Bearer $token'},
+      );
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((id) => id.toString()).toList();
+      }
+      return [];
+    } catch (e) {
+      print('Erreur getFavorites: $e');
+      return [];
     }
   }
 
