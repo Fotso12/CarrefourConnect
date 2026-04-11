@@ -14,7 +14,13 @@ import org.springframework.test.context.ActiveProfiles;
  * Test de démarrage du contexte applicatif.
  * Utilise le profil 'test' qui configure une base H2 en mémoire.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest(
+	webEnvironment = SpringBootTest.WebEnvironment.NONE,
+	properties = {
+		"spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration,org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration,org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration",
+		"spring.main.allow-bean-definition-overriding=true"
+	}
+)
 @ActiveProfiles("test")
 class CarrefourconnectApplicationTests {
 
