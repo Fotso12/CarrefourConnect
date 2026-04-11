@@ -1,57 +1,85 @@
-<div class="space-y-8">
-  <div class="flex items-center justify-between">
+<div class="space-y-12">
+  <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
     <div>
-      <h1 class="text-3xl font-black text-slate-800">Modération des Commerces</h1>
-      <p class="text-slate-400 font-medium">Validez les nouveaux établissements pour les rendre publics</p>
+      <h1 class="text-4xl font-black text-slate-800 tracking-tight">Modération</h1>
+      <p class="text-slate-400 font-bold mt-2 uppercase text-[10px] tracking-[0.2em]">Validation des nouveaux établissements</p>
     </div>
-    <div class="bg-[#00ADEF]/10 text-[#00ADEF] px-4 py-2 rounded-xl text-sm font-bold">
-        {{ commerces.length }} établissement(s)
+    <div class="bg-[#034d92]/5 text-[#034d92] px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-[#034d92]/10">
+        {{ commerces.length }} établissement(s) en attente
     </div>
   </div>
 
-  <div *ngIf="loading" class="space-y-4">
-      <div *ngFor="let i of [1,2,3]" class="h-24 bg-white rounded-3xl animate-pulse"></div>
+  <div *ngIf="loading" class="grid grid-cols-1 gap-6">
+      <div *ngFor="let i of [1,2,3]" class="h-32 bg-white rounded-[32px] animate-pulse border border-slate-50"></div>
   </div>
 
-  <div *ngIf="!loading && commerces.length === 0" class="bg-white p-20 rounded-[40px] text-center border-2 border-dashed border-gray-100">
-      <p class="text-slate-400 font-medium">Aucun commerce à afficher pour le moment.</p>
+  <div *ngIf="!loading && commerces.length === 0" class="bg-white p-24 rounded-[40px] text-center border border-slate-100 shadow-sm flex flex-col items-center">
+      <div class="h-20 w-20 bg-slate-50 rounded-[32px] flex items-center justify-center text-slate-200 mb-6">
+          <i class="fa-solid fa-check-double text-4xl"></i>
+      </div>
+      <p class="text-slate-400 font-bold uppercase text-xs tracking-widest leading-relaxed max-w-xs">Tout est à jour. Aucun commerce ne nécessite de validation pour le moment.</p>
   </div>
 
-  <div class="grid grid-cols-1 gap-6">
-    <div *ngFor="let commerce of commerces" 
-         class="bg-white p-6 rounded-[32px] shadow-sm border border-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4 group hover:shadow-xl transition-all duration-500">
-      <div class="flex items-center gap-6">
-          <div class="h-16 w-16 rounded-2xl bg-slate-100 overflow-hidden shrink-0">
-              <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=100'" class="w-full h-full object-cover">
+  <div class="grid grid-cols-1 gap-8">
+    <div *ngFor="let commerce of pagedCommerces" 
+         class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex flex-col lg:flex-row lg:items-center justify-between gap-8 group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
+      <div class="flex items-center gap-8 flex-1 min-w-0">
+          <div class="h-24 w-24 rounded-[32px] bg-slate-50 overflow-hidden shrink-0 shadow-inner">
+              <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
           </div>
-          <div class="min-w-0">
-              <div class="flex flex-wrap items-center gap-2">
-                <h3 class="font-bold text-slate-800 truncate">{{ commerce.nom }}</h3>
-                <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-600">En attente</span>
-                <span *ngIf="commerce.statut === 'VALIDE'" class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-600">Validé</span>
+          <div class="flex-1 min-w-0">
+              <div class="flex flex-wrap items-center gap-3 mb-2">
+                <h3 class="text-xl font-black text-slate-800 truncate">{{ commerce.nom }}</h3>
+                <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-amber-50 text-amber-500 border border-amber-100">En attente</span>
+                <span *ngIf="commerce.statut === 'VALIDE'" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-500 border border-emerald-100">Validé</span>
               </div>
-              <p class="text-xs text-slate-400 truncate">{{ commerce.ville }} • {{ commerce.categorie?.nom }}</p>
+              <div class="flex items-center gap-4 text-slate-400">
+                  <span class="text-[10px] font-black uppercase tracking-widest flex items-center bg-slate-50 px-2.5 py-1 rounded-lg">
+                      <i class="fa-solid fa-location-dot mr-1.5 text-[#034d92]/50"></i> {{ commerce.ville }}
+                  </span>
+                  <span class="text-[10px] font-black uppercase tracking-widest flex items-center bg-slate-50 px-2.5 py-1 rounded-lg">
+                      <i class="fa-solid fa-tag mr-1.5 text-[#034d92]/50"></i> {{ commerce.categorie?.nom }}
+                  </span>
+              </div>
           </div>
       </div>
 
-      <div class="flex items-center gap-2 justify-end pt-4 sm:pt-0 border-t sm:border-t-0 border-gray-50">
-        <button (click)="openDetail(commerce)" class="p-2.5 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-[#00ADEF] transition-all group/info" title="Voir les détails">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+      <div class="flex items-center gap-3 justify-end pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-50">
+        <button (click)="openDetail(commerce)" class="w-12 h-12 flex items-center justify-center rounded-2xl text-slate-400 hover:bg-slate-50 hover:text-[#034d92] transition-all" title="Voir les détails">
+          <i class="fa-solid fa-circle-info text-xl"></i>
         </button>
 
         <!-- Action si EN_ATTENTE -->
         <ng-container *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'">
-          <button (click)="openReject(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all flex-1 sm:flex-none">Rejeter</button>
-          <button (click)="valider(commerce.idcommerce)" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-[#00ADEF]/10 text-[#00ADEF] hover:bg-[#00ADEF] hover:text-white transition-all shadow-sm flex-1 sm:flex-none">Valider</button>
+          <button (click)="openReject(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
+          <button (click)="valider(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest bg-[#034d92] text-white hover:bg-blue-800 transition-all shadow-xl shadow-blue-900/10">Valider</button>
         </ng-container>
 
         <!-- Action si VALIDE -->
         <ng-container *ngIf="commerce.statut === 'VALIDE'">
-          <button (click)="openSuspend(commerce.idcommerce)" class="px-6 py-2.5 rounded-xl text-xs font-bold text-amber-500 hover:bg-amber-50 hover:text-amber-600 transition-all border border-amber-100 flex-1 sm:flex-none">Suspendre</button>
+          <button (click)="openSuspend(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-[#f97316] hover:bg-[#f97316]/5 border border-[#f97316]/20 transition-all">Suspendre</button>
         </ng-container>
       </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-4 mt-12 bg-white/50 backdrop-blur-sm p-4 rounded-[32px] border border-slate-100 w-fit mx-auto">
+        <button (click)="prevPage()" [disabled]="currentPage === 1" 
+                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all"
+                [class]="currentPage === 1 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-lg hover:text-[#034d92]'">
+            <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        
+        <div class="flex items-center px-6">
+            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Page</span>
+            <span class="mx-3 text-sm font-black text-slate-800">{{ currentPage }} / {{ totalPages }}</span>
+        </div>
+
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" 
+                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all"
+                [class]="currentPage === totalPages ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-lg hover:text-[#034d92]'">
+            <i class="fa-solid fa-chevron-right"></i>
+        </button>
     </div>
   </div>
 </div>

@@ -1,67 +1,116 @@
-<div class="flex h-screen bg-[#F8FAFC] relative overflow-hidden">
+<div class="flex h-screen bg-[#F0F4F8] relative overflow-hidden font-['Plus_Jakarta_Sans']" [style.--brand-color]="accentColor">
   
-  <!-- Overlay (Mobile uniquement) -->
-  <div *ngIf="isSidebarOpen" 
-       (click)="toggleSidebar()" 
-       class="md:hidden fixed inset-0 bg-black/50 z-[45] backdrop-blur-sm transition-opacity">
-  </div>
-
-  <!-- Sidebar Admin -->
-  <aside [class.translate-x-0]="isSidebarOpen"
-         [class.-translate-x-full]="!isSidebarOpen"
-         class="fixed inset-y-0 left-0 w-72 bg-[#1E293B] text-white flex flex-col shadow-2xl z-50 md:relative md:translate-x-0 transition-transform duration-300">
-    <div class="h-20 flex items-center px-8 gap-3 border-b border-white/5">
-      <div class="h-10 w-10 bg-[#00ADEF] rounded-xl flex items-center justify-center">
-          <i class="fa-solid fa-user-gear text-white text-xl"></i>
-      </div>
-      <span class="text-xl font-black tracking-tight text-white">Admin</span>
+  <!-- Sidebar -->
+  <aside class="w-80 bg-[#0a192f] text-slate-300 flex flex-col shadow-2xl z-50 transition-all duration-300 shrink-0">
+    <!-- Header Sidebar -->
+    <div class="h-28 flex items-center px-10 gap-3 shrink-0">
+        <h1 class="text-2xl font-black tracking-tighter">
+            <span class="text-white">Carrefour</span><span class="text-[#f97316]">Connect</span>
+        </h1>
     </div>
 
-    <nav class="flex-1 py-10 px-6 space-y-3">
+    <nav class="flex-1 py-4 px-6 space-y-3 overflow-y-auto">
       <a *ngFor="let item of menuItems" 
          [routerLink]="[item.link]" 
-         routerLinkActive="bg-[#003B71] text-white shadow-lg"
+         routerLinkActive="bg-[var(--brand-color)] text-white shadow-lg shadow-blue-900/20"
          #rla="routerLinkActive"
-         [routerLinkActiveOptions]="{exact: true}"
-         (click)="isSidebarOpen = false"
-         class="flex items-center gap-4 px-6 py-4 rounded-2xl transition-all duration-300 group hover:bg-slate-700/50">
+         [routerLinkActiveOptions]="{exact: item.link === '/admin/dashboard'}"
+         class="flex items-center gap-4 px-6 py-4 rounded-3xl transition-all duration-300 group hover:bg-white/5">
         <div class="flex items-center justify-center w-6 h-6">
-            <i [class]="item.icon + ' text-lg'" [class.text-white]="rla.isActive"></i>
+            <i [class]="item.icon + ' text-lg opacity-70 transition-all'" [class.opacity-100]="rla.isActive"></i>
         </div>
-        <span class="font-bold text-sm flex-1">{{ item.label }}</span>
-        <span *ngIf="item.badge && pendingValidationsCount > 0" 
-              class="bg-red-500 text-white text-xs font-black px-2.5 py-1 rounded-full shadow-lg shadow-red-500/30 animate-pulse">
-          {{ pendingValidationsCount }}
-        </span>
+        <span class="font-bold text-sm tracking-tight">{{ item.label }}</span>
+        <div *ngIf="item.badge && pendingValidationsCount > 0" class="ml-auto bg-red-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center">
+            {{ pendingValidationsCount }}
+        </div>
       </a>
     </nav>
+
+    <!-- Footer Sidebar (Profile) -->
+    <div class="p-8 border-t border-slate-800/50 space-y-4">
+      <div class="flex items-center gap-4 p-4 rounded-[28px] bg-slate-800/30 border border-slate-700/30">
+        <div class="h-12 w-12 rounded-[18px] bg-[var(--brand-color)] flex items-center justify-center font-black text-white shadow-lg">
+            {{ (currentUser.nom?.charAt(0) || 'A') }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-[13px] font-bold text-white truncate">{{ (currentUser.prenom || '') + ' ' + (currentUser.nom || 'Admin') }}</p>
+          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Administrateur</p>
+        </div>
+      </div>
+      <button (click)="showLogoutConfirm = true" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-[20px] text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-400/10 transition-all border border-red-400/10">
+          <i class="fa-solid fa-power-off"></i>
+          Deconnexion
+      </button>
+    </div>
   </aside>
 
   <!-- Main Content -->
-  <div class="flex-1 flex flex-col overflow-hidden">
-    <header class="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 md:px-10 shrink-0">
-      <div class="flex items-center gap-4">
-        <!-- Button Toggle (Mobile) -->
-        <button (click)="toggleSidebar()" class="md:hidden p-2 bg-slate-50 rounded-xl text-slate-400 hover:text-[#00ADEF]">
-          <i class="fa-solid fa-bars text-xl"></i>
-        </button>
-        <h2 class="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden sm:block">Back-office</h2>
+  <div class="flex-1 flex flex-col overflow-hidden relative">
+    
+    <!-- Top Bar -->
+    <header class="h-28 bg-white/70 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-12 shrink-0">
+      <div class="flex items-center gap-12">
+          <h2 class="text-xl font-bold text-slate-800 tracking-tight">Tableau de Bord</h2>
+          <nav class="hidden md:flex items-center gap-8">
+              <a routerLink="/" class="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--brand-color)] transition-colors">Accueil</a>
+              <a routerLink="/a-propos" class="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[var(--brand-color)] transition-colors">À Propos</a>
+          </nav>
       </div>
-      
-      <!-- Zone Actions Admin -->
-      <div class="flex items-center gap-4 md:gap-6">
-        <!-- Notification Bell -->
-        <a routerLink="/admin/notifications" class="relative p-2 text-slate-400 hover:text-[#00ADEF] transition-colors rounded-full hover:bg-slate-50 cursor-pointer">
-          <i class="fa-solid fa-bell text-xl"></i>
-          <span *ngIf="unreadCount > 0" class="absolute top-0 right-0 h-4 w-4 bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center border-2 border-white">
-            {{ unreadCount }}
-          </span>
-        </a>
+
+      <div class="flex items-center gap-6">
+          <div class="flex items-center gap-4">
+              <!-- Settings Toggle -->
+              <button (click)="showSettings = !showSettings" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[var(--brand-color)] hover:border-[var(--brand-color)] transition-all">
+                  <i class="fa-solid fa-sliders text-lg"></i>
+              </button>
+              
+              <!-- Notifications Bell -->
+              <button routerLink="/admin/notifications" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[var(--brand-color)] hover:border-[var(--brand-color)] transition-all relative">
+                  <i class="fa-solid fa-bell text-lg"></i>
+                  <div *ngIf="unreadCount > 0" class="absolute top-2.5 right-2.5 h-4 w-4 bg-red-500 rounded-full border-2 border-white text-[9px] font-black text-white flex items-center justify-center animate-pulse">
+                    {{ unreadCount }}
+                  </div>
+              </button>
+          </div>
       </div>
     </header>
 
-    <main class="flex-1 overflow-y-auto p-6 md:p-12 bg-slate-50/30">
+    <!-- Content Zone -->
+    <main class="flex-1 overflow-y-auto p-12 bg-[#F8FAFC]">
       <router-outlet></router-outlet>
     </main>
+  </div>
+
+  <!-- Settings Panel (Color Customization) -->
+  <div *ngIf="showSettings" class="absolute top-32 right-12 w-80 bg-white rounded-[32px] shadow-2xl border border-slate-100 p-8 z-[100] animate-in slide-in-from-right duration-300">
+      <div class="flex justify-between items-center mb-8">
+          <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest">Configuration</h3>
+          <button (click)="showSettings = false"><i class="fa-solid fa-xmark text-slate-300"></i></button>
+      </div>
+      <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Couleur Principale</p>
+      <div class="grid grid-cols-4 gap-3">
+          <button *ngFor="let color of colors" 
+                  (click)="setAccentColor(color)"
+                  class="h-10 rounded-xl transition-transform hover:scale-110 shadow-sm"
+                  [style.background-color]="color"
+                  [class.ring-2]="accentColor === color"
+                  [class.ring-slate-800]="accentColor === color">
+          </button>
+      </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div *ngIf="showLogoutConfirm" class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-6">
+    <div class="bg-white rounded-[40px] p-10 w-full max-w-md shadow-2xl border border-slate-100 animate-in zoom-in duration-300">
+      <div class="h-16 w-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-6 text-2xl">
+          <i class="fa-solid fa-power-off"></i>
+      </div>
+      <h3 class="text-2xl font-black text-slate-800 mb-2">Déconnexion ?</h3>
+      <p class="text-slate-500 text-sm leading-relaxed mb-10">Souhaitez-vous vraiment quitter votre session d'administration ? Tous vos changements non enregistrés pourraient être perdus.</p>
+      <div class="flex gap-4">
+        <button (click)="showLogoutConfirm = false" class="flex-1 py-4 bg-slate-50 text-slate-800 rounded-2xl font-bold transition-all hover:bg-slate-100">Rester</button>
+        <button (click)="logout()" class="flex-1 py-4 bg-red-600 text-white rounded-2xl font-bold transition-all hover:bg-red-700 shadow-xl shadow-red-600/20">Se déconnecter</button>
+      </div>
+    </div>
   </div>
 </div>

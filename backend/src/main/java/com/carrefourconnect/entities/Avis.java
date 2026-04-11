@@ -47,4 +47,9 @@ public class Avis {
     @Enumerated(EnumType.STRING)
     @Column(length = 32, nullable = false)
     private StatutAvis status;
+    @Column(columnDefinition = "TEXT")
+    private String reponse;
+
+    @Column(name = "datereponse")
+    private LocalDateTime dateReponse;
 }

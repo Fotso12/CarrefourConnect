@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { AuthService } from '../../../coeur/services/auth.service';
 import { NotificationService } from '../../../coeur/services/notification.service';
@@ -20,20 +20,29 @@ export class TableauBordAdminComponent implements OnInit {
   unreadCount = 0;
   currentUser: any = {};
   isSidebarOpen = false;
+  showLogoutConfirm = false;
+  showSettings = false;
+  accentColor = '#034d92';
+  colors = ['#034d92', '#f97316', '#10b981', '#6366f1', '#ec4899', '#f59e0b', '#06b6d4', '#8b5cf6'];
 
   menuItems = [
     { label: 'Vue d\'ensemble', icon: 'fa-solid fa-chart-line', link: '/admin/dashboard' },
     { label: 'Modération Commerces', icon: 'fa-solid fa-user-shield', link: '/admin/validation', badge: true },
     { label: 'Utilisateurs', icon: 'fa-solid fa-users', link: '/admin/utilisateurs' },
-    { label: 'Gestion Catégories', icon: 'fa-solid fa-tags', link: '/admin/categories' },
-    { label: 'Abonnements', icon: 'fa-solid fa-credit-card', link: '/admin/abonnements' }
+    { label: 'Catégories', icon: 'fa-solid fa-layer-group', link: '/admin/categories' },
+    { label: 'Abonnements', icon: 'fa-solid fa-wallet', link: '/admin/abonnements' },
+    { label: 'Avis Clients', icon: 'fa-solid fa-comment-dots', link: '/admin/avis' }
   ];
 
   constructor(
       private commerceService: CommerceService,
       private authService: AuthService,
-      private notificationService: NotificationService
-  ) {}
+      private notificationService: NotificationService,
+      private router: Router
+  ) {
+    const savedColor = localStorage.getItem('admin_accent_color');
+    if (savedColor) this.accentColor = savedColor;
+  }
 
   ngOnInit(): void {
     // Appel direct pour charger les compteurs au démarrage
@@ -64,5 +73,16 @@ export class TableauBordAdminComponent implements OnInit {
 
   toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.showLogoutConfirm = false;
+    this.router.navigate(['/']);
+  }
+
+  setAccentColor(color: string): void {
+    this.accentColor = color;
+    localStorage.setItem('admin_accent_color', color);
   }
 }

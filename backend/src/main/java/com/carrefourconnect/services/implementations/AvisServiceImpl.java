@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -70,6 +71,13 @@ public class AvisServiceImpl implements AvisService {
             existing.setNote(dto.getNote());
             existing.setCommentaire(dto.getCommentaire());
             existing.setStatus(dto.getStatus());
+            
+            // Gestion de la réponse du commerçant
+            if (dto.getReponse() != null && !dto.getReponse().equals(existing.getReponse())) {
+                existing.setReponse(dto.getReponse());
+                existing.setDateReponse(LocalDateTime.now());
+            }
+
             Avis saved = repository.save(existing);
             updateCommerceRating(saved.getCommerce().getIdcommerce());
             return mapper.toDto(saved);

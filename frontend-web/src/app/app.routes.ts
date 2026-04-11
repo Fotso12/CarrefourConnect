@@ -39,6 +39,10 @@ export const routes: Routes = [
         path: 'notifications',
         loadComponent: () => import('./fonctionnalites/commercant/gestion-notifications/gestion-notifications').then(m => m.GestionNotificationsCommercant)
       },
+      { 
+        path: 'avis', 
+        loadComponent: () => import('./fonctionnalites/commercant/gestion-avis/gestion-avis.component').then(m => m.GestionAvisCommercantComponent) 
+      },
       { path: '', redirectTo: 'commerces', pathMatch: 'full' }
     ]
   },
@@ -69,6 +73,10 @@ export const routes: Routes = [
       {
         path: 'notifications',
         loadComponent: () => import('./fonctionnalites/admin/gestion-notifications/gestion-notifications').then(m => m.GestionNotifications)
+      },
+      {
+        path: 'avis',
+        loadComponent: () => import('./fonctionnalites/admin/gestion-avis/gestion-avis.component').then(m => m.GestionAvisAdminComponent)
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

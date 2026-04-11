@@ -19,6 +19,7 @@ export class App {
   isLoggedIn: boolean = false;
   showLogoutModal: boolean = false;
   showMobileMenu: boolean = false;
+  isDashboardMode: boolean = false;
 
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
@@ -30,10 +31,12 @@ export class App {
     console.log('[App] Démarrage... URL actuelle:', window.location.pathname);
     console.log('[App] Rôle actuel:', this.currentUserRole);
     
-    // Pister tous les changements de route pour le diagnostic
+    // Pister tous les changements de route pour le diagnostic et le layout
     this.router.events.subscribe(event => {
       if (event.constructor.name === 'NavigationEnd') {
-        console.log('[App] Navigation terminée vers:', (event as any).url);
+        const url = (event as any).url;
+        console.log('[App] Navigation terminée vers:', url);
+        this.isDashboardMode = url.includes('/admin') || url.includes('/commercant');
       }
     });
 

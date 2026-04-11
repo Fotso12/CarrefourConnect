@@ -103,7 +103,8 @@ export class AuthService {
   public isLoggedIn(): boolean {
     const user = this.getUser();
     const token = this.getToken();
-    // Vrai uniquement si on a à la fois un token ET un utilisateur avec un identifiant
-    return !!(token && user && user.id);
+    // Supporte à la fois 'id' et 'iduser' pour plus de robustesse
+    const hasUserId = !!(user && (user.id || user.iduser));
+    return !!(token && hasUserId);
   }
 }

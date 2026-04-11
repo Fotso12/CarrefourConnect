@@ -20,7 +20,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-50">
-                <tr *ngFor="let user of utilisateurs" class="hover:bg-slate-50/50 transition-colors group">
+                <tr *ngFor="let user of pagedUtilisateurs" class="hover:bg-slate-50/50 transition-colors group">
                     <td class="px-10 py-8">
                         <div class="flex items-center gap-4">
                             <div class="h-12 w-12 bg-slate-100 rounded-xl flex items-center justify-center font-black text-slate-400 group-hover:bg-[#00ADEF] group-hover:text-white transition-all">
@@ -80,6 +80,26 @@
                 </tr>
             </tbody>
         </table>
+
+        <!-- Pagination Controls -->
+        <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-4 py-8 bg-slate-50 border-t border-slate-100">
+            <button (click)="prevPage()" [disabled]="currentPage === 1" 
+                    class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    [class]="currentPage === 1 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-md hover:text-[#00ADEF]'">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            
+            <div class="flex items-center">
+                <span class="text-[10px] font-black uppercase tracking-widest text-slate-400">Page</span>
+                <span class="mx-3 text-sm font-black text-slate-800">{{ currentPage }} / {{ totalPages }}</span>
+            </div>
+
+            <button (click)="nextPage()" [disabled]="currentPage === totalPages" 
+                    class="w-10 h-10 rounded-xl flex items-center justify-center transition-all"
+                    [class]="currentPage === totalPages ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-md hover:text-[#00ADEF]'">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
 
         <!-- Loading / Empty State -->
         <div *ngIf="loading" class="p-20 text-center">

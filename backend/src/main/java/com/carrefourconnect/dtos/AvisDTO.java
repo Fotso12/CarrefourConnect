@@ -22,4 +22,7 @@ public class AvisDTO {
     private String commentaire;
     private LocalDateTime datePublication;
     private StatutAvis status;
+    private String reponse;
+    private LocalDateTime dateReponse;
+    private String nomCommerce;
 }

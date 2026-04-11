@@ -6,8 +6,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'brand-dark': '#003B71',   // Bleu foncé du logo
-        'brand-orange': '#F78F1E', // Orange du logo
+        'brand-dark': '#034d92',   // Nouveau bleu premium
+        'brand-orange': '#f97316', // Nouvel orange premium
         'brand-light': '#00ADEF',  // Bleu clair (antenne)
       }
     },

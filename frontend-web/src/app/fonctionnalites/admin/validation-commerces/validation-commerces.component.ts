@@ -19,6 +19,10 @@ export class ValidationCommercesComponent implements OnInit {
   commerces: any[] = [];
   loading = true;
 
+  // Pagination
+  currentPage = 1;
+  pageSize = 15;
+
   // Modal State
   showSuspendModal = false;
   showRejectModal = false;
@@ -34,6 +38,7 @@ export class ValidationCommercesComponent implements OnInit {
   }
 
   chargerCommerces(): void {
+    this.loading = true;
     forkJoin({
       attente: this.commerceService.getByStatut('EN_ATTENTE_VALIDATION'),
       valide: this.commerceService.getByStatut('VALIDE')
@@ -41,12 +46,30 @@ export class ValidationCommercesComponent implements OnInit {
       next: (data) => {
         this.commerces = [...data.attente, ...data.valide];
         this.loading = false;
+        this.currentPage = 1; // Reset to page 1 on load
       },
       error: (err) => {
         console.error('Erreur chargement commerces:', err);
         this.loading = false;
       }
     });
+  }
+
+  get pagedCommerces(): any[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.commerces.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.commerces.length / this.pageSize);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) this.currentPage--;
   }
 
   valider(id: string): void {

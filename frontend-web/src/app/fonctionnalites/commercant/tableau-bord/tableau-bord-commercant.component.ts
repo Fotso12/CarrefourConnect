@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../../coeur/services/auth.service';
 import { NotificationService } from '../../../coeur/services/notification.service';
 
@@ -21,6 +21,7 @@ export class TableauBordCommercantComponent implements OnInit {
   ];
 
   isSidebarOpen = false;
+  showLogoutConfirm = false;
   currentUser: any = {};
   displayName: string = '';
   displayRole: string = '';
@@ -28,7 +29,8 @@ export class TableauBordCommercantComponent implements OnInit {
 
   constructor(
     private readonly authService: AuthService,
-    private readonly notificationService: NotificationService
+    private readonly notificationService: NotificationService,
+    private readonly router: Router
   ) {}
 
   ngOnInit(): void {
@@ -73,5 +75,11 @@ export class TableauBordCommercantComponent implements OnInit {
     if (window.innerWidth <= 1024) {
       this.isSidebarOpen = false;
     }
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.showLogoutConfirm = false;
+    this.router.navigate(['/']);
   }
 }

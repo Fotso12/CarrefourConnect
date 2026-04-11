@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AvisMapper {
     @Mapping(source = "commerce.idcommerce", target = "idcommerce")
+    @Mapping(source = "commerce.nom", target = "nomCommerce")
     @Mapping(source = "visiteur.iduser", target = "iduser")
     AvisDTO toDto(Avis avis);
 

@@ -25,6 +25,7 @@ export class StatsAdminComponent implements OnInit {
   };
   
   topCommercesVues: any[] = [];
+  secteurs: any[] = [];
   
   loading = true;
 
@@ -64,6 +65,18 @@ export class StatsAdminComponent implements OnInit {
            .filter(c => c.statut === 'VALIDE')
            .sort((a, b) => (b.nombreVues || 0) - (a.nombreVues || 0))
            .slice(0, 5);
+
+        // Simulation/Calcul des secteurs (par catégorie)
+        const categoriesMap = data.commerces.reduce((acc: any, c: any) => {
+            const catName = c.categorie?.nom || 'Autre';
+            acc[catName] = (acc[catName] || 0) + 1;
+            return acc;
+        }, {});
+
+        this.secteurs = Object.keys(categoriesMap).map(key => ({
+            nom: key,
+            percent: Math.round((categoriesMap[key] / data.commerces.length) * 100)
+        })).sort((a,b) => b.percent - a.percent).slice(0, 4);
 
         this.loading = false;
       },
