@@ -187,7 +187,10 @@ class _CommerceCardState extends State<CommerceCard> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${widget.commerce.ville ?? "Littoral"}, Douala',
+                    [
+                      widget.commerce.ville,
+                      widget.commerce.region,
+                    ].where((s) => s != null && s.isNotEmpty).join(', '),
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[500],

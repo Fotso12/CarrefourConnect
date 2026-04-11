@@ -22,7 +22,7 @@ class Media {
   factory Media.fromJson(Map<String, dynamic> json) {
     return Media(
       idmedia: json['idmedia']?.toString(),
-      url: (json['url'] ?? '').replaceAll('localhost', '192.168.6.95'),
+      url: (json['url'] ?? '').replaceAll('localhost', '192.168.6.44').replaceAll('192.168.6.95', '192.168.6.44'),
       estPrincipale: json['estPrincipale'] ?? false,
     );
   }
@@ -34,6 +34,7 @@ class Commerce {
   final String? description;
   final String? adresse;
   final String? ville;
+  final String? region;
   final double? latitude;
   final double? longitude;
   final String? telephone;
@@ -48,6 +49,7 @@ class Commerce {
     this.description,
     this.adresse,
     this.ville,
+    this.region,
     this.latitude,
     this.longitude,
     this.telephone,
@@ -62,6 +64,7 @@ class Commerce {
     double? lon;
     String? addr;
     String? city;
+    String? rgn;
 
     if (json['localisations'] != null && (json['localisations'] as List).isNotEmpty) {
       final loc = json['localisations'][0];
@@ -69,6 +72,7 @@ class Commerce {
       lon = loc['lon'] != null ? double.tryParse(loc['lon'].toString()) : null;
       addr = loc['adresse'];
       city = loc['ville'];
+      rgn = loc['region'];
     }
 
     return Commerce(
@@ -77,6 +81,7 @@ class Commerce {
       description: json['description'],
       adresse: addr ?? json['adresse'],
       ville: city ?? json['ville'],
+      region: rgn ?? json['region'],
       latitude: lat ?? (json['latitude'] != null ? double.tryParse(json['latitude'].toString()) : null),
       longitude: lon ?? (json['longitude'] != null ? double.tryParse(json['longitude'].toString()) : null),
       telephone: json['telephone1'] ?? json['telephone'],
@@ -84,7 +89,7 @@ class Commerce {
       images: (json['images'] as List? ?? [])
           .map((img) => Media.fromJson(img))
           .toList(),
-      imagePrincipale: json['imagePrincipale']?.replaceAll('localhost', '192.168.6.95'),
+      imagePrincipale: json['imagePrincipale']?.replaceAll('localhost', '192.168.6.44').replaceAll('192.168.6.95', '192.168.6.44'),
       noteGlobale: json['noteGlobale'] != null ? double.tryParse(json['noteGlobale'].toString()) : null,
     );
   }

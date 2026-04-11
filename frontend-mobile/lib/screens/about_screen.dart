@@ -77,7 +77,7 @@ class AboutScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 0,
                 ),
-                child: const Text('Explorer', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text('Explorer les commerces', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
               OutlinedButton(
                 onPressed: () {},
@@ -87,7 +87,7 @@ class AboutScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                child: const Text('Partenaire', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text('Devenir partenaire', style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           ),

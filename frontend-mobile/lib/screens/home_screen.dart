@@ -177,10 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       hintStyle: TextStyle(color: Colors.grey[400], fontSize: 14),
                       border: InputBorder.none,
                       icon: const Icon(Icons.search_rounded, color: Colors.grey),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.tune_rounded, color: accentOrange),
-                        onPressed: _search,
-                      ),
                     ),
                   ),
                 ),
