@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/commerce.dart';
 import '../services/api_service.dart';
@@ -48,11 +46,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
       _displayImages.insert(0, widget.commerce.imagePrincipale!);
     }
     
-    // Debug
-    print('DEBUG: Commerce ${widget.commerce.nom} has ${_displayImages.length} images.');
-    for (var url in _displayImages) {
-      print('DEBUG: Carousel URL: $url');
-    }
+    // Images préparées
   }
 
   Future<void> _loadAvis() async {
@@ -196,7 +190,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           gradient: const LinearGradient(colors: [accentOrange, Color(0xFFE67E22)]),
-                          boxShadow: [BoxShadow(color: accentOrange.withOpacity(0.3), blurRadius: 15, offset: const Offset(0, 5))],
+                          boxShadow: [BoxShadow(color: accentOrange.withValues(alpha: 0.3), blurRadius: 15, offset: const Offset(0, 5))],
                         ),
                         child: ElevatedButton(
                           onPressed: () async {
@@ -212,25 +206,25 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                               'status': 'PUBLIE', // Requirement for backend
                             }, token); 
                             
-                            if (mounted) {
-                              Navigator.pop(context); // Close rate dialog
-                              if (success) {
-                                _loadAvis();
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                    title: const Icon(Icons.check_circle, color: Colors.green, size: 48),
-                                    content: const Text('Merci ! Votre avis a bien été enregistré.', textAlign: TextAlign.center),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
+                            if (!mounted) return;
+
+                            Navigator.pop(context); // Close rate dialog
+                            if (success) {
+                              _loadAvis();
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  title: const Icon(Icons.check_circle, color: Colors.green, size: 48),
+                                  content: const Text('Merci ! Votre avis a bien été enregistré.', textAlign: TextAlign.center),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    ),
+                                  ],
+                                ),
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -337,7 +331,6 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      print('IMAGE ERROR: Failed to load ${_displayImages[index]}: $error');
                       return Container(
                         color: const Color(0xFFF1F5F9),
                         child: const Column(
@@ -367,9 +360,9 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withOpacity(0.3),
+                      Colors.black.withValues(alpha: 0.3),
                       Colors.transparent,
-                      Colors.black.withOpacity(0.5),
+                      Colors.black.withValues(alpha: 0.5),
                     ],
                   ),
                 ),
@@ -652,7 +645,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             minimumSize: const Size(double.infinity, 56),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             elevation: 8,
-            shadowColor: primaryBlue.withOpacity(0.3),
+            shadowColor: primaryBlue.withValues(alpha: 0.3),
           ),
           child: const Text('VOIR L\'ITINÉRAIRE', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
         ),
@@ -660,18 +653,6 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
     );
   }
 
-  Future<void> _launchMap(double lat, double lng, String title) async {
-    final googleUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
-    final appleUrl = 'https://maps.apple.com/?q=$lat,$lng';
-
-    if (await canLaunchUrl(Uri.parse(googleUrl))) {
-      await launchUrl(Uri.parse(googleUrl), mode: LaunchMode.externalApplication);
-    } else if (await canLaunchUrl(Uri.parse(appleUrl))) {
-      await launchUrl(Uri.parse(appleUrl), mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch maps';
-    }
-  }
 
   Widget _buildAvisList() {
     if (_isLoadingAvis) return const Center(child: CircularProgressIndicator());

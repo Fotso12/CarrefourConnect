@@ -80,10 +80,10 @@ class _CommerceCardState extends State<CommerceCard> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(28),
-          border: Border.all(color: Colors.grey.withOpacity(0.1)),
+          border: Border.all(color: Colors.grey.withAlpha(25)),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withAlpha(10),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -116,7 +116,7 @@ class _CommerceCardState extends State<CommerceCard> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
+                      color: Colors.white.withAlpha(230),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -136,7 +136,7 @@ class _CommerceCardState extends State<CommerceCard> {
                   child: GestureDetector(
                     onTap: _toggleFavorite,
                     child: CircleAvatar(
-                      backgroundColor: Colors.white.withOpacity(0.8),
+                      backgroundColor: Colors.white.withAlpha(204),
                       radius: 18,
                       child: Icon(
                         _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded, 
@@ -203,7 +203,7 @@ class _CommerceCardState extends State<CommerceCard> {
                     child: ElevatedButton(
                       onPressed: widget.onTap,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryBlue.withOpacity(0.1),
+                        backgroundColor: primaryBlue.withAlpha(25),
                         foregroundColor: primaryBlue,
                         elevation: 0,
                         padding: const EdgeInsets.symmetric(vertical: 12),

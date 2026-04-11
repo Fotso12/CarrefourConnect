@@ -98,7 +98,7 @@ class _MapScreenState extends State<MapScreen> {
             options: MapOptions(
               initialCenter: const LatLng(4.0511, 9.7679), // Douala par défaut
               initialZoom: 13.0,
-              onTap: (_, __) {
+              onTap: (_, _) {
                 // Fermer les popups si nécessaire
               },
             ),
@@ -122,7 +122,7 @@ class _MapScreenState extends State<MapScreen> {
                             width: 20,
                             height: 20,
                             decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.2),
+                              color: Colors.blue.withAlpha(51),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -157,7 +157,7 @@ class _MapScreenState extends State<MapScreen> {
                                 border: Border.all(color: Colors.white, width: 2),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withAlpha(51),
                                     blurRadius: 8,
                                     offset: const Offset(0, 4),
                                   ),
@@ -193,7 +193,7 @@ class _MapScreenState extends State<MapScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10)],
               ),
               child: Row(
                 children: [
@@ -238,7 +238,7 @@ class _MapScreenState extends State<MapScreen> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+                    boxShadow: [BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10)],
                   ),
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
@@ -270,7 +270,7 @@ class _MapScreenState extends State<MapScreen> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10),
+                  BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10),
                 ],
               ),
               child: const Row(

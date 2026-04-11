@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../screens/login_screen.dart';
 import '../screens/signup_screen.dart';
 import '../screens/profile_screen.dart';
@@ -57,7 +56,7 @@ class AppDrawer extends StatelessWidget {
                       ),
                     ] else ...[
                       _buildDrawerItem(
-                        icon: FontAwesomeIcons.userLarge,
+                        icon: FontAwesomeIcons.user,
                         title: 'Mon Profil',
                         onTap: () {
                           Navigator.pop(context);
@@ -142,7 +141,7 @@ class AppDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+                boxShadow: [BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10)],
               ),
               child: Center(
                 child: user != null 

@@ -42,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 20)],
+                    boxShadow: [BoxShadow(color: Colors.black.withAlpha(13), blurRadius: 20)],
                   ),
                   child: Center(
                     child: Text(
@@ -72,7 +72,7 @@ class ProfileScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 16),
                     child: _buildInfoCard(Icons.phone_rounded, 'Téléphone', user['telephone'].toString(), primaryBlue),
                   ),
-                _buildInfoCard(Icons.badge_rounded, 'Identifiant', user['id'].toString().substring(0, 8) + '...', primaryBlue),
+                _buildInfoCard(Icons.badge_rounded, 'Identifiant', '${user['id'].toString().substring(0, 8)}...', primaryBlue),
                 const SizedBox(height: 16),
                 
                 // Logout Button
@@ -111,7 +111,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: color.withOpacity(0.1), shape: BoxShape.circle),
+            decoration: BoxDecoration(color: color.withAlpha(25), shape: BoxShape.circle),
             child: Icon(icon, color: color, size: 20),
           ),
           const SizedBox(width: 16),
