@@ -2,6 +2,10 @@ package com.carrefourconnect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mail.javamail.JavaMailSender;
+import com.carrefourconnect.services.interfaces.NotificationService;
+import com.carrefourconnect.services.implementations.EmailService;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
@@ -11,6 +15,15 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @ActiveProfiles("test")
 class CarrefourconnectApplicationTests {
+
+	@MockBean
+	private JavaMailSender javaMailSender;
+
+	@MockBean
+	private NotificationService notificationService;
+
+	@MockBean
+	private EmailService emailService;
 
 	@Test
 	void contextLoads() {
