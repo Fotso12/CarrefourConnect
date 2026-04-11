@@ -11,6 +11,7 @@ import com.carrefourconnect.utils.enums.TypeAbonnement;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.time.LocalDateTime;
  * Initialisation des données de base au démarrage de l'application.
  */
 @Configuration
+@Profile("!test")
 public class DataInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);

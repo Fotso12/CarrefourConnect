@@ -39,7 +39,7 @@ public class Localisation {
     @Column(name = "datemiseajour", nullable = false)
     private LocalDateTime dateMiseAJour;
 
-    @Column(columnDefinition = "${app.spatial.column-type:geography(Point, 4326)}")
+    @Column
     private Point geolocalisation;
 
     @Column(length = 256)
