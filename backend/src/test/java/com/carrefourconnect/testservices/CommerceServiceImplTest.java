@@ -3,8 +3,15 @@ package com.carrefourconnect.testservices;
 import com.carrefourconnect.dtos.CommerceDTO;
 import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.mappers.CommerceMapper;
+import com.carrefourconnect.mappers.MediaMapper;
+import com.carrefourconnect.repositories.AbonnementRepository;
+import com.carrefourconnect.repositories.CategorieRepository;
+import com.carrefourconnect.repositories.CommercantRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
+import com.carrefourconnect.repositories.MediaRepository;
 import com.carrefourconnect.services.implementations.CommerceServiceImpl;
+import com.carrefourconnect.services.implementations.EmailService;
+import com.carrefourconnect.services.interfaces.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -25,6 +32,20 @@ class CommerceServiceImplTest {
     private CommerceRepository repository;
     @Mock
     private CommerceMapper mapper;
+    @Mock
+    private CategorieRepository categorieRepository;
+    @Mock
+    private AbonnementRepository abonnementRepository;
+    @Mock
+    private CommercantRepository commercantRepository;
+    @Mock
+    private MediaRepository mediaRepository;
+    @Mock
+    private MediaMapper mediaMapper;
+    @Mock
+    private NotificationService notificationService;
+    @Mock
+    private EmailService emailService;
 
     @InjectMocks
     private CommerceServiceImpl service;

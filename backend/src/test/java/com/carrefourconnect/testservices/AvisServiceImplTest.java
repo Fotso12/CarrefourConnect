@@ -6,6 +6,7 @@ import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.mappers.AvisMapper;
 import com.carrefourconnect.repositories.AvisRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
+import com.carrefourconnect.repositories.VisiteurRepository;
 import com.carrefourconnect.services.implementations.AvisServiceImpl;
 import com.carrefourconnect.utils.enums.StatutAvis;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,6 +30,8 @@ class AvisServiceImplTest {
     private AvisRepository repository;
     @Mock
     private CommerceRepository commerceRepository;
+    @Mock
+    private VisiteurRepository visiteurRepository;
     @Mock
     private AvisMapper mapper;
 
