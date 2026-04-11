@@ -45,6 +45,9 @@ class CarrefourconnectApplicationTests {
 	@MockBean
 	private AbonnementRepository abonnementRepository;
 
+	@MockBean
+	private RoleRepository roleRepository;
+
 	@Test
 	void contextLoads() {
 		// Vérifie que le contexte Spring démarre sans erreur
