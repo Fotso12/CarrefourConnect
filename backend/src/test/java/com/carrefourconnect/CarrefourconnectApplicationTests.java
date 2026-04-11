@@ -6,6 +6,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import com.carrefourconnect.services.interfaces.NotificationService;
 import com.carrefourconnect.services.implementations.EmailService;
+import com.carrefourconnect.repositories.*;
+import javax.sql.DataSource;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
@@ -24,6 +26,24 @@ class CarrefourconnectApplicationTests {
 
 	@MockBean
 	private EmailService emailService;
+
+	@MockBean
+	private DataSource dataSource;
+
+	@MockBean
+	private CommerceRepository commerceRepository;
+
+	@MockBean
+	private CategorieRepository categorieRepository;
+
+	@MockBean
+	private VisiteurRepository visiteurRepository;
+
+	@MockBean
+	private CommercantRepository commercantRepository;
+
+	@MockBean
+	private AbonnementRepository abonnementRepository;
 
 	@Test
 	void contextLoads() {
