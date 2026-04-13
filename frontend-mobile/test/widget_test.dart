@@ -10,10 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:carrefourconnect_mobile/main.dart';
 
+import 'test_helpers.dart';
+
 void main() {
   testWidgets('App initialization smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    // Provide a fake asset bundle so Image.asset calls during the splash
+    // do not fail in the test environment. The bundle returns a 1x1
+    // transparent PNG for any asset key.
+    // Build our app wrapped with the shared fake asset bundle helper so
+    // Image.asset calls during the splash do not fail in the test.
+    await tester.pumpWidget(wrapWithFakeAssets(const MyApp()));
 
     // La SplashScreen a plusieurs phases d'animation et des délais.
     // On attend un peu pour que le premier frame soit rendu correctement.
