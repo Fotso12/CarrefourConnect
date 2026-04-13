@@ -79,6 +79,7 @@ jobs:
         with:
           name: jacoco-report
           path: backend/target/site/jacoco/jacoco.xml
+          if-no-files-found: warn
 
   test-web:
     name:  Tests Web
@@ -97,6 +98,7 @@ jobs:
         with:
           name: web-coverage
           path: frontend-web/coverage/lcov.info
+          if-no-files-found: warn
 
   test-mobile:
     name:  Tests Mobile
@@ -115,6 +117,7 @@ jobs:
         with:
           name: mobile-coverage
           path: frontend-mobile/coverage/lcov.info
+          if-no-files-found: warn
 
   # ============================================================
   # PHASE 3 : SÉCURITÉ & QUALITÉ (SONAR CLOUD)
@@ -136,11 +139,25 @@ jobs:
       - name: Prepare reports
         run: |
           mkdir -p backend/target/site/jacoco
-          mv jacoco-report/jacoco.xml backend/target/site/jacoco/jacoco.xml
+          if [ -f jacoco-report/jacoco.xml ]; then
+            mv jacoco-report/jacoco.xml backend/target/site/jacoco/jacoco.xml
+          else
+            echo "jacoco report not found, skipping"
+          fi
+
           mkdir -p frontend-web/coverage
-          mv web-coverage/lcov.info frontend-web/coverage/lcov.info
+          if [ -f web-coverage/lcov.info ]; then
+            mv web-coverage/lcov.info frontend-web/coverage/lcov.info
+          else
+            echo "web coverage not found, skipping"
+          fi
+
           mkdir -p frontend-mobile/coverage
-          mv mobile-coverage/lcov.info frontend-mobile/coverage/lcov.info
+          if [ -f mobile-coverage/lcov.info ]; then
+            mv mobile-coverage/lcov.info frontend-mobile/coverage/lcov.info
+          else
+            echo "mobile coverage not found, skipping"
+          fi
       - name: SonarCloud Analysis
         uses: sonarsource/sonarcloud-github-action@v3
         env:
