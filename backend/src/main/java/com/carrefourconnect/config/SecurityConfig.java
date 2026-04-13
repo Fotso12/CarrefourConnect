@@ -22,7 +22,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.http.HttpMethod;
 
 /**
- * Configuration principale de la sécurité de l'application.
+ * Configuration principale de la sécurité de l'application globale
+ * - Définit les règles d'accès aux endpoints REST
+ * - Configure l'authentification JWT
+ * - Gère les exceptions d'authentification
+ * - Permet la configuration CORS pour les requêtes cross-origin
+ * - Utilise un UserDetailsService personnalisé pour charger les utilisateurs depuis la base de données
  */
 @Configuration
 @EnableMethodSecurity
