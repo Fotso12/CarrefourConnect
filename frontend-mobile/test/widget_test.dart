@@ -23,10 +23,19 @@ void main() {
 
     // La SplashScreen a plusieurs phases d'animation et des délais.
     // On attend un peu pour que le premier frame soit rendu correctement.
-    // On pompe plusieurs fois pour avancer les timers.
+    // On pompe plusieurs fois pour avancer les timers. Après chaque pump
+    // on vérifie s'il y a des exceptions capturées par l'environnement de test.
     await tester.pump(const Duration(seconds: 1));
+    var ex = tester.takeException();
+    if (ex != null) fail('Exception after first pump: $ex');
+
     await tester.pump(const Duration(seconds: 1));
+    ex = tester.takeException();
+    if (ex != null) fail('Exception after second pump: $ex');
+
     await tester.pump(const Duration(seconds: 1));
+    ex = tester.takeException();
+    if (ex != null) fail('Exception after third pump: $ex');
 
     // Verify that our app starts and pumps the MaterialApp.
     expect(find.byType(MaterialApp), findsOneWidget);
