@@ -1,10 +1,24 @@
-import { TestBed } from '@angular/core/testing';
-import { App } from './app';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { AuthService } from './coeur/services/auth.service';
 
 describe('App', () => {
+  let mockAuthService: any;
+
   beforeEach(async () => {
+    mockAuthService = {
+      currentUser: of({ role: 'ROLE_USER' }),
+      currentUserValue: { role: 'ROLE_USER' },
+      isLoggedIn: () => true,
+      logout: () => {}
+    };
+
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        provideRouter([]),
+        { provide: AuthService, useValue: mockAuthService }
+      ]
     }).compileComponents();
   });
 
@@ -16,8 +30,9 @@ describe('App', () => {
 
   it('should render title', async () => {
     const fixture = TestBed.createComponent(App);
-    await fixture.whenStable();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, carrefourconnect-web');
+    // Le titre est maintenant 'CarrefourConnect' dans la classe App
+    expect(compiled.querySelector('span')?.textContent).toContain('Carrefour');
   });
 });
