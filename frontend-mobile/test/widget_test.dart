@@ -17,7 +17,10 @@ void main() {
 
     // La SplashScreen a plusieurs phases d'animation et des délais.
     // On attend un peu pour que le premier frame soit rendu correctement.
-    await tester.pump(const Duration(milliseconds: 500));
+    // On pompe plusieurs fois pour avancer les timers.
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
 
     // Verify that our app starts and pumps the MaterialApp.
     expect(find.byType(MaterialApp), findsOneWidget);

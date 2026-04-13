@@ -17,7 +17,7 @@ jobs:
   # ============================================================
 
   lint-backend:
-    name: 🔍 Lint Backend
+    name:  Lint Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         run: chmod +x mvnw && ./mvnw compile
 
   lint-web:
-    name: 🔍 Lint Web
+    name:  Lint Web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +45,7 @@ jobs:
         run: npm install --legacy-peer-deps && (npx ng lint || echo "Lint skipped")
 
   lint-mobile:
-    name: 🔍 Lint Mobile
+    name:  Lint Mobile
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,7 +62,7 @@ jobs:
   # ============================================================
 
   test-backend:
-    name: 🧪 Tests Backend
+    name:  Tests Backend
     needs: lint-backend
     runs-on: ubuntu-latest
     steps:
@@ -81,7 +81,7 @@ jobs:
           path: backend/target/site/jacoco/jacoco.xml
 
   test-web:
-    name: 🧪 Tests Web
+    name:  Tests Web
     needs: lint-web
     runs-on: ubuntu-latest
     steps:
@@ -99,7 +99,7 @@ jobs:
           path: frontend-web/coverage/lcov.info
 
   test-mobile:
-    name: 🧪 Tests Mobile
+    name:  Tests Mobile
     needs: lint-mobile
     runs-on: ubuntu-latest
     steps:
@@ -121,7 +121,7 @@ jobs:
   # ============================================================
 
   sonarcloud:
-    name: 🛡️ Security & Quality Gate
+    name:  Security & Quality Gate
     needs: [test-backend, test-web, test-mobile]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -152,7 +152,7 @@ jobs:
   # ============================================================
 
   delivery-backend:
-    name: 🚀 Build Backend Docker
+    name:  Build Backend Docker
     needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
@@ -170,7 +170,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/carrefourconnect-backend:latest
 
   delivery-web:
-    name: 🚀 Build Web Docker
+    name:  Build Web Docker
     needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
@@ -188,7 +188,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/carrefourconnect-web:latest
 
   delivery-mobile:
-    name: 🚀 Build Mobile APK
+    name:  Build Mobile APK
     needs: sonarcloud
     runs-on: ubuntu-latest
     steps:
