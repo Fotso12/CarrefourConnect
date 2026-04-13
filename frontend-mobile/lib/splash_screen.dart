@@ -3,7 +3,15 @@ import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
   final Widget nextScreen;
-  const SplashScreen({super.key, required this.nextScreen});
+
+  /// When `testMode` is true, animations that repeat indefinitely are disabled
+  /// to make widget tests deterministic.
+  final bool testMode;
+  const SplashScreen({
+    super.key,
+    required this.nextScreen,
+    this.testMode = false,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -18,10 +26,10 @@ class _SplashScreenState extends State<SplashScreen>
 
   // Controllers
   late AnimationController _convergenceController; // icons converging
-  late AnimationController _logoController;         // logo appears
-  late AnimationController _textController;         // text appears
-  late AnimationController _pulseController;        // logo pulsation
-  late AnimationController _exitController;         // fade out
+  late AnimationController _logoController; // logo appears
+  late AnimationController _textController; // text appears
+  late AnimationController _pulseController; // logo pulsation
+  late AnimationController _exitController; // fade out
 
   // Animations
   late Animation<double> _logoScale;
@@ -48,7 +56,10 @@ class _SplashScreenState extends State<SplashScreen>
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1400),
-    )..repeat(reverse: true);
+    );
+    if (!widget.testMode) {
+      _pulseController.repeat(reverse: true);
+    }
     _exitController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -60,15 +71,14 @@ class _SplashScreenState extends State<SplashScreen>
     _logoOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _logoController, curve: const Interval(0.0, 0.4)),
     );
-    _textSlide = Tween<Offset>(
-      begin: const Offset(0, 0.6),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeOutCubic),
-    );
-    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeIn),
-    );
+    _textSlide = Tween<Offset>(begin: const Offset(0, 0.6), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _textController, curve: Curves.easeOutCubic),
+        );
+    _textOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
 
     _startSequence();
   }
@@ -211,11 +221,13 @@ class _SplashScreenState extends State<SplashScreen>
               builder: (context, _) {
                 return Stack(
                   children: elements.map((el) {
-                    final t = (((_convergenceController.value - el.delay) /
+                    final t =
+                        (((_convergenceController.value - el.delay) /
                                 (1.0 - el.delay))
                             .clamp(0.0, 1.0));
-                    final curved =
-                        Curves.easeInCubic.transform(t); // accelerate inward
+                    final curved = Curves.easeInCubic.transform(
+                      t,
+                    ); // accelerate inward
                     final pos = Offset(
                       el.start.dx + (el.end.dx - el.start.dx) * curved,
                       el.start.dy + (el.end.dy - el.start.dy) * curved,
@@ -252,16 +264,14 @@ class _SplashScreenState extends State<SplashScreen>
                   left: center.dx - 90 * t,
                   top: center.dy - 90 * t,
                   child: Opacity(
-                    opacity: (t * 2).clamp(0.0, 1.0) * (1.0 - t).clamp(0.0, 1.0) * 2,
+                    opacity:
+                        (t * 2).clamp(0.0, 1.0) * (1.0 - t).clamp(0.0, 1.0) * 2,
                     child: Container(
                       width: 180 * t,
                       height: 180 * t,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(
-                          color: accentOrange,
-                          width: 2,
-                        ),
+                        border: Border.all(color: accentOrange, width: 2),
                       ),
                     ),
                   ),
@@ -479,8 +489,11 @@ class _GlowCircle extends StatelessWidget {
   final double size;
   final Color color;
   final double opacity;
-  const _GlowCircle(
-      {required this.size, required this.color, required this.opacity});
+  const _GlowCircle({
+    required this.size,
+    required this.color,
+    required this.opacity,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -536,9 +549,7 @@ class _PulsingDotsState extends State<_PulsingDots>
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: (i == 1
-                          ? const Color(0xFFF78F1E)
-                          : Colors.white)
+                  color: (i == 1 ? const Color(0xFFF78F1E) : Colors.white)
                       .withValues(alpha: opacity),
                   shape: BoxShape.circle,
                 ),

@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,74 +21,12 @@ class FakeAssetBundle extends CachingAssetBundle {
 
 /// Retourne un PNG 1x1 transparent sous forme de bytes.
 Uint8List onePixelPng() {
-  return Uint8List.fromList([
-    137,
-    80,
-    78,
-    71,
-    13,
-    10,
-    26,
-    10,
-    0,
-    0,
-    0,
-    13,
-    73,
-    72,
-    68,
-    82,
-    0,
-    0,
-    0,
-    1,
-    0,
-    0,
-    0,
-    1,
-    8,
-    6,
-    0,
-    0,
-    0,
-    31,
-    21,
-    196,
-    137,
-    0,
-    0,
-    0,
-    12,
-    73,
-    68,
-    65,
-    84,
-    8,
-    153,
-    99,
-    0,
-    1,
-    0,
-    0,
-    5,
-    0,
-    1,
-    14,
-    190,
-    83,
-    0,
-    0,
-    0,
-    0,
-    73,
-    69,
-    78,
-    68,
-    174,
-    66,
-    96,
-    130,
-  ]);
+  // Standard 1x1 transparent PNG used in many examples/tests
+  // Use a canonical base64 1x1 transparent PNG to avoid formatting issues.
+  const b64 =
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8A'
+      'An8B9Q1f2wAAAABJRU5ErkJggg==';
+  return base64.decode(b64);
 }
 
 /// Enveloppe [child] avec un [DefaultAssetBundle] utilisant le bundle factice.
