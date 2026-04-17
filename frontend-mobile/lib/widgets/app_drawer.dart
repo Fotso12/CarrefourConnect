@@ -5,6 +5,7 @@ import '../screens/signup_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/favorites_screen.dart';
 import '../services/auth_service.dart';
+// ThemeService removed: force light theme
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -18,20 +19,20 @@ class AppDrawer extends StatelessWidget {
 
     return Drawer(
       backgroundColor: Colors.white,
-      child: FutureBuilder<Map<String, dynamic>?>(
-        future: authService.getUserData(),
-        builder: (context, snapshot) {
-          final userData = snapshot.data;
-          final isLoggedIn = userData != null;
-
+      child: ValueListenableBuilder<bool>(
+        valueListenable: authService.authNotifier,
+        builder: (context, logged, _) {
           return Column(
             children: [
-              _buildHeader(userData),
+              FutureBuilder<Map<String, dynamic>?>(
+                future: authService.getUserData(),
+                builder: (context, userSnap) => _buildHeader(userSnap.data),
+              ),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.zero,
                   children: [
-                    if (!isLoggedIn) ...[
+                    if (!logged) ...[
                       _buildDrawerItem(
                         icon: FontAwesomeIcons.rightToBracket,
                         title: 'Connexion',
@@ -39,7 +40,9 @@ class AppDrawer extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const LoginScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => const LoginScreen(),
+                            ),
                           );
                         },
                       ),
@@ -50,7 +53,9 @@ class AppDrawer extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SignupScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => const SignupScreen(),
+                            ),
                           );
                         },
                       ),
@@ -62,7 +67,9 @@ class AppDrawer extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ProfileScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => const ProfileScreen(),
+                            ),
                           );
                         },
                       ),
@@ -73,7 +80,9 @@ class AppDrawer extends StatelessWidget {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const FavoritesScreen()),
+                            MaterialPageRoute(
+                              builder: (context) => const FavoritesScreen(),
+                            ),
                           );
                         },
                       ),
@@ -85,22 +94,39 @@ class AppDrawer extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                              title: const Text('Déconnexion', style: TextStyle(fontWeight: FontWeight.w900)),
-                              content: const Text('Voulez-vous vraiment vous déconnecter ?'),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              title: const Text(
+                                'Déconnexion',
+                                style: TextStyle(fontWeight: FontWeight.w900),
+                              ),
+                              content: const Text(
+                                'Voulez-vous vraiment vous déconnecter ?',
+                              ),
                               actions: [
-                                TextButton(onPressed: () => Navigator.pop(context), child: const Text('Annuler')),
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('Annuler'),
+                                ),
                                 ElevatedButton(
                                   onPressed: () async {
                                     await authService.logout();
                                     if (context.mounted) {
-                                      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                                      Navigator.of(
+                                        context,
+                                      ).pushNamedAndRemoveUntil(
+                                        '/',
+                                        (route) => false,
+                                      );
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red,
                                     foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                   ),
                                   child: const Text('Déconnexion'),
                                 ),
@@ -122,15 +148,15 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildHeader(Map<String, dynamic>? user) {
-    final String fullName = user != null ? '${user['prenom']} ${user['nom']}' : 'CarrefourConnect';
-    final String initial = user != null 
+    final String fullName = user != null
+        ? '${user['prenom']} ${user['nom']}'
+        : 'CarrefourConnect';
+    final String initial = user != null
         ? (user['nom'] ?? 'U').toString().substring(0, 1).toUpperCase()
         : '';
 
     return DrawerHeader(
-      decoration: const BoxDecoration(
-        color: primaryBlue,
-      ),
+      decoration: const BoxDecoration(color: primaryBlue),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -141,16 +167,34 @@ class AppDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                boxShadow: [BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10)],
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10),
+                ],
               ),
               child: Center(
-                child: user != null 
-                  ? Text(initial, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w900, color: accentOrange))
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Image.asset('assets/icon.png', width: 50, height: 50, fit: BoxFit.cover, 
-                        errorBuilder: (c, e, s) => const Icon(Icons.person, color: accentOrange, size: 40)),
-                    ),
+                child: user != null
+                    ? Text(
+                        initial,
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w900,
+                          color: accentOrange,
+                        ),
+                      )
+                    : ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          'assets/icon.png',
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (c, e, s) => const Icon(
+                            Icons.person,
+                            color: accentOrange,
+                            size: 40,
+                          ),
+                        ),
+                      ),
               ),
             ),
             const SizedBox(height: 12),
@@ -204,13 +248,26 @@ class AppDrawer extends StatelessWidget {
             children: [
               IconButton(
                 onPressed: () {},
-                icon: const Icon(FontAwesomeIcons.facebook, size: 20, color: Colors.grey),
+                icon: const Icon(
+                  FontAwesomeIcons.facebook,
+                  size: 20,
+                  color: Colors.grey,
+                ),
               ),
               IconButton(
                 onPressed: () {},
-                icon: const Icon(FontAwesomeIcons.instagram, size: 20, color: Colors.grey),
+                icon: const Icon(
+                  FontAwesomeIcons.instagram,
+                  size: 20,
+                  color: Colors.grey,
+                ),
               ),
             ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Thème: Clair (sombre désactivé)',
+            style: TextStyle(color: Colors.grey, fontSize: 12),
           ),
         ],
       ),

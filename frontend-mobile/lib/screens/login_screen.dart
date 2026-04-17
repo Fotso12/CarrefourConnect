@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _authService = AuthService();
   bool _obscurePassword = true;
   bool _isLoggingIn = false;
+  bool _rememberMe = false;
 
   static const primaryBlue = Color(0xFF034D92);
   static const accentOrange = Color(0xFFF78F1E);
@@ -98,11 +99,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {},
                   child: const Text(
                     'Mot de passe oublié ?',
-                    style: TextStyle(color: accentOrange, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: accentOrange,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 32),
+              _buildRememberMe(),
+              const SizedBox(height: 8),
               _buildLoginButton(),
               const SizedBox(height: 32),
               Center(
@@ -170,14 +176,20 @@ class _LoginScreenState extends State<LoginScreen> {
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    _obscurePassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                    _obscurePassword
+                        ? Icons.visibility_off_rounded
+                        : Icons.visibility_rounded,
                     color: Colors.grey[400],
                   ),
-                  onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  onPressed: () =>
+                      setState(() => _obscurePassword = !_obscurePassword),
                 )
               : null,
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 16,
+          ),
         ),
       ),
     );
@@ -207,43 +219,82 @@ class _LoginScreenState extends State<LoginScreen> {
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(vertical: 18),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
-        child: _isLoggingIn 
-          ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-          : const Text(
-              'SE CONNECTER',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-                letterSpacing: 1.5,
+        child: _isLoggingIn
+            ? const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : const Text(
+                'SE CONNECTER',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.white,
+                  letterSpacing: 1.5,
+                ),
               ),
-            ),
+      ),
+    );
+  }
+
+  Widget _buildRememberMe() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Row(
+        children: [
+          Checkbox(
+            value: _rememberMe,
+            onChanged: (v) => setState(() => _rememberMe = v ?? false),
+          ),
+          const SizedBox(width: 4),
+          const Text(
+            'Se souvenir de moi',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
     );
   }
 
   Future<void> _handleLogin() async {
     setState(() => _isLoggingIn = true);
-    final response = await _apiService.login(_emailController.text, _passwordController.text);
+    final response = await _apiService.login(
+      _emailController.text,
+      _passwordController.text,
+    );
     setState(() => _isLoggingIn = false);
 
     if (response != null && response['token'] != null) {
-      await _authService.saveToken(response['token']);
-      await _authService.saveUserData(response);
-      
+      await _authService.saveToken(response['token'], remember: _rememberMe);
+      await _authService.saveUserData(response, remember: _rememberMe);
+
       if (mounted) {
         showDialog(
           context: context,
           barrierDismissible: false,
           builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
             title: const Column(
               children: [
                 Icon(Icons.check_circle, color: Colors.green, size: 64),
                 SizedBox(height: 16),
-                Text('Bienvenue !', style: TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF1E293B))),
+                Text(
+                  'Bienvenue !',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w900,
+                    color: Color(0xFF1E293B),
+                  ),
+                ),
               ],
             ),
             content: Text(
@@ -260,10 +311,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFF78F1E),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 12,
+                    ),
                   ),
-                  child: const Text('Commencer', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    'Commencer',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),

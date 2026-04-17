@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
 import 'screens/main_screen.dart';
+import 'services/auth_service.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initialize auth and ensure no unwanted auto-login
+  await AuthService().init();
   runApp(const MyApp());
 }
 
@@ -22,6 +26,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
+      themeMode: ThemeMode.light,
       home: const SplashScreen(nextScreen: MainScreen()),
     );
   }

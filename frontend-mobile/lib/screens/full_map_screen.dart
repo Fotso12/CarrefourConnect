@@ -3,6 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+import '../services/realtime_service.dart';
 import '../models/commerce.dart';
 
 class FullScreenMapScreen extends StatefulWidget {
@@ -32,12 +35,51 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
   static const accentOrange = Color(0xFFF78F1E);
   final MapController _mapController = MapController();
   late LatLng _userPos;
+  Timer? _routeDebounce;
+  StreamSubscription? _realtimeSub;
 
   @override
   void initState() {
     super.initState();
     _userPos = LatLng(widget.userLat, widget.userLon);
-    _fetchRoute();
+    // connect to realtime service (if available) and subscribe to updates
+    try {
+      RealtimeService.instance.connect();
+      _realtimeSub = RealtimeService.instance.stream.listen((data) async {
+        // handle incoming realtime messages (simple contract)
+        try {
+          if (data['type'] == 'position' &&
+              data['lat'] != null &&
+              data['lon'] != null) {
+            final double lat = (data['lat'] as num).toDouble();
+            final double lon = (data['lon'] as num).toDouble();
+            setState(() {
+              _userPos = LatLng(lat, lon);
+            });
+          } else if (data['type'] == 'route_update' &&
+              data['coordinates'] != null) {
+            // coordinates should be a list of [lon, lat] pairs
+            final coords = data['coordinates'];
+            try {
+              final parsed = await compute(_parseCoordsSync, coords);
+              setState(() {
+                _routePoints = parsed.map((p) => LatLng(p[0], p[1])).toList();
+                _isLoading = false;
+              });
+            } catch (_) {}
+          }
+        } catch (_) {}
+      });
+    } catch (_) {}
+
+    _scheduleFetchRoute();
+  }
+
+  void _scheduleFetchRoute({
+    Duration delay = const Duration(milliseconds: 700),
+  }) {
+    _routeDebounce?.cancel();
+    _routeDebounce = Timer(delay, () => _fetchRoute());
   }
 
   Future<void> _fetchRoute() async {
@@ -59,7 +101,8 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
     if (destLat == null || destLon == null) return;
 
     final profile = _travelMode == 'walking' ? 'walking' : 'driving';
-    final url = 'https://router.project-osrm.org/route/v1/$profile/${widget.userLon},${widget.userLat};$destLon,$destLat?overview=full&geometries=geojson';
+    final url =
+        'https://router.project-osrm.org/route/v1/$profile/${widget.userLon},${widget.userLat};$destLon,$destLat?overview=full&geometries=geojson';
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -68,24 +111,27 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
         if (data['routes'] != null && data['routes'].isNotEmpty) {
           final route = data['routes'][0];
           final List<dynamic> coords = route['geometry']['coordinates'];
-          
+
+          // parse coordinates in background isolate to avoid UI jank
+          final parsed = await compute(_parseCoordsSync, coords);
+          final points = parsed.map((c) => LatLng(c[0], c[1])).toList();
           setState(() {
-            final points = coords.map((c) => LatLng(c[1].toDouble(), c[0].toDouble())).toList();
             double distanceKm = (route['distance'] / 1000);
             final distanceStr = distanceKm.toStringAsFixed(1);
             String durationStr = '';
-            
+
             if (_travelMode == 'walking') {
               durationStr = (distanceKm * 13.1).toStringAsFixed(0);
             } else {
               double baseDurationSec = (route['duration']).toDouble();
               final traffic = _getTrafficInfo();
-              
+
               double factorMin = _travelMode == 'moto' ? 1.2 : 1.8;
               double factorMax = _travelMode == 'moto' ? 2.5 : 4.0;
-              
+
               if (traffic['intensity'] == 'dense') {
-                factorMin *= 1.5; factorMax *= 1.5;
+                factorMin *= 1.5;
+                factorMax *= 1.5;
               } else if (traffic['intensity'] == 'fluide') {
                 factorMax *= 0.8;
               }
@@ -94,18 +140,18 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
               int max = (baseDurationSec * factorMax / 60).round();
               durationStr = '$min - $max';
             }
-            
+
             _routePoints = points;
             _distance = distanceStr;
             _duration = durationStr;
-            
+
             // Mettre en cache pour la prochaine fois
             _routeCache[_travelMode] = {
               'points': points,
               'distance': distanceStr,
               'duration': durationStr,
             };
-            
+
             _isLoading = false;
           });
         }
@@ -124,20 +170,34 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
     if ((time >= 7.5 && time <= 9.5) || (time >= 16.5 && time <= 19.5)) {
       return {'intensity': 'dense', 'label': 'Trafic dense', 'color': 'red'};
     } else if (time >= 10.0 && time <= 16.0) {
-      return {'intensity': 'modere', 'label': 'Trafic modéré', 'color': 'orange'};
+      return {
+        'intensity': 'modere',
+        'label': 'Trafic modéré',
+        'color': 'orange',
+      };
     } else {
-      return {'intensity': 'fluide', 'label': 'Trafic fluide', 'color': 'green'};
+      return {
+        'intensity': 'fluide',
+        'label': 'Trafic fluide',
+        'color': 'green',
+      };
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final commercePos = LatLng(widget.commerce.latitude!, widget.commerce.longitude!);
+    final commercePos = LatLng(
+      widget.commerce.latitude!,
+      widget.commerce.longitude!,
+    );
     final userPos = LatLng(widget.userLat, widget.userLon);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.commerce.nom, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+        title: Text(
+          widget.commerce.nom,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
         elevation: 0,
@@ -146,14 +206,12 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
         children: [
           FlutterMap(
             mapController: _mapController,
-            options: MapOptions(
-              initialCenter: commercePos,
-              initialZoom: 14.0,
-            ),
+            options: MapOptions(initialCenter: commercePos, initialZoom: 14.0),
             children: [
               TileLayer(
                 urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'CarrefourConnectMobile/1.0 (contact@carrefourconnect.com)',
+                userAgentPackageName:
+                    'CarrefourConnectMobile/1.0 (contact@carrefourconnect.com)',
               ),
               if (_routePoints.isNotEmpty)
                 PolylineLayer(
@@ -171,13 +229,21 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                     point: userPos,
                     width: 40,
                     height: 40,
-                    child: const Icon(Icons.my_location, color: Colors.blue, size: 30),
+                    child: const Icon(
+                      Icons.my_location,
+                      color: Colors.blue,
+                      size: 30,
+                    ),
                   ),
                   Marker(
                     point: commercePos,
                     width: 50,
                     height: 50,
-                    child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+                    child: const Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                      size: 40,
+                    ),
                   ),
                 ],
               ),
@@ -185,7 +251,7 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
           ),
           if (_isLoading)
             const Center(child: CircularProgressIndicator(color: accentOrange)),
-          
+
           // Mode Selection
           Positioned(
             top: 10,
@@ -196,19 +262,32 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(30),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10)],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    blurRadius: 10,
+                  ),
+                ],
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildModeTab('driving', Icons.directions_car_rounded, 'Voiture'),
+                  _buildModeTab(
+                    'driving',
+                    Icons.directions_car_rounded,
+                    'Voiture',
+                  ),
                   _buildModeTab('moto', Icons.moped_rounded, 'Moto'),
-                  _buildModeTab('walking', Icons.directions_walk_rounded, 'Pied'),
+                  _buildModeTab(
+                    'walking',
+                    Icons.directions_walk_rounded,
+                    'Pied',
+                  ),
                 ],
               ),
             ),
           ),
-          
+
           // Info Overlay
           if (_distance.isNotEmpty)
             Positioned(
@@ -220,24 +299,36 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(24),
-                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20)],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 20,
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _buildRouteInfo(
-                      _travelMode == 'driving' ? Icons.directions_car : 
-                      (_travelMode == 'moto' ? Icons.moped : Icons.directions_walk), 
-                      'Distance', 
-                      '$_distance km'
+                      _travelMode == 'driving'
+                          ? Icons.directions_car
+                          : (_travelMode == 'moto'
+                                ? Icons.moped
+                                : Icons.directions_walk),
+                      'Distance',
+                      '$_distance km',
                     ),
                     Container(width: 1, height: 40, color: Colors.grey[200]),
-                    _buildRouteInfo(Icons.access_time_filled, 'Temps', '$_duration min'),
+                    _buildRouteInfo(
+                      Icons.access_time_filled,
+                      'Temps',
+                      '$_duration min',
+                    ),
                   ],
                 ),
               ),
             ),
-          
+
           // Traffic Status Badge
           if (_travelMode != 'walking' && _distance.isNotEmpty)
             Positioned(
@@ -246,14 +337,23 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
               right: 0,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
-                    color: _getTrafficInfo()['color'] == 'red' ? Colors.red[50] :
-                           (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[50] : Colors.green[50]),
+                    color: _getTrafficInfo()['color'] == 'red'
+                        ? Colors.red[50]
+                        : (_getTrafficInfo()['color'] == 'orange'
+                              ? Colors.orange[50]
+                              : Colors.green[50]),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: _getTrafficInfo()['color'] == 'red' ? Colors.red[200]! :
-                             (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[200]! : Colors.green[200]!),
+                      color: _getTrafficInfo()['color'] == 'red'
+                          ? Colors.red[200]!
+                          : (_getTrafficInfo()['color'] == 'orange'
+                                ? Colors.orange[200]!
+                                : Colors.green[200]!),
                     ),
                   ),
                   child: Row(
@@ -263,8 +363,11 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                         width: 8,
                         height: 8,
                         decoration: BoxDecoration(
-                          color: _getTrafficInfo()['color'] == 'red' ? Colors.red :
-                                 (_getTrafficInfo()['color'] == 'orange' ? Colors.orange : Colors.green),
+                          color: _getTrafficInfo()['color'] == 'red'
+                              ? Colors.red
+                              : (_getTrafficInfo()['color'] == 'orange'
+                                    ? Colors.orange
+                                    : Colors.green),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -274,8 +377,11 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: _getTrafficInfo()['color'] == 'red' ? Colors.red[900] :
-                                 (_getTrafficInfo()['color'] == 'orange' ? Colors.orange[900] : Colors.green[900]),
+                          color: _getTrafficInfo()['color'] == 'red'
+                              ? Colors.red[900]
+                              : (_getTrafficInfo()['color'] == 'orange'
+                                    ? Colors.orange[900]
+                                    : Colors.green[900]),
                         ),
                       ),
                     ],
@@ -283,7 +389,7 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
                 ),
               ),
             ),
-          
+
           // Floating Action Button to center user
           Positioned(
             bottom: 130,
@@ -305,8 +411,22 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
       children: [
         Icon(icon, color: accentOrange, size: 24),
         const SizedBox(height: 4),
-        Text(label, style: TextStyle(color: Colors.grey[400], fontSize: 10, fontWeight: FontWeight.bold)),
-        Text(value, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 18, color: Color(0xFF1E293B))),
+        Text(
+          label,
+          style: TextStyle(
+            color: Colors.grey[400],
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 18,
+            color: Color(0xFF1E293B),
+          ),
+        ),
       ],
     );
   }
@@ -329,16 +449,48 @@ class _FullScreenMapScreenState extends State<FullScreenMapScreen> {
         ),
         child: Row(
           children: [
-            Icon(icon, color: isSelected ? Colors.white : Colors.grey, size: 20),
+            Icon(
+              icon,
+              color: isSelected ? Colors.white : Colors.grey,
+              size: 20,
+            ),
             if (isSelected) const SizedBox(width: 8),
             if (isSelected)
               Text(
                 label,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
               ),
           ],
         ),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _routeDebounce?.cancel();
+    _realtimeSub?.cancel();
+    try {
+      RealtimeService.instance.dispose();
+    } catch (_) {}
+    super.dispose();
+  }
+}
+
+@pragma('vm:entry-point')
+List<List<double>> _parseCoordsSync(dynamic coords) {
+  final List<List<double>> out = [];
+  try {
+    for (final c in coords as List) {
+      // coords are [lon, lat]
+      final double lon = (c[0] as num).toDouble();
+      final double lat = (c[1] as num).toDouble();
+      out.add([lat, lon]);
+    }
+  } catch (_) {}
+  return out;
 }

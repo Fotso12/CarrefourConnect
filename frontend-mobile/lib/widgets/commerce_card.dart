@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../models/commerce.dart';
 import '../services/api_service.dart';
 import '../services/auth_service.dart';
@@ -9,10 +10,10 @@ class CommerceCard extends StatefulWidget {
   final bool isFavorite;
 
   const CommerceCard({
-    super.key, 
-    required this.commerce, 
-    this.onTap, 
-    this.isFavorite = false
+    super.key,
+    required this.commerce,
+    this.onTap,
+    this.isFavorite = false,
   });
 
   @override
@@ -45,7 +46,9 @@ class _CommerceCardState extends State<CommerceCard> {
     if (token == null || userData == null) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Veuillez vous connecter pour ajouter des favoris')),
+          const SnackBar(
+            content: Text('Veuillez vous connecter pour ajouter des favoris'),
+          ),
         );
       }
       return;
@@ -54,16 +57,18 @@ class _CommerceCardState extends State<CommerceCard> {
     setState(() => _isFavorite = !_isFavorite);
 
     final success = await _apiService.toggleFavorite(
-      userData['id'].toString(), 
-      widget.commerce.idcommerce ?? '', 
+      userData['id'].toString(),
+      widget.commerce.idcommerce ?? '',
       !_isFavorite, // The old state before setState was !_isFavorite
-      token
+      token,
     );
 
     if (!success && mounted) {
       setState(() => _isFavorite = !_isFavorite); // Rollback
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erreur lors de la mise à jour des favoris')),
+        const SnackBar(
+          content: Text('Erreur lors de la mise à jour des favoris'),
+        ),
       );
     }
   }
@@ -96,16 +101,31 @@ class _CommerceCardState extends State<CommerceCard> {
             Stack(
               children: [
                 ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
-                  child: Image.network(
-                    widget.commerce.mainImageUrl,
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(28),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.commerce.mainImageUrl,
                     height: 130,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
+                    fadeInDuration: const Duration(milliseconds: 180),
+                    useOldImageOnUrlChange: true,
+                    placeholder: (context, url) => Container(
+                      height: 130,
+                      color: Colors.grey[100],
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
                       height: 130,
                       color: Colors.grey[200],
-                      child: const Icon(Icons.store_rounded, color: Colors.grey, size: 40),
+                      child: const Icon(
+                        Icons.store_rounded,
+                        color: Colors.grey,
+                        size: 40,
+                      ),
                     ),
                   ),
                 ),
@@ -114,13 +134,17 @@ class _CommerceCardState extends State<CommerceCard> {
                   top: 12,
                   left: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withAlpha(230),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
-                      widget.commerce.categorie?.nom.toUpperCase() ?? 'COMMERCE',
+                      widget.commerce.categorie?.nom.toUpperCase() ??
+                          'COMMERCE',
                       style: const TextStyle(
                         color: primaryBlue,
                         fontSize: 9,
@@ -139,9 +163,11 @@ class _CommerceCardState extends State<CommerceCard> {
                       backgroundColor: Colors.white.withAlpha(204),
                       radius: 18,
                       child: Icon(
-                        _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded, 
-                        color: _isFavorite ? accentOrange : Colors.grey, 
-                        size: 20
+                        _isFavorite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        color: _isFavorite ? accentOrange : Colors.grey,
+                        size: 20,
                       ),
                     ),
                   ),
@@ -171,10 +197,18 @@ class _CommerceCardState extends State<CommerceCard> {
                       ),
                       Row(
                         children: [
-                          const Icon(Icons.star_rounded, color: Color(0xFFFFB800), size: 16),
+                          const Icon(
+                            Icons.star_rounded,
+                            color: Color(0xFFFFB800),
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text(
-                            widget.commerce.noteGlobale != null ? widget.commerce.noteGlobale!.toStringAsFixed(1) : '0.0',
+                            widget.commerce.noteGlobale != null
+                                ? widget.commerce.noteGlobale!.toStringAsFixed(
+                                    1,
+                                  )
+                                : '0.0',
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w700,
@@ -230,4 +264,3 @@ class _CommerceCardState extends State<CommerceCard> {
     );
   }
 }
-
