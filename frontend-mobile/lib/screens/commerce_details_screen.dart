@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' hide Path;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'image_gallery_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import '../models/commerce.dart';
 import '../services/api_service.dart';
@@ -39,6 +40,13 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
     _moyenne = widget.commerce.noteGlobale ?? 0.0;
     _loadAvis();
     _prepareImages();
+    // Precache images after first frame so they load faster when shown
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      for (final url in _displayImages) {
+        if (url.isNotEmpty)
+          precacheImage(CachedNetworkImageProvider(url), context);
+      }
+    });
   }
 
   void _prepareImages() {
@@ -424,32 +432,50 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                 onPageChanged: (index) =>
                     setState(() => _currentImageIndex = index),
                 itemBuilder: (context, index) {
-                  return CachedNetworkImage(
-                    imageUrl: _displayImages[index],
-                    key: ValueKey(_displayImages[index]),
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: const Color(0xFFF1F5F9),
-                      child: const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                  final img = _displayImages[index];
+                  return GestureDetector(
+                    onTap: () {
+                      // open fullscreen gallery starting at tapped image
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ImageGalleryScreen(
+                            images: _displayImages,
+                            initialIndex: index,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: img,
+                      key: ValueKey(img),
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: const Color(0xFFF1F5F9),
+                        child: const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        ),
                       ),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      color: const Color(0xFFF1F5F9),
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image_rounded,
-                            color: Colors.grey,
-                            size: 48,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Image indisponible',
-                            style: TextStyle(color: Colors.grey, fontSize: 12),
-                          ),
-                        ],
+                      errorWidget: (context, url, error) => Container(
+                        color: const Color(0xFFF1F5F9),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.broken_image_rounded,
+                              color: Colors.grey,
+                              size: 48,
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              'Image indisponible',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

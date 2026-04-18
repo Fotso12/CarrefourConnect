@@ -5,6 +5,7 @@ import '../services/api_service.dart';
 import '../widgets/commerce_card.dart';
 import 'commerce_details_screen.dart';
 import '../services/auth_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:geolocator/geolocator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -105,6 +106,15 @@ class _HomeScreenState extends State<HomeScreen> {
         _categories = results[0] as List<Categorie>;
         _commerces = results[1] as List<Commerce>;
         _isLoading = false;
+      });
+
+      // Precache main images for faster display
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        for (final c in _commerces) {
+          final url = c.mainImageUrl;
+          if (url.isNotEmpty)
+            precacheImage(CachedNetworkImageProvider(url), context);
+        }
       });
     }
   }

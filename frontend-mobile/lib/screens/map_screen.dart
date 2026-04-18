@@ -25,7 +25,6 @@ class _MapScreenState extends State<MapScreen> {
   bool _isLoading = true;
   Position? _currentPosition;
   double _radius = 10.0; // displayed slider (represents max radius)
-  double _minRadius = 0.0; // filter min radius (km)
   double _maxRadius = 10.0; // effective max radius sent to API (km)
   bool _hasNetwork = true;
 
@@ -98,7 +97,7 @@ class _MapScreenState extends State<MapScreen> {
           LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
           LatLng(c.latitude!, c.longitude!),
         );
-        if (dKm >= _minRadius && dKm <= _maxRadius) filtered.add(c);
+        if (dKm <= _maxRadius) filtered.add(c);
       }
 
       setState(() {
@@ -315,32 +314,19 @@ class _MapScreenState extends State<MapScreen> {
                       final result = await showDialog<Map<String, double>>(
                         context: context,
                         builder: (context) {
-                          final minCtrl = TextEditingController(
-                            text: _minRadius.toStringAsFixed(0),
-                          );
                           final maxCtrl = TextEditingController(
                             text: _maxRadius.toStringAsFixed(0),
                           );
                           return AlertDialog(
-                            title: const Text('Saisir min / max (km)'),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextField(
-                                  controller: minCtrl,
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Distance minimale (km)',
-                                  ),
-                                ),
-                                TextField(
-                                  controller: maxCtrl,
-                                  keyboardType: TextInputType.number,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Distance maximale (km)',
-                                  ),
-                                ),
-                              ],
+                            title: const Text(
+                              'Saisir la distance maximale (km)',
+                            ),
+                            content: TextField(
+                              controller: maxCtrl,
+                              keyboardType: TextInputType.number,
+                              decoration: const InputDecoration(
+                                labelText: 'Distance maximale (km)',
+                              ),
                             ),
                             actions: [
                               TextButton(
@@ -349,15 +335,10 @@ class _MapScreenState extends State<MapScreen> {
                               ),
                               ElevatedButton(
                                 onPressed: () {
-                                  final min =
-                                      double.tryParse(minCtrl.text) ?? 0.0;
                                   final max =
                                       double.tryParse(maxCtrl.text) ??
                                       _maxRadius;
-                                  Navigator.pop(context, {
-                                    'min': min,
-                                    'max': max,
-                                  });
+                                  Navigator.pop(context, {'max': max});
                                 },
                                 child: const Text('OK'),
                               ),
@@ -368,9 +349,8 @@ class _MapScreenState extends State<MapScreen> {
 
                       if (result != null) {
                         setState(() {
-                          _minRadius = result['min']!.clamp(0.0, 10000.0);
-                          _maxRadius = result['max']!.clamp(
-                            _minRadius,
+                          _maxRadius = (result['max'] as double).clamp(
+                            0.0,
                             10000.0,
                           );
                           _radius = _maxRadius;
