@@ -1,74 +1,81 @@
-<div class="page-wrapper">
-  <div class="page-header">
-    <div class="title-row">
-      <div class="page-title">Espace Commerçant</div>
-      <div class="page-breadcrumb">ACCUEIL &nbsp;&middot;&nbsp; À PROPOS</div>
-    </div>
-  </div>
-  <div class="profile-container">
-    <aside class="profile-summary">
-      <div class="profile-card">
-        <div style="display:flex;gap:16px;align-items:center">
-          <div class="profile-avatar">{{ (user?.prenom?.charAt(0) || user?.displayName?.charAt(0) || 'U') }}</div>
-          <div>
-            <div class="profile-name">{{ user?.prenom }} {{ user?.nom }}</div>
-            <div style="margin-top:8px"><span class="profile-role">Commerçant</span></div>
-          </div>
+<div class="wrapper">
+  <div class="sections-container">
+    <section class="section-card">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-user-tie"></i> Profil Utilisateur</h2>
+        <button class="btn btn-edit" (click)="edit()"><i class="fas fa-edit"></i> Éditer</button>
+      </div>
+
+      <div class="info-display">
+        <div class="info-item">
+          <span class="info-label">Nom complet</span>
+          <span class="info-value">{{ user?.prenom }} {{ user?.nom }}</span>
         </div>
-        <div class="profile-contact" style="margin-top:14px">
-          <div><i class="fa-solid fa-envelope"></i>&nbsp;{{ user?.email }}</div>
+        <div class="info-item">
+          <span class="info-label">Nom d'utilisateur</span>
+          <span class="info-value">{{ user?.displayName || (user?.prenom + ' ' + user?.nom) }}</span>
         </div>
-        <div style="margin-top:18px; display:flex; gap:12px; justify-content:flex-start">
-          <button class="btn-primary" (click)="edit()">Modifier</button>
+        <div class="info-item">
+          <span class="info-label">Adresse de messagerie</span>
+          <span class="info-value">{{ user?.email }}</span>
         </div>
       </div>
-    </aside>
-    <main class="profile-content">
-      <div class="profile-card">
-        <h3>Informations</h3>
-        <div style="margin-top:8px;color:var(--pf-muted)">
-          Nom d'utilisateur: <strong>{{ user?.displayName || (user?.prenom + ' ' + user?.nom) }}</strong>
-        </div>
+    </section>
+
+    <section class="section-card" style="border-top: 6px solid var(--pf-accent);">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-key"></i> Sécurité</h2>
       </div>
-    </main>
+
+      <form (ngSubmit)="requestSave()">
+        <div class="form-group">
+          <label>Mot de passe actuel</label>
+          <input type="password" [(ngModel)]="editModel.oldPassword" name="oldPassword" placeholder="Saisir l'ancien mot de passe" />
+        </div>
+        <div class="form-group">
+          <label>Nouveau mot de passe</label>
+          <input type="password" [(ngModel)]="editModel.newPassword" name="newPassword" placeholder="Min. 12 caractères mixtes" />
+        </div>
+        <div class="form-group">
+          <label>Confirmation</label>
+          <input type="password" [(ngModel)]="editModel.confirmPassword" name="confirmPassword" placeholder="Ressaisir le nouveau mot de passe" />
+        </div>
+
+        <button type="submit" class="btn btn-save" [disabled]="!isFormValid() || loading">Mettre à jour les accès</button>
+      </form>
+    </section>
   </div>
 
   <div *ngIf="message" class="toast">{{ message }}</div>
-</div>
 
-<!-- Modal edition commerce -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal">
-    <h2>Modifier le commerce</h2>
-    <div class="modal-body">
-      <label>Prénom<input [(ngModel)]="editModel.prenom" class="input" /></label>
-      <label>Nom<input [(ngModel)]="editModel.nom" class="input" /></label>
-      <label>Email<input [(ngModel)]="editModel.email" class="input" /></label>
-      <label>Status<input [(ngModel)]="editModel.status" class="input" disabled /></label>
-      <label class="col-span-2">Changer le mot de passe (optionnel)</label>
-      <label>Mot de passe actuel<input type="password" [(ngModel)]="editModel.oldPassword" class="input" placeholder="Mot de passe actuel (requis si vous changez)" /></label>
-      <label>Nouveau mot de passe<input type="password" [(ngModel)]="editModel.newPassword" class="input" placeholder="Nouveau mot de passe" /></label>
-      <label>Confirmer<input type="password" [(ngModel)]="editModel.confirmPassword" class="input" placeholder="Confirmer le mot de passe" /></label>
-      <div *ngIf="editModel?.newPassword && editModel.newPassword !== editModel.confirmPassword" style="color:#c74000;margin-top:6px;">Les mots de passe ne correspondent pas.</div>
-      <div *ngIf="editModel?.newPassword && (editModel.newPassword?.length < 6)" style="color:#c74000;margin-top:6px;">Le mot de passe doit contenir au moins 6 caractères.</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-outline" (click)="showModal=false">Annuler</button>
-      <button class="btn-primary" (click)="requestSave()" [disabled]="!isFormValid() || loading">Enregistrer</button>
+  <!-- Modal edition commerce -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h2>Modifier le commerce</h2>
+      <div class="modal-body">
+        <label>Prénom<input [(ngModel)]="editModel.prenom" class="input" /></label>
+        <label>Nom<input [(ngModel)]="editModel.nom" class="input" /></label>
+        <label>Email<input [(ngModel)]="editModel.email" class="input" /></label>
+        <label>Status<input [(ngModel)]="editModel.status" class="input" disabled /></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="showModal=false">Annuler</button>
+        <button class="btn-primary" (click)="requestSave()" [disabled]="!isFormValid() || loading">Enregistrer</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Confirmation modal -->
-<div class="modal-backdrop" *ngIf="showConfirm">
-  <div class="modal">
-    <h2>Confirmer la mise à jour</h2>
-    <div class="modal-body" style="grid-template-columns:1fr;">
-      <p>{{ confirmMessage }}</p>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-outline" (click)="cancelConfirm()">Annuler</button>
-      <button class="btn-primary" (click)="confirmSave()">Confirmer</button>
+  <!-- Confirmation modal -->
+  <div class="modal-backdrop" *ngIf="showConfirm">
+    <div class="modal">
+      <h2>Confirmer la mise à jour</h2>
+      <div class="modal-body" style="grid-template-columns:1fr;">
+        <p>{{ confirmMessage }}</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="cancelConfirm()">Annuler</button>
+        <button class="btn-primary" (click)="confirmSave()">Confirmer</button>
+      </div>
     </div>
   </div>
 </div>

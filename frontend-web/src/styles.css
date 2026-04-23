@@ -42,9 +42,9 @@ body {
 
 /* Design system variables and layout helpers for profile pages */
 :root {
-  --pf-primary: #003B71; /* deep blue */
-  --pf-accent: #F78F1E; /* orange accent */
-  --pf-bg: #F8FAFC;
+  --pf-primary: #1e3a8a; /* user palette: deep navy */
+  --pf-accent: #f97316; /* user palette: orange */
+  --pf-bg: #f0f4f8;
   --pf-surface: #ffffff;
   --pf-muted: #64748b;
   --pf-radius: 12px;
@@ -64,6 +64,96 @@ body {
 /* Toast */
 .toast { position:fixed; right:24px; bottom:24px; background:var(--pf-primary); color:white; padding:12px 20px; border-radius:10px; box-shadow:0 10px 30px rgba(2,6,23,0.2); z-index:60 }
 
+/* Top navigation (inspired by provided snippet) */
+.top-nav {
+  background: var(--pf-primary);
+  border-bottom: 4px solid var(--pf-accent);
+  padding: 1rem 5%;
+  display:flex; justify-content:space-between; align-items:center; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+}
+.brand { font-weight:800; font-size:1.15rem; display:flex; align-items:center; gap:10px }
+.brand i { color: var(--pf-accent) }
+
+/* Wrapper utility (centers content like the HTML sample) */
+.wrapper { width: 90%; max-width: 1300px; margin: 2.5rem auto }
+
+/* Button styles matching sample */
+.btn { padding: 0.7rem 1.4rem; border-radius: 8px; font-weight:700; cursor:pointer; border:none; font-size:0.9rem; display:inline-flex; align-items:center; gap:8px; text-transform:uppercase }
+.btn-edit { background: var(--pf-accent); color: white }
+.btn-edit:hover { background: #ea580c; transform: scale(1.02) }
+.btn-save { background: var(--pf-primary); color: white; width:100%; margin-top:1rem; padding:1rem; justify-content:center }
+.btn-save:hover { background:#1e40af; box-shadow:0 4px 12px rgba(30,58,138,0.18) }
+
+/* Section card from the example (used by wrapper/sections) */
+.section-card { background: var(--pf-surface); border-radius: 12px; padding: 2.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border:1px solid rgba(30,58,138,0.06) }
+.section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:2px solid rgba(240,244,248,0.8) }
+.section-title { font-size:1.1rem; font-weight:700; color:var(--pf-primary); display:flex; align-items:center; gap:12px }
+.section-title i { color:var(--pf-accent) }
+
+/* Profile info: horizontal layout and colored labels/values */
+.info-display { display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-start }
+.info-item { display:flex; flex-direction:column; gap:6px; flex: 0 0 calc(50% - 0.75rem); }
+.info-label { font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--pf-primary); font-weight:700 }
+.info-value { font-size:1.05rem; color:var(--pf-accent); font-weight:800 }
+
+/* On small screens use stacked layout */
+@media (max-width: 700px) {
+  .info-item { flex: 0 0 100% }
+}
+
+/* Ensure sections are side-by-side on wide screens */
+.sections-container { display:flex; gap:2.5rem; align-items:flex-start; justify-content:space-between }
+.sections-container > .section-card { flex: 0 0 48%; }
+
+/* Security form: two-column grid for inputs and improved input styling */
+.security-form { display:grid; grid-template-columns: 1fr 1fr; gap:14px; align-items:start }
+.security-form .form-group { margin-bottom:0 }
+.security-form .form-group.full { grid-column: 1 / -1 }
+.security-form input {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(30,58,138,0.06);
+  background: #ffffff;
+  box-shadow: none;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.security-form input:focus {
+  outline: none;
+  border-color: var(--pf-primary);
+  box-shadow: 0 8px 24px rgba(14,46,94,0.06);
+  transform: translateY(-1px);
+}
+.security-form .btn-save { grid-column: 1 / -1 }
+
+@media (max-width: 700px) {
+  .sections-container { flex-direction:column }
+  .sections-container > .section-card { flex: 1 1 100% }
+  .security-form { grid-template-columns: 1fr }
+}
+
+/* Generic input styles used across profile pages and modals */
+.section-card input,
+.section-card .input,
+input[type="text"],
+input[type="password"],
+textarea {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(30,58,138,0.06);
+  background: #ffffff;
+  box-shadow: none;
+  transition: box-shadow 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.section-card input:focus,
+.section-card .input:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--pf-primary);
+  box-shadow: 0 8px 24px rgba(14,46,94,0.06);
+  transform: translateY(-1px);
+}
 /* Modal animation */
 @keyframes modalEnter { from { transform: translateY(12px) scale(0.98); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 }}
 .modal { animation: modalEnter 220ms cubic-bezier(.2,.9,.2,1); }

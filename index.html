@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace Professionnel | Savely & Carrefour Connect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Palette Bleue (Dominante) */
+            --primary-blue: #1e3a8a; /* Bleu Marine profond */
+            --secondary-blue: #3b82f6; /* Bleu vif */
+            --bg-blue: #f0f4f8;
+            
+            /* Palette Orange (Accentuation) */
+            --primary-orange: #f97316; /* Orange vif */
+            --orange-hover: #ea580c;
+            --orange-light: #fff7ed;
+
+            /* Neutres */
+            --white: #ffffff;
+            --border: #d1d5db;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-blue);
+            min-height: 100vh;
+        }
+
+        /* Top Navigation avec rappel de la charte */
+        .top-nav {
+            background: var(--primary-blue);
+            border-bottom: 4px solid var(--primary-orange);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand i {
+            color: var(--primary-orange);
+        }
+
+        .wrapper {
+            width: 90%;
+            max-width: 1300px;
+            margin: 3.5rem auto;
+        }
+
+        .sections-container {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+        }
+
+        .section-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            flex: 1;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(30, 58, 138, 0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-blue);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--primary-orange);
+        }
+
+        /* --- AFFICHAGE PROFIL (Lecture Seule) --- */
+        .info-display {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--secondary-blue);
+            font-weight: 700;
+        }
+
+        .info-value {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .bio-box {
+            background: var(--orange-light);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border-left: 5px solid var(--primary-orange);
+            margin-top: 0.5rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* --- FORMULAIRE SÉCURITÉ --- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 0.6rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--bg-blue);
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #fcfcfc;
+        }
+
+        input:focus {
+            border-color: var(--secondary-blue);
+            outline: none;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        /* --- BOUTONS --- */
+        .btn {
+            padding: 0.7rem 1.4rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-transform: uppercase;
+        }
+
+        .btn-edit { 
+            background: var(--primary-orange); 
+            color: white; 
+        }
+
+        .btn-edit:hover { 
+            background: var(--orange-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-save { 
+            background: var(--primary-blue); 
+            color: white; 
+            width: 100%; 
+            margin-top: 1rem; 
+            padding: 1rem;
+            justify-content: center;
+        }
+
+        .btn-save:hover { 
+            background: #1e40af;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+        }
+
+        .alert-box {
+            margin: 1.5rem 0;
+            padding: 1rem;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .alert-box i {
+            color: var(--primary-orange);
+            margin-top: 3px;
+        }
+
+        .alert-box p {
+            font-size: 0.85rem;
+            color: #9a3412;
+            line-height: 1.4;
+        }
+
+        /* Responsive */
+        @media (max-width: 950px) {
+            .sections-container { flex-direction: column; }
+            .wrapper { margin: 1.5rem auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div class="brand">
+            <i class="fas fa-rocket"></i> 
+            <span>INTERFACE GESTION</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <span style="font-size: 0.85rem; font-weight: 500; opacity: 0.9;">Session active : Michel Darryl</span>
+            <i class="fas fa-circle-user" style="font-size: 1.5rem; color: var(--primary-orange);"></i>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <div class="sections-container">
+            
+            <section class="section-card">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-user-tie"></i> Profil Utilisateur</h2>
+                    <button class="btn btn-edit"><i class="fas fa-edit"></i> Éditer</button>
+                </div>
+
+                <div class="info-display">
+                    <div class="info-item">
+                        <span class="info-label">Nom complet</span>
+                        <span class="info-value">Michel Darryl TAMO FOTSO</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Poste Actuel</span>
+                        <span class="info-value">Développeur Full-Stack & Entrepreneur</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Adresse de messagerie</span>
+                        <span class="info-value">michel.darryl@votreapp.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Résidence</span>
+                        <span class="info-value">Douala, Cameroun</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Présentation</span>
+                        <div class="bio-box">
+                            Passionné par la conception de systèmes d'information et le développement d'architectures logicielles modernes (Savely, Carrefour Connect).
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-card" style="border-top: 6px solid var(--primary-orange);">
+                <div class="section-header">
+                    <h2 class="section-title"><i class="fas fa-key"></i> Sécurité</h2>
+                </div>
+
+                <form>
+                    <div class="form-group">
+                        <label>Mot de passe actuel</label>
+                        <input type="password" placeholder="Saisir l'ancien mot de passe">
+                    </div>
+                    <div class="form-group">
+                        <label>Nouveau mot de passe</label>
+                        <input type="password" placeholder="Min. 12 caractères mixtes">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmation</label>
+                        <input type="password" placeholder="Ressaisir le nouveau mot de passe">
+                    </div>
+
+                    <div class="alert-box">
+                        <i class="fas fa-shield-check"></i>
+                        <p>
+                            <strong>Sécurité renforcée :</strong> La modification du mot de passe est une action sensible. Vous recevrez une confirmation par email après validation.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn btn-save">
+                        Mettre à jour les accès
+                    </button>
+                </form>
+            </section>
+
+        </div>
+    </div>
+
+</body>
+</html>

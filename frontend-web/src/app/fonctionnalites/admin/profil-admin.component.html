@@ -1,82 +1,89 @@
-<div class="page-wrapper">
-  <div class="page-header">
-    <div class="title-row">
-      <div class="page-title">Espace Administrateur</div>
-      <div class="page-breadcrumb">ACCUEIL &nbsp;&middot;&nbsp; À PROPOS</div>
-    </div>
-  </div>
-  <div class="profile-container">
-    <aside class="profile-summary">
-      <div class="profile-card">
-        <div style="display:flex;gap:16px;align-items:center">
-          <div class="profile-avatar">{{ (user.prenom?.charAt(0) || user.displayName?.charAt(0) || 'A') }}</div>
-          <div>
-            <div class="profile-name">{{ user?.displayName }}</div>
-            <div style="margin-top:8px"><span class="profile-role">{{ user?.role }}</span></div>
-          </div>
-        </div>
-        <div class="profile-contact" style="margin-top:14px">
-          <div><i class="fa-solid fa-envelope"></i>&nbsp;{{ user?.email }}</div>
-          <div style="margin-top:8px"><i class="fa-solid fa-phone"></i>&nbsp;{{ user?.phone }}</div>
-          <div style="margin-top:8px"><i class="fa-solid fa-location-dot"></i>&nbsp;{{ user?.city }}</div>
-        </div>
-        <div style="margin-top:18px; display:flex; gap:12px; justify-content:flex-start">
-          <button class="btn-primary" (click)="edit()">Modifier</button>
-        </div>
-      </div>
-    </aside>
-    <main class="profile-content">
-      <div class="profile-card">
-        <h3>Vérification et Sécurité</h3>
-        <div style="margin-top:12px">
-          <div class="item"><div class="label">STATUT KYC</div><div class="value">{{ user.status }}</div></div>
-          <div class="item" style="margin-top:8px"><div class="label">DATE D'INSCRIPTION</div><div class="value">{{ user.since }}</div></div>
-        </div>
+<div class="wrapper">
+  <div class="sections-container">
+    <section class="section-card">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-user-tie"></i> Profil Utilisateur</h2>
+        <button class="btn btn-edit" (click)="edit()"><i class="fas fa-edit"></i> Éditer</button>
       </div>
 
-      <div class="profile-card" style="margin-top:18px">
-        <h3>Aperçu de l'activité</h3>
-        <p style="margin-top:8px;color:var(--pf-muted)">Statistiques et graphiques à implémenter.</p>
+      <div class="info-display">
+        <div class="info-item">
+          <span class="info-label">Nom complet</span>
+          <span class="info-value">{{ user?.displayName || (user?.prenom + ' ' + user?.nom) }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Poste Actuel</span>
+          <span class="info-value">{{ user?.poste || '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Adresse de messagerie</span>
+          <span class="info-value">{{ user?.email }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Résidence</span>
+          <span class="info-value">{{ user?.city || user?.ville || '-' }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Présentation</span>
+          <div class="bio-box">{{ user?.bio || 'Passionné(e) - ajoutez une présentation.' }}</div>
+        </div>
       </div>
-    </main>
+    </section>
+
+    <section class="section-card" style="border-top: 6px solid var(--pf-accent);">
+      <div class="section-header">
+        <h2 class="section-title"><i class="fas fa-key"></i> Sécurité</h2>
+      </div>
+
+      <form (ngSubmit)="requestSave()">
+        <div class="form-group">
+          <label>Mot de passe actuel</label>
+          <input type="password" [(ngModel)]="editModel.oldPassword" name="oldPassword" placeholder="Saisir l'ancien mot de passe" />
+        </div>
+        <div class="form-group">
+          <label>Nouveau mot de passe</label>
+          <input type="password" [(ngModel)]="editModel.newPassword" name="newPassword" placeholder="Min. 12 caractères mixtes" />
+        </div>
+        <div class="form-group">
+          <label>Confirmation</label>
+          <input type="password" [(ngModel)]="editModel.confirmPassword" name="confirmPassword" placeholder="Ressaisir le nouveau mot de passe" />
+        </div>
+
+        <button type="submit" class="btn btn-save" [disabled]="!isFormValid() || loading">Mettre à jour les accès</button>
+      </form>
+    </section>
   </div>
 
   <div *ngIf="message" class="toast">{{ message }}</div>
-</div>
 
-<!-- Modal d'édition -->
-<div class="modal-backdrop" *ngIf="showModal">
-  <div class="modal">
-    <h2>Modifier le profil</h2>
-    <div class="modal-body">
-      <label>Nom complet<input [(ngModel)]="editModel.displayName" class="input" /></label>
-      <label>Email<input [(ngModel)]="editModel.email" class="input" /></label>
-      <label>Téléphone<input [(ngModel)]="editModel.phone" class="input" /></label>
-      <label>Ville<input [(ngModel)]="editModel.city" class="input" /></label>
-      <label class="col-span-2">Changer le mot de passe (optionnel)</label>
-      <label>Mot de passe actuel<input type="password" [(ngModel)]="editModel.oldPassword" class="input" placeholder="Mot de passe actuel (requis si vous changez)" /></label>
-      <label>Nouveau mot de passe<input type="password" [(ngModel)]="editModel.newPassword" class="input" placeholder="Nouveau mot de passe" /></label>
-      <label>Confirmer<input type="password" [(ngModel)]="editModel.confirmPassword" class="input" placeholder="Confirmer le mot de passe" /></label>
-      <div *ngIf="editModel?.newPassword && editModel.newPassword !== editModel.confirmPassword" style="color:#c74000;margin-top:6px;">Les mots de passe ne correspondent pas.</div>
-      <div *ngIf="editModel?.newPassword && (editModel.newPassword?.length < 6)" style="color:#c74000;margin-top:6px;">Le mot de passe doit contenir au moins 6 caractères.</div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-outline" (click)="showModal=false">Annuler</button>
-      <button class="btn-primary" (click)="requestSave()" [disabled]="!isFormValid() || loading">Enregistrer</button>
+  <!-- Modal d'édition (gardé pour édition complète) -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h2>Modifier le profil</h2>
+      <div class="modal-body">
+        <label>Nom complet<input [(ngModel)]="editModel.displayName" class="input" /></label>
+        <label>Email<input [(ngModel)]="editModel.email" class="input" /></label>
+        <label>Téléphone<input [(ngModel)]="editModel.phone" class="input" /></label>
+        <label>Ville<input [(ngModel)]="editModel.city" class="input" /></label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="showModal=false">Annuler</button>
+        <button class="btn-primary" (click)="requestSave()" [disabled]="!isFormValid() || loading">Enregistrer</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Confirmation modal -->
-<div class="modal-backdrop" *ngIf="showConfirm">
-  <div class="modal">
-    <h2>Confirmer la mise à jour</h2>
-    <div class="modal-body" style="grid-template-columns:1fr;">
-      <p>{{ confirmMessage }}</p>
-    </div>
-    <div class="modal-actions">
-      <button class="btn-outline" (click)="cancelConfirm()">Annuler</button>
-      <button class="btn-primary" (click)="confirmSave()">Confirmer</button>
+  <!-- Confirmation modal -->
+  <div class="modal-backdrop" *ngIf="showConfirm">
+    <div class="modal">
+      <h2>Confirmer la mise à jour</h2>
+      <div class="modal-body" style="grid-template-columns:1fr;">
+        <p>{{ confirmMessage }}</p>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" (click)="cancelConfirm()">Annuler</button>
+        <button class="btn-primary" (click)="confirmSave()">Confirmer</button>
+      </div>
     </div>
   </div>
 </div>
