@@ -17,21 +17,26 @@ class ApiService {
     try {
       final queryParams = {
         if (nom != null && nom.isNotEmpty) 'nom': nom,
-        if (idCategorie != null && idCategorie != 'null') 'idCategorie': idCategorie,
+        if (idCategorie != null && idCategorie != 'null')
+          'idCategorie': idCategorie,
         if (lat != null) 'lat': lat.toString(),
         if (lon != null) 'lon': lon.toString(),
         if (rayon != null) 'rayon': rayon.toString(),
       };
 
-      final uri = Uri.parse('$baseUrl/commerces/rechercher').replace(queryParameters: queryParams);
-      
+      final uri = Uri.parse(
+        '$baseUrl/commerces/rechercher',
+      ).replace(queryParameters: queryParams);
+
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         return data.map((json) => Commerce.fromJson(json)).toList();
       } else {
-        throw Exception('Erreur lors du chargement des commerces : ${response.statusCode}');
+        throw Exception(
+          'Erreur lors du chargement des commerces : ${response.statusCode}',
+        );
       }
     } catch (e) {
       print('Erreur ApiService.getCommerces: $e');
@@ -61,7 +66,9 @@ class ApiService {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
         return data.map((json) => Categorie.fromJson(json)).toList();
       } else {
-        throw Exception('Erreur lors du chargement des catégories : ${response.statusCode}');
+        throw Exception(
+          'Erreur lors du chargement des catégories : ${response.statusCode}',
+        );
       }
     } catch (e) {
       print('Erreur ApiService.getCategories: $e');
@@ -72,7 +79,9 @@ class ApiService {
   // --- Avis ---
   Future<List<dynamic>> getAvisByCommerce(String commerceId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/avis/commerce/$commerceId'));
+      final response = await http.get(
+        Uri.parse('$baseUrl/avis/commerce/$commerceId'),
+      );
       if (response.statusCode == 200) {
         return json.decode(utf8.decode(response.bodyBytes));
       }
@@ -101,20 +110,31 @@ class ApiService {
   }
 
   // --- Favoris ---
-  Future<bool> toggleFavorite(String userId, String commerceId, bool isFavorite, String? token) async {
+  Future<bool> toggleFavorite(
+    String userId,
+    String commerceId,
+    bool isFavorite,
+    String? token,
+  ) async {
     try {
       final url = '$baseUrl/utilisateurs/$userId/favoris/$commerceId';
       final headers = {
         'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token'
+        if (token != null) 'Authorization': 'Bearer $token',
       };
-      
-      final response = isFavorite 
-        ? await http.delete(Uri.parse(url), headers: headers)
-        : await http.post(Uri.parse(url), headers: headers, body: json.encode({}));
-      
+
+      final response = isFavorite
+          ? await http.delete(Uri.parse(url), headers: headers)
+          : await http.post(
+              Uri.parse(url),
+              headers: headers,
+              body: json.encode({}),
+            );
+
       if (response.statusCode != 200 && response.statusCode != 201) {
-        print('Erreur toggleFavorite API response: ${response.statusCode} - ${response.body}');
+        print(
+          'Erreur toggleFavorite API response: ${response.statusCode} - ${response.body}',
+        );
       }
       return response.statusCode == 200 || response.statusCode == 201;
     } catch (e) {
@@ -160,7 +180,68 @@ class ApiService {
     }
   }
 
-  Future<bool> register(String nom, String prenom, String email, String password, String telephone) async {
+  // --- Mot de passe oublié (FR endpoints) ---
+  Future<bool> requestPasswordReset(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/mot-de-passe-oublie'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'email': email}),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Erreur requestPasswordReset: $e');
+      return false;
+    }
+  }
+
+  Future<String?> verifyResetCode(String email, String code) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/verifier-code'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'email': email, 'code': code}),
+      );
+      if (response.statusCode == 200) {
+        final data = json.decode(utf8.decode(response.bodyBytes));
+        return data['token']?.toString();
+      }
+      return null;
+    } catch (e) {
+      print('Erreur verifyResetCode: $e');
+      return null;
+    }
+  }
+
+  Future<bool> resetPassword(
+    String email,
+    String token,
+    String nouveauMotDePasse,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/reinitialiser-mot-de-passe'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({
+          'email': email,
+          'token': token,
+          'nouveauMotDePasse': nouveauMotDePasse,
+        }),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      print('Erreur resetPassword: $e');
+      return false;
+    }
+  }
+
+  Future<bool> register(
+    String nom,
+    String prenom,
+    String email,
+    String password,
+    String telephone,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/utilisateurs/inscription/visiteur'),
@@ -173,7 +254,7 @@ class ApiService {
           'telephone': telephone,
         }),
       );
-      
+
       if (response.statusCode == 201 || response.statusCode == 200) {
         return true;
       } else {
@@ -186,4 +267,3 @@ class ApiService {
     }
   }
 }
-

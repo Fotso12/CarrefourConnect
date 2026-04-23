@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'main_screen.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -14,18 +16,18 @@ class AboutScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildHero(),
+            _buildHero(context),
             _buildMission(),
             _buildStats(),
             _buildGuide(),
-            _buildCTA(),
+            _buildCTA(context),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildHero() {
+  Widget _buildHero(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
       width: double.infinity,
@@ -67,25 +69,46 @@ class AboutScreen extends StatelessWidget {
             spacing: 12,
             children: [
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Navigate to main screen home tab
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (_) => const MainScreen()),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryBlue,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   elevation: 0,
                 ),
-                child: const Text('Explorer les commerces', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Explorer les commerces',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               OutlinedButton(
-                onPressed: () {},
+                onPressed: () => _showPartnerModal(context),
                 style: OutlinedButton.styleFrom(
                   foregroundColor: primaryBlue,
                   side: const BorderSide(color: Color(0xFFE2E8F0), width: 2),
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 16,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                child: const Text('Devenir partenaire', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text(
+                  'Devenir partenaire',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),
@@ -159,16 +182,41 @@ class AboutScreen extends StatelessWidget {
         crossAxisSpacing: 16,
         childAspectRatio: 1.3,
         children: [
-          _buildStatCard('+1000', 'Commerces', const Color(0xFFF8FAFC), primaryBlue),
-          _buildStatCard('98%', 'Satisfaction', const Color(0xFFF0F9FF), secondaryBlue),
-          _buildStatCard('24/7', 'Accessibilité', const Color(0xFFFFF7ED), accentOrange),
-          _buildStatCard('100%', 'Local', const Color(0xFF0F172A), Colors.white),
+          _buildStatCard(
+            '+1000',
+            'Commerces',
+            const Color(0xFFF8FAFC),
+            primaryBlue,
+          ),
+          _buildStatCard(
+            '98%',
+            'Satisfaction',
+            const Color(0xFFF0F9FF),
+            secondaryBlue,
+          ),
+          _buildStatCard(
+            '24/7',
+            'Accessibilité',
+            const Color(0xFFFFF7ED),
+            accentOrange,
+          ),
+          _buildStatCard(
+            '100%',
+            'Local',
+            const Color(0xFF0F172A),
+            Colors.white,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatCard(String value, String label, Color bgColor, Color textColor) {
+  Widget _buildStatCard(
+    String value,
+    String label,
+    Color bgColor,
+    Color textColor,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -224,9 +272,24 @@ class AboutScreen extends StatelessWidget {
             style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
           ),
           const SizedBox(height: 32),
-          _buildStep(1, 'Recherche & Filtres', 'Utilisez la barre de recherche intelligente. Filtrez par catégorie ou proximité.', primaryBlue),
-          _buildStep(2, 'Détails & Avis', 'Consultez les photos et les horaires avant de vous déplacer.', accentOrange),
-          _buildStep(3, 'Engagement', 'Pour les pros, créez votre compte et publiez vos offres.', secondaryBlue),
+          _buildStep(
+            1,
+            'Recherche & Filtres',
+            'Utilisez la barre de recherche intelligente. Filtrez par catégorie ou proximité.',
+            primaryBlue,
+          ),
+          _buildStep(
+            2,
+            'Détails & Avis',
+            'Consultez les photos et les horaires avant de vous déplacer.',
+            accentOrange,
+          ),
+          _buildStep(
+            3,
+            'Engagement',
+            'Pour les pros, créez votre compte et publiez vos offres.',
+            secondaryBlue,
+          ),
         ],
       ),
     );
@@ -244,12 +307,21 @@ class AboutScreen extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                ),
+              ],
             ),
             child: Center(
               child: Text(
                 '$number',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: color),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                  color: color,
+                ),
               ),
             ),
           ),
@@ -260,12 +332,20 @@ class AboutScreen extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: primaryBlue),
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: primaryBlue,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   desc,
-                  style: const TextStyle(fontSize: 13, color: Color(0xFF64748B), height: 1.4),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: Color(0xFF64748B),
+                    height: 1.4,
+                  ),
                 ),
               ],
             ),
@@ -275,7 +355,7 @@ class AboutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCTA() {
+  Widget _buildCTA(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(24),
       padding: const EdgeInsets.all(32),
@@ -309,21 +389,63 @@ class AboutScreen extends StatelessWidget {
           Text(
             'CarrefourConnect est votre meilleur allié pour booster votre commerce.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white.withOpacity(0.9), fontSize: 14),
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 32),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _showPartnerModal(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: accentOrange,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
-              child: const Text('Inscrire un commerce', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Inscrire un commerce',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPartnerModal(BuildContext context) {
+    const webUrl = 'https://carrefourconnect.com';
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'Devenir partenaire',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Pour créer un compte professionnel et inscrire un commerce, veuillez utiliser la version web depuis un ordinateur.\n\nRendez-vous sur notre site pour vous inscrire et soumettre votre commerce.\n\nLe processus permet de vérifier votre identité et d\'ajouter les informations administratives nécessaires.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Fermer'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              final uri = Uri.parse(webUrl);
+              if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+                // ignore: avoid_print
+                print('Impossible d\'ouvrir $webUrl');
+              }
+              Navigator.pop(ctx);
+            },
+            child: const Text('Ouvrir le site'),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'splash_screen.dart';
 import 'screens/main_screen.dart';
+import 'screens/not_found_screen.dart';
 import 'services/auth_service.dart';
 
 Future<void> main() async {
@@ -28,6 +29,8 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: const SplashScreen(nextScreen: MainScreen()),
+      onUnknownRoute: (settings) =>
+          MaterialPageRoute(builder: (_) => const NotFoundScreen()),
     );
   }
 }

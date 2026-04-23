@@ -15,6 +15,18 @@ export const routes: Routes = [
     path: 'connexion', 
     loadComponent: () => import('./fonctionnalites/auth/connexion/connexion.component').then(m => m.ConnexionComponent) 
   },
+  {
+    path: 'auth/mot-de-passe-oublie',
+    loadComponent: () => import('./fonctionnalites/auth/mot-de-passe-oublie/mot-de-passe-oublie.component').then(m => m.MotDePasseOublieComponent)
+  },
+  {
+    path: 'auth/verifier-code',
+    loadComponent: () => import('./fonctionnalites/auth/verifier-code/verifier-code.component').then(m => m.VerifierCodeComponent)
+  },
+  {
+    path: 'auth/reinitialiser-mot-de-passe',
+    loadComponent: () => import('./fonctionnalites/auth/reinitialiser-mot-de-passe/reinitialiser-mot-de-passe.component').then(m => m.ReinitialiserMotDePasseComponent)
+  },
   { 
     path: 'inscription-commercant', 
     loadComponent: () => import('./fonctionnalites/auth/inscription-commercant/inscription-commercant.component').then(m => m.InscriptionCommercantComponent) 
@@ -42,6 +54,10 @@ export const routes: Routes = [
       { 
         path: 'avis', 
         loadComponent: () => import('./fonctionnalites/commercant/gestion-avis/gestion-avis.component').then(m => m.GestionAvisCommercantComponent) 
+      },
+      {
+        path: 'profil',
+        loadComponent: () => import('./fonctionnalites/commercant/profil-commercant.component').then(m => m.ProfilCommercantComponent)
       },
       { path: '', redirectTo: 'commerces', pathMatch: 'full' }
     ]
@@ -78,8 +94,13 @@ export const routes: Routes = [
         path: 'avis',
         loadComponent: () => import('./fonctionnalites/admin/gestion-avis/gestion-avis.component').then(m => m.GestionAvisAdminComponent)
       },
+      {
+        path: 'profil',
+        loadComponent: () => import('./fonctionnalites/admin/profil-admin.component').then(m => m.ProfilAdminComponent)
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
-  { path: '**', redirectTo: '' }
+  // Profil routes moved into their parent dashboards so sidebar/navbar remain visible
+  { path: '**', loadComponent: () => import('./fonctionnalites/shared/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];

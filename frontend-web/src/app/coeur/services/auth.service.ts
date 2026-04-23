@@ -78,6 +78,19 @@ export class AuthService {
     this.currentUserSubject.next({});
   }
 
+  // --- Mot de passe oublié ---
+  requestPasswordReset(email: string) {
+    return this.http.post(`${AUTH_API}/mot-de-passe-oublie`, { email }, httpOptions);
+  }
+
+  verifyResetCode(email: string, code: string) {
+    return this.http.post(`${AUTH_API}/verifier-code`, { email, code }, httpOptions);
+  }
+
+  resetPassword(email: string, token: string, nouveauMotDePasse: string) {
+    return this.http.post(`${AUTH_API}/reinitialiser-mot-de-passe`, { email, token, nouveauMotDePasse }, httpOptions);
+  }
+
   public saveToken(token: string): void {
     window.localStorage.removeItem(TOKEN_KEY);
     window.localStorage.setItem(TOKEN_KEY, token);

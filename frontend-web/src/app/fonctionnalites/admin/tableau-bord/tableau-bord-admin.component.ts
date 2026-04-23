@@ -75,6 +75,11 @@ export class TableauBordAdminComponent implements OnInit {
     this.isSidebarOpen = !this.isSidebarOpen;
   }
 
+  goToProfile(): void {
+    this.router.navigate(['/admin/profil']);
+    if (window.innerWidth <= 1024) this.isSidebarOpen = false;
+  }
+
   logout(): void {
     this.authService.logout();
     this.showLogoutConfirm = false;

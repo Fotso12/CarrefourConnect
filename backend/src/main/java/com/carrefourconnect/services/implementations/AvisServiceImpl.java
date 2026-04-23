@@ -59,6 +59,17 @@ public class AvisServiceImpl implements AvisService {
         if (dto.getIduser() != null) {
             entity.setVisiteur(visiteurRepository.findById(dto.getIduser()).orElseThrow(() -> new RuntimeException("Visiteur non trouvé")));
         }
+        // Defense-in-depth: prevent a commercant from rating their own commerce
+        if (entity.getCommerce() != null && entity.getCommerce().getCommercant() != null && entity.getVisiteur() != null) {
+            try {
+                if (entity.getVisiteur().getIduser().equals(entity.getCommerce().getCommercant().getIduser())) {
+                    throw new RuntimeException("Un commerçant ne peut pas noter son propre commerce");
+                }
+            } catch (Exception e) {
+                log.warn("Vérification propriétaire/commercant échouée: {}", e.getMessage());
+                throw e;
+            }
+        }
         Avis saved = repository.save(entity);
         updateCommerceRating(saved.getCommerce().getIdcommerce());
         return mapper.toDto(saved);

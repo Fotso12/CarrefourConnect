@@ -106,4 +106,28 @@ public class EmailService {
             log.error("Erreur lors de l'envoi de l'email de suspension: {}", e.getMessage());
         }
     }
+
+    /**
+     * Envoie un code de réinitialisation au commerçant/visiteur.
+     */
+    @Async
+    public void envoyerCodeReinitialisation(String emailDestinataire, String code) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(emailDestinataire);
+            message.setSubject("[CarrefourConnect] Code de réinitialisation de mot de passe");
+            message.setText(
+                "Bonjour,\n\n" +
+                "Vous avez demandé la réinitialisation de votre mot de passe.\n" +
+                "Voici votre code de vérification à 5 chiffres : " + code + "\n\n" +
+                "Ce code est valide pendant 15 minutes. Si vous n'avez pas demandé cette opération, ignorez ce message.\n\n" +
+                "Cordialement,\nL'équipe CarrefourConnect"
+            );
+            mailSender.send(message);
+            log.info("Email de code de réinitialisation envoyé à: {}", emailDestinataire);
+        } catch (Exception e) {
+            log.error("Erreur lors de l'envoi de l'email de code de réinitialisation: {}", e.getMessage());
+        }
+    }
 }

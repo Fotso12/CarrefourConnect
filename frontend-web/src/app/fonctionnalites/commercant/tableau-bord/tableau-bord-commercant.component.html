@@ -28,7 +28,7 @@
 
     <!-- Footer Sidebar (Profile) -->
     <div class="p-8 border-t border-slate-800/50 space-y-4">
-      <div class="flex items-center gap-4 p-4 rounded-[28px] bg-slate-800/30 border border-slate-700/30">
+      <div (click)="goToProfile()" class="flex items-center gap-4 p-4 rounded-[28px] bg-slate-800/30 border border-slate-700/30 cursor-pointer hover:bg-slate-800/40">
         <div class="h-12 w-12 rounded-[18px] bg-[#f97316] flex items-center justify-center font-black text-white shadow-lg">
             {{ (currentUser.prenom?.charAt(0) || 'C') }}
         </div>
@@ -66,6 +66,10 @@
                   </div>
               </button>
           </div>
+            <!-- Profile icon on navbar -->
+            <button (click)="goToProfile()" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all">
+              <i class="fa-solid fa-user text-lg"></i>
+            </button>
       </div>
     </header>
 

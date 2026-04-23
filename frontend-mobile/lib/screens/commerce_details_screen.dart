@@ -84,9 +84,41 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
 
     if (!isConnected) {
       _showLoginRequiredModal();
-    } else {
-      _showRateDialog();
+      return;
     }
+
+    // Prevent a merchant / owner from rating their own commerce if ownerId is present
+    final userData = await _authService.getUserData();
+    final currentUserId = userData != null ? userData['id']?.toString() : null;
+    final ownerId = widget.commerce.ownerId;
+
+    if (ownerId != null && currentUserId != null && ownerId == currentUserId) {
+      // Show a polite message explaining that merchants cannot rate their own commerce
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Action interdite',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Vous ne pouvez pas laisser un avis sur votre propre commerce.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    _showRateDialog();
   }
 
   void _showLoginRequiredModal() {

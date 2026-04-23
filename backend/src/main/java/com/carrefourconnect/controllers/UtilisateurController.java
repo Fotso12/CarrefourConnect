@@ -117,6 +117,25 @@ public class UtilisateurController {
         }
     }
 
+    static class ChangePasswordRequest {
+        public String ancienMotDePasse;
+        public String nouveauMotDePasse;
+    }
+
+    @PutMapping("/{id}/mot-de-passe")
+    @Operation(summary = "Change le mot de passe d'un utilisateur en vérifiant l'ancien mot de passe")
+    public ResponseEntity<?> changePassword(@PathVariable("id") java.util.UUID id, @RequestBody ChangePasswordRequest req) {
+        log.info("Requête changement mot de passe pour utilisateur ID: {}", id);
+        try {
+            boolean ok = service.changePassword(id, req.ancienMotDePasse == null ? "" : req.ancienMotDePasse, req.nouveauMotDePasse == null ? "" : req.nouveauMotDePasse);
+            if (!ok) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ancien mot de passe invalide ou utilisateur introuvable");
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur changement mot de passe {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     /**
      * Supprime définitivement un utilisateur du système.
      *

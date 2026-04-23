@@ -26,4 +26,16 @@ public interface UtilisateurService {
 
     void suspendre(UUID id, String motif);
     void activer(UUID id);
+    // Réinitialisation de mot de passe
+    boolean reinitialiserMotDePasseParEmail(String email, String nouveauMotDePasse);
+    
+    /**
+     * Change le mot de passe pour un utilisateur donné en vérifiant l'ancien mot de passe.
+     * @param id ID de l'utilisateur
+     * @param ancienMotDePasse le mot de passe actuel fourni par l'utilisateur
+     * @param nouveauMotDePasse le nouveau mot de passe à appliquer
+     * @return true si le changement a réussi, false sinon
+     */
+    boolean changePassword(java.util.UUID id, String ancienMotDePasse, String nouveauMotDePasse);
+
 }

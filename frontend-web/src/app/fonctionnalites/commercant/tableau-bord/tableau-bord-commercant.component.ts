@@ -77,6 +77,13 @@ export class TableauBordCommercantComponent implements OnInit {
     }
   }
 
+  goToProfile(): void {
+    // Navigate to the commercant profile page
+    this.router.navigate(['/commercant/profil']);
+    // close sidebar on small screens for better UX
+    if (window.innerWidth <= 1024) this.isSidebarOpen = false;
+  }
+
   logout(): void {
     this.authService.logout();
     this.showLogoutConfirm = false;

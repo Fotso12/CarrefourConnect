@@ -98,6 +98,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             existing.setPrenom(dto.getPrenom());
             existing.setEmail(dto.getEmail());
             existing.setTelephone(dto.getTelephone());
+            // Allow password update when provided (encode before saving)
+            if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
+                existing.setPassword(passwordEncoder.encode(dto.getPassword()));
+            }
             existing.setStatus(dto.getStatus());
             existing.setMotifSuspension(dto.getMotifSuspension());
             return mapper.toDto(repository.save(existing));
@@ -105,6 +109,21 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             log.error("Utilisateur non trouvé pour mise à jour: {}", id);
             return null;
         });
+    }
+
+    @Override
+    public boolean changePassword(UUID id, String ancienMotDePasse, String nouveauMotDePasse) {
+        log.info("Changement de mot de passe pour l'utilisateur ID: {}", id);
+        return repository.findById(id).map(u -> {
+            // Vérifier l'ancien mot de passe
+            if (ancienMotDePasse == null || !passwordEncoder.matches(ancienMotDePasse, u.getPassword())) {
+                log.warn("Ancien mot de passe invalide pour utilisateur {}", id);
+                return false;
+            }
+            u.setPassword(passwordEncoder.encode(nouveauMotDePasse));
+            repository.save(u);
+            return true;
+        }).orElse(false);
     }
 
     @Override
@@ -139,6 +158,16 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return repository.findByEmail(email)
                 .map(mapper::toDto)
                 .orElse(null);
+    }
+
+    @Override
+    public boolean reinitialiserMotDePasseParEmail(String email, String nouveauMotDePasse) {
+        log.info("Réinitialisation du mot de passe pour l'email: {}", email);
+        return repository.findByEmail(email).map(user -> {
+            user.setPassword(passwordEncoder.encode(nouveauMotDePasse));
+            repository.save(user);
+            return true;
+        }).orElse(false);
     }
 
     @Override

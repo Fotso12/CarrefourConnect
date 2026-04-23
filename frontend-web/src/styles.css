@@ -39,3 +39,43 @@ body {
 .pulse {
   animation: pulse 2s infinite;
 }
+
+/* Design system variables and layout helpers for profile pages */
+:root {
+  --pf-primary: #003B71; /* deep blue */
+  --pf-accent: #F78F1E; /* orange accent */
+  --pf-bg: #F8FAFC;
+  --pf-surface: #ffffff;
+  --pf-muted: #64748b;
+  --pf-radius: 12px;
+  --pf-radius-lg: 20px;
+  --pf-shadow: 0 20px 40px rgba(2,6,23,0.08);
+}
+
+.profile-container { width:100%; max-width:1200px; display:grid; grid-template-columns: 320px 1fr; gap:28px; align-items:start; margin:0 auto; }
+.profile-summary { background:var(--pf-surface); border-radius:var(--pf-radius-lg); padding:28px; box-shadow:var(--pf-shadow); }
+.profile-content { background:transparent; }
+.profile-card { background:var(--pf-surface); border-radius:var(--pf-radius); padding:20px; box-shadow:0 12px 30px rgba(2,6,23,0.06); }
+.profile-avatar { width:120px; height:120px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:40px; color:whitesmoke; background:linear-gradient(135deg,var(--pf-primary), #0a66b2); }
+.profile-name { font-size:22px; font-weight:800; color:var(--pf-primary); }
+.profile-role { font-size:13px; font-weight:700; color:var(--pf-muted); background:#f1f5f9; padding:6px 10px; border-radius:10px; display:inline-block }
+.profile-contact { color:var(--pf-muted); margin-top:12px }
+
+/* Toast */
+.toast { position:fixed; right:24px; bottom:24px; background:var(--pf-primary); color:white; padding:12px 20px; border-radius:10px; box-shadow:0 10px 30px rgba(2,6,23,0.2); z-index:60 }
+
+/* Modal animation */
+@keyframes modalEnter { from { transform: translateY(12px) scale(0.98); opacity:0 } to { transform: translateY(0) scale(1); opacity:1 }}
+.modal { animation: modalEnter 220ms cubic-bezier(.2,.9,.2,1); }
+
+/* Page fade for full-page feel */
+@keyframes pageFade { from { opacity:0; transform: translateY(8px) } to { opacity:1; transform: translateY(0) } }
+
+/* utility applied on main wrappers to make whole page feel alive */
+.page-wrapper { animation: pageFade 260ms cubic-bezier(.2,.9,.2,1) both }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .profile-container { grid-template-columns: 1fr; padding:0 16px }
+  .profile-summary { order:2 }
+}

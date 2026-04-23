@@ -39,6 +39,7 @@ class Media {
 
 class Commerce {
   final String? idcommerce;
+  final String? ownerId;
   final String nom;
   final String? description;
   final String? adresse;
@@ -87,6 +88,14 @@ class Commerce {
 
     return Commerce(
       idcommerce: json['idcommerce']?.toString(),
+      ownerId: json['utilisateur'] != null
+          ? (json['utilisateur']['id']?.toString() ??
+                json['utilisateur']['iduser']?.toString())
+          : (json['idUtilisateur']?.toString() ??
+                json['idUtilisateur']?.toString() ??
+                json['idUser']?.toString() ??
+                json['ownerId']?.toString() ??
+                json['proprietaire']?.toString()),
       nom: json['nom'] ?? '',
       description: json['description'],
       adresse: addr ?? json['adresse'],
