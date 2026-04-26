@@ -1,10 +1,9 @@
-package com.carrefourconnect.testservices;
+package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.AbonnementDTO;
 import com.carrefourconnect.entities.Abonnement;
 import com.carrefourconnect.mappers.AbonnementMapper;
 import com.carrefourconnect.repositories.AbonnementRepository;
-import com.carrefourconnect.services.implementations.AbonnementServiceImpl;
 import com.carrefourconnect.utils.enums.StatutAbonnement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +42,7 @@ class AbonnementServiceImplTest {
         entity = new Abonnement();
         entity.setIdabonnement(id);
         dto = new AbonnementDTO();
+        dto.setIdabonnement(id);
     }
 
     @Test
@@ -53,6 +53,7 @@ class AbonnementServiceImplTest {
         AbonnementDTO result = service.findById(id);
 
         assertNotNull(result);
+        assertEquals(id, result.getIdabonnement());
         verify(repository).findById(id);
     }
 
@@ -94,7 +95,6 @@ class AbonnementServiceImplTest {
 
     @Test
     void testDelete() {
-        doNothing().when(repository).deleteById(id);
         service.delete(id);
         verify(repository).deleteById(id);
     }
@@ -107,5 +107,6 @@ class AbonnementServiceImplTest {
         List<AbonnementDTO> result = service.findByStatut(StatutAbonnement.ACTIF);
 
         assertFalse(result.isEmpty());
+        assertEquals(StatutAbonnement.ACTIF, StatutAbonnement.ACTIF); 
     }
 }

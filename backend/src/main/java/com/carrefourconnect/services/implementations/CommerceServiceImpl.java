@@ -42,6 +42,9 @@ public class CommerceServiceImpl implements CommerceService {
     private final NotificationService notificationService;
     private final EmailService emailService;
 
+    @org.springframework.beans.factory.annotation.Value("${app.base-url}")
+    private String baseUrl;
+
     public CommerceServiceImpl(CommerceRepository repository, 
                                CommerceMapper mapper,
                                CategorieRepository categorieRepository,
@@ -64,7 +67,6 @@ public class CommerceServiceImpl implements CommerceService {
 
     private void enrichirDto(CommerceDTO dto) {
         if (dto != null && dto.getIdcommerce() != null) {
-            String baseUrl = "http://localhost:8084";
             
             // Récupérer tous les médias et les mapper
             List<com.carrefourconnect.entities.Media> mediaEntities = mediaRepository.findByCommerce_Idcommerce(dto.getIdcommerce());
@@ -205,21 +207,24 @@ public class CommerceServiceImpl implements CommerceService {
 
         Commerce savedEntity = repository.save(entity);
 
-        // Envoyer une notification aux administrateurs
+        // Envoyer une notification et email aux administrateurs
+        envoyerNotificationAdministrateurs(savedEntity);
+
+        return mapper.toDto(savedEntity);
+    }
+
+    private void envoyerNotificationAdministrateurs(Commerce commerce) {
         notificationService.sendToAdmins(NotificationDTO.builder()
                 .titre("Demande d'inscription de commerce")
-                .message("Une nouvelle demande d'inscription pour le commerce '" + savedEntity.getNom() + "' a été soumise.")
+                .message("Une nouvelle demande d'inscription pour le commerce '" + commerce.getNom() + "' a été soumise.")
                 .type("NOUVEAU_COMMERCE")
                 .build());
 
-        // Envoyer l'email aux administrateurs
-        if (savedEntity.getCommercant() != null) {
-            emailService.envoyerNotificationNouveauCommerce(savedEntity.getNom(),
-                    savedEntity.getCommercant().getNom() + " " + savedEntity.getCommercant().getPrenom(),
-                    savedEntity.getCommercant().getEmail());
+        if (commerce.getCommercant() != null) {
+            emailService.envoyerNotificationNouveauCommerce(commerce.getNom(),
+                    commerce.getCommercant().getNom() + " " + commerce.getCommercant().getPrenom(),
+                    commerce.getCommercant().getEmail());
         }
-
-        return mapper.toDto(savedEntity);
     }
 
     @Override
@@ -371,87 +376,65 @@ public class CommerceServiceImpl implements CommerceService {
 
     @Override
     public void suspendre(UUID id, String motif) {
-        log.info("Suspension du commerce ID: {} pour motif: {}", id, motif);
-        repository.findById(id).ifPresent(c -> {
-            c.setStatut(StatutCommerce.SUSPENDU);
-            c.setMotifSuspension(motif);
-            repository.save(c);
-
-            // Envoyer une notification au commerçant
-            notificationService.send(NotificationDTO.builder()
-                    .iduser(c.getCommercant().getIduser())
-                    .titre("Commerce Suspendu")
-                    .message("Votre commerce '" + c.getNom() + "' a été suspendu pour le motif suivant : " + motif)
-                    .type("SUSPENSION")
-                    .build());
-                    
-            // Envoyer un email
-            emailService.envoyerEmailSuspensionCommerce(c.getCommercant().getEmail(), c.getNom(), motif);
-        });
+        changerStatut(id, StatutCommerce.SUSPENDU, "Commerce Suspendu", 
+            "Votre commerce '%s' a été suspendu pour le motif suivant : %s", motif, true);
     }
 
     @Override
     public void rejeter(UUID id, String motif) {
-        log.info("Rejet du commerce ID: {} pour motif: {}", id, motif);
-        repository.findById(id).ifPresent(c -> {
-            c.setStatut(StatutCommerce.REJETE);
-            c.setMotifSuspension(motif);
-            repository.save(c);
-
-            // Envoyer une notification au commerçant
-            notificationService.send(NotificationDTO.builder()
-                    .iduser(c.getCommercant().getIduser())
-                    .titre("Inscription de Commerce Rejetée")
-                    .message("Votre demande d'inscription pour le commerce '" + c.getNom() + "' a été rejetée pour le motif suivant : " + motif)
-                    .type("REJET")
-                    .build());
-                    
-            // Envoyer un email
-            emailService.envoyerEmailRejetCommerce(c.getCommercant().getEmail(), c.getNom(), motif);
-        });
+        changerStatut(id, StatutCommerce.REJETE, "Inscription de Commerce Rejetée", 
+            "Votre demande d'inscription pour le commerce '%s' a été rejetée pour le motif suivant : %s", motif, true);
     }
 
     @Override
     public void valider(UUID id) {
-        log.info("Validation du commerce ID: {}", id);
-        repository.findById(id).ifPresent(c -> {
-            c.setStatut(StatutCommerce.VALIDE);
-            c.setMotifSuspension(null);
-            repository.save(c);
-
-            // Notification (Email n'est pas envoyé par défaut pour la validation selon EmailService, on peut utiliser uniquement in-app)
-            notificationService.send(NotificationDTO.builder()
-                    .iduser(c.getCommercant().getIduser())
-                    .titre("Commerce Validé")
-                    .message("Félicitations ! Votre commerce '" + c.getNom() + "' a été validé et est désormais visible sur la plateforme.")
-                    .type("VALIDATION")
-                    .build());
-
-            // Envoyer un email de validation au commerçant (ajouté pour notifier par mail)
-            if (c.getCommercant() != null && c.getCommercant().getEmail() != null) {
-                emailService.envoyerEmailValidationCommerce(c.getCommercant().getEmail(), c.getNom());
-            }
-        });
+        changerStatut(id, StatutCommerce.VALIDE, "Commerce Validé", 
+            "Félicitations ! Votre commerce '%s' a été validé et est désormais visible sur la plateforme.", null, false);
     }
 
     @Override
     public void reactiver(UUID id) {
-        log.info("Réactivation du commerce ID: {}", id);
+        changerStatut(id, StatutCommerce.VALIDE, "Commerce Réactivé", 
+            "Votre commerce '%s' a été réactivé par l'administration et est de nouveau visible.", null, true);
+    }
+
+    private void changerStatut(UUID id, StatutCommerce nouveauStatut, String titreNotif, String templateMsg, String motif, boolean estSuspension) {
+        log.info("Changement de statut pour commerce ID: {} vers {}", id, nouveauStatut);
         repository.findById(id).ifPresent(c -> {
-            c.setStatut(StatutCommerce.VALIDE);
-            c.setMotifSuspension(null);
+            c.setStatut(nouveauStatut);
+            if (motif != null) {
+                c.setMotifSuspension(motif);
+            } else {
+                c.setMotifSuspension(null);
+            }
             repository.save(c);
 
-            // Notification + email au commerçant
-            notificationService.send(NotificationDTO.builder()
-                    .iduser(c.getCommercant().getIduser())
-                    .titre("Commerce Réactivé")
-                    .message("Votre commerce '" + c.getNom() + "' a été réactivé par l'administration et est de nouveau visible.")
-                    .type("REACTIVATION")
-                    .build());
-
-            if (c.getCommercant() != null && c.getCommercant().getEmail() != null) {
-                emailService.envoyerEmailReactivationCommerce(c.getCommercant().getEmail(), c.getNom());
+            if (c.getCommercant() != null) {
+                String message = String.format(templateMsg, c.getNom(), motif);
+                
+                // Notification in-app
+                notificationService.send(NotificationDTO.builder()
+                        .iduser(c.getCommercant().getIduser())
+                        .titre(titreNotif)
+                        .message(message)
+                        .type(nouveauStatut.name())
+                        .build());
+                
+                // Notification Email
+                String email = c.getCommercant().getEmail();
+                if (email != null) {
+                    switch (nouveauStatut) {
+                        case SUSPENDU -> emailService.envoyerEmailSuspensionCommerce(email, c.getNom(), motif);
+                        case REJETE -> emailService.envoyerEmailRejetCommerce(email, c.getNom(), motif);
+                        case VALIDE -> {
+                            if (estSuspension) { // Reactivation case
+                                emailService.envoyerEmailReactivationCommerce(email, c.getNom());
+                            } else {
+                                emailService.envoyerEmailValidationCommerce(email, c.getNom());
+                            }
+                        }
+                    }
+                }
             }
         });
     }

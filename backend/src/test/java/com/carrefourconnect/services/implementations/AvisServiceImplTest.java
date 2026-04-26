@@ -1,4 +1,4 @@
-package com.carrefourconnect.testservices;
+package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.AvisDTO;
 import com.carrefourconnect.entities.Avis;
@@ -7,8 +7,6 @@ import com.carrefourconnect.mappers.AvisMapper;
 import com.carrefourconnect.repositories.AvisRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.repositories.VisiteurRepository;
-import com.carrefourconnect.services.implementations.AvisServiceImpl;
-import com.carrefourconnect.utils.enums.StatutAvis;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -49,6 +47,7 @@ class AvisServiceImplTest {
         id = UUID.randomUUID();
         commerce = new Commerce();
         commerce.setIdcommerce(UUID.randomUUID());
+        commerce.setNoteGlobale(BigDecimal.ZERO);
         
         entity = new Avis();
         entity.setIdavis(id);
@@ -62,7 +61,11 @@ class AvisServiceImplTest {
     void testFindById() {
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        assertNotNull(service.findById(id));
+        
+        AvisDTO result = service.findById(id);
+        
+        assertNotNull(result);
+        verify(repository).findById(id);
     }
 
     @Test
@@ -73,9 +76,12 @@ class AvisServiceImplTest {
         when(commerceRepository.findById(any())).thenReturn(Optional.of(commerce));
         when(mapper.toDto(entity)).thenReturn(dto);
 
-        assertNotNull(service.save(dto));
+        AvisDTO result = service.save(dto);
+
+        assertNotNull(result);
         verify(repository).save(entity);
-        verify(commerceRepository).save(any());
+        verify(commerceRepository).save(commerce);
+        assertEquals(BigDecimal.valueOf(4.5), commerce.getNoteGlobale());
     }
 
     @Test
@@ -87,12 +93,15 @@ class AvisServiceImplTest {
         service.delete(id);
         
         verify(repository).deleteById(id);
-        verify(commerceRepository).save(any());
+        verify(commerceRepository).save(commerce);
+        assertEquals(BigDecimal.valueOf(4.0), commerce.getNoteGlobale());
     }
 
     @Test
     void testFindByCommerce() {
         when(repository.findByCommerce_Idcommerce(any())).thenReturn(Collections.singletonList(entity));
-        assertFalse(service.findByCommerce(UUID.randomUUID()).isEmpty());
+        when(mapper.toDto(entity)).thenReturn(dto);
+        
+        assertFalse(service.findByCommerce(commerce.getIdcommerce()).isEmpty());
     }
 }

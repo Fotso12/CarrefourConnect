@@ -1,10 +1,9 @@
-package com.carrefourconnect.testservices;
+package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.CategorieDTO;
 import com.carrefourconnect.entities.Categorie;
 import com.carrefourconnect.mappers.CategorieMapper;
 import com.carrefourconnect.repositories.CategorieRepository;
-import com.carrefourconnect.services.implementations.CategorieServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -39,14 +38,28 @@ class CategorieServiceImplTest {
         id = UUID.randomUUID();
         entity = new Categorie();
         entity.setIdcategorie(id);
+        
         dto = new CategorieDTO();
+        dto.setIdcategorie(id);
     }
 
     @Test
     void testFindById() {
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        assertNotNull(service.findById(id));
+        
+        CategorieDTO result = service.findById(id);
+        
+        assertNotNull(result);
+        assertEquals(id, result.getIdcategorie());
+    }
+
+    @Test
+    void testFindAll() {
+        when(repository.findAll()).thenReturn(Collections.singletonList(entity));
+        when(mapper.toDto(entity)).thenReturn(dto);
+        
+        assertFalse(service.findAll().isEmpty());
     }
 
     @Test
@@ -54,7 +67,9 @@ class CategorieServiceImplTest {
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
         when(mapper.toDto(entity)).thenReturn(dto);
+        
         assertNotNull(service.save(dto));
+        verify(repository).save(entity);
     }
 
     @Test
@@ -63,7 +78,11 @@ class CategorieServiceImplTest {
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(any())).thenReturn(entity);
         when(mapper.toDto(any())).thenReturn(dto);
-        assertNotNull(service.update(id, dto));
+        
+        CategorieDTO result = service.update(id, dto);
+        
+        assertNotNull(result);
+        verify(repository).save(any());
     }
 
     @Test

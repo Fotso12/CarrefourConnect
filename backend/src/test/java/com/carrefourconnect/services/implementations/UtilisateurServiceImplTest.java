@@ -1,9 +1,10 @@
-package com.carrefourconnect.testservices;
+package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.CommercantDTO;
 import com.carrefourconnect.dtos.UtilisateurDTO;
 import com.carrefourconnect.dtos.VisiteurDTO;
 import com.carrefourconnect.entities.Commerce;
+import com.carrefourconnect.entities.Role;
 import com.carrefourconnect.entities.Utilisateur;
 import com.carrefourconnect.entities.Visiteur;
 import com.carrefourconnect.mappers.CommercantMapper;
@@ -14,8 +15,6 @@ import com.carrefourconnect.repositories.CommercantRepository;
 import com.carrefourconnect.repositories.RoleRepository;
 import com.carrefourconnect.repositories.UtilisateurRepository;
 import com.carrefourconnect.repositories.VisiteurRepository;
-import com.carrefourconnect.services.implementations.UtilisateurServiceImpl;
-import com.carrefourconnect.entities.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,9 +22,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,28 +62,34 @@ class UtilisateurServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         id = UUID.randomUUID();
-        entity = new Visiteur(); // Visiteur is concrete
+        entity = new Visiteur();
         entity.setIduser(id);
         entity.setFavoris(new HashSet<>());
         dto = new UtilisateurDTO();
+        dto.setIduser(id);
     }
 
     @Test
     void testFindById() {
         when(repository.findById(id)).thenReturn(Optional.of(entity));
         when(mapper.toDto(entity)).thenReturn(dto);
-        assertNotNull(service.findById(id));
+        
+        UtilisateurDTO result = service.findById(id);
+        
+        assertNotNull(result);
+        assertEquals(id, result.getIduser());
     }
 
     @Test
     void testAddFavorite() {
         Commerce commerce = new Commerce();
-        commerce.setIdcommerce(UUID.randomUUID());
+        UUID commerceId = UUID.randomUUID();
+        commerce.setIdcommerce(commerceId);
         
         when(repository.findById(id)).thenReturn(Optional.of(entity));
-        when(commerceRepository.findById(any())).thenReturn(Optional.of(commerce));
+        when(commerceRepository.findById(commerceId)).thenReturn(Optional.of(commerce));
         
-        service.addFavorite(id, commerce.getIdcommerce());
+        service.addFavorite(id, commerceId);
         
         verify(repository).save(entity);
         assertTrue(entity.getFavoris().contains(commerce));
@@ -93,9 +98,12 @@ class UtilisateurServiceImplTest {
     @Test
     void testRegisterVisiteur() {
         VisiteurDTO visiteurDto = new VisiteurDTO();
+        visiteurDto.setPassword("rawPassword");
+        
         Visiteur visiteurEntity = new Visiteur();
         
         when(visiteurMapper.toEntity(any())).thenReturn(visiteurEntity);
+        when(passwordEncoder.encode("rawPassword")).thenReturn("encodedPassword");
         when(visiteurRepository.save(any())).thenReturn(visiteurEntity);
         when(visiteurMapper.toDto(any())).thenReturn(new VisiteurDTO());
         
@@ -103,25 +111,30 @@ class UtilisateurServiceImplTest {
         role.setNom("VISITEUR");
         when(roleRepository.findByNom("VISITEUR")).thenReturn(Optional.of(role));
         
-        assertNotNull(service.registerVisiteur(visiteurDto));
+        UtilisateurDTO result = service.registerVisiteur(visiteurDto);
+        
+        assertNotNull(result);
+        verify(passwordEncoder).encode("rawPassword");
     }
 
     @Test
     void testRegisterCommercant() {
         CommercantDTO commercantDto = new CommercantDTO();
-        commercantDto.setEmail("test@ex.com");
-        commercantDto.setNumeroRegistreCommerce("RC123");
-
-        com.carrefourconnect.entities.Commercant entity = new com.carrefourconnect.entities.Commercant();
+        commercantDto.setPassword("p@ss123");
         
-        when(commercantMapper.toEntity(any())).thenReturn(entity);
-        when(commercantRepository.save(any())).thenReturn(entity);
+        com.carrefourconnect.entities.Commercant commercantEntity = new com.carrefourconnect.entities.Commercant();
+        
+        when(commercantMapper.toEntity(any())).thenReturn(commercantEntity);
+        when(passwordEncoder.encode("p@ss123")).thenReturn("hashed");
+        when(commercantRepository.save(any())).thenReturn(commercantEntity);
         when(commercantMapper.toDto(any())).thenReturn(new CommercantDTO());
         
         Role role = new Role();
         role.setNom("COMMERCANT");
         when(roleRepository.findByNom("COMMERCANT")).thenReturn(Optional.of(role));
         
-        assertNotNull(service.registerCommercant(commercantDto));
+        UtilisateurDTO result = service.registerCommercant(commercantDto);
+        
+        assertNotNull(result);
     }
 }
