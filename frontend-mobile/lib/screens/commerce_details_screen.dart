@@ -43,8 +43,9 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
     // Precache images after first frame so they load faster when shown
     WidgetsBinding.instance.addPostFrameCallback((_) {
       for (final url in _displayImages) {
-        if (url.isNotEmpty)
+        if (url.isNotEmpty) {
           precacheImage(CachedNetworkImageProvider(url), context);
+        }
       }
     });
   }
@@ -89,6 +90,7 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
 
     // Prevent a merchant / owner from rating their own commerce if ownerId is present
     final userData = await _authService.getUserData();
+    if (!mounted) return;
     final currentUserId = userData != null ? userData['id']?.toString() : null;
     final ownerId = widget.commerce.ownerId;
 

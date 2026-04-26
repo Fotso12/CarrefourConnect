@@ -45,8 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    if (_authListener != null)
+    if (_authListener != null) {
       _authService.authNotifier.removeListener(_authListener!);
+    }
     super.dispose();
   }
 
@@ -112,8 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         for (final c in _commerces) {
           final url = c.mainImageUrl;
-          if (url.isNotEmpty)
+          if (url.isNotEmpty) {
             precacheImage(CachedNetworkImageProvider(url), context);
+          }
         }
       });
     }
