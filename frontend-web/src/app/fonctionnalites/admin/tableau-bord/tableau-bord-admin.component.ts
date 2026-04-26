@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { CommerceService } from '../../../coeur/services/commerce.service';
 import { AuthService } from '../../../coeur/services/auth.service';
 import { NotificationService } from '../../../coeur/services/notification.service';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Dashboard principal pour l'administration
@@ -16,8 +18,9 @@ import { NotificationService } from '../../../coeur/services/notification.servic
   styleUrl: './tableau-bord-admin.component.css'
 })
 export class TableauBordAdminComponent implements OnInit {
-  pendingValidationsCount = 0;
-  unreadCount = 0;
+  private readonly notificationService = inject(NotificationService);
+  pendingValidationsCount$ = new BehaviorSubject<number>(0);
+  unreadCount$ = this.notificationService.unread$;
   currentUser: any = {};
   isSidebarOpen = false;
   showLogoutConfirm = false;
@@ -37,12 +40,13 @@ export class TableauBordAdminComponent implements OnInit {
   constructor(
       private commerceService: CommerceService,
       private authService: AuthService,
-      private notificationService: NotificationService,
-      private router: Router
+      private router: Router,
+      private http: HttpClient
   ) {
     const savedColor = localStorage.getItem('admin_accent_color');
     if (savedColor) this.accentColor = savedColor;
   }
+
 
   ngOnInit(): void {
     // Appel direct pour charger les compteurs au démarrage
@@ -50,8 +54,11 @@ export class TableauBordAdminComponent implements OnInit {
 
     this.authService.currentUser.subscribe(user => {
       this.currentUser = user || {};
-      if (this.currentUser.iduser) {
+      const userId = this.currentUser.iduser || this.currentUser.id;
+      if (userId) {
         this.loadCounts();
+        // Connect websocket for real-time notifications
+        this.notificationService.connect(userId);
       }
     });
 
@@ -59,6 +66,9 @@ export class TableauBordAdminComponent implements OnInit {
     this.notificationService.refresh$.subscribe(() => {
       this.loadCounts();
     });
+
+    // Aussi s'abonner pour des rafraîchissements immédiats depuis d'autres composants
+    this.notificationService.refresh$.subscribe(() => this.loadCounts());
 
     setInterval(() => {
         if (this.currentUser && this.currentUser.iduser) {
@@ -68,7 +78,21 @@ export class TableauBordAdminComponent implements OnInit {
   }
 
   loadCounts(): void {
-    // ... (rest of the method unchanged, but we add the toggle below)
+    // Charger le nombre de validations en attente et le nombre de notifications non lues
+    // Compteur validations
+    this.commerceService.getByStatut('EN_ATTENTE_VALIDATION').subscribe({
+      next: (list) => {
+        const count = Array.isArray(list) ? list.length : 0;
+        this.pendingValidationsCount$.next(count);
+      },
+      error: (err) => console.error('Erreur chargement validations:', err)
+    });
+
+    // Compteur notifications non lues pour l'admin (utilisateur courant)
+    const userId = this.currentUser.iduser || this.currentUser.id;
+    if (userId) {
+      this.notificationService.countUnread(userId).subscribe();
+    }
   }
 
   toggleSidebar(): void {

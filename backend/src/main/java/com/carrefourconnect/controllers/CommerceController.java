@@ -227,6 +227,7 @@ public class CommerceController {
     public ResponseEntity<?> rechercher(
             @RequestParam(required = false) String nom,
             @RequestParam(required = false) UUID idCategorie,
+            @RequestParam(required = false) UUID idAbonnement,
             @RequestParam(required = false) String ville,
             @RequestParam(required = false) StatutCommerce statut,
             @RequestParam(required = false) Double lat,
@@ -234,7 +235,7 @@ public class CommerceController {
             @RequestParam(required = false) Double rayon) {
         log.info("Requête de recherche multicritères");
         try {
-            return ResponseEntity.ok(service.rechercher(nom, idCategorie, ville, statut, lat, lon, rayon));
+            return ResponseEntity.ok(service.rechercher(nom, idCategorie, idAbonnement, ville, statut, lat, lon, rayon));
         } catch (Exception e) {
             log.error("Erreur lors de la recherche: {}", e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -276,6 +277,19 @@ public class CommerceController {
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error("Erreur validation commerce {}: {}", id, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/{id}/reactiver")
+    @Operation(summary = "Réactive un commerce suspendu")
+    public ResponseEntity<?> reactiver(@PathVariable("id") UUID id) {
+        log.info("Requête de réactivation commerce ID: {}", id);
+        try {
+            service.reactiver(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("Erreur réactivation commerce {}: {}", id, e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

@@ -57,6 +57,10 @@ export class CommerceService {
       params = params.set('rayon', filtres.rayon.toString());
     }
 
+    if (filtres.idAbonnement && filtres.idAbonnement !== 'undefined' && filtres.idAbonnement !== 'null') {
+      params = params.set('idAbonnement', filtres.idAbonnement);
+    }
+
     return this.http.get<any[]>(`${API_URL}/rechercher`, { params });
   }
 
@@ -126,6 +130,13 @@ export class CommerceService {
     return this.http.put(`${API_URL}/${id}/suspendre`, {}, {
       params: new HttpParams().set('motif', motif)
     });
+  }
+
+  /**
+   * Réactive un commerce suspendu
+   */
+  reactiver(id: string): Observable<any> {
+    return this.http.put(`${API_URL}/${id}/reactiver`, {});
   }
 
   /**

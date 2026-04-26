@@ -46,6 +46,9 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
    * Initialise la carte centrée sur Douala
    */
   private initMap(): void {
+    // Ensure the container has a reasonable min height before creating the map
+    this.mapContainer.nativeElement.style.minHeight = this.minHeight + 'px';
+
     // Create the map inside the container element (avoid fixed IDs)
     // Correction des icônes par défaut de Leaflet (utilisation du dossier public)
     const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
@@ -70,9 +73,6 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
       zoom: 13
     });
 
-    // Ensure container has a reasonable min height
-    this.mapContainer.nativeElement.style.minHeight = this.minHeight + 'px';
-
     // Couche OpenStreetMap
     if (!this.map) return;
     const tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -81,6 +81,14 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
       attribution: '&copy; OpenStreetMap'
     });
     tileLayer.addTo(this.map);
+
+    // After tiles are added, update markers (in case points were provided before map init)
+    this.updateMarkers();
+
+    // Leaflet needs an invalidateSize if the container size may have changed or when shown
+    setTimeout(() => {
+      try { this.map?.invalidateSize(); } catch (e) { /* ignore */ }
+    }, 200);
 
     // Emit clicks on the map so parent can update coordinates
     this.map.on('click', (e: any) => {
@@ -95,6 +103,8 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
    */
   private updateMarkers(): void {
     if (!this.map) return;
+    // Make sure map knows its container size
+    try { this.map.invalidateSize(); } catch (e) { /* ignore */ }
 
     // Remove existing markers and polylines
     (this.map as any).eachLayer((layer: any) => {
@@ -151,5 +161,21 @@ export class CarteComponent implements OnInit, AfterViewInit, OnChanges {
         }
       }
     });
+
+    // If there's exactly one visible point, zoom to it for better UX
+    const visiblePoints = this.points.filter(p => (p.lat != null && p.lon != null));
+    if (visiblePoints.length === 1) {
+      const p = visiblePoints[0];
+      const lat = p.lat ?? p.latitude ?? p.latitud;
+      const lon = p.lon ?? p.longitude ?? p.lng;
+      if (lat != null && lon != null) {
+        // Smooth fly and set a comfortable zoom level
+        try {
+          this.map.flyTo([lat, lon], 15, { animate: true, duration: 0.8 });
+        } catch (e) {
+          this.map.setView([lat, lon], 15);
+        }
+      }
+    }
   }
 }

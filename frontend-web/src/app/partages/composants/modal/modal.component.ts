@@ -37,7 +37,7 @@ import { CommonModule } from '@angular/common';
           </div>
 
           <div class="flex gap-4 mt-10">
-            <button (click)="close()" class="flex-1 bg-slate-50 text-slate-500 font-black py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
+            <button *ngIf="showCancel" (click)="close()" class="flex-1 bg-slate-50 text-slate-500 font-black py-4 rounded-2xl hover:bg-slate-100 transition-all duration-300">
               Annuler
             </button>
             <button (click)="confirm()" [class]="'flex-1 text-white font-black py-4 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] active:scale-95 shadow-lg ' + btnBg">
@@ -66,6 +66,7 @@ export class ModalComponent {
   @Input() iconBg = 'from-[#00ADEF] to-[#00709B]';
   @Input() btnBg = 'bg-[#00ADEF] shadow-[#00ADEF]/20';
   @Input() confirmLabel = 'Confirmer';
+  @Input() showCancel = true;
 
   @Output() onConfirm = new EventEmitter<void>();
   @Output() onCancel = new EventEmitter<void>();

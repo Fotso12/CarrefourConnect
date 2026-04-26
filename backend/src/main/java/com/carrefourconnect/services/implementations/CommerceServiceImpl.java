@@ -332,7 +332,7 @@ public class CommerceServiceImpl implements CommerceService {
     }
 
     @Override
-    public List<CommerceDTO> rechercher(String nom, UUID idCategorie, String ville, StatutCommerce statut, Double lat, Double lon, Double rayonKm) {
+    public List<CommerceDTO> rechercher(String nom, UUID idCategorie, UUID idAbonnement, String ville, StatutCommerce statut, Double lat, Double lon, Double rayonKm) {
         log.info("Recherche avancée: nom={}, ville={}, proximité={}km", nom, ville, rayonKm);
         
         List<Commerce> resultats;
@@ -360,6 +360,7 @@ public class CommerceServiceImpl implements CommerceService {
                     return c.getStatut().equals(StatutCommerce.VALIDE);
                 })
                 .filter(c -> idCategorie == null || (c.getCategorie() != null && c.getCategorie().getIdcategorie().equals(idCategorie)))
+                .filter(c -> idAbonnement == null || (c.getAbonnement() != null && c.getAbonnement().getIdabonnement().equals(idAbonnement)))
                 // Note: La ville est dans Localisation, donc on filtre via les localisations du commerce
                 // Pour simplifier ici, on accepte si au moins une localisation match
                 /*.filter(c -> ville == null || repository.checkVille(c.getIdcommerce(), ville))*/
@@ -425,6 +426,33 @@ public class CommerceServiceImpl implements CommerceService {
                     .message("Félicitations ! Votre commerce '" + c.getNom() + "' a été validé et est désormais visible sur la plateforme.")
                     .type("VALIDATION")
                     .build());
+
+            // Envoyer un email de validation au commerçant (ajouté pour notifier par mail)
+            if (c.getCommercant() != null && c.getCommercant().getEmail() != null) {
+                emailService.envoyerEmailValidationCommerce(c.getCommercant().getEmail(), c.getNom());
+            }
+        });
+    }
+
+    @Override
+    public void reactiver(UUID id) {
+        log.info("Réactivation du commerce ID: {}", id);
+        repository.findById(id).ifPresent(c -> {
+            c.setStatut(StatutCommerce.VALIDE);
+            c.setMotifSuspension(null);
+            repository.save(c);
+
+            // Notification + email au commerçant
+            notificationService.send(NotificationDTO.builder()
+                    .iduser(c.getCommercant().getIduser())
+                    .titre("Commerce Réactivé")
+                    .message("Votre commerce '" + c.getNom() + "' a été réactivé par l'administration et est de nouveau visible.")
+                    .type("REACTIVATION")
+                    .build());
+
+            if (c.getCommercant() != null && c.getCommercant().getEmail() != null) {
+                emailService.envoyerEmailReactivationCommerce(c.getCommercant().getEmail(), c.getNom());
+            }
         });
     }
 

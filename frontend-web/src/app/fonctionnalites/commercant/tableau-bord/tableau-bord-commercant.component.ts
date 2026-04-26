@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from '../../../coeur/services/auth.service';
@@ -17,7 +17,8 @@ import { NotificationService } from '../../../coeur/services/notification.servic
 export class TableauBordCommercantComponent implements OnInit {
   menuItems = [
     { label: 'Mes Commerces', icon: 'fa-solid fa-store', link: '/commercant/commerces' },
-    { label: 'Avis Clients', icon: 'fa-solid fa-comments', link: '/commercant/avis' }
+    { label: 'Avis Clients', icon: 'fa-solid fa-comments', link: '/commercant/avis' },
+    { label: 'Notifications', icon: 'fa-solid fa-bell', link: '/commercant/notifications' }
   ];
 
   isSidebarOpen = false;
@@ -25,11 +26,11 @@ export class TableauBordCommercantComponent implements OnInit {
   currentUser: any = {};
   displayName: string = '';
   displayRole: string = '';
-  unreadCount = 0;
+  private readonly notificationService = inject(NotificationService);
+  unreadCount$ = this.notificationService.unread$;
 
   constructor(
     private readonly authService: AuthService,
-    private readonly notificationService: NotificationService,
     private readonly router: Router
   ) {}
 
@@ -47,24 +48,28 @@ export class TableauBordCommercantComponent implements OnInit {
       }
       this.displayRole = this.currentUser.role || '';
 
-      if (this.currentUser.iduser) {
+      const userId = this.currentUser.iduser || this.currentUser.id;
+      if (userId) {
         this.loadUnreadCount();
+        // Connect websocket for real-time notifications
+        this.notificationService.connect(userId);
       }
     });
 
     // S'abonner aux rafraîchissements (ex: après marquage comme lu)
     this.notificationService.refresh$.subscribe(() => {
-      if (this.currentUser.iduser) {
-        this.loadUnreadCount();
-      }
+      this.loadUnreadCount();
     });
   }
 
   loadUnreadCount(): void {
-    this.notificationService.countUnread(this.currentUser.iduser).subscribe({
-      next: (count) => this.unreadCount = count,
-      error: (err) => console.error("Erreur chargement notifications:", err)
-    });
+    const userId = this.currentUser.iduser || this.currentUser.id;
+    if (userId) {
+      this.notificationService.countUnread(userId).subscribe({
+        next: (count) => console.log('Badge notifications:', count),
+        error: (err) => console.error('Erreur notifications:', err)
+      });
+    }
   }
 
   toggleSidebar() {

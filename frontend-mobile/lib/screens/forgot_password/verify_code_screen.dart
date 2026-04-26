@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+// import '../services/api_service.dart';
+import 'package:carrefourconnect_mobile/services/api_service.dart';
+import 'reset_password_screen.dart';
 
 class VerifyCodeScreen extends StatefulWidget {
   final String email;
@@ -59,4 +61,4 @@ class _VerifyCodeScreenState extends State<VerifyCodeScreen> {
   }
 }
 
-import 'reset_password_screen.dart';
+

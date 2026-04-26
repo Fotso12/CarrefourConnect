@@ -125,15 +125,24 @@ export class AjouterCommerceComponent implements OnInit {
   chargerAbonnements(): void {
     this.abonnementService.getAll().subscribe({
       next: (data) => {
-        this.abonnements = data.map(ab => {
-          let prix = 0;
-          const nomOuType = (ab.type || ab.nom || '').toLowerCase();
-          if (nomOuType.includes('basique')) prix = 5000;
-          else if (nomOuType.includes('premium')) prix = 10000;
-          else if (nomOuType.includes('gold')) prix = 15000;
-          else prix = 5000; // default
-          return { ...ab, nomAffiche: ab.type || ab.nom, prixAffiche: prix };
-        });
+        // Dédupliquer par type/nom et mapper les prix
+        const seenTypes = new Set<string>();
+        this.abonnements = data
+          .filter(ab => {
+            const key = (ab.type || ab.nom || '').toLowerCase();
+            if (seenTypes.has(key)) return false;
+            seenTypes.add(key);
+            return true;
+          })
+          .map(ab => {
+            let prix = 0;
+            const nomOuType = (ab.type || ab.nom || '').toLowerCase();
+            if (nomOuType.includes('basique')) prix = 5000;
+            else if (nomOuType.includes('premium')) prix = 10000;
+            else if (nomOuType.includes('gold')) prix = 15000;
+            else prix = 5000; // default
+            return { ...ab, nomAffiche: ab.type || ab.nom, prixAffiche: prix };
+          });
       },
       error: (err) => console.error("Erreur abonnements", err)
     });
@@ -202,26 +211,47 @@ export class AjouterCommerceComponent implements OnInit {
   }
 
   /**
-   * Cherche les coordonnées GPS à partir de la ville et du quartier
+   * Cherche les coordonnées GPS à partir de la ville et du quartier avec timeout et retry
    */
-  localiserQuartier(): void {
-    const query = `${this.commerce.quartier}, ${this.commerce.ville}, Cameroun`;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+  localiserQuartier(retry = 0): void {
+    if (!this.commerce.quartier || !this.commerce.ville) {
+      alert("Veuillez entrer la ville et le quartier.");
+      return;
+    }
 
-    fetch(url)
-      .then(res => res.json())
+    const query = `${this.commerce.quartier}, ${this.commerce.ville}, Cameroon`;
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1&timeout=10`;
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 secondes timeout
+
+    fetch(url, { signal: controller.signal })
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
       .then(results => {
+        clearTimeout(timeoutId);
         if (results && results.length > 0) {
           this.commerce.lat = parseFloat(results[0].lat);
           this.commerce.lon = parseFloat(results[0].lon);
+          console.log(`✓ Localisation trouvée: ${this.commerce.lat}, ${this.commerce.lon}`);
           this.cdr.detectChanges();
         } else {
-          alert("Lieu introuvable. Veuillez placer le marqueur manuellement.");
+          alert("Lieu introuvable. Veuillez placer le marqueur manuellement sur la carte.");
         }
       })
       .catch(err => {
+        clearTimeout(timeoutId);
         console.error("Erreur Nominatim:", err);
-        alert("Erreur lors de la recherche du quartier.");
+        
+        // Retry logic: retry once if network error or timeout
+        if (retry < 1 && (err.name === 'AbortError' || err.message.includes('fetch'))) {
+          console.warn("Tentative de localisation échouée. Nouvelle tentative...");
+          setTimeout(() => this.localiserQuartier(retry + 1), 2000);
+        } else {
+          alert("Erreur lors de la recherche du quartier. Veuillez réessayer ou placer le marqueur manuellement.");
+        }
       });
   }
 

@@ -55,6 +55,7 @@ class Commerce {
 
   Commerce({
     this.idcommerce,
+    this.ownerId,
     required this.nom,
     this.description,
     this.adresse,

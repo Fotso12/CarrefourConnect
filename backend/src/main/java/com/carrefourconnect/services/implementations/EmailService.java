@@ -130,4 +130,52 @@ public class EmailService {
             log.error("Erreur lors de l'envoi de l'email de code de réinitialisation: {}", e.getMessage());
         }
     }
+
+    /**
+     * Envoie un email au commerçant pour l'informer que son commerce a été validé.
+     */
+    @Async
+    public void envoyerEmailValidationCommerce(String emailCommercant, String nomCommerce) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(emailCommercant);
+            message.setSubject("[CarrefourConnect] Votre commerce a été validé");
+            message.setText(
+                "Bonjour,\n\n" +
+                "Félicitations ! Votre commerce \"" + nomCommerce + "\" a été validé par notre équipe et est désormais visible sur la plateforme CarrefourConnect.\n\n" +
+                "Vous pouvez consulter votre tableau de bord pour gérer votre fiche.\n\n" +
+                "Cordialement,\n" +
+                "L'équipe CarrefourConnect"
+            );
+            mailSender.send(message);
+            log.info("Email de validation envoyé au commerçant: {}", emailCommercant);
+        } catch (Exception e) {
+            log.error("Erreur lors de l'envoi de l'email de validation: {}", e.getMessage());
+        }
+    }
+
+    /**
+     * Envoie un email au commerçant pour l'informer que son commerce a été réactivé.
+     */
+    @Async
+    public void envoyerEmailReactivationCommerce(String emailCommercant, String nomCommerce) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(fromEmail);
+            message.setTo(emailCommercant);
+            message.setSubject("[CarrefourConnect] Votre commerce a été réactivé");
+            message.setText(
+                "Bonjour,\n\n" +
+                "Bonne nouvelle ! Votre commerce \"" + nomCommerce + "\" a été réactivé et est de nouveau visible sur la plateforme CarrefourConnect.\n\n" +
+                "Si vous avez des questions, contactez notre support.\n\n" +
+                "Cordialement,\n" +
+                "L'équipe CarrefourConnect"
+            );
+            mailSender.send(message);
+            log.info("Email de réactivation envoyé au commerçant: {}", emailCommercant);
+        } catch (Exception e) {
+            log.error("Erreur lors de l'envoi de l'email de réactivation: {}", e.getMessage());
+        }
+    }
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { CommerceService } from '../../../coeur/services/commerce.service';
+import { NotificationService } from '../../../coeur/services/notification.service';
 import { ModalComponent } from '../../../partages/composants/modal/modal.component';
 
 /**
@@ -19,6 +20,11 @@ export class ValidationCommercesComponent implements OnInit {
   commerces: any[] = [];
   loading = true;
 
+  // Filters
+  filterStatut: string | null = null;
+  filterCategorie: string | null = null;
+  filterVille: string | null = null;
+
   // Pagination
   currentPage = 1;
   pageSize = 15;
@@ -30,8 +36,12 @@ export class ValidationCommercesComponent implements OnInit {
   selectedCommerce: any = null;
   motifAction = '';
   showDetailModal = false;
+  showSuccessModal = false;
+  successTitle = '';
+  successMessage = '';
 
-  constructor(private readonly commerceService: CommerceService) {}
+  constructor(private readonly commerceService: CommerceService,
+              private readonly notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.chargerCommerces();
@@ -39,14 +49,23 @@ export class ValidationCommercesComponent implements OnInit {
 
   chargerCommerces(): void {
     this.loading = true;
+    // Charger explicitement par statuts pour la modération (EN_ATTENTE_VALIDATION, VALIDE, SUSPENDU)
     forkJoin({
       attente: this.commerceService.getByStatut('EN_ATTENTE_VALIDATION'),
-      valide: this.commerceService.getByStatut('VALIDE')
+      valide: this.commerceService.getByStatut('VALIDE'),
+      suspendu: this.commerceService.getByStatut('SUSPENDU')
     }).subscribe({
       next: (data) => {
-        this.commerces = [...data.attente, ...data.valide];
+        let list = [...(data.attente || []), ...(data.valide || []), ...(data.suspendu || [])];
+        // Appliquer filtres simples côté client
+        if (this.filterStatut) list = list.filter(c => c.statut === this.filterStatut);
+        if (this.filterCategorie) list = list.filter(c => c.categorie && c.categorie.idcategorie === this.filterCategorie);
+        const searchVille = this.filterVille;
+        if (searchVille) list = list.filter(c => c.ville && c.ville.toLowerCase().includes(searchVille.toLowerCase()));
+
+        this.commerces = list;
         this.loading = false;
-        this.currentPage = 1; // Reset to page 1 on load
+        this.currentPage = 1;
       },
       error: (err) => {
         console.error('Erreur chargement commerces:', err);
@@ -75,8 +94,11 @@ export class ValidationCommercesComponent implements OnInit {
   valider(id: string): void {
     this.commerceService.valider(id).subscribe({
       next: () => {
-        // Au lieu de supprimer on recharge pour passer de "attente" à "valide" (plus simple)
         this.chargerCommerces();
+        this.notificationService.notifyRefresh();
+        this.successTitle = 'Commerce Validé';
+        this.successMessage = 'Le commerce a été validé avec succès et est maintenant visible sur la plateforme.';
+        this.showSuccessModal = true;
       },
       error: (err) => console.error('Erreur lors de la validation:', err)
     });
@@ -99,8 +121,12 @@ export class ValidationCommercesComponent implements OnInit {
 
     this.commerceService.suspendre(this.selectedCommerceId, this.motifAction).subscribe({
       next: () => {
-        this.commerces = this.commerces.filter(c => c.idcommerce !== this.selectedCommerceId);
         this.closeSuspend();
+        this.chargerCommerces();
+        this.notificationService.notifyRefresh();
+        this.successTitle = 'Commerce Suspendu';
+        this.successMessage = 'Le commerce a été suspendu avec succès. Le commerçant a été notifié par email.';
+        this.showSuccessModal = true;
       },
       error: (err) => console.error('Erreur lors de la suspension:', err)
     });
@@ -123,10 +149,27 @@ export class ValidationCommercesComponent implements OnInit {
 
     this.commerceService.rejeter(this.selectedCommerceId, this.motifAction).subscribe({
       next: () => {
-        this.commerces = this.commerces.filter(c => c.idcommerce !== this.selectedCommerceId);
         this.closeReject();
+        this.chargerCommerces();
+        this.notificationService.notifyRefresh();
+        this.successTitle = 'Inscription Rejetée';
+        this.successMessage = "La demande d'inscription a été rejetée avec succès.";
+        this.showSuccessModal = true;
       },
       error: (err) => console.error('Erreur lors du rejet:', err)
+    });
+  }
+
+  reactiver(id: string): void {
+    this.commerceService.reactiver(id).subscribe({
+      next: () => {
+        this.chargerCommerces();
+        this.notificationService.notifyRefresh();
+        this.successTitle = 'Commerce Réactivé';
+        this.successMessage = 'Le commerce a été réactivé avec succès.';
+        this.showSuccessModal = true;
+      },
+      error: (err) => console.error('Erreur lors de la réactivation:', err)
     });
   }
 

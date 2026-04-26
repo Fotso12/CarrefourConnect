@@ -20,8 +20,8 @@
             <i [class]="item.icon + ' text-lg opacity-70 transition-all'" [class.opacity-100]="rla.isActive"></i>
         </div>
         <span class="font-bold text-sm tracking-tight">{{ item.label }}</span>
-        <div *ngIf="unreadCount > 0 && item.label === 'Notifications'" class="ml-auto bg-red-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center">
-            {{ unreadCount }}
+        <div *ngIf="((unreadCount$ | async) ?? 0) > 0 && item.label === 'Notifications'" class="ml-auto bg-red-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center">
+            {{ unreadCount$ | async }}
         </div>
       </a>
     </nav>
@@ -61,8 +61,8 @@
           <div class="flex items-center gap-4">
               <button routerLink="/commercant/notifications" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all relative">
                   <i class="fa-solid fa-bell text-lg"></i>
-                  <div *ngIf="unreadCount > 0" class="absolute top-2.5 right-2.5 h-4 w-4 bg-red-500 rounded-full border-2 border-white text-[9px] font-black text-white flex items-center justify-center animate-pulse">
-                    {{ unreadCount }}
+                  <div *ngIf="((unreadCount$ | async) ?? 0) > 0" class="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full border-2 border-white text-[10px] font-black text-white flex items-center justify-center shadow-lg animate-bounce">
+                    {{ unreadCount$ | async }}
                   </div>
               </button>
           </div>

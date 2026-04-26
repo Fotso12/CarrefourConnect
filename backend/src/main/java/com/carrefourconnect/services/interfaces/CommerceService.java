@@ -18,9 +18,10 @@ public interface CommerceService {
     List<CommerceDTO> searchByName(String name);
     List<CommerceDTO> findByStatut(StatutCommerce statut);
     List<CommerceDTO> findNearby(double latitude, double longitude, double distanceInKm);
-    List<CommerceDTO> rechercher(String nom, UUID idCategorie, String ville, StatutCommerce statut, Double lat, Double lon, Double rayonKm);
+    List<CommerceDTO> rechercher(String nom, UUID idCategorie, UUID idAbonnement, String ville, StatutCommerce statut, Double lat, Double lon, Double rayonKm);
     void suspendre(UUID id, String motif);
     void rejeter(UUID id, String motif);
     void valider(UUID id);
+    void reactiver(UUID id);
     void incrementerViews(UUID id);
 }

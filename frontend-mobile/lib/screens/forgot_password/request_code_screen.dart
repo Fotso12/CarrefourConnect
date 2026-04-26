@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+// 1. Déplace l'import ici (en haut)
+import 'verify_code_screen.dart';
+// 2. Utilise de préférence l'import 'package' pour éviter les erreurs de chemin relatif
+import 'package:carrefourconnect_mobile/services/api_service.dart'; 
 
 class RequestCodeScreen extends StatefulWidget {
   const RequestCodeScreen({super.key});
@@ -16,18 +19,24 @@ class _RequestCodeScreenState extends State<RequestCodeScreen> {
   void _submit() async {
     final email = _emailCtrl.text.trim();
     if (email.isEmpty) return;
+    
     setState(() => _loading = true);
     final ok = await _api.requestPasswordReset(email);
     setState(() => _loading = false);
+
     if (ok) {
-      if (context.mounted) {
+      if (mounted) { // Utilisation simplifiée de context.mounted
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => VerifyCodeScreen(email: email)),
         );
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Erreur lors de la demande.')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Erreur lors de la demande.')),
+        );
+      }
     }
   }
 
@@ -42,13 +51,23 @@ class _RequestCodeScreenState extends State<RequestCodeScreen> {
           children: [
             const Text('Entrez votre adresse email. Nous vous enverrons un code à 5 chiffres.'),
             const SizedBox(height: 16),
-            TextField(controller: _emailCtrl, keyboardType: TextInputType.emailAddress, decoration: const InputDecoration(labelText: 'Email')),
+            TextField(
+              controller: _emailCtrl, 
+              keyboardType: TextInputType.emailAddress, 
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
             const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _loading ? null : _submit,
-                child: _loading ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white)) : const Text('Envoyer le code'),
+                child: _loading 
+                  ? const SizedBox(
+                      width: 18, 
+                      height: 18, 
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    ) 
+                  : const Text('Envoyer le code'),
               ),
             ),
           ],
@@ -57,6 +76,4 @@ class _RequestCodeScreenState extends State<RequestCodeScreen> {
     );
   }
 }
-
-// import placed at bottom to avoid circular import in file creation order
-import 'verify_code_screen.dart';
+// SUPPRIME L'IMPORT QUI ÉTAIT ICI
