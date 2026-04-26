@@ -136,6 +136,16 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: .
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Compile Backend for Sonar
+        working-directory: ./backend
+        run: chmod +x mvnw && ./mvnw compile -DskipTests
+
       - name: Prepare reports
         run: |
           mkdir -p backend/target/site/jacoco
