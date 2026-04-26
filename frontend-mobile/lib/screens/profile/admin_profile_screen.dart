@@ -134,13 +134,13 @@ class AdminProfileScreen extends StatelessWidget {
                           Row(
                             children: [
                               Expanded(
-                                child: _smallInfo('STATUT KYC', user['status']),
+                                child: _smallInfo('STATUT KYC', user['status'] ?? ''),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
                                 child: _smallInfo(
                                   'DATE D\'INSCRIPTION',
-                                  user['since'],
+                                  user['since'] ?? '',
                                 ),
                               ),
                             ],
