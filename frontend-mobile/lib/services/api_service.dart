@@ -167,4 +167,41 @@ class ApiService {
     );
     return response.statusCode == 201 || response.statusCode == 200;
   }
+
+  // --- Profil Utilisateur ---
+
+  Future<Map<String, dynamic>?> updateProfile(String id, Map<String, dynamic> data, String? token) async {
+    final response = await _handleRequest(
+      () => http.put(
+        Uri.parse('$baseUrl/utilisateurs/$id'),
+        headers: _headers(token),
+        body: json.encode(data),
+      ),
+      'updateProfile',
+    );
+    return response.statusCode == 200
+        ? json.decode(utf8.decode(response.bodyBytes))
+        : null;
+  }
+
+  Future<bool> changeProfilePassword(
+    String id,
+    String oldPass,
+    String newPass,
+    String? token,
+  ) async {
+    final response = await _handleRequest(
+      () => http.put(
+        Uri.parse('$baseUrl/utilisateurs/$id/mot-de-passe'),
+        headers: _headers(token),
+        body: json.encode({
+          'ancienMotDePasse': oldPass,
+          'nouveauMotDePasse': newPass,
+        }),
+      ),
+      'changeProfilePassword',
+    );
+    return response.statusCode == 200;
+  }
 }
+
