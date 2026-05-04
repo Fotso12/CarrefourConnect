@@ -82,7 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       if (permission == LocationPermission.whileInUse ||
           permission == LocationPermission.always) {
-        final pos = await Geolocator.getCurrentPosition();
+        final pos = await Geolocator.getCurrentPosition(
+          timeLimit: const Duration(seconds: 5),
+        );
         setState(() => _currentPosition = pos);
       }
     } catch (e) {
@@ -92,8 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
-    _loadFavorites();
+    
+    // Parallélisation maximale des favoris, catégories et commerces
     final results = await Future.wait([
+      _loadFavorites(),
       _apiService.getCategories(),
       _apiService.getCommerces(
         lat: _currentPosition?.latitude,
@@ -104,8 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (mounted) {
       setState(() {
-        _categories = results[0] as List<Categorie>;
-        _commerces = results[1] as List<Commerce>;
+        _categories = results[1] as List<Categorie>;
+        _commerces = results[2] as List<Commerce>;
         _isLoading = false;
       });
 

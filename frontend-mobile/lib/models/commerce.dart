@@ -48,6 +48,7 @@ class Commerce {
   final double? latitude;
   final double? longitude;
   final String? telephone;
+  final String? siteweb;
   final Categorie? categorie;
   final List<Media> images;
   final String? imagePrincipale;
@@ -64,6 +65,7 @@ class Commerce {
     this.latitude,
     this.longitude,
     this.telephone,
+    this.siteweb,
     this.categorie,
     required this.images,
     this.imagePrincipale,
@@ -113,6 +115,7 @@ class Commerce {
               ? double.tryParse(json['longitude'].toString())
               : null),
       telephone: json['telephone1'] ?? json['telephone'],
+      siteweb: json['siteWeb'] ?? json['siteweb'],
       categorie: json['categorie'] != null
           ? Categorie.fromJson(json['categorie'])
           : null,

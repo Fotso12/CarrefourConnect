@@ -54,14 +54,17 @@ class _ImageGalleryScreenState extends State<ImageGalleryScreen> {
           return InteractiveViewer(
             maxScale: 4.0,
             child: Center(
-              child: CachedNetworkImage(
-                imageUrl: url,
-                placeholder: (c, u) =>
-                    const Center(child: CircularProgressIndicator()),
-                errorWidget: (c, u, e) => const Icon(
-                  Icons.broken_image,
-                  color: Colors.white,
-                  size: 64,
+              child: Hero(
+                tag: 'gallery_$url',
+                child: CachedNetworkImage(
+                  imageUrl: url,
+                  placeholder: (c, u) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (c, u, e) => const Icon(
+                    Icons.broken_image,
+                    color: Colors.white,
+                    size: 64,
+                  ),
                 ),
               ),
             ),

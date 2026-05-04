@@ -24,36 +24,36 @@ class _MapScreenState extends State<MapScreen> {
   List<Commerce> _commerces = [];
   bool _isLoading = true;
   Position? _currentPosition;
-  double _radius = 10.0; // displayed slider (represents max radius)
-  double _maxRadius = 10.0; // effective max radius sent to API (km)
+  double _radius = 10.0;
+  double _maxRadius = 10.0;
   bool _hasNetwork = true;
 
   @override
   void initState() {
     super.initState();
-    _determinePosition().then((pos) {
-      if (pos != null) {
-        setState(() => _currentPosition = pos);
-        _mapController.move(LatLng(pos.latitude, pos.longitude), 13.0);
-      }
-      _checkNetwork();
-      _loadCommerces();
-    });
+    _initApp();
+  }
+
+  Future<void> _initApp() async {
+    await _checkNetwork();
+    final pos = await _determinePosition();
+    if (pos != null && mounted) {
+      setState(() => _currentPosition = pos);
+      _mapController.move(LatLng(pos.latitude, pos.longitude), 13.0);
+    }
+    _loadCommerces();
   }
 
   Future<void> _checkNetwork() async {
     try {
-      // quick HEAD request to an OSM tile to verify network (short timeout)
-      final uri = Uri.parse('https://tile.openstreetmap.org/0/0/0.png');
-      final resp = await Future.any([
-        // use http package via ApiService import is not desired here; use Dart HttpClient
-        // small request to check connectivity
-        HttpClient().getUrl(uri).then((r) => r.close()),
-        Future.delayed(const Duration(seconds: 3), () => null),
-      ]);
-      setState(() => _hasNetwork = resp != null);
+      final result = await InternetAddress.lookup('google.com').timeout(const Duration(seconds: 3));
+      if (mounted) {
+        setState(() => _hasNetwork = result.isNotEmpty && result[0].rawAddress.isNotEmpty);
+      }
     } catch (_) {
-      setState(() => _hasNetwork = false);
+      if (mounted) {
+        setState(() => _hasNetwork = false);
+      }
     }
   }
 
@@ -72,7 +72,9 @@ class _MapScreenState extends State<MapScreen> {
 
     if (permission == LocationPermission.deniedForever) return null;
 
-    return await Geolocator.getCurrentPosition();
+    return await Geolocator.getCurrentPosition(
+      timeLimit: const Duration(seconds: 5),
+    ).catchError((_) => null);
   }
 
   Future<void> _loadCommerces() async {
@@ -83,25 +85,8 @@ class _MapScreenState extends State<MapScreen> {
       rayon: _maxRadius,
     );
     if (mounted) {
-      // compute distance to each commerce and apply client-side min/max filter
-      final Distance distance = Distance();
-      final filtered = <Commerce>[];
-      for (final c in results) {
-        if (c.latitude == null || c.longitude == null) continue;
-        if (_currentPosition == null) {
-          filtered.add(c);
-          continue;
-        }
-        final dKm = distance.as(
-          LengthUnit.Kilometer,
-          LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          LatLng(c.latitude!, c.longitude!),
-        );
-        if (dKm <= _maxRadius) filtered.add(c);
-      }
-
       setState(() {
-        _commerces = filtered;
+        _commerces = results.where((c) => c.latitude != null && c.longitude != null).toList();
         _isLoading = false;
       });
     }
@@ -115,7 +100,7 @@ class _MapScreenState extends State<MapScreen> {
       );
     } else {
       _determinePosition().then((pos) {
-        if (pos != null) {
+        if (pos != null && mounted) {
           setState(() => _currentPosition = pos);
           _mapController.move(LatLng(pos.latitude, pos.longitude), 15.0);
         }
@@ -131,132 +116,135 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          FlutterMap(
-            mapController: _mapController,
-            options: MapOptions(
-              initialCenter: const LatLng(4.0511, 9.7679), // Douala par défaut
-              initialZoom: 13.0,
-              onTap: (_, _) {
-                // Fermer les popups si nécessaire
-              },
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: const ['a', 'b', 'c'],
-                userAgentPackageName:
-                    'CarrefourConnectMobileApp/1.0 (contact@carrefourconnect.com)',
+          if (_hasNetwork) 
+            FlutterMap(
+              mapController: _mapController,
+              options: MapOptions(
+                initialCenter: const LatLng(4.0511, 9.7679), 
+                initialZoom: 13.0,
               ),
-              MarkerLayer(
-                markers: [
-                  if (_currentPosition != null)
-                    Marker(
-                      point: LatLng(
-                        _currentPosition!.latitude,
-                        _currentPosition!.longitude,
-                      ),
-                      width: 60,
-                      height: 60,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 20,
-                            height: 20,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withAlpha(51),
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-                          Container(
-                            width: 12,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white, width: 2),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ..._commerces.map((commerce) {
-                    return Marker(
-                      point: LatLng(commerce.latitude!, commerce.longitude!),
-                      width: 50,
-                      height: 50,
-                      child: GestureDetector(
-                        onTap: () => _showCommerceDetails(commerce),
-                        child: Column(
+              children: [
+                TileLayer(
+                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: const ['a', 'b', 'c'],
+                  tileDisplay: const TileDisplay.fadeIn(duration: const Duration(milliseconds: 300)),
+                  keepBuffer: 3,
+                  panBuffer: 1,
+                  userAgentPackageName: 'CarrefourConnectMobileApp/1.0',
+                ),
+                MarkerLayer(
+                  markers: [
+                    if (_currentPosition != null)
+                      Marker(
+                        point: LatLng(
+                          _currentPosition!.latitude,
+                          _currentPosition!.longitude,
+                        ),
+                        width: 60,
+                        height: 60,
+                        child: Stack(
+                          alignment: Alignment.center,
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(8),
+                              width: 20,
+                              height: 20,
                               decoration: BoxDecoration(
-                                color: primaryBlue,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: Colors.white,
-                                  width: 2,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withAlpha(51),
-                                    blurRadius: 8,
-                                    offset: const Offset(0, 4),
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(
-                                FontAwesomeIcons.store,
-                                color: Colors.white,
-                                size: 14,
+                                color: Colors.blue.withAlpha(51),
+                                shape: BoxShape.circle,
                               ),
                             ),
-                            CustomPaint(
-                              painter: TrianglePainter(color: primaryBlue),
-                              size: const Size(10, 5),
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white, width: 2),
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    );
-                  }),
-                ],
-              ),
-              if (!_hasNetwork)
-                Positioned.fill(
-                  child: Container(
-                    color: Colors.white.withOpacity(0.9),
-                    child: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.cloud_off,
-                            size: 64,
-                            color: Colors.grey,
+                    ..._commerces.map((commerce) {
+                      return Marker(
+                        point: LatLng(commerce.latitude!, commerce.longitude!),
+                        width: 50,
+                        height: 50,
+                        child: GestureDetector(
+                          onTap: () => _showCommerceDetails(commerce),
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: primaryBlue,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withAlpha(51),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(
+                                  FontAwesomeIcons.store,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                              ),
+                              CustomPaint(
+                                painter: TrianglePainter(color: primaryBlue),
+                                size: const Size(10, 5),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 12),
-                          const Text(
-                            'Aucune connexion internet pour charger la carte',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 12),
-                          ElevatedButton(
-                            onPressed: () async {
-                              await _checkNetwork();
-                              if (_hasNetwork) _loadCommerces();
-                            },
-                            child: const Text('Réessayer'),
-                          ),
-                        ],
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              ],
+            )
+          else
+            Container(
+              color: Colors.white,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.wifi_off_rounded, size: 64, color: Colors.grey),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Accès internet requis pour la carte',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: Text(
+                        'Vérifiez la connexion Wi-Fi ou mobile de votre téléphone.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        _checkNetwork().then((_) {
+                          if (_hasNetwork) _loadCommerces();
+                        });
+                      },
+                      child: const Text('Réessayer'),
+                    ),
+                  ],
                 ),
-            ],
-          ),
+              ),
+            ),
 
           // Slider de distance
           Positioned(
@@ -307,66 +295,12 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: () async {
-                      // open dialog for manual min/max entry
-                      final result = await showDialog<Map<String, double>>(
-                        context: context,
-                        builder: (context) {
-                          final maxCtrl = TextEditingController(
-                            text: _maxRadius.toStringAsFixed(0),
-                          );
-                          return AlertDialog(
-                            title: const Text(
-                              'Saisir la distance maximale (km)',
-                            ),
-                            content: TextField(
-                              controller: maxCtrl,
-                              keyboardType: TextInputType.number,
-                              decoration: const InputDecoration(
-                                labelText: 'Distance maximale (km)',
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Annuler'),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  final max =
-                                      double.tryParse(maxCtrl.text) ??
-                                      _maxRadius;
-                                  Navigator.pop(context, {'max': max});
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-
-                      if (result != null) {
-                        setState(() {
-                          _maxRadius = (result['max'] as double).clamp(
-                            0.0,
-                            10000.0,
-                          );
-                          _radius = _maxRadius;
-                        });
-                        _loadCommerces();
-                      }
-                    },
-                    icon: const Icon(Icons.edit, size: 18),
-                    color: primaryBlue,
-                  ),
                 ],
               ),
             ),
           ),
 
-          // Loading Overlay (Intelligent)
+          // Loading Overlay
           if (_isLoading)
             Positioned(
               top: 100,
@@ -374,18 +308,12 @@ class _MapScreenState extends State<MapScreen> {
               right: 0,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(25),
-                        blurRadius: 10,
-                      ),
+                      BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10),
                     ],
                   ),
                   child: const Row(
@@ -394,54 +322,18 @@ class _MapScreenState extends State<MapScreen> {
                       SizedBox(
                         width: 15,
                         height: 15,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: accentOrange,
-                        ),
+                        child: CircularProgressIndicator(strokeWidth: 2, color: accentOrange),
                       ),
                       SizedBox(width: 12),
                       Text(
-                        'Actualisation des commerces...',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey,
-                        ),
+                        'Actualisation...',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-
-          // Search / Filter overlay (optionnel)
-          Positioned(
-            top: 40,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(color: Colors.black.withAlpha(25), blurRadius: 10),
-                ],
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.search_rounded, color: Colors.grey),
-                  SizedBox(width: 12),
-                  Text(
-                    'Explorer les commerces...',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                  Spacer(),
-                  Icon(Icons.tune_rounded, color: accentOrange),
-                ],
-              ),
-            ),
-          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -468,8 +360,7 @@ class _MapScreenState extends State<MapScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      CommerceDetailsScreen(commerce: commerce),
+                  builder: (context) => CommerceDetailsScreen(commerce: commerce),
                 ),
               );
             },

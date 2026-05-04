@@ -14,7 +14,7 @@ class ApiService {
 
   Future<http.Response> _handleRequest(Future<http.Response> Function() request, String methodName) async {
     try {
-      final response = await request();
+      final response = await request().timeout(const Duration(seconds: 10));
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response;
       } else {
@@ -50,9 +50,19 @@ class ApiService {
       
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
-        return data.map((json) => Commerce.fromJson(json)).toList();
+        return data.map((item) {
+          try {
+            return Commerce.fromJson(item);
+          } catch (e) {
+            print('Erreur de parsing pour un commerce: $e');
+            print('JSON problématique: $item');
+            rethrow;
+          }
+        }).toList();
       }
-    } catch (_) {}
+    } catch (e) {
+      print('Exception dans getCommerces: $e');
+    }
     return [];
   }
 
@@ -96,6 +106,14 @@ class ApiService {
       'createAvis'
     );
     return response.statusCode == 200 || response.statusCode == 201;
+  }
+
+  Future<bool> updateAvis(String id, Map<String, dynamic> avisData, String? token) async {
+    final response = await _handleRequest(
+      () => http.put(Uri.parse('$baseUrl/avis/$id'), headers: _headers(token), body: json.encode(avisData)), 
+      'updateAvis'
+    );
+    return response.statusCode == 200;
   }
 
   // --- Favoris ---

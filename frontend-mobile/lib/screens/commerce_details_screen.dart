@@ -121,49 +121,28 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
     }
 
     _showRateDialog();
+  }  Map<String, dynamic>? _getMyAvis(String? userId) {
+    if (userId == null) return null;
+    try {
+      return _avis.firstWhere(
+        (a) => a['utilisateur']?['id']?.toString() == userId,
+        orElse: () => null,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 
-  void _showLoginRequiredModal() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text(
-          'Connexion requise',
-          style: TextStyle(fontWeight: FontWeight.bold, color: primaryBlue),
-        ),
-        content: const Text(
-          'Vous devez être connecté pour laisser un avis sur ce commerce.',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: accentOrange,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: const Text('Se connecter'),
-          ),
-        ],
-      ),
-    );
-  }
+  void _showRateDialog() async {
+    final userData = await _authService.getUserData();
+    final String? currentUserId = userData?['id']?.toString();
+    final existingAvis = _getMyAvis(currentUserId);
 
-  void _showRateDialog() {
-    double rating = 5.0;
-    final commentController = TextEditingController();
+    double rating = (existingAvis?['note'] ?? 5).toDouble();
+    final commentController =
+        TextEditingController(text: existingAvis?['commentaire'] ?? '');
+
+    if (!mounted) return;
 
     showDialog(
       context: context,
@@ -194,19 +173,21 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Votre Expérience',
-                              style: TextStyle(
+                              existingAvis != null
+                                  ? 'Modifier votre avis'
+                                  : 'Votre Expérience',
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w900,
                                 color: Color(0xFF1E293B),
                               ),
                             ),
-                            Text(
+                            const Text(
                               'Aidez la communauté en partageant votre avis',
                               style: TextStyle(
                                 fontSize: 13,
@@ -315,51 +296,43 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                           ),
                           child: ElevatedButton(
                             onPressed: () async {
-                              final userData = await _authService.getUserData();
                               final token = await _authService.getToken();
-                              if (userData == null || token == null) return;
+                              if (currentUserId == null || token == null) {
+                                return;
+                              }
 
-                              final success = await _apiService.createAvis({
+                              final Map<String, dynamic> avisData = {
                                 'idcommerce': widget.commerce.idcommerce,
-                                'iduser':
-                                    userData['id'], // Fix: sending the userId
+                                'iduser': currentUserId,
                                 'note': rating.round(),
                                 'commentaire': commentController.text,
-                                'status': 'PUBLIE', // Requirement for backend
-                              }, token);
+                                'status': 'PUBLIE',
+                              };
+
+                              bool success;
+                              if (existingAvis != null) {
+                                avisData['id'] = existingAvis['id'];
+                                success = await _apiService.updateAvis(
+                                  existingAvis['id'].toString(),
+                                  avisData,
+                                  token,
+                                );
+                              } else {
+                                success = await _apiService.createAvis(
+                                  avisData,
+                                  token,
+                                );
+                              }
 
                               if (!mounted) return;
 
-                              Navigator.pop(context); // Close rate dialog
+                              Navigator.pop(context);
                               if (success) {
                                 _loadAvis();
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24),
-                                    ),
-                                    title: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                      size: 48,
-                                    ),
-                                    content: const Text(
-                                      'Merci ! Votre avis a bien été enregistré.',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: const Text(
-                                          'OK',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                _showSimpleSuccessDialog(
+                                  existingAvis != null
+                                      ? 'Votre avis a été modifié.'
+                                      : 'Merci ! Votre avis a bien été enregistré.',
                                 );
                               }
                             },
@@ -371,9 +344,9 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                                 borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            child: const Text(
-                              'Publier mon avis',
-                              style: TextStyle(
+                            child: Text(
+                              existingAvis != null ? 'Modifier' : 'Publier',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w900,
                                 fontSize: 16,
@@ -389,6 +362,61 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showSimpleSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Icon(Icons.check_circle, color: Colors.green, size: 48),
+        content: Text(message, textAlign: TextAlign.center),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showLoginRequiredModal() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text(
+          'Connexion requise',
+          style: TextStyle(fontWeight: FontWeight.bold, color: primaryBlue),
+        ),
+        content: const Text(
+          'Vous devez être connecté pour laisser un avis sur ce commerce.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Annuler', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: accentOrange,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: const Text('Se connecter'),
+          ),
+        ],
       ),
     );
   }
@@ -480,35 +508,38 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                         ),
                       );
                     },
-                    child: CachedNetworkImage(
-                      imageUrl: img,
-                      key: ValueKey(img),
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: const Color(0xFFF1F5F9),
-                        child: const Center(
-                          child: CircularProgressIndicator(strokeWidth: 2),
+                    child: Hero(
+                      tag: 'gallery_$img',
+                      child: CachedNetworkImage(
+                        imageUrl: img,
+                        key: ValueKey(img),
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: const Color(0xFFF1F5F9),
+                          child: const Center(
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
                         ),
-                      ),
-                      errorWidget: (context, url, error) => Container(
-                        color: const Color(0xFFF1F5F9),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.broken_image_rounded,
-                              color: Colors.grey,
-                              size: 48,
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              'Image indisponible',
-                              style: TextStyle(
+                        errorWidget: (context, url, error) => Container(
+                          color: const Color(0xFFF1F5F9),
+                          child: const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.broken_image_rounded,
                                 color: Colors.grey,
-                                fontSize: 12,
+                                size: 48,
                               ),
-                            ),
-                          ],
+                              SizedBox(height: 8),
+                              Text(
+                                'Image indisponible',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -675,6 +706,23 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
     );
   }
 
+  Future<void> _launchURL(String urlString) async {
+    final Uri url = Uri.parse(urlString);
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(url, mode: LaunchMode.externalApplication);
+      } else {
+        if (mounted) {
+          _showDataMissingDialog("Impossible d'ouvrir ce lien : $urlString");
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        _showDataMissingDialog("Erreur lors de l'ouverture : $e");
+      }
+    }
+  }
+
   Widget _buildContactInfo() {
     return Container(
       padding: const EdgeInsets.all(20),
@@ -689,19 +737,44 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
           _buildContactButton(
             icon: Icons.phone_rounded,
             label: 'Appeler',
-            onTap: () => _launchURL('tel:${widget.commerce.telephone}'),
-          ),
-          Container(width: 1, height: 40, color: const Color(0xFFE2E8F0)),
-          _buildContactButton(
-            icon: Icons.message_rounded,
-            label: 'Message',
-            onTap: () => _launchURL('sms:${widget.commerce.telephone}'),
+            onTap: () {
+              final phone = widget.commerce.telephone;
+              if (phone != null && phone.isNotEmpty) {
+                _launchURL('tel:$phone');
+              } else {
+                _showDataMissingDialog('Le numéro de téléphone n\'est pas renseigné.');
+              }
+            },
           ),
           Container(width: 1, height: 40, color: const Color(0xFFE2E8F0)),
           _buildContactButton(
             icon: Icons.language_rounded,
             label: 'Site Web',
-            onTap: () => _launchURL('https://carrefourconnect.com'),
+            onTap: () {
+              final web = widget.commerce.siteweb;
+              if (web != null && web.isNotEmpty) {
+                _launchURL(web.startsWith('http') ? web : 'https://$web');
+              } else {
+                _showDataMissingDialog('L\'adresse du site web n\'est pas renseignée.');
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDataMissingDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        title: const Text('Information manquante', style: TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -839,43 +912,84 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
 
   Widget _buildBottomAction() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-      color: Colors.white,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 20,
+            offset: const Offset(0, -10),
+          ),
+        ],
+      ),
       child: SafeArea(
-        child: ElevatedButton(
-          onPressed: () async {
-            Position? maybePos = await Geolocator.getLastKnownPosition();
-            Position pos =
-                maybePos ??
-                await Geolocator.getCurrentPosition(
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            gradient: const LinearGradient(
+              colors: [primaryBlue, Color(0xFF003B71)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: primaryBlue.withValues(alpha: 0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: ElevatedButton(
+            onPressed: () async {
+              try {
+                Position? maybePos = await Geolocator.getLastKnownPosition();
+                Position pos = maybePos ?? await Geolocator.getCurrentPosition(
                   desiredAccuracy: LocationAccuracy.low,
+                  timeLimit: const Duration(seconds: 5),
                 );
-            if (mounted && widget.commerce.latitude != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => FullScreenMapScreen(
-                    commerce: widget.commerce,
-                    userLat: pos.latitude,
-                    userLon: pos.longitude,
+                
+                if (mounted && widget.commerce.latitude != null) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenMapScreen(
+                        commerce: widget.commerce,
+                        userLat: pos.latitude,
+                        userLon: pos.longitude,
+                      ),
+                    ),
+                  );
+                }
+              } catch (e) {
+                print('Erreur itinéraire: $e');
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.directions_rounded, color: Colors.white),
+                SizedBox(width: 12),
+                Text(
+                  'VOIR L\'ITINÉRAIRE',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    letterSpacing: 1.5,
                   ),
                 ),
-              );
-            }
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryBlue,
-            foregroundColor: Colors.white,
-            minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              ],
             ),
-            elevation: 8,
-            shadowColor: primaryBlue.withValues(alpha: 0.3),
-          ),
-          child: const Text(
-            'VOIR L\'ITINÉRAIRE',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
       ),
@@ -926,24 +1040,32 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
               ],
             ),
             const Spacer(),
-            ElevatedButton.icon(
-              onPressed: _checkAuthAndRate,
-              icon: const Icon(Icons.edit_rounded, size: 16),
-              label: const Text(
-                'Rédiger',
-                style: TextStyle(fontWeight: FontWeight.w900),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF003B71),
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
+            FutureBuilder<Map<String, dynamic>?>(
+              future: _authService.getUserData(),
+              builder: (context, snapshot) {
+                final String? userId = snapshot.data?['id']?.toString();
+                final existing = _getMyAvis(userId);
+                
+                return ElevatedButton.icon(
+                  onPressed: _checkAuthAndRate,
+                  icon: Icon(existing != null ? Icons.edit_rounded : Icons.add_comment_rounded, size: 16),
+                  label: Text(
+                    existing != null ? 'Modifier' : 'Rédiger',
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF003B71),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
@@ -986,75 +1108,114 @@ class _CommerceDetailsScreenState extends State<CommerceDetailsScreen> {
                 .toString()
                 .substring(0, 1)
                 .toUpperCase();
-            return Container(
-              margin: const EdgeInsets.only(bottom: 16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: primaryBlue.withOpacity(0.05),
-                    child: Text(
-                      initial,
-                      style: const TextStyle(
-                        color: primaryBlue,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              user['nom'] ?? 'Anonyme',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w900,
-                                fontSize: 14,
-                                color: Color(0xFF1E293B),
-                              ),
-                            ),
-                            Row(
-                              children: List.generate(
-                                5,
-                                (i) => Icon(
-                                  Icons.star_rounded,
-                                  size: 12,
-                                  color: i < (a['note'] ?? 0)
-                                      ? accentOrange
-                                      : Colors.grey[200],
+            
+            return FutureBuilder<Map<String, dynamic>?>(
+              future: _authService.getUserData(),
+              builder: (context, snapshot) {
+                final currentUserId = snapshot.data?['id']?.toString();
+                final isMyAvis = user['id']?.toString() == currentUserId;
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  padding: isMyAvis ? const EdgeInsets.all(12) : null,
+                  decoration: isMyAvis ? BoxDecoration(
+                    color: primaryBlue.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: primaryBlue.withOpacity(0.1)),
+                  ) : null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (isMyAvis)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.person_pin_rounded, color: primaryBlue, size: 16),
+                              const SizedBox(width: 4),
+                              const Text(
+                                'VOTRE AVIS',
+                                style: TextStyle(
+                                  color: primaryBlue,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  letterSpacing: 1.2,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          a['commentaire'] ?? '',
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 13,
-                            height: 1.4,
+                              const Spacer(),
+                              TextButton.icon(
+                                onPressed: _checkAuthAndRate,
+                                icon: const Icon(Icons.edit, size: 14, color: primaryBlue),
+                                label: const Text('Modifier', style: TextStyle(color: primaryBlue, fontSize: 12, fontWeight: FontWeight.bold)),
+                                style: TextButton.styleFrom(visualDensity: VisualDensity.compact),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: isMyAvis ? primaryBlue : primaryBlue.withOpacity(0.05),
+                            child: Text(
+                              initial,
+                              style: TextStyle(
+                                color: isMyAvis ? Colors.white : primaryBlue,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      isMyAvis ? 'Vous' : (user['nom'] ?? 'Anonyme'),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 14,
+                                        color: Color(0xFF1E293B),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: List.generate(
+                                        5,
+                                        (i) => Icon(
+                                          Icons.star_rounded,
+                                          size: 12,
+                                          color: i < (a['note'] ?? 0)
+                                              ? accentOrange
+                                              : Colors.grey[200],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  a['commentaire'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 13,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                );
+              }
             );
           }),
       ],
     );
-  }
-
-  Future<void> _launchURL(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    }
   }
 }

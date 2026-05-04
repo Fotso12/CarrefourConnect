@@ -132,6 +132,9 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     final newPassController = TextEditingController();
     final confirmPassController = TextEditingController();
     bool isChanging = false;
+    bool obscureOld = true;
+    bool obscureNew = true;
+    bool obscureConfirm = true;
 
     showDialog(
       context: context,
@@ -146,11 +149,29 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
             children: [
               const Text('Changez votre mot de passe pour sécuriser votre accès.', style: TextStyle(fontSize: 13, color: Colors.grey)),
               const SizedBox(height: 20),
-              _buildDialogField(oldPassController, 'Ancien mot de passe', true, Icons.lock_outline),
+              _buildDialogField(
+                oldPassController, 
+                'Ancien mot de passe', 
+                obscureOld, 
+                Icons.lock_outline,
+                onToggle: () => setDialogState(() => obscureOld = !obscureOld),
+              ),
               const SizedBox(height: 12),
-              _buildDialogField(newPassController, 'Nouveau mot de passe', true, Icons.vpn_key_outlined),
+              _buildDialogField(
+                newPassController, 
+                'Nouveau mot de passe', 
+                obscureNew, 
+                Icons.vpn_key_outlined,
+                onToggle: () => setDialogState(() => obscureNew = !obscureNew),
+              ),
               const SizedBox(height: 12),
-              _buildDialogField(confirmPassController, 'Confirmer le nouveau', true, Icons.check_circle_outline),
+              _buildDialogField(
+                confirmPassController, 
+                'Confirmer le nouveau', 
+                obscureConfirm, 
+                Icons.check_circle_outline,
+                onToggle: () => setDialogState(() => obscureConfirm = !obscureConfirm),
+              ),
             ],
           ),
           actions: [
@@ -200,12 +221,16 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     );
   }
 
-  Widget _buildDialogField(TextEditingController ctrl, String hint, bool isPass, IconData icon) {
+  Widget _buildDialogField(TextEditingController ctrl, String hint, bool isPass, IconData icon, {VoidCallback? onToggle}) {
     return TextField(
       controller: ctrl,
       obscureText: isPass,
       decoration: InputDecoration(
         prefixIcon: Icon(icon, size: 18, color: primaryBlue),
+        suffixIcon: onToggle != null ? IconButton(
+          icon: Icon(isPass ? Icons.visibility_off_rounded : Icons.visibility_rounded, size: 18, color: Colors.grey),
+          onPressed: onToggle,
+        ) : null,
         hintText: hint,
         hintStyle: const TextStyle(fontSize: 14),
         filled: true,
@@ -264,7 +289,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
                     _buildFieldGroup([
                       _buildModernField('Prénom', _prenomController, Icons.person_outline_rounded),
                       _buildModernField('Nom', _nomController, Icons.badge_outlined),
-                      _buildModernField('Contact', _phoneController, Icons.phone_android_rounded),
                     ]),
                     
                     if (_isEditing) ...[

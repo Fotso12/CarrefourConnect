@@ -345,13 +345,17 @@
         <div (click)="paymentMode = 'OM'" 
              [class.ring-2]="paymentMode === 'OM'" [class.ring-[#F78F1E]]="paymentMode === 'OM'"
              class="border border-gray-100 p-4 rounded-2xl cursor-pointer hover:bg-orange-50 transition-all text-center">
-             <div class="h-10 bg-orange-500 rounded-lg w-full flex items-center justify-center text-white font-black text-sm mb-2 shadow-sm">OM</div>
+             <div class="h-14 w-full flex items-center justify-center mb-2 overflow-hidden rounded-lg bg-orange-50/50 p-2">
+               <img src="assets/images/Orange-Money-logo.jpg" alt="Orange Money" class="w-full h-full object-contain object-center mix-blend-multiply" />
+             </div>
              <span class="text-xs font-bold text-gray-600 block">Orange Money</span>
         </div>
         <div (click)="paymentMode = 'MOMO'" 
              [class.ring-2]="paymentMode === 'MOMO'" [class.ring-[#F78F1E]]="paymentMode === 'MOMO'"
              class="border border-gray-100 p-4 rounded-2xl cursor-pointer hover:bg-yellow-50 transition-all text-center">
-             <div class="h-10 bg-yellow-400 rounded-lg w-full flex items-center justify-center text-white font-black text-sm mb-2 shadow-sm">MoMo</div>
+             <div class="h-14 w-full flex items-center justify-center mb-2 overflow-hidden rounded-lg bg-yellow-50/50 p-2">
+               <img src="assets/images/mtn-mobile-money-logo.jpg" alt="MTN Mobile Money" class="w-full h-full object-contain object-center mix-blend-multiply" />
+             </div>
              <span class="text-xs font-bold text-gray-600 block">Mobile Money</span>
         </div>
       </div>

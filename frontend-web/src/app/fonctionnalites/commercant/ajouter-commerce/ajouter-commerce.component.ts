@@ -375,8 +375,8 @@ export class AjouterCommerceComponent implements OnInit {
             description: this.offreSpeciale.description,
             type: this.offreSpeciale.type,
             reduction: this.offreSpeciale.reduction,
-            dateDebut: this.offreSpeciale.dateDebut,
-            dateFin: this.offreSpeciale.dateFin
+            dateDebut: this.offreSpeciale.dateDebut ? this.offreSpeciale.dateDebut + 'T00:00:00' : null,
+            dateFin: this.offreSpeciale.dateFin ? this.offreSpeciale.dateFin + 'T23:59:59' : null
           };
           this.offreService.create(offrePayload).subscribe({
             next: () => console.log("Offre spéciale créée"),

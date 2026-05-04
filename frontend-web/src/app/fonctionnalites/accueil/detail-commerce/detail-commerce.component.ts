@@ -55,10 +55,16 @@ export class DetailCommerceComponent implements OnInit {
       });
       
       // 2. Récupérer le commerce
-      this.commerceService.getById(id).subscribe(data => {
-        this.commerce = data;
-        this.loading = false;
-        this.initialiserCarte();
+      this.commerceService.getById(id).subscribe({
+        next: (data) => {
+          this.commerce = data;
+          this.loading = false;
+          this.initialiserCarte();
+        },
+        error: (err) => {
+          console.error("Erreur de récupération du commerce:", err);
+          this.loading = false;
+        }
       });
 
       // 3. Charger les offres

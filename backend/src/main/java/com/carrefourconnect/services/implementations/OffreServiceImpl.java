@@ -52,6 +52,8 @@ public class OffreServiceImpl implements OffreService {
         Offre entity = mapper.toEntity(dto);
         if (dto.getIdcommerce() != null) {
             entity.setCommerce(commerceRepository.findById(dto.getIdcommerce()).orElseThrow(() -> new RuntimeException("Commerce non trouvé")));
+        } else {
+            throw new IllegalArgumentException("L'ID du commerce est obligatoire pour créer une offre");
         }
         // Valeurs par défaut pour les champs obligatoires non envoyés par le frontend
         if (entity.getStatut() == null) {

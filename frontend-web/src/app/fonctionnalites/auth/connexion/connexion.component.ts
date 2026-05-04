@@ -37,15 +37,25 @@ export class ConnexionComponent {
 
     this.authService.login(this.credentials).subscribe({
       next: (res) => {
+        const role: string = (res.role || res.roles?.[0] || '').toUpperCase();
+        console.log('[Connexion] Rôle détecté:', role);
+        
+        if (role === 'USER' || role === 'ROLE_USER') {
+          this.authService.logout();
+          this.error = 'Accès refusé. La plateforme web est réservée aux commerçants et administrateurs.';
+          this.showErrorModal = true;
+          this.loading = false;
+          return;
+        }
+
         // Afficher modal de succès puis rediriger
         this.successMessage = 'Connexion réussie. Bienvenue !';
         this.showSuccessModal = true;
         this.loading = false;
+        
         // Redirection après courte pause pour laisser le modal s'afficher
         setTimeout(() => {
           this.showSuccessModal = false;
-          const role: string = (res.role || res.roles?.[0] || '').toUpperCase();
-          console.log('[Connexion] Rôle détecté:', role);
           if (role === 'ADMIN' || role === 'ROLE_ADMIN') {
             console.log('[Connexion] Navigation vers /admin');
             this.router.navigate(['/admin']);

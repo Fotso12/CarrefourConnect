@@ -72,7 +72,8 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**", "/api/test/**").permitAll()
+                        auth.dispatcherTypeMatchers(jakarta.servlet.DispatcherType.ERROR).permitAll()
+                                .requestMatchers("/api/auth/**", "/api/test/**").permitAll()
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/commerces/**").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "/api/commerces/**").permitAll()
@@ -82,7 +83,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/notifications/**").permitAll()
                                 .requestMatchers("/api/medias", "/api/medias/**").permitAll()
                                 .requestMatchers("/api/utilisateurs/inscription/**").permitAll()
-                                .requestMatchers("/uploads/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers("/uploads/**", "/swagger-ui/**", "/v3/api-docs/**", "/ws/**", "/error").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -95,9 +96,10 @@ public class SecurityConfig {
     @Bean
     public org.springframework.web.cors.CorsConfigurationSource corsConfigurationSource() {
         org.springframework.web.cors.CorsConfiguration configuration = new org.springframework.web.cors.CorsConfiguration();
-        configuration.setAllowedOrigins(java.util.List.of("*"));
+        configuration.setAllowedOriginPatterns(java.util.List.of("*"));
         configuration.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type", "X-Requested-With"));
+        configuration.setAllowCredentials(true);
         org.springframework.web.cors.UrlBasedCorsConfigurationSource source = new org.springframework.web.cors.UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
