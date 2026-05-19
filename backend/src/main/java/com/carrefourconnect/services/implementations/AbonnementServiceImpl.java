@@ -1,6 +1,7 @@
 package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.AbonnementDTO;
+import com.carrefourconnect.dtos.PlanConfigDTO;
 import com.carrefourconnect.entities.Abonnement;
 import com.carrefourconnect.mappers.AbonnementMapper;
 import com.carrefourconnect.repositories.AbonnementRepository;
@@ -78,15 +79,56 @@ public class AbonnementServiceImpl implements AbonnementService {
     public void updatePrixParType(String type, BigDecimal prix) {
         log.info("Mise à jour du prix pour le type d'abonnement: {} -> {} FCFA", type, prix);
         TypeAbonnement typeEnum = TypeAbonnement.valueOf(type);
-        List<Abonnement> abonnements = repository.findAll().stream()
-                .filter(a -> typeEnum.equals(a.getType()))
-                .collect(Collectors.toList());
-        
+        List<Abonnement> abonnements = repository.findByType(typeEnum);
         abonnements.forEach(a -> {
             a.setMontant(prix);
             repository.save(a);
         });
         log.info("{} abonnement(s) mis à jour pour le type {}", abonnements.size(), type);
     }
-}
 
+    @Override
+    public AbonnementDTO findConfigParType(String type) {
+        log.debug("Récupération de la configuration du plan: {}", type);
+        TypeAbonnement typeEnum = TypeAbonnement.valueOf(type.toUpperCase());
+        return repository.findByType(typeEnum)
+                .stream()
+                .findFirst()
+                .map(mapper::toDto)
+                .orElse(null);
+    }
+
+    @Override
+    public void updateConfigParType(String type, PlanConfigDTO config) {
+        log.info("Mise à jour de la configuration du plan: {}", type);
+        TypeAbonnement typeEnum = TypeAbonnement.valueOf(type.toUpperCase());
+        List<Abonnement> abonnements = repository.findByType(typeEnum);
+
+        if (abonnements.isEmpty()) {
+            throw new IllegalArgumentException("Aucun abonnement trouvé pour le type: " + type);
+        }
+
+        abonnements.forEach(a -> {
+            if (config.getMontant() != null) a.setMontant(config.getMontant());
+            a.setMaxPhotos(config.getMaxPhotos());
+            a.setOffreSpecialeAutorisee(config.isOffreSpecialeAutorisee());
+            a.setMiseEnAvant(config.isMiseEnAvant());
+            a.setPrioriteAffichage(config.getPrioriteAffichage());
+            a.setLienWhatsapp(config.isLienWhatsapp());
+            a.setNotificationPush(config.isNotificationPush());
+            if (config.getNomAffiche() != null) a.setNomAffiche(config.getNomAffiche());
+            if (config.getDescriptionPlan() != null) a.setDescriptionPlan(config.getDescriptionPlan());
+            repository.save(a);
+        });
+
+        log.info("{} abonnement(s) mis à jour pour le plan {}", abonnements.size(), type);
+    }
+
+    @Override
+    public List<AbonnementDTO> findByCommercant(UUID userId) {
+        log.debug("Récupération de l'historique d'abonnement pour l'utilisateur: {}", userId);
+        return repository.findByCommercantId(userId).stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+}

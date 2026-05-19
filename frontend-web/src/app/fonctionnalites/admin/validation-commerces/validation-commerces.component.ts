@@ -27,7 +27,7 @@ export class ValidationCommercesComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  pageSize = 15;
+  pageSize = 10;
 
   // Modal State
   showSuspendModal = false;

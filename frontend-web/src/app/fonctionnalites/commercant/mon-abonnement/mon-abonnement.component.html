@@ -1,0 +1,156 @@
+<div class="p-6 md:p-10 max-w-5xl mx-auto">
+
+  <!-- En-tête -->
+  <div class="mb-10 flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <h1 class="text-3xl font-black text-[#003B71]">Mes Abonnements</h1>
+      <p class="text-gray-500 mt-1">Gérez vos forfaits et suivez vos dépenses pour l'ensemble de vos commerces.</p>
+    </div>
+    
+    <button (click)="changerDePlan()"
+            class="bg-[#003B71] text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-900/10 hover:bg-[#00ADEF] transition-all flex items-center gap-2">
+      <i class="fa-solid fa-plus"></i>
+      Nouveau plan
+    </button>
+  </div>
+
+  <!-- Chargement -->
+  <div *ngIf="loading" class="flex items-center justify-center py-24">
+    <div class="w-10 h-10 border-4 border-[#003B71] border-t-transparent rounded-full animate-spin"></div>
+  </div>
+
+  <!-- Erreur -->
+  <div *ngIf="error && !loading" class="p-6 bg-red-50 text-red-600 rounded-2xl text-sm font-bold border border-red-100 mb-8">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && !error">
+    
+    <!-- Cartes de Statistiques -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+      
+      <!-- Basique -->
+      <div class="bg-emerald-50 border border-emerald-100 p-6 rounded-[28px]">
+        <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-1">Basique</p>
+        <div class="flex items-end justify-between">
+          <p class="text-3xl font-black text-emerald-800">{{ stats.basique }}</p>
+          <div class="h-10 w-10 bg-emerald-100 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-star text-emerald-600"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Premium -->
+      <div class="bg-indigo-50 border border-indigo-100 p-6 rounded-[28px]">
+        <p class="text-xs font-bold text-indigo-600 uppercase tracking-widest mb-1">Premium</p>
+        <div class="flex items-end justify-between">
+          <p class="text-3xl font-black text-indigo-800">{{ stats.premium }}</p>
+          <div class="h-10 w-10 bg-indigo-100 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-crown text-indigo-600"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gold -->
+      <div class="bg-amber-50 border border-amber-100 p-6 rounded-[28px]">
+        <p class="text-xs font-bold text-amber-600 uppercase tracking-widest mb-1">Gold</p>
+        <div class="flex items-end justify-between">
+          <p class="text-3xl font-black text-amber-800">{{ stats.gold }}</p>
+          <div class="h-10 w-10 bg-amber-100 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-gem text-amber-600"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Dépensé -->
+      <div class="bg-slate-900 p-6 rounded-[28px]">
+        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Dépensé</p>
+        <div class="flex items-end justify-between">
+          <div>
+            <p class="text-2xl font-black text-white">{{ stats.totalDepense | number:'1.0-0' }}</p>
+            <p class="text-[10px] text-slate-500 font-bold uppercase">FCFA TTC</p>
+          </div>
+          <div class="h-10 w-10 bg-slate-800 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-wallet text-white"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des abonnements par commerce -->
+    <div class="bg-white rounded-[32px] shadow-sm border border-gray-100 overflow-hidden">
+      <div class="p-8 border-b border-gray-50 flex items-center justify-between">
+        <h2 class="text-xl font-black text-[#003B71]">Historique des abonnements</h2>
+        <span class="text-xs font-bold text-gray-400">{{ abonnements.length }} enregistrements</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead>
+            <tr class="bg-gray-50/50">
+              <th class="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Commerce</th>
+              <th class="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Forfait</th>
+              <th class="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Période</th>
+              <th class="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Montant</th>
+              <th class="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400">Statut</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            <tr *ngFor="let abo of abonnements" class="hover:bg-gray-50/50 transition-colors">
+              <td class="px-8 py-5">
+                <div class="flex flex-col">
+                  <span class="font-bold text-[#003B71]">{{ getCommerceNom(abo.idCommerce) }}</span>
+                  <span class="text-[10px] font-mono text-gray-400">{{ abo.reference }}</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span [class]="getPlanClass(abo.type)">{{ abo.nomAffiche || abo.type }}</span>
+              </td>
+              <td class="px-8 py-5 text-sm text-gray-500">
+                <div class="flex flex-col">
+                  <span>Du {{ abo.dateDebut | date:'dd/MM/yyyy' }}</span>
+                  <span class="text-xs text-gray-400">Au {{ abo.dateFin | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </td>
+              <td class="px-8 py-5">
+                <span class="font-black text-[#003B71]">{{ abo.montant | number:'1.0-0' }} FCFA</span>
+              </td>
+              <td class="px-8 py-5">
+                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
+                      [class]="getStatutClass(abo.statut)">
+                  {{ abo.statut }}
+                </span>
+              </td>
+            </tr>
+
+            <!-- Vide -->
+            <tr *ngIf="abonnements.length === 0">
+              <td colspan="5" class="px-8 py-20 text-center">
+                <div class="flex flex-col items-center">
+                  <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fa-solid fa-receipt text-gray-300 text-2xl"></i>
+                  </div>
+                  <p class="text-gray-400 font-bold">Aucun historique d'abonnement trouvé.</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Information footer -->
+    <div class="mt-8 p-6 bg-blue-50 border border-blue-100 rounded-2xl flex gap-4 items-start">
+      <div class="h-10 w-10 bg-blue-100 rounded-xl flex items-center justify-center flex-shrink-0">
+        <i class="fa-solid fa-circle-info text-blue-600"></i>
+      </div>
+      <div>
+        <p class="text-sm font-bold text-blue-900">À propos de vos abonnements</p>
+        <p class="text-xs text-blue-700 mt-1 leading-relaxed">
+          Les abonnements sont spécifiques à chaque commerce. Lorsque vous passez à un forfait supérieur pour un commerce, l'ancien abonnement est automatiquement marqué comme expiré et les nouveaux droits sont immédiatement débloqués pour ce commerce.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>

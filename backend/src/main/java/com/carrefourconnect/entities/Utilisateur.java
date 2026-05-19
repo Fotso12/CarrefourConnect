@@ -61,4 +61,7 @@ public abstract class Utilisateur {
 
     @Column(name = "motifsuspension", columnDefinition = "TEXT")
     private String motifSuspension;
+
+    @Column(name = "fcm_token", length = 512)
+    private String fcmToken;
 }

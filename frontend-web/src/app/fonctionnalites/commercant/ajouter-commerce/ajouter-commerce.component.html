@@ -68,12 +68,21 @@
         
         <!-- Toggle Offres Spéciales -->
         <div class="md:col-span-2 pt-6 border-t border-gray-100 mt-2">
-          <label class="flex items-center gap-3 cursor-pointer mb-2 w-max">
+
+          <!-- Bandeau verrouillé si le plan ne permet pas les offres spéciales -->
+          <div *ngIf="!droitsAbonnement.offreSpecialeAutorisee" class="flex items-center gap-3 p-4 bg-amber-50 border border-amber-200 rounded-2xl text-sm text-amber-700">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            <span><strong>Offres spéciales non disponibles</strong> avec votre plan actuel. Passez au <strong>Premium</strong> ou <strong>Gold</strong> à l'étape suivante pour débloquer cette fonctionnalité.</span>
+          </div>
+
+          <label *ngIf="droitsAbonnement.offreSpecialeAutorisee" class="flex items-center gap-3 cursor-pointer mb-2 w-max">
             <input type="checkbox" [(ngModel)]="hasSpecialOffer" class="w-5 h-5 rounded text-[#003B71] border-gray-300 focus:ring-[#003B71] transition-all">
             <span class="text-sm font-bold text-gray-700">Ajouter une offre spéciale ? (Promotion, Vente Flash...)</span>
           </label>
-          
-          <div *ngIf="hasSpecialOffer" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-6 bg-orange-50/50 rounded-3xl border border-orange-100 animate-in fade-in zoom-in duration-300">
+
+          <div *ngIf="hasSpecialOffer && droitsAbonnement.offreSpecialeAutorisee" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6 p-6 bg-orange-50/50 rounded-3xl border border-orange-100 animate-in fade-in zoom-in duration-300">
             <div class="md:col-span-2">
               <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Titre de l'offre</label>
               <input type="text" [(ngModel)]="offreSpeciale.titre" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E]" placeholder="Ex: -50% sur tous nos articles d'hiver">
@@ -85,10 +94,10 @@
             <div>
               <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Type d'offre</label>
               <select [(ngModel)]="offreSpeciale.type" class="w-full bg-white border-none rounded-2xl px-4 py-3 text-sm focus:ring-2 focus:ring-[#F78F1E]">
-                 <option value="PROMOTION">Promotion</option>
-                 <option value="VENTE_FLASH">Vente Flash</option>
-                 <option value="SOLDE">Solde</option>
-                 <option value="OFFRE_SPECIALE">Offre Spéciale</option>
+                <option value="PROMOTION">Promotion</option>
+                <option value="VENTE_FLASH">Vente Flash</option>
+                <option value="SOLDE">Solde</option>
+                <option value="OFFRE_SPECIALE">Offre Spéciale</option>
               </select>
             </div>
             <div>
@@ -194,15 +203,45 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div class="border-4 border-dashed border-gray-100 rounded-[40px] p-12 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-all group" (click)="fileInput.click()">
-            <div class="h-20 w-20 rounded-full bg-blue-50 flex items-center justify-center text-[#00ADEF] mb-4 group-hover:scale-110 transition-transform">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+        <!-- Zone upload avec compteur et blocage selon plan -->
+      <div>
+        <div class="border-4 border-dashed rounded-[40px] p-10 flex flex-col items-center justify-center transition-all group"
+             [class.border-gray-100]="!photosBloquees"
+             [class.border-red-200]="photosBloquees"
+             [class.bg-red-50]="photosBloquees"
+             [class.hover:bg-gray-50]="!photosBloquees"
+             [class.cursor-pointer]="!photosBloquees"
+             [class.cursor-not-allowed]="photosBloquees"
+             (click)="!photosBloquees && fileInput.click()">
+          <div class="h-16 w-16 rounded-full flex items-center justify-center mb-3 transition-transform"
+               [class.bg-blue-50]="!photosBloquees"
+               [class.text-[#00ADEF]]="!photosBloquees"
+               [class.bg-red-100]="photosBloquees"
+               [class.text-red-400]="photosBloquees"
+               [class.group-hover:scale-110]="!photosBloquees">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold" [class.text-gray-400]="!photosBloquees" [class.text-red-500]="photosBloquees">
+            {{ photosBloquees ? 'Limite atteinte pour votre plan' : 'Cliquez pour uploader le logo ou une photo' }}
+          </span>
+          <!-- Compteur de photos -->
+          <div class="mt-3 flex items-center gap-2">
+            <div class="flex gap-1">
+              <div *ngFor="let i of [].constructor(droitsAbonnement.maxPhotos === -1 ? 10 : droitsAbonnement.maxPhotos); let idx = index"
+                   class="w-3 h-3 rounded-full transition-all"
+                   [class.bg-[#003B71]]="idx < selectedFiles.length"
+                   [class.bg-gray-200]="idx >= selectedFiles.length"></div>
             </div>
-            <span class="text-sm font-bold text-gray-400">Cliquez pour uploader le logo ou une photo</span>
-            <input #fileInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
+            <span class="text-xs font-bold text-gray-400">{{ selectedFiles.length }} / {{ maxPhotosLabel }}</span>
+          </div>
+          <input #fileInput type="file" accept="image/*" multiple hidden (change)="onFilesSelected($event)" />
         </div>
+        <p *ngIf="photosBloquees" class="text-xs text-amber-600 font-semibold mt-2 text-center">
+          🔒 Passez au plan Premium ou Gold pour ajouter plus de photos.
+        </p>
+      </div>
 
         <!-- Preview thumbnails -->
         <div *ngIf="commerce.images && commerce.images.length > 0" class="flex gap-3 flex-wrap">
@@ -226,40 +265,140 @@
       </div>
     </div>
 
-    <!-- ÉTAPE 5 : ABONNEMENT -->
-    <div *ngIf="step === 5" class="animate-in fade-in slide-in-from-right-4 duration-500 space-y-8">
-      <div class="text-center max-w-lg mx-auto mb-8">
+    <!-- ÉTAPE 5 : ABONNEMENT (maquette) -->
+    <div *ngIf="step === 5" class="animate-in fade-in slide-in-from-right-4 duration-500">
+      <div class="text-center mb-10">
         <h2 class="text-3xl font-black text-[#003B71] mb-2">Choisissez votre forfait</h2>
         <p class="text-gray-400 text-sm font-medium">Développez votre visibilité en choisissant le forfait adapté.</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div *ngFor="let ab of abonnements"
-             (click)="selectedAbonnement = ab"
-             [class.border-[#F78F1E]]="selectedAbonnement?.idabonnement === ab.idabonnement"
-             [class.ring-4]="selectedAbonnement?.idabonnement === ab.idabonnement"
-             [class.ring-orange-100]="selectedAbonnement?.idabonnement === ab.idabonnement"
-             [class.scale-105]="selectedAbonnement?.idabonnement === ab.idabonnement"
-             class="bg-white border-2 border-gray-100 rounded-[32px] p-8 cursor-pointer transition-all duration-300 relative flex flex-col group hover:shadow-xl">
-            
-            <div *ngIf="ab.nomAffiche === 'Premium'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00ADEF] py-1 px-4 rounded-full text-[10px] font-bold text-white uppercase tracking-widest shadow-md">Populaire</div>
-            
-            <h3 class="text-xl font-black text-[#003B71] mb-1 uppercase tracking-tight">{{ ab.nomAffiche }}</h3>
-            <div class="flex items-baseline gap-1 mb-6">
-                <span class="text-4xl font-black text-[#F78F1E] tracking-tighter">{{ ab.prixAffiche }}</span>
-                <span class="text-xs font-bold text-gray-400">FCFA</span>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+
+        <!-- Carte BASIQUE -->
+        <ng-container *ngFor="let ab of abonnements">
+
+          <!-- BASIQUE -->
+          <div *ngIf="ab.type === 'BASIQUE'"
+               (click)="chargerDroitsPlan(ab)"
+               class="bg-white border-2 rounded-3xl p-8 cursor-pointer transition-all duration-300 flex flex-col shadow-md hover:shadow-xl"
+               [class.border-orange-500]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.border-gray-100]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+               [class.ring-4]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.ring-orange-100]="selectedAbonnement?.idabonnement === ab.idabonnement">
+            <div class="text-center mb-6">
+              <div class="text-4xl mb-3">🥉</div>
+              <h3 class="text-xl font-black text-orange-500 uppercase tracking-widest mb-4">{{ ab.nomAffiche || 'Basique' }}</h3>
+              <div class="flex items-baseline justify-center gap-1">
+                <span class="text-5xl font-black text-[#003B71]">{{ ab.prixAffiche | number:'1.0-0' }}</span>
+                <span class="text-sm font-bold text-gray-400">CFA</span>
+              </div>
+              <p class="text-gray-400 text-xs mt-2">{{ ab.descriptionPlan || "L'essentiel pour apparaître sur la carte." }}</p>
             </div>
-            
-            <p class="text-xs text-gray-500 mb-8 flex-1 leading-relaxed">{{ ab.description || 'Boostez votre commerce avec ce plan unique.' }}</p>
-            
-            <button [class.bg-[#F78F1E]]="selectedAbonnement?.idabonnement === ab.idabonnement"
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-orange-400">📍</span> Référencement basique (Nom & GPS)
+              </li>
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-orange-400">🏷️</span> 1 catégorie de commerce
+              </li>
+              <li class="flex items-center gap-2 text-sm" [class.text-gray-300]="true">
+                <span>🖼️</span> Jusqu'à {{ ab.maxPhotos === -1 ? 'Illimité' : ab.maxPhotos }} photos
+              </li>
+            </ul>
+            <button class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all"
+                    [class.bg-orange-500]="selectedAbonnement?.idabonnement === ab.idabonnement"
                     [class.text-white]="selectedAbonnement?.idabonnement === ab.idabonnement"
-                    [class.bg-gray-50]="selectedAbonnement?.idabonnement !== ab.idabonnement"
-                    [class.text-gray-400]="selectedAbonnement?.idabonnement !== ab.idabonnement"
-                    class="w-full py-4 rounded-2xl font-bold transition-all text-sm group-hover:bg-[#F78F1E] group-hover:text-white">
-                Sélectionner
+                    [class.bg-orange-50]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.text-orange-600]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.hover:bg-orange-500]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.hover:text-white]="selectedAbonnement?.idabonnement !== ab.idabonnement">
+              Commencer
             </button>
-        </div>
+          </div>
+
+          <!-- PREMIUM -->
+          <div *ngIf="ab.type === 'PREMIUM'"
+               (click)="chargerDroitsPlan(ab)"
+               class="bg-[#003B71] border-2 rounded-3xl p-8 cursor-pointer transition-all duration-300 flex flex-col shadow-2xl relative -mt-0 md:-mt-4 md:mb-4"
+               [class.border-blue-400]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.border-transparent]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+               [class.ring-4]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.ring-blue-200]="selectedAbonnement?.idabonnement === ab.idabonnement">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-500 py-1.5 px-6 rounded-full text-[10px] font-black text-white uppercase tracking-widest shadow-lg">✦ Plus Populaire</div>
+            <div class="text-center mb-6 mt-2">
+              <div class="text-4xl mb-3">🏅</div>
+              <h3 class="text-xl font-black text-blue-300 uppercase tracking-widest mb-4">{{ ab.nomAffiche || 'Premium' }}</h3>
+              <div class="flex items-baseline justify-center gap-1">
+                <span class="text-5xl font-black text-white">{{ ab.prixAffiche | number:'1.0-0' }}</span>
+                <span class="text-sm font-bold text-blue-300">CFA</span>
+              </div>
+              <p class="text-blue-200 text-xs mt-2">{{ ab.descriptionPlan || 'Le meilleur rapport visibilité / prix.' }}</p>
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-center gap-2 text-sm text-blue-100">
+                <span>📈</span> Mise en avant
+              </li>
+              <li class="flex items-center gap-2 text-sm text-blue-100">
+                <span>🖼️</span> Jusqu'à {{ ab.maxPhotos === -1 ? 'Illimité' : ab.maxPhotos }} photos / mois
+              </li>
+              <li class="flex items-center gap-2 text-sm text-blue-100">
+                <span>💬</span> Lien WhatsApp direct
+              </li>
+              <li class="flex items-center gap-2 text-sm text-blue-100">
+                <span>🏷️</span> Offres spéciales activées
+              </li>
+            </ul>
+            <button class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all"
+                    [class.bg-white]="true"
+                    [class.text-[#003B71]]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.text-blue-600]="selectedAbonnement?.idabonnement === ab.idabonnement"
+                    [class.shadow-xl]="selectedAbonnement?.idabonnement === ab.idabonnement">
+              Choisir ce plan
+            </button>
+          </div>
+
+          <!-- GOLD -->
+          <div *ngIf="ab.type === 'GOLD'"
+               (click)="chargerDroitsPlan(ab)"
+               class="bg-white border-2 rounded-3xl p-8 cursor-pointer transition-all duration-300 flex flex-col shadow-md hover:shadow-xl relative"
+               [class.border-amber-500]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.border-gray-100]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+               [class.ring-4]="selectedAbonnement?.idabonnement === ab.idabonnement"
+               [class.ring-amber-100]="selectedAbonnement?.idabonnement === ab.idabonnement">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 py-1.5 px-6 rounded-full text-[10px] font-black text-white uppercase tracking-widest shadow-lg">👑 Meilleure Valeur</div>
+            <div class="text-center mb-6 mt-2">
+              <div class="text-4xl mb-3">🏆</div>
+              <h3 class="text-xl font-black text-amber-500 uppercase tracking-widest mb-4">{{ ab.nomAffiche || 'Gold' }}</h3>
+              <div class="flex items-baseline justify-center gap-1">
+                <span class="text-5xl font-black text-[#003B71]">{{ ab.prixAffiche | number:'1.0-0' }}</span>
+                <span class="text-sm font-bold text-gray-400">CFA</span>
+              </div>
+              <p class="text-gray-400 text-xs mt-2">{{ ab.descriptionPlan || 'Performance maximale pour les pros.' }}</p>
+            </div>
+            <ul class="space-y-3 mb-8 flex-1">
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-amber-500">⭐</span> Position VIP & Badge
+              </li>
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-amber-500">📊</span> Photos illimitées
+              </li>
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-amber-500">🔔</span> Notifications Push
+              </li>
+              <li class="flex items-center gap-2 text-sm text-gray-600">
+                <span class="text-amber-500">💬</span> WhatsApp + Offres spéciales
+              </li>
+            </ul>
+            <button class="w-full py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all"
+                    [class.bg-amber-500]="selectedAbonnement?.idabonnement === ab.idabonnement"
+                    [class.text-white]="selectedAbonnement?.idabonnement === ab.idabonnement"
+                    [class.bg-amber-50]="selectedAbonnement?.idabonnement !== ab.idabonnement"
+                    [class.text-amber-600]="selectedAbonnement?.idabonnement !== ab.idabonnement">
+              Passer Gold
+            </button>
+          </div>
+
+        </ng-container>
       </div>
     </div>
 

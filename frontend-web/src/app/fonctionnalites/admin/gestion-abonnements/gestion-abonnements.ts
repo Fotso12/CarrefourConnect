@@ -13,6 +13,15 @@ interface TarifForfait {
   idabonnement: string | null;
   enEdition: boolean;
   prixEdition: number | null;
+  showConfig: boolean;
+  config: {
+    maxPhotos: number;
+    offreSpecialeAutorisee: boolean;
+    miseEnAvant: boolean;
+    prioriteAffichage: number;
+    lienWhatsapp: boolean;
+    notificationPush: boolean;
+  };
 }
 
 @Component({
@@ -28,7 +37,6 @@ export class GestionAbonnements implements OnInit {
   saving = false;
   successMessage = '';
 
-  // Plans tarifaires fixes
   forfaits: TarifForfait[] = [
     {
       type: 'BASIQUE',
@@ -39,7 +47,9 @@ export class GestionAbonnements implements OnInit {
       prix: null,
       idabonnement: null,
       enEdition: false,
-      prixEdition: null
+      prixEdition: null,
+      showConfig: false,
+      config: { maxPhotos: 3, offreSpecialeAutorisee: false, miseEnAvant: false, prioriteAffichage: 1, lienWhatsapp: false, notificationPush: false }
     },
     {
       type: 'PREMIUM',
@@ -50,7 +60,9 @@ export class GestionAbonnements implements OnInit {
       prix: null,
       idabonnement: null,
       enEdition: false,
-      prixEdition: null
+      prixEdition: null,
+      showConfig: false,
+      config: { maxPhotos: 10, offreSpecialeAutorisee: true, miseEnAvant: true, prioriteAffichage: 2, lienWhatsapp: true, notificationPush: false }
     },
     {
       type: 'GOLD',
@@ -61,7 +73,9 @@ export class GestionAbonnements implements OnInit {
       prix: null,
       idabonnement: null,
       enEdition: false,
-      prixEdition: null
+      prixEdition: null,
+      showConfig: false,
+      config: { maxPhotos: -1, offreSpecialeAutorisee: true, miseEnAvant: true, prioriteAffichage: 3, lienWhatsapp: true, notificationPush: true }
     }
   ];
 
@@ -76,21 +90,28 @@ export class GestionAbonnements implements OnInit {
       next: (data) => {
         this.abonnements = data;
         this.loading = false;
-        this.associerPrixForfaits(data);
+        this.associerForfaits(data);
       },
       error: (err) => {
-        console.error("Erreur chargement abonnements:", err);
+        console.error('Erreur chargement abonnements:', err);
         this.loading = false;
       }
     });
   }
 
-  associerPrixForfaits(abonnements: any[]): void {
+  associerForfaits(abonnements: any[]): void {
     this.forfaits.forEach(forfait => {
       const match = abonnements.find(a => a.type === forfait.type);
       if (match) {
-        forfait.prix = match.montant;   // le DTO backend utilise 'montant'
+        forfait.prix = match.montant;
         forfait.idabonnement = match.idabonnement;
+        // Synchroniser la config avec les valeurs du backend
+        forfait.config.maxPhotos = match.maxPhotos ?? forfait.config.maxPhotos;
+        forfait.config.offreSpecialeAutorisee = match.offreSpecialeAutorisee ?? forfait.config.offreSpecialeAutorisee;
+        forfait.config.miseEnAvant = match.miseEnAvant ?? forfait.config.miseEnAvant;
+        forfait.config.prioriteAffichage = match.prioriteAffichage ?? forfait.config.prioriteAffichage;
+        forfait.config.lienWhatsapp = match.lienWhatsapp ?? forfait.config.lienWhatsapp;
+        forfait.config.notificationPush = match.notificationPush ?? forfait.config.notificationPush;
       }
     });
   }
@@ -107,18 +128,41 @@ export class GestionAbonnements implements OnInit {
 
   sauvegarderTarif(forfait: TarifForfait): void {
     if (forfait.prixEdition === null || forfait.prixEdition === undefined || forfait.prixEdition < 0) return;
-    if (!forfait.idabonnement) return; // Sécurité : pas de création depuis cette interface
-
+    if (!forfait.idabonnement) return;
     this.saving = true;
     this.abonnementService.updatePrixParType(forfait.type, forfait.prixEdition).subscribe({
       next: () => {
         forfait.prix = forfait.prixEdition;
         forfait.enEdition = false;
         this.saving = false;
-        this.showSuccess(`Tarif ${forfait.label} mis à jour avec succès !`);
+        this.showSuccess(`Prix ${forfait.label} mis à jour avec succès !`);
       },
       error: (err: any) => {
-        console.error("Erreur mise à jour tarif:", err);
+        console.error('Erreur mise à jour prix:', err);
+        this.saving = false;
+      }
+    });
+  }
+
+  sauvegarderConfig(forfait: TarifForfait): void {
+    this.saving = true;
+    const payload = {
+      montant: forfait.prix,
+      maxPhotos: forfait.config.maxPhotos,
+      offreSpecialeAutorisee: forfait.config.offreSpecialeAutorisee,
+      miseEnAvant: forfait.config.miseEnAvant,
+      prioriteAffichage: forfait.config.prioriteAffichage,
+      lienWhatsapp: forfait.config.lienWhatsapp,
+      notificationPush: forfait.config.notificationPush
+    };
+    this.abonnementService.updateConfigParType(forfait.type, payload).subscribe({
+      next: () => {
+        this.saving = false;
+        forfait.showConfig = false;
+        this.showSuccess(`Configuration ${forfait.label} sauvegardée !`);
+      },
+      error: (err: any) => {
+        console.error('Erreur sauvegarde config:', err);
         this.saving = false;
       }
     });
@@ -138,9 +182,7 @@ export class GestionAbonnements implements OnInit {
     return map[couleur] || map['blue'];
   }
 
-  // Abonnements actifs = list totale
   getAbonnementsActifs(): any[] {
     return this.abonnements.filter(a => a.statut === 'ACTIF');
   }
 }
-

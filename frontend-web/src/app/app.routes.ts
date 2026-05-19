@@ -56,6 +56,10 @@ export const routes: Routes = [
         loadComponent: () => import('./fonctionnalites/commercant/gestion-avis/gestion-avis.component').then(m => m.GestionAvisCommercantComponent) 
       },
       {
+        path: 'abonnement',
+        loadComponent: () => import('./fonctionnalites/commercant/mon-abonnement/mon-abonnement.component').then(m => m.MonAbonnementComponent)
+      },
+      {
         path: 'profil',
         loadComponent: () => import('./fonctionnalites/commercant/profil-commercant.component').then(m => m.ProfilCommercantComponent)
       },

@@ -2,6 +2,7 @@ package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.OffreDTO;
 import com.carrefourconnect.entities.Offre;
+import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.mappers.OffreMapper;
 import com.carrefourconnect.repositories.OffreRepository;
 import com.carrefourconnect.repositories.CommerceRepository;
@@ -27,11 +28,13 @@ public class OffreServiceImpl implements OffreService {
     private final OffreRepository repository;
     private final CommerceRepository commerceRepository;
     private final OffreMapper mapper;
+    private final FcmService fcmService;
 
-    public OffreServiceImpl(OffreRepository repository, CommerceRepository commerceRepository, OffreMapper mapper) {
+    public OffreServiceImpl(OffreRepository repository, CommerceRepository commerceRepository, OffreMapper mapper, FcmService fcmService) {
         this.repository = repository;
         this.commerceRepository = commerceRepository;
         this.mapper = mapper;
+        this.fcmService = fcmService;
     }
 
     @Override
@@ -50,11 +53,23 @@ public class OffreServiceImpl implements OffreService {
     public OffreDTO save(OffreDTO dto) {
         log.info("Création d'une nouvelle offre: {}", dto.getTitre());
         Offre entity = mapper.toEntity(dto);
+        
+        Commerce commerce = null;
         if (dto.getIdcommerce() != null) {
-            entity.setCommerce(commerceRepository.findById(dto.getIdcommerce()).orElseThrow(() -> new RuntimeException("Commerce non trouvé")));
+            commerce = commerceRepository.findById(dto.getIdcommerce())
+                    .orElseThrow(() -> new RuntimeException("Commerce non trouvé"));
+            
+            // Vérification des droits d'abonnement
+            if (commerce.getAbonnement() != null && !commerce.getAbonnement().isOffreSpecialeAutorisee()) {
+                log.warn("Tentative de création d'offre pour un commerce dont l'abonnement ne l'autorise pas: {}", commerce.getNom());
+                throw new IllegalStateException("Votre abonnement actuel ne vous permet pas de créer des offres spéciales.");
+            }
+            
+            entity.setCommerce(commerce);
         } else {
             throw new IllegalArgumentException("L'ID du commerce est obligatoire pour créer une offre");
         }
+        
         // Valeurs par défaut pour les champs obligatoires non envoyés par le frontend
         if (entity.getStatut() == null) {
             entity.setStatut(StatutOffre.ACTIF);
@@ -68,7 +83,31 @@ public class OffreServiceImpl implements OffreService {
         if (entity.getDateFin() == null) {
             entity.setDateFin(LocalDateTime.now().plusDays(30));
         }
-        return mapper.toDto(repository.save(entity));
+        
+        Offre savedOffre = repository.save(entity);
+
+        // Envoyer des notifications push si l'abonnement le permet
+        if (commerce != null && commerce.getAbonnement() != null && commerce.getAbonnement().isNotificationPush()) {
+            envoyerNotificationsPush(commerce, savedOffre);
+        }
+
+        return mapper.toDto(savedOffre);
+    }
+
+    private void envoyerNotificationsPush(Commerce commerce, Offre offre) {
+        log.info("Envoi de notifications push pour l'offre: {}", offre.getTitre());
+        
+        String title = "Nouvelle offre chez " + commerce.getNom() + " !";
+        String body = offre.getTitre() + " : " + offre.getDescription();
+        java.util.Map<String, String> data = new java.util.HashMap<>();
+        data.put("type", "NOUVELLE_OFFRE");
+        data.put("idcommerce", commerce.getIdcommerce().toString());
+        data.put("idoffre", offre.getIdoffre().toString());
+
+        // On pourrait utiliser topic "commerce_" + commerce.getIdcommerce()
+        // Mais ici on boucle sur les favoris pour l'exemple, ou on utilise le topic.
+        // Utiliser un topic est plus efficace pour un grand nombre d'utilisateurs.
+        fcmService.sendTopicNotification("commerce_" + commerce.getIdcommerce(), title, body, data);
     }
 
     @Override

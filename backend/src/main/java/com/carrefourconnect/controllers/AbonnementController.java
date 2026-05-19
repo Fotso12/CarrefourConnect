@@ -1,6 +1,7 @@
 package com.carrefourconnect.controllers;
 
 import com.carrefourconnect.dtos.AbonnementDTO;
+import com.carrefourconnect.dtos.PlanConfigDTO;
 import com.carrefourconnect.services.interfaces.AbonnementService;
 import com.carrefourconnect.utils.enums.StatutAbonnement;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,8 +29,6 @@ public class AbonnementController {
 
     /**
      * Retourne la liste de tous les abonnements enregistrés.
-     *
-     * @return 200 OK avec la liste des abonnements, ou 400 en cas d'erreur.
      */
     @GetMapping
     @Operation(summary = "Liste tous les abonnements")
@@ -45,9 +44,6 @@ public class AbonnementController {
 
     /**
      * Récupère un abonnement par son identifiant unique.
-     *
-     * @param id L'UUID de l'abonnement recherché.
-     * @return 200 OK avec l'abonnement, 404 si introuvable, ou 400 en cas d'erreur.
      */
     @GetMapping("/{id}")
     @Operation(summary = "Récupère un abonnement par son ID")
@@ -63,10 +59,54 @@ public class AbonnementController {
     }
 
     /**
-     * Crée un nouvel abonnement pour un commerçant.
+     * Retourne la configuration (droits et prix) du plan de référence pour un type donné.
+     * Utilisé par le frontend pour afficher les features et appliquer les restrictions.
      *
-     * @param dto Les informations de l'abonnement à créer.
-     * @return 201 Created avec l'abonnement créé, ou 400 si les données sont invalides.
+     * @param type Le type de plan : BASIQUE, PREMIUM ou GOLD
+     */
+    @GetMapping("/config/{type}")
+    @Operation(summary = "Retourne la configuration d'un plan par son type")
+    public ResponseEntity<?> getConfigParType(@PathVariable("type") String type) {
+        log.info("Requête de configuration pour le plan: {}", type);
+        try {
+            AbonnementDTO config = service.findConfigParType(type.toUpperCase());
+            return config != null ? ResponseEntity.ok(config) : ResponseEntity.notFound().build();
+        } catch (IllegalArgumentException e) {
+            log.error("Type de plan invalide: {}", type);
+            return new ResponseEntity<>("Type de plan invalide: " + type, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("Erreur récupération config plan {}: {}", type, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Met à jour la configuration complète (prix + droits) de tous les abonnements
+     * d'un type donné. Action réservée à l'admin.
+     *
+     * @param type   Le type de plan : BASIQUE, PREMIUM ou GOLD
+     * @param config Les nouvelles valeurs de configuration
+     */
+    @PutMapping("/config/{type}")
+    @Operation(summary = "Met à jour la configuration d'un plan (admin)")
+    public ResponseEntity<?> updateConfigParType(
+            @PathVariable("type") String type,
+            @RequestBody PlanConfigDTO config) {
+        log.info("Mise à jour de la configuration du plan: {}", type);
+        try {
+            service.updateConfigParType(type.toUpperCase(), config);
+            return ResponseEntity.ok("Configuration du plan " + type + " mise à jour avec succès.");
+        } catch (IllegalArgumentException e) {
+            log.error("Type de plan invalide: {}", type);
+            return new ResponseEntity<>("Type de plan invalide: " + type, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("Erreur mise à jour config plan {}: {}", type, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * Crée un nouvel abonnement pour un commerçant.
      */
     @PostMapping
     @Operation(summary = "Crée un nouvel abonnement")
@@ -82,10 +122,6 @@ public class AbonnementController {
 
     /**
      * Met à jour les données d'un abonnement existant.
-     *
-     * @param id  L'UUID de l'abonnement à modifier.
-     * @param dto Les nouvelles données à appliquer.
-     * @return 200 OK avec l'abonnement modifié, 404 si introuvable, ou 400 en cas d'erreur.
      */
     @PutMapping("/{id}")
     @Operation(summary = "Met à jour un abonnement")
@@ -102,9 +138,6 @@ public class AbonnementController {
 
     /**
      * Supprime définitivement un abonnement du système.
-     *
-     * @param id L'UUID de l'abonnement à supprimer.
-     * @return 204 No Content si la suppression réussit, ou 400 en cas d'erreur.
      */
     @DeleteMapping("/{id}")
     @Operation(summary = "Supprime un abonnement")
@@ -121,10 +154,6 @@ public class AbonnementController {
 
     /**
      * Met à jour le prix de tous les abonnements d'un type donné (BASIQUE, PREMIUM, GOLD).
-     *
-     * @param type Le type d'abonnement (enum).
-     * @param body Map contenant le champ "prix".
-     * @return 200 OK si la mise à jour réussit, ou 400 en cas d'erreur.
      */
     @PutMapping("/tarif/{type}")
     @Operation(summary = "Met à jour le prix de tous les abonnements d'un type donné")
@@ -147,5 +176,19 @@ public class AbonnementController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-}
 
+    /**
+     * Récupère l'historique des abonnements pour un commerçant (tous ses commerces).
+     */
+    @GetMapping("/commercant/{userId}")
+    @Operation(summary = "Récupère l'historique d'abonnement d'un commerçant")
+    public ResponseEntity<?> getByCommercant(@PathVariable("userId") UUID userId) {
+        log.info("Requête historique abonnement pour commerçant: {}", userId);
+        try {
+            return ResponseEntity.ok(service.findByCommercant(userId));
+        } catch (Exception e) {
+            log.error("Erreur historique abonnement commerçant {}: {}", userId, e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+}

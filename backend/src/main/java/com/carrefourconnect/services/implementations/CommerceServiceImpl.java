@@ -125,8 +125,8 @@ public class CommerceServiceImpl implements CommerceService {
 
     @Override
     public List<CommerceDTO> findAll() {
-        log.debug("Récupération de tous les commerces");
-        return repository.findAll().stream()
+        log.debug("Récupération de tous les commerces triés par priorité");
+        return repository.findByStatutOrderByPriority(StatutCommerce.VALIDE).stream()
                 .map(mapper::toDto)
                 .peek(this::enrichirDto)
                 .collect(Collectors.toList());
@@ -312,7 +312,7 @@ public class CommerceServiceImpl implements CommerceService {
     @Override
     public List<CommerceDTO> searchByName(String name) {
         log.debug("Recherche par nom contenant: {}", name);
-        return repository.findByNomContainingIgnoreCase(name).stream()
+        return repository.findByNomOrderByPriority(name).stream()
                 .map(mapper::toDto)
                 .peek(this::enrichirDto)
                 .collect(Collectors.toList());
@@ -320,8 +320,8 @@ public class CommerceServiceImpl implements CommerceService {
 
     @Override
     public List<CommerceDTO> findByStatut(StatutCommerce statut) {
-        log.debug("Filtrage par statut: {}", statut);
-        return repository.findByStatut(statut).stream()
+        log.debug("Filtrage par statut trié par priorité: {}", statut);
+        return repository.findByStatutOrderByPriority(statut).stream()
                 .map(mapper::toDto)
                 .peek(this::enrichirDto)
                 .collect(Collectors.toList());
@@ -369,6 +369,11 @@ public class CommerceServiceImpl implements CommerceService {
                 // Note: La ville est dans Localisation, donc on filtre via les localisations du commerce
                 // Pour simplifier ici, on accepte si au moins une localisation match
                 /*.filter(c -> ville == null || repository.checkVille(c.getIdcommerce(), ville))*/
+                .sorted((c1, c2) -> {
+                    int p1 = c1.getAbonnement() != null ? c1.getAbonnement().getPrioriteAffichage() : 0;
+                    int p2 = c2.getAbonnement() != null ? c2.getAbonnement().getPrioriteAffichage() : 0;
+                    return Integer.compare(p2, p1); // Descending
+                })
                 .map(mapper::toDto)
                 .peek(this::enrichirDto)
                 .collect(Collectors.toList());
@@ -457,33 +462,38 @@ public class CommerceServiceImpl implements CommerceService {
         abonnementRepository.findById(idTemplate).ifPresent(template -> {
             log.info("Gestion de l'abonnement pour {} basée sur le type {}", entity.getNom(), template.getType());
             
-            // Si le commerce a déjà un abonnement qui lui est propre (non partagé), on le met à jour
-            // Sinon on en crée un nouveau.
-            Abonnement current = entity.getAbonnement();
-            
-            // On considère qu'un abonnement est propre au commerce s'il a une "reference" (SUB-...) 
-            // et que la date n'est pas le template 2125.
-            if (current != null && current.getReference() != null && current.getReference().startsWith("SUB-")) {
-                log.info("Mise à jour de l'instance d'abonnement existante {}", current.getReference());
-                current.setType(template.getType());
-                current.setMontant(template.getMontant());
-                // On ne change pas la date de début pour garder l'historique de commencement, 
-                // mais on corrige la date de fin si elle est erronée ou si le type a changé.
-                current.setDateFin(java.time.LocalDateTime.now().plusMonths(1));
-                current.setStatut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF);
-                abonnementRepository.save(current);
-            } else {
-                log.info("Création d'une nouvelle instance d'abonnement (Première fois ou migration)");
-                Abonnement instance = Abonnement.builder()
-                        .type(template.getType())
-                        .montant(template.getMontant())
-                        .dateDebut(java.time.LocalDateTime.now())
-                        .dateFin(java.time.LocalDateTime.now().plusMonths(1))
-                        .statut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
-                        .reference("SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
-                        .build();
-                entity.setAbonnement(abonnementRepository.save(instance));
+            // Expirer les anciens abonnements actifs pour ce commerce
+            if (entity.getIdcommerce() != null) {
+                List<Abonnement> anciens = abonnementRepository.findByIdCommerceOrderByDateDebutDesc(entity.getIdcommerce());
+                anciens.stream()
+                        .filter(a -> a.getStatut() == com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
+                        .forEach(a -> {
+                            a.setStatut(com.carrefourconnect.utils.enums.StatutAbonnement.EXPIRE);
+                            abonnementRepository.save(a);
+                        });
             }
+
+            log.info("Création d'une nouvelle instance d'abonnement (Historisation)");
+            Abonnement instance = Abonnement.builder()
+                    .idCommerce(entity.getIdcommerce())
+                    .type(template.getType())
+                    .montant(template.getMontant())
+                    .dateDebut(java.time.LocalDateTime.now())
+                    .dateFin(java.time.LocalDateTime.now().plusMonths(1))
+                    .statut(com.carrefourconnect.utils.enums.StatutAbonnement.ACTIF)
+                    .reference("SUB-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
+                    .maxPhotos(template.getMaxPhotos())
+                    .offreSpecialeAutorisee(template.isOffreSpecialeAutorisee())
+                    .miseEnAvant(template.isMiseEnAvant())
+                    .prioriteAffichage(template.getPrioriteAffichage())
+                    .lienWhatsapp(template.isLienWhatsapp())
+                    .notificationPush(template.isNotificationPush())
+                    .nomAffiche(template.getNomAffiche())
+                    .descriptionPlan(template.getDescriptionPlan())
+                    .build();
+            
+            Abonnement savedAbo = abonnementRepository.save(instance);
+            entity.setAbonnement(savedAbo);
         });
     }
 }

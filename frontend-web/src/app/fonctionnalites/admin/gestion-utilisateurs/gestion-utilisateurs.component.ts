@@ -16,7 +16,7 @@ export class GestionUtilisateursComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  pageSize = 15;
+  pageSize = 10;
 
   // Modal Variables
   selectedUser: any = null;

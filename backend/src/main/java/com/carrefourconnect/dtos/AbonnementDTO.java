@@ -17,9 +17,21 @@ import java.util.UUID;
 @Builder
 public class AbonnementDTO {
     private UUID idabonnement;
+    private UUID idCommerce;
     private TypeAbonnement type;
     private LocalDateTime dateDebut;
     private LocalDateTime dateFin;
     private BigDecimal montant;
     private StatutAbonnement statut;
+    private String reference;
+
+    // ===== Droits et restrictions =====
+    private int maxPhotos;
+    private boolean offreSpecialeAutorisee;
+    private boolean miseEnAvant;
+    private int prioriteAffichage;
+    private boolean lienWhatsapp;
+    private boolean notificationPush;
+    private String nomAffiche;
+    private String descriptionPlan;
 }

@@ -29,9 +29,10 @@ public class DataInitializer {
     private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     @Bean
-    public CommandLineRunner initData(RoleRepository roleRepository, 
+    public CommandLineRunner initData(RoleRepository roleRepository,
                                      CategorieRepository categorieRepository,
-                                     AbonnementRepository abonnementRepository) {
+                                     AbonnementRepository abonnementRepository,
+                                     com.carrefourconnect.repositories.CommerceRepository commerceRepository) {
         return args -> {
             log.info("Vérification et initialisation des données de base...");
 
@@ -50,10 +51,58 @@ public class DataInitializer {
                 categorieRepository.save(cat);
             }
 
-            // Abonnements de référence (un par type)
-            initAbonnement(abonnementRepository, TypeAbonnement.BASIQUE,  new BigDecimal("0"),     "REF-BASIQUE-FREE");
-            initAbonnement(abonnementRepository, TypeAbonnement.PREMIUM,  new BigDecimal("5000"),  "REF-PREMIUM-DEFAULT");
-            initAbonnement(abonnementRepository, TypeAbonnement.GOLD,     new BigDecimal("10000"), "REF-GOLD-DEFAULT");
+            // Abonnements de référence (un par type) avec leurs droits
+            initAbonnement(abonnementRepository,
+                    TypeAbonnement.BASIQUE,
+                    new BigDecimal("5000"),
+                    3,       // maxPhotos
+                    false,   // offreSpecialeAutorisee
+                    false,   // miseEnAvant
+                    1,       // prioriteAffichage
+                    false,   // lienWhatsapp
+                    false,   // notificationPush
+                    "Basique",
+                    "L'essentiel pour apparaître sur la carte.",
+                    "REF-BASIQUE-FREE");
+
+            initAbonnement(abonnementRepository,
+                    TypeAbonnement.PREMIUM,
+                    new BigDecimal("10000"),
+                    10,      // maxPhotos
+                    true,    // offreSpecialeAutorisee
+                    true,    // miseEnAvant
+                    2,       // prioriteAffichage
+                    true,    // lienWhatsapp
+                    false,   // notificationPush
+                    "Premium",
+                    "Le meilleur rapport visibilité / prix.",
+                    "REF-PREMIUM-DEFAULT");
+
+            initAbonnement(abonnementRepository,
+                    TypeAbonnement.GOLD,
+                    new BigDecimal("15000"),
+                    -1,      // maxPhotos (-1 = illimité)
+                    true,    // offreSpecialeAutorisee
+                    true,    // miseEnAvant (VIP)
+                    3,       // prioriteAffichage
+                    true,    // lienWhatsapp
+                    true,    // notificationPush
+                    "Gold",
+                    "Performance maximale pour les pros.",
+                    "REF-GOLD-DEFAULT");
+
+            // Migration : Lier les abonnements spécifiques existants à leur commerce
+            log.info("Migration : Backfill idCommerce pour les abonnements existants...");
+            commerceRepository.findAllWithAbonnement().forEach(c -> {
+                if (c.getAbonnement() != null && c.getAbonnement().getIdCommerce() == null) {
+                    Abonnement a = c.getAbonnement();
+                    // On ne lie que si c'est une instance spécifique (pas une REF template)
+                    if (a.getReference() != null && a.getReference().startsWith("SUB-")) {
+                        a.setIdCommerce(c.getIdcommerce());
+                        abonnementRepository.save(a);
+                    }
+                }
+            });
 
             log.info("Initialisation des données terminée.");
         };
@@ -70,7 +119,19 @@ public class DataInitializer {
         }
     }
 
-    private void initAbonnement(AbonnementRepository repository, TypeAbonnement type, BigDecimal montant, String reference) {
+    private void initAbonnement(AbonnementRepository repository,
+                                TypeAbonnement type,
+                                BigDecimal montant,
+                                int maxPhotos,
+                                boolean offreSpecialeAutorisee,
+                                boolean miseEnAvant,
+                                int prioriteAffichage,
+                                boolean lienWhatsapp,
+                                boolean notificationPush,
+                                String nomAffiche,
+                                String descriptionPlan,
+                                String reference) {
+
         boolean exists = repository.findAll().stream().anyMatch(a -> type.equals(a.getType()));
         if (!exists) {
             log.info("Création de l'abonnement de référence : {}", type);
@@ -81,8 +142,33 @@ public class DataInitializer {
                     .dateDebut(LocalDateTime.now())
                     .dateFin(LocalDateTime.now().plusMonths(99))
                     .reference(reference)
+                    .maxPhotos(maxPhotos)
+                    .offreSpecialeAutorisee(offreSpecialeAutorisee)
+                    .miseEnAvant(miseEnAvant)
+                    .prioriteAffichage(prioriteAffichage)
+                    .lienWhatsapp(lienWhatsapp)
+                    .notificationPush(notificationPush)
+                    .nomAffiche(nomAffiche)
+                    .descriptionPlan(descriptionPlan)
                     .build();
             repository.save(abo);
+        } else {
+            // Mise à jour des champs de droits sur l'abonnement de référence existant
+            // (au cas où l'abonnement existait avant l'ajout des nouveaux champs)
+            repository.findByReference(reference).ifPresent(abo -> {
+                if (abo.getNomAffiche() == null || abo.getNomAffiche().isEmpty()) {
+                    abo.setNomAffiche(nomAffiche);
+                    abo.setDescriptionPlan(descriptionPlan);
+                    abo.setMaxPhotos(maxPhotos);
+                    abo.setOffreSpecialeAutorisee(offreSpecialeAutorisee);
+                    abo.setMiseEnAvant(miseEnAvant);
+                    abo.setPrioriteAffichage(prioriteAffichage);
+                    abo.setLienWhatsapp(lienWhatsapp);
+                    abo.setNotificationPush(notificationPush);
+                    repository.save(abo);
+                    log.info("Mise à jour des droits de l'abonnement existant: {}", type);
+                }
+            });
         }
     }
 }

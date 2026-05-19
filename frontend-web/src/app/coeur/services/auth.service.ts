@@ -25,11 +25,11 @@ export class AuthService {
    * Initialisation du service avec récupération de l'utilisateur stocké
    */
   constructor(private readonly http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem(USER_KEY) || '{}'));
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(sessionStorage.getItem(USER_KEY) || '{}'));
     this.currentUser = this.currentUserSubject.asObservable();
     
     // Nettoyage de sécurité : si on a des restes de session mais qu'elle est invalide, on vide tout
-    if (!this.isLoggedIn() && (localStorage.getItem(USER_KEY) || localStorage.getItem(TOKEN_KEY))) {
+    if (!this.isLoggedIn() && (sessionStorage.getItem(USER_KEY) || sessionStorage.getItem(TOKEN_KEY))) {
       this.logout();
     }
   }
@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   logout(): void {
-    window.localStorage.clear();
+    window.sessionStorage.clear();
     this.currentUserSubject.next({});
   }
 
@@ -92,21 +92,21 @@ export class AuthService {
   }
 
   public saveToken(token: string): void {
-    window.localStorage.removeItem(TOKEN_KEY);
-    window.localStorage.setItem(TOKEN_KEY, token);
+    window.sessionStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.setItem(TOKEN_KEY, token);
   }
 
   public getToken(): string | null {
-    return window.localStorage.getItem(TOKEN_KEY);
+    return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
   public saveUser(user: any): void {
-    window.localStorage.removeItem(USER_KEY);
-    window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+    window.sessionStorage.removeItem(USER_KEY);
+    window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
   public getUser(): any {
-    const user = window.localStorage.getItem(USER_KEY);
+    const user = window.sessionStorage.getItem(USER_KEY);
     if (user) {
       return JSON.parse(user);
     }

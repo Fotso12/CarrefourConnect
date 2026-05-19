@@ -18,6 +18,7 @@ export class TableauBordCommercantComponent implements OnInit {
   menuItems = [
     { label: 'Mes Commerces', icon: 'fa-solid fa-store', link: '/commercant/commerces' },
     { label: 'Avis Clients', icon: 'fa-solid fa-comments', link: '/commercant/avis' },
+    { label: 'Mes Abonnements', icon: 'fa-solid fa-crown', link: '/commercant/abonnement' },
     { label: 'Notifications', icon: 'fa-solid fa-bell', link: '/commercant/notifications' }
   ];
 

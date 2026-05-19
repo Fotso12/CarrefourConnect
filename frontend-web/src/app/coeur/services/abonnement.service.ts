@@ -55,4 +55,29 @@ export class AbonnementService {
   delete(id: string): Observable<any> {
     return this.http.delete(`${API_URL}/${id}`);
   }
+
+  /**
+   * Retourne la configuration (droits + prix) du plan de référence pour un type donné.
+   * Utilisé pour afficher les features et appliquer les restrictions côté frontend.
+   * @param type BASIQUE | PREMIUM | GOLD
+   */
+  getConfigParType(type: string): Observable<any> {
+    return this.http.get<any>(`${API_URL}/config/${type}`);
+  }
+
+  /**
+   * Met à jour la configuration complète (droits + prix) d'un plan (admin only).
+   * @param type BASIQUE | PREMIUM | GOLD
+   * @param config Objet PlanConfigDTO
+   */
+  updateConfigParType(type: string, config: any): Observable<any> {
+    return this.http.put(`${API_URL}/config/${type}`, config, { responseType: 'text' });
+  }
+
+  /**
+   * Récupère l'historique d'abonnement d'un commerçant (tous ses commerces)
+   */
+  getHistoryByCommercant(userId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${API_URL}/commercant/${userId}`);
+  }
 }

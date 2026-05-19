@@ -3,11 +3,11 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h2 class="text-3xl font-black text-slate-800">Tarifs des Forfaits</h2>
-      <p class="text-slate-400 font-medium">Configurez les prix des 3 types de forfaits d'abonnement.</p>
+      <h2 class="text-3xl font-black text-slate-800">Gestion des Forfaits</h2>
+      <p class="text-slate-400 font-medium">Configurez les prix et les droits de chaque plan d'abonnement.</p>
     </div>
     <div class="bg-blue-50 text-blue-600 px-6 py-3 rounded-2xl font-black text-sm">
-      {{ abonnements.length }} Abonnements actifs
+      {{ abonnements.length }} Abonnements en base
     </div>
   </div>
 
@@ -24,10 +24,10 @@
     <div class="animate-spin h-10 w-10 border-4 border-[#00ADEF] border-t-transparent rounded-full"></div>
   </div>
 
-  <!-- 3 Prix Cards -->
+  <!-- Cartes des forfaits -->
   <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <div *ngFor="let forfait of forfaits"
-         class="bg-white rounded-3xl border-2 p-8 flex flex-col gap-6 transition-all"
+         class="bg-white rounded-3xl border-2 p-8 flex flex-col gap-5 transition-all"
          [ngClass]="getColorClasses(forfait.couleur).border">
 
       <!-- Icon + Label -->
@@ -46,25 +46,14 @@
         </div>
       </div>
 
-      <p class="text-sm text-slate-500">{{ forfait.description }}</p>
-
-      <!-- Prix Display / Edit -->
-      <div class="mt-auto">
-        <!-- Cas : aucun abonnement de ce type en base -->
-        <ng-container *ngIf="forfait.idabonnement === null && !forfait.enEdition">
-          <div class="rounded-xl p-4 bg-slate-50 border border-dashed border-slate-200 text-center">
-            <p class="text-sm text-slate-400 font-semibold">Aucun abonnement de ce type</p>
-            <p class="text-xs text-slate-400 mt-1">Le tarif sera modifiable dès qu'un commerçant souscrit à ce forfait.</p>
-          </div>
-        </ng-container>
-
-        <!-- Cas : abonnement existant, affichage du prix -->
-        <ng-container *ngIf="forfait.idabonnement !== null && !forfait.enEdition">
+      <!-- Prix actuel + édition -->
+      <div>
+        <ng-container *ngIf="!forfait.enEdition">
           <div class="flex items-end justify-between">
             <div>
               <span class="text-sm font-bold text-slate-400">Prix actuel</span>
               <p class="text-4xl font-black text-slate-800 mt-1">
-                {{ forfait.prix !== null ? (forfait.prix + ' FCFA') : '—' }}
+                {{ forfait.prix !== null ? (forfait.prix | number:'1.0-0') + ' FCFA' : '—' }}
               </p>
             </div>
             <button (click)="editerTarif(forfait)"
@@ -99,18 +88,89 @@
           </div>
         </ng-container>
       </div>
-    </div>
-  </div>
 
-  <!-- Active Subscriptions Summary -->
-  <div *ngIf="!loading && abonnements.length > 0" class="bg-white rounded-3xl border border-slate-100 p-8">
-    <h3 class="text-lg font-black text-slate-800 mb-4">Récapitulatif par forfait</h3>
-    <div class="grid grid-cols-3 gap-4 text-center">
-      <div *ngFor="let forfait of forfaits" class="rounded-2xl p-4" [ngClass]="getColorClasses(forfait.couleur).bg">
-        <p class="text-2xl font-black" [ngClass]="getColorClasses(forfait.couleur).text">
-          {{ abonnements.filter(a => a.type === forfait.type).length }}
-        </p>
-        <p class="text-xs font-bold text-slate-500 mt-1">{{ forfait.label }}</p>
+      <!-- Séparateur -->
+      <hr class="border-slate-100">
+
+      <!-- Configuration des droits -->
+      <div>
+        <button (click)="forfait.showConfig = !forfait.showConfig"
+                class="w-full flex items-center justify-between text-sm font-black text-slate-600 hover:text-slate-800 transition-colors">
+          <span class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Configuration des droits
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform" [class.rotate-180]="forfait.showConfig" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+
+        <div *ngIf="forfait.showConfig" class="mt-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+
+          <!-- maxPhotos -->
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-500 w-40 flex-shrink-0">Photos max (-1 = ∞)</label>
+            <input type="number" [(ngModel)]="forfait.config.maxPhotos" min="-1"
+                   class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 focus:outline-none focus:border-blue-300" />
+          </div>
+
+          <!-- Toggles -->
+          <div class="grid grid-cols-1 gap-3">
+            <label class="flex items-center justify-between gap-3 cursor-pointer">
+              <span class="text-xs font-bold text-slate-500">Offres spéciales</span>
+              <div class="relative">
+                <input type="checkbox" [(ngModel)]="forfait.config.offreSpecialeAutorisee" class="sr-only peer">
+                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between gap-3 cursor-pointer">
+              <span class="text-xs font-bold text-slate-500">Mise en avant</span>
+              <div class="relative">
+                <input type="checkbox" [(ngModel)]="forfait.config.miseEnAvant" class="sr-only peer">
+                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between gap-3 cursor-pointer">
+              <span class="text-xs font-bold text-slate-500">Lien WhatsApp</span>
+              <div class="relative">
+                <input type="checkbox" [(ngModel)]="forfait.config.lienWhatsapp" class="sr-only peer">
+                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+            <label class="flex items-center justify-between gap-3 cursor-pointer">
+              <span class="text-xs font-bold text-slate-500">Notifications Push</span>
+              <div class="relative">
+                <input type="checkbox" [(ngModel)]="forfait.config.notificationPush" class="sr-only peer">
+                <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 transition-colors"></div>
+                <div class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5"></div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Priorité d'affichage -->
+          <div class="flex items-center gap-3">
+            <label class="text-xs font-bold text-slate-500 w-40 flex-shrink-0">Priorité d'affichage</label>
+            <select [(ngModel)]="forfait.config.prioriteAffichage"
+                    class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-700">
+              <option [value]="1">1 - Basique (bas)</option>
+              <option [value]="2">2 - Premium (normal)</option>
+              <option [value]="3">3 - Gold (VIP / haute)</option>
+            </select>
+          </div>
+
+          <!-- Bouton sauvegarder config -->
+          <button (click)="sauvegarderConfig(forfait)" [disabled]="saving"
+                  class="w-full py-3 rounded-2xl font-bold text-sm text-white transition-all disabled:opacity-50"
+                  [ngClass]="forfait.couleur === 'blue' ? 'bg-blue-600 hover:bg-blue-700' : forfait.couleur === 'purple' ? 'bg-purple-600 hover:bg-purple-700' : 'bg-amber-500 hover:bg-amber-600'">
+            {{ saving ? 'Enregistrement...' : '✓ Sauvegarder la configuration' }}
+          </button>
+        </div>
       </div>
     </div>
   </div>

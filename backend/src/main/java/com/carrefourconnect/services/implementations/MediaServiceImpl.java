@@ -21,10 +21,14 @@ public class MediaServiceImpl implements MediaService {
     private static final Logger log = LoggerFactory.getLogger(MediaServiceImpl.class);
 
     private final MediaRepository repository;
+    private final com.carrefourconnect.repositories.CommerceRepository commerceRepository;
     private final MediaMapper mapper;
 
-    public MediaServiceImpl(MediaRepository repository, MediaMapper mapper) {
+    public MediaServiceImpl(MediaRepository repository, 
+                            com.carrefourconnect.repositories.CommerceRepository commerceRepository,
+                            MediaMapper mapper) {
         this.repository = repository;
+        this.commerceRepository = commerceRepository;
         this.mapper = mapper;
     }
 
@@ -85,6 +89,22 @@ public class MediaServiceImpl implements MediaService {
     public MediaDTO upload(org.springframework.web.multipart.MultipartFile file, UUID commerceId, boolean estPrincipale) {
         log.info("Upload de fichier pour commerce {}: {}", commerceId, file.getOriginalFilename());
         try {
+            // Récupérer le commerce et son abonnement
+            com.carrefourconnect.entities.Commerce commerce = commerceRepository.findById(commerceId)
+                    .orElseThrow(() -> new RuntimeException("Commerce non trouvé"));
+            
+            // Vérification du quota de photos
+            if (commerce.getAbonnement() != null) {
+                int max = commerce.getAbonnement().getMaxPhotos();
+                if (max != -1) {
+                    long currentCount = repository.findByCommerce_Idcommerce(commerceId).size();
+                    if (currentCount >= max) {
+                        log.warn("Quota de photos atteint pour le commerce {}: {}/{}", commerce.getNom(), currentCount, max);
+                        throw new IllegalStateException("Limite de photos atteinte pour votre plan d'abonnement (" + max + ").");
+                    }
+                }
+            }
+
             // Créer le dossier uploads s'il n'existe pas
             java.nio.file.Path root = java.nio.file.Paths.get("uploads");
             if (!java.nio.file.Files.exists(root)) {
@@ -105,7 +125,7 @@ public class MediaServiceImpl implements MediaService {
                     .typeContenu(file.getContentType())
                     .tailleFichier(file.getSize())
                     .estPrincipale(estPrincipale)
-                    .commerce(com.carrefourconnect.entities.Commerce.builder().idcommerce(commerceId).build())
+                    .commerce(commerce)
                     .build();
 
             return mapper.toDto(repository.save(media));

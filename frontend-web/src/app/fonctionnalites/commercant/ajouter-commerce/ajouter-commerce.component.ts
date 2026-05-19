@@ -26,9 +26,19 @@ export class AjouterCommerceComponent implements OnInit {
   categories: any[] = [];
   abonnements: any[] = [];
   selectedAbonnement: any = null;
-  
+
+  /** Droits du plan sélectionné (mis à jour dynamiquement à l'étape 5) */
+  droitsAbonnement: any = {
+    maxPhotos: 3,
+    offreSpecialeAutorisee: false,
+    miseEnAvant: false,
+    lienWhatsapp: false,
+    notificationPush: false
+  };
+
   isEdit = false;
   showSuccessModal = false;
+  currentCommerceAbonnement: any = null;
   
   commerce = {
     idcommerce: '',
@@ -110,6 +120,35 @@ export class AjouterCommerceComponent implements OnInit {
             this.commerce.lat = loc.lat;
             this.commerce.lon = loc.lon;
           }
+          if (data.abonnement) {
+            this.currentCommerceAbonnement = data.abonnement;
+            this.droitsAbonnement = {
+              maxPhotos: data.abonnement.maxPhotos ?? 3,
+              offreSpecialeAutorisee: data.abonnement.offreSpecialeAutorisee ?? false,
+              miseEnAvant: data.abonnement.miseEnAvant ?? false,
+              lienWhatsapp: data.abonnement.lienWhatsapp ?? false,
+              notificationPush: data.abonnement.notificationPush ?? false
+            };
+            this.selectedAbonnement = {
+              ...data.abonnement,
+              nomAffiche: data.abonnement.nomAffiche || data.abonnement.type,
+              prixAffiche: data.abonnement.montant != null ? Number(data.abonnement.montant) : 0
+            };
+            if (data.offres && data.offres.length > 0) {
+              const spec = data.offres.find((o: any) => o.type === 'PROMOTION' || o.type === 'VENTE_FLASH' || o.type === 'OFFRE_SPECIALE');
+              if (spec) {
+                this.hasSpecialOffer = true;
+                this.offreSpeciale = {
+                  titre: spec.titre,
+                  description: spec.description,
+                  type: spec.type,
+                  reduction: spec.reduction,
+                  dateDebut: spec.dateDebut ? spec.dateDebut.substring(0, 10) : '',
+                  dateFin: spec.dateFin ? spec.dateFin.substring(0, 10) : ''
+                };
+              }
+            }
+          }
         },
         error: (err) => {
           console.error("Erreur chargement commerce, utilisation de l'ID de l'URL", err);
@@ -125,27 +164,58 @@ export class AjouterCommerceComponent implements OnInit {
   chargerAbonnements(): void {
     this.abonnementService.getAll().subscribe({
       next: (data) => {
-        // Dédupliquer par type/nom et mapper les prix
+        // Filtrer pour ne garder que les forfaits de référence (REF-...) et dédupliquer par type
         const seenTypes = new Set<string>();
         this.abonnements = data
+          .filter(ab => ab.reference && ab.reference.startsWith('REF-'))
           .filter(ab => {
-            const key = (ab.type || ab.nom || '').toLowerCase();
+            const key = (ab.type || '').toUpperCase();
             if (seenTypes.has(key)) return false;
             seenTypes.add(key);
             return true;
           })
-          .map(ab => {
-            let prix = 0;
-            const nomOuType = (ab.type || ab.nom || '').toLowerCase();
-            if (nomOuType.includes('basique')) prix = 5000;
-            else if (nomOuType.includes('premium')) prix = 10000;
-            else if (nomOuType.includes('gold')) prix = 15000;
-            else prix = 5000; // default
-            return { ...ab, nomAffiche: ab.type || ab.nom, prixAffiche: prix };
-          });
+          .map(ab => ({
+            ...ab,
+            nomAffiche: ab.nomAffiche || ab.type,
+            prixAffiche: ab.montant != null ? Number(ab.montant) : 0
+          }))
+          .sort((a, b) => a.prixAffiche - b.prixAffiche); // Basique < Premium < Gold
       },
-      error: (err) => console.error("Erreur abonnements", err)
+      error: (err) => console.error('Erreur abonnements', err)
     });
+  }
+
+  /** Charge les droits du plan sélectionné et met à jour droitsAbonnement */
+  chargerDroitsPlan(abonnement: any): void {
+    this.selectedAbonnement = abonnement;
+    this.droitsAbonnement = {
+      maxPhotos: abonnement.maxPhotos ?? 3,
+      offreSpecialeAutorisee: abonnement.offreSpecialeAutorisee ?? false,
+      miseEnAvant: abonnement.miseEnAvant ?? false,
+      lienWhatsapp: abonnement.lienWhatsapp ?? false,
+      notificationPush: abonnement.notificationPush ?? false
+    };
+    // Si le nombre de photos déjà sélectionnées dépasse le nouveau max, on tronque
+    if (this.droitsAbonnement.maxPhotos !== -1 && this.selectedFiles.length > this.droitsAbonnement.maxPhotos) {
+      this.selectedFiles = this.selectedFiles.slice(0, this.droitsAbonnement.maxPhotos);
+      this.commerce.images = this.commerce.images.slice(0, this.droitsAbonnement.maxPhotos);
+    }
+    // Si le plan ne permet pas l'offre spéciale, on la réinitialise
+    if (!this.droitsAbonnement.offreSpecialeAutorisee) {
+      this.hasSpecialOffer = false;
+    }
+  }
+
+  /** Retourne le label du nombre max de photos pour affichage */
+  get maxPhotosLabel(): string {
+    const max = this.droitsAbonnement.maxPhotos;
+    return max === -1 ? 'Illimité' : `${max}`;
+  }
+
+  /** True si l'ajout de photo est bloqué par le plan */
+  get photosBloquees(): boolean {
+    const max = this.droitsAbonnement.maxPhotos;
+    return max !== -1 && this.selectedFiles.length >= max;
   }
 
   nextStep(): void {
@@ -266,18 +336,23 @@ export class AjouterCommerceComponent implements OnInit {
     
     let requiredPrice = this.selectedAbonnement.prixAffiche;
 
-    if (this.isEdit && this.commerce.idabonnement) {
-      // Find old abonnement
-      const oldAb = this.abonnements.find(a => a.idabonnement === this.commerce.idabonnement);
-      if (oldAb) {
-        if (requiredPrice > oldAb.prixAffiche) {
-          requiredPrice = requiredPrice - oldAb.prixAffiche; // Pay only the difference
-        } else if (requiredPrice <= oldAb.prixAffiche) {
-           this.commerce.idabonnement = this.selectedAbonnement.idabonnement;
-           this.enregistrer();
-           return;
+    if (this.isEdit && this.currentCommerceAbonnement) {
+      // Trouver le plan actuel dans les abonnements de référence pour obtenir son prix de base
+      const oldPlan = this.abonnements.find(a => a.type === this.currentCommerceAbonnement.type);
+      if (oldPlan) {
+        const oldPrice = oldPlan.prixAffiche;
+        if (requiredPrice > oldPrice) {
+          requiredPrice = requiredPrice - oldPrice; // Ne payer que la différence (ex: 10000 - 5000 = 5000)
+        } else {
+          requiredPrice = 0;
         }
       }
+    }
+    
+    if (requiredPrice <= 0) {
+      this.commerce.idabonnement = this.selectedAbonnement.idabonnement;
+      this.enregistrer();
+      return;
     }
     
     this.amountToPay = requiredPrice;

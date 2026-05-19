@@ -107,7 +107,7 @@ export class GestionAvisAdminComponent implements OnInit {
 
   // Pagination
   currentPage = 1;
-  pageSize = 15;
+  pageSize = 10;
 
   constructor(private avisService: AvisService) {}
 
