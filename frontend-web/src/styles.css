@@ -12,8 +12,8 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  @apply antialiased text-slate-900 bg-[#f8fafc];
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  @apply antialiased text-[#333333] bg-[#f4f6f9];
   overflow-x: hidden;
 }
 
@@ -22,18 +22,18 @@ body {
 }
 
 .shop-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 20px 25px -5px rgba(3, 77, 146, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(10, 53, 92, 0.08);
 }
 
 .custom-scroll::-webkit-scrollbar { width: 6px; }
 .custom-scroll::-webkit-scrollbar-track { background: #f1f5f9; }
-.custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 0 0 rgba(0, 173, 239, 0.7); }
-  70% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 10px rgba(0, 173, 239, 0); }
-  100% { transform: scale(0.95); opacity: 0.7; box-shadow: 0 0 0 0 rgba(0, 173, 239, 0); }
+  0% { transform: scale(0.98); opacity: 0.8; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.98); opacity: 0.8; }
 }
 
 .pulse {
@@ -42,14 +42,14 @@ body {
 
 /* Design system variables and layout helpers for profile pages */
 :root {
-  --pf-primary: #1e3a8a; /* user palette: deep navy */
+  --pf-primary: #0a355c; /* user palette: deep navy */
   --pf-accent: #f97316; /* user palette: orange */
-  --pf-bg: #f0f4f8;
+  --pf-bg: #f4f6f9;
   --pf-surface: #ffffff;
   --pf-muted: #64748b;
-  --pf-radius: 12px;
-  --pf-radius-lg: 20px;
-  --pf-shadow: 0 20px 40px rgba(2,6,23,0.08);
+  --pf-radius: 8px;
+  --pf-radius-lg: 12px;
+  --pf-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .profile-container { width:100%; max-width:1200px; display:grid; grid-template-columns: 320px 1fr; gap:28px; align-items:start; margin:0 auto; }

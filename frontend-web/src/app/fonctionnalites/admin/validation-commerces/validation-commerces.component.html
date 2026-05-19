@@ -1,99 +1,99 @@
-<div class="space-y-12">
+<div class="space-y-6 md:space-y-8">
   <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
     <div>
-      <h1 class="text-4xl font-black text-slate-800 tracking-tight">Modération</h1>
-      <p class="text-slate-400 font-bold mt-2 uppercase text-[10px] tracking-[0.2em]">Validation des nouveaux établissements</p>
+      <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Modération</h1>
+      <p class="text-slate-400 font-bold mt-1.5 uppercase text-[10px] tracking-[0.2em]">Validation des nouveaux établissements</p>
     </div>
-    <div class="flex gap-4 items-center">
-      <div class="bg-[#034d92]/5 text-[#034d92] px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-[#034d92]/10">
+    <div class="flex flex-wrap gap-4 items-center w-full md:w-auto">
+      <div class="bg-[#0a355c]/5 text-[#0a355c] px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-[#0a355c]/10">
           {{ commerces.length }} établissement(s)
       </div>
-      <div class="flex items-center gap-3 bg-white rounded-2xl p-3 border border-slate-100">
-        <select [(ngModel)]="filterStatut" (change)="chargerCommerces()" class="text-sm font-bold">
+      <div class="flex items-center gap-3 bg-white rounded-lg p-2 border border-gray-100 shadow-sm flex-1 md:flex-none">
+        <select [(ngModel)]="filterStatut" (change)="chargerCommerces()" class="text-sm font-bold bg-transparent outline-none py-1">
           <option [ngValue]="null">Tous statuts</option>
           <option value="EN_ATTENTE_VALIDATION">En attente</option>
           <option value="VALIDE">Validé</option>
           <option value="SUSPENDU">Suspendu</option>
         </select>
-        <input [(ngModel)]="filterVille" (keyup.enter)="chargerCommerces()" placeholder="Ville" class="text-sm px-3 py-2 rounded" />
+        <input [(ngModel)]="filterVille" (keyup.enter)="chargerCommerces()" placeholder="Ville" class="text-sm px-3 py-1.5 rounded bg-slate-50 border-none outline-none w-28 md:w-36 focus:ring-1 focus:ring-[#0a355c]" />
       </div>
     </div>
   </div>
 
   <div *ngIf="loading" class="grid grid-cols-1 gap-6">
-      <div *ngFor="let i of [1,2,3]" class="h-32 bg-white rounded-[32px] animate-pulse border border-slate-50"></div>
+      <div *ngFor="let i of [1,2,3]" class="h-32 bg-white rounded-xl animate-pulse border border-gray-100"></div>
   </div>
 
-  <div *ngIf="!loading && commerces.length === 0" class="bg-white p-24 rounded-[40px] text-center border border-slate-100 shadow-sm flex flex-col items-center">
-      <div class="h-20 w-20 bg-slate-50 rounded-[32px] flex items-center justify-center text-slate-200 mb-6">
-          <i class="fa-solid fa-check-double text-4xl"></i>
+  <div *ngIf="!loading && commerces.length === 0" class="bg-white p-12 md:p-20 rounded-xl text-center border border-gray-100 shadow-sm flex flex-col items-center">
+      <div class="h-16 w-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-6">
+          <i class="fa-solid fa-check-double text-2xl"></i>
       </div>
       <p class="text-slate-400 font-bold uppercase text-xs tracking-widest leading-relaxed max-w-xs">Tout est à jour. Aucun commerce ne nécessite de validation pour le moment.</p>
   </div>
 
-  <div class="grid grid-cols-1 gap-8">
+  <div class="grid grid-cols-1 gap-6">
     <div *ngFor="let commerce of pagedCommerces" 
-         class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex flex-col lg:flex-row lg:items-center justify-between gap-8 group hover:shadow-2xl hover:-translate-y-1 transition-all duration-500">
-      <div class="flex items-center gap-8 flex-1 min-w-0">
-          <div class="h-24 w-24 rounded-[32px] bg-slate-50 overflow-hidden shrink-0 shadow-inner">
-              <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+         class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col lg:flex-row lg:items-center justify-between gap-6 group hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+      <div class="flex items-center gap-6 flex-1 min-w-0">
+          <div class="h-20 w-20 rounded-lg bg-slate-50 overflow-hidden shrink-0 shadow-inner">
+              <img [src]="commerce.imagePrincipale || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=200'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
           </div>
           <div class="flex-1 min-w-0">
-              <div class="flex flex-wrap items-center gap-3 mb-2">
-                <h3 class="text-xl font-black text-slate-800 truncate">{{ commerce.nom }}</h3>
-                <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-amber-50 text-amber-500 border border-amber-100">En attente</span>
-                <span *ngIf="commerce.statut === 'VALIDE'" class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-500 border border-emerald-100">Validé</span>
+              <div class="flex flex-wrap items-center gap-2 mb-2">
+                <h3 class="text-lg font-bold text-gray-800 truncate">{{ commerce.nom }}</h3>
+                <span *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'" class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-amber-50 text-amber-600 border border-amber-100">En attente</span>
+                <span *ngIf="commerce.statut === 'VALIDE'" class="px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-widest bg-emerald-50 text-emerald-600 border border-emerald-100">Validé</span>
               </div>
-              <div class="flex items-center gap-4 text-slate-400">
-                  <span class="text-[10px] font-black uppercase tracking-widest flex items-center bg-slate-50 px-2.5 py-1 rounded-lg">
-                      <i class="fa-solid fa-location-dot mr-1.5 text-[#034d92]/50"></i> {{ commerce.ville }}
+              <div class="flex flex-wrap items-center gap-2 text-slate-400 text-[10px] font-bold uppercase tracking-widest">
+                  <span class="flex items-center bg-slate-50 px-2.5 py-1 rounded">
+                      <i class="fa-solid fa-location-dot mr-1.5 text-[#0a355c]/60"></i> {{ commerce.ville }}
                   </span>
-                  <span class="text-[10px] font-black uppercase tracking-widest flex items-center bg-slate-50 px-2.5 py-1 rounded-lg">
-                      <i class="fa-solid fa-tag mr-1.5 text-[#034d92]/50"></i> {{ commerce.categorie?.nom }}
+                  <span class="flex items-center bg-slate-50 px-2.5 py-1 rounded">
+                      <i class="fa-solid fa-tag mr-1.5 text-[#0a355c]/60"></i> {{ commerce.categorie?.nom }}
                   </span>
               </div>
           </div>
       </div>
 
-      <div class="flex items-center gap-3 justify-end pt-6 lg:pt-0 border-t lg:border-t-0 border-slate-50">
-        <button (click)="openDetail(commerce)" class="w-12 h-12 flex items-center justify-center rounded-2xl text-slate-400 hover:bg-slate-50 hover:text-[#034d92] transition-all" title="Voir les détails">
-          <i class="fa-solid fa-circle-info text-xl"></i>
+      <div class="flex items-center gap-2 justify-end pt-4 lg:pt-0 border-t lg:border-t-0 border-gray-100">
+        <button (click)="openDetail(commerce)" class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-[#0a355c] transition-all" title="Voir les détails">
+          <i class="fa-solid fa-circle-info text-lg"></i>
         </button>
 
         <!-- Action si EN_ATTENTE -->
         <ng-container *ngIf="commerce.statut === 'EN_ATTENTE_VALIDATION'">
-          <button (click)="openReject(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
-          <button (click)="valider(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest bg-[#034d92] text-white hover:bg-blue-800 transition-all shadow-xl shadow-blue-900/10">Valider</button>
+          <button (click)="openReject(commerce.idcommerce)" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest text-slate-400 hover:bg-red-50 hover:text-red-500 transition-all">Rejeter</button>
+          <button (click)="valider(commerce.idcommerce)" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest bg-[#0a355c] text-white hover:bg-blue-800 transition-all shadow-sm">Valider</button>
         </ng-container>
 
         <!-- Action si VALIDE -->
         <ng-container *ngIf="commerce.statut === 'VALIDE'">
-          <button (click)="openSuspend(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-[#f97316] hover:bg-[#f97316]/5 border border-[#f97316]/20 transition-all">Suspendre</button>
+          <button (click)="openSuspend(commerce.idcommerce)" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest text-[#f97316] hover:bg-[#f97316]/5 border border-[#f97316]/20 transition-all">Suspendre</button>
         </ng-container>
 
         <!-- Action si SUSPENDU -->
         <ng-container *ngIf="commerce.statut === 'SUSPENDU'">
-          <button (click)="reactiver(commerce.idcommerce)" class="px-8 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest bg-green-600 text-white hover:bg-green-700 transition-all">Réactiver</button>
+          <button (click)="reactiver(commerce.idcommerce)" class="px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-widest bg-green-600 text-white hover:bg-green-700 transition-all">Réactiver</button>
         </ng-container>
       </div>
     </div>
 
     <!-- Pagination Controls -->
-    <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-4 mt-12 bg-white/50 backdrop-blur-sm p-4 rounded-[32px] border border-slate-100 w-fit mx-auto">
+    <div *ngIf="totalPages > 1" class="flex items-center justify-center gap-4 mt-8 bg-white border border-gray-100 p-2.5 rounded-lg w-fit mx-auto shadow-sm">
         <button (click)="prevPage()" [disabled]="currentPage === 1" 
-                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all"
-                [class]="currentPage === 1 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-lg hover:text-[#034d92]'">
+                class="w-10 h-10 rounded-lg flex items-center justify-center transition-all"
+                [class]="currentPage === 1 ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-50 hover:text-[#0a355c]'">
             <i class="fa-solid fa-chevron-left"></i>
         </button>
         
-        <div class="flex items-center px-6">
-            <span class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Page</span>
-            <span class="mx-3 text-sm font-black text-slate-800">{{ currentPage }} / {{ totalPages }}</span>
+        <div class="flex items-center px-4">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Page</span>
+            <span class="mx-2.5 text-sm font-bold text-slate-800">{{ currentPage }} / {{ totalPages }}</span>
         </div>
 
         <button (click)="nextPage()" [disabled]="currentPage === totalPages" 
-                class="w-12 h-12 rounded-2xl flex items-center justify-center transition-all"
-                [class]="currentPage === totalPages ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-white hover:shadow-lg hover:text-[#034d92]'">
+                class="w-10 h-10 rounded-lg flex items-center justify-center transition-all"
+                [class]="currentPage === totalPages ? 'text-slate-200 cursor-not-allowed' : 'text-slate-600 hover:bg-slate-50 hover:text-[#0a355c]'">
             <i class="fa-solid fa-chevron-right"></i>
         </button>
     </div>
@@ -106,7 +106,7 @@
   title="Refuser ou Suspendre" 
   subtitle="Modération du commerce"
   iconBg="from-orange-500 to-red-500"
-  btnBg="bg-red-500 shadow-red-500/20"
+  btnBg="bg-red-500 shadow-sm"
   confirmLabel="Confirmer"
   (onConfirm)="confirmerSuspension()"
   (onCancel)="closeSuspend()">
@@ -116,15 +116,15 @@
     </svg>
   </div>
   <div modal-body class="space-y-4">
-    <p class="text-sm font-medium text-slate-600">
+    <p class="text-sm font-medium text-slate-650">
       Veuillez fournir un motif pour cette suspension. Le commerce sera masqué pour les utilisateurs.
     </p>
     <div>
-      <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
+      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
       <textarea 
         [(ngModel)]="motifAction"
         rows="4"
-        class="w-full bg-slate-50 border-0 text-slate-600 text-sm font-bold rounded-2xl px-6 py-4 focus:ring-4 focus:ring-red-500/10 placeholder-slate-300 resize-none transition-all"
+        class="w-full bg-slate-50 border border-gray-100 text-slate-600 text-sm font-medium rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500/20 placeholder-slate-300 resize-none transition-all outline-none"
         placeholder="Expliquez pourquoi le commerce est suspendu...">
       </textarea>
     </div>
@@ -136,8 +136,8 @@
   [isOpen]="showRejectModal" 
   title="Rejeter le commerce" 
   subtitle="Modération de l'inscription"
-  iconBg="from-red-500 to-red-600"
-  btnBg="bg-red-500 shadow-red-500/20"
+  iconBg="from-red-500 to-red-650"
+  btnBg="bg-red-500 shadow-sm"
   confirmLabel="Rejeter"
   (onConfirm)="confirmerReject()"
   (onCancel)="closeReject()">
@@ -147,15 +147,15 @@
     </svg>
   </div>
   <div modal-body class="space-y-4">
-    <p class="text-sm font-medium text-slate-600">
+    <p class="text-sm font-medium text-slate-650">
       Veuillez fournir un motif pour ce rejet. Ce motif sera envoyé au commerçant par email.
     </p>
     <div>
-      <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
+      <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Motif <span class="text-red-500">*</span></label>
       <textarea 
         [(ngModel)]="motifAction"
         rows="4"
-        class="w-full bg-slate-50 border-0 text-slate-600 text-sm font-bold rounded-2xl px-6 py-4 focus:ring-4 focus:ring-red-500/10 placeholder-slate-300 resize-none transition-all"
+        class="w-full bg-slate-50 border border-gray-100 text-slate-600 text-sm font-medium rounded-lg px-4 py-3 focus:ring-2 focus:ring-red-500/20 placeholder-slate-300 resize-none transition-all outline-none"
         placeholder="Expliquez pourquoi la demande d'inscription est rejetée...">
       </textarea>
     </div>
@@ -167,8 +167,8 @@
   [isOpen]="showDetailModal" 
   title="Détails du Commerce" 
   [subtitle]="selectedCommerce?.nom"
-  iconBg="from-[#003B71] to-[#00ADEF]"
-  btnBg="bg-[#003B71]"
+  iconBg="from-[#0a355c] to-[#00ADEF]"
+  btnBg="bg-[#0a355c]"
   confirmLabel="Fermer"
   (onConfirm)="closeDetail()"
   (onCancel)="closeDetail()">
@@ -184,7 +184,7 @@
       
       <!-- Section Infos -->
       <div class="space-y-4">
-        <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">Informations Générales</h4>
+        <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Informations Générales</h4>
         <div class="space-y-3">
           <div>
             <p class="text-[10px] text-slate-400 font-bold uppercase">Description</p>
@@ -210,8 +210,8 @@
       <!-- Section Localisation & Forfait -->
       <div class="space-y-6">
         <div class="space-y-4">
-          <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">Localisation</h4>
-          <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Localisation</h4>
+          <div class="p-4 bg-slate-50 rounded-lg border border-gray-100">
              <p class="text-sm font-bold text-slate-700">{{ selectedCommerce.ville }}</p>
              <p class="text-xs text-slate-400">{{ selectedCommerce.quartier || 'Quartier non précisé' }}</p>
              <p class="text-xs text-slate-400 mt-1 italic">{{ selectedCommerce.localisations && selectedCommerce.localisations[0]?.adresse }}</p>
@@ -219,11 +219,11 @@
         </div>
 
         <div class="space-y-4" *ngIf="selectedCommerce.abonnement">
-          <h4 class="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">Abonnement & Forfait</h4>
-          <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+          <h4 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b pb-2">Abonnement & Forfait</h4>
+          <div class="p-4 bg-emerald-50/50 rounded-lg border border-emerald-100">
              <div class="flex items-center justify-between mb-2">
-                <span class="text-xs font-black text-emerald-600 uppercase">{{ selectedCommerce.abonnement?.type || 'Standard' }}</span>
-                <span class="text-lg font-black text-emerald-700">{{ selectedCommerce.abonnement?.montant || 0 }} FCFA</span>
+                <span class="text-xs font-bold text-emerald-600 uppercase">{{ selectedCommerce.abonnement?.type || 'Standard' }}</span>
+                <span class="text-lg font-bold text-emerald-700">{{ selectedCommerce.abonnement?.montant || 0 }} FCFA</span>
              </div>
              <p class="text-[10px] text-emerald-600/70 font-medium">Forfait actif jusqu'au {{ selectedCommerce.abonnement?.dateFin | date:'dd/MM/yyyy' }}</p>
           </div>
@@ -232,24 +232,25 @@
     </div>
   </div>
 </app-modal>
+
 <!-- Modal Succès -->
 <app-modal 
   [isOpen]="showSuccessModal" 
   [title]="successTitle" 
   [subtitle]="successMessage"
-  iconBg="from-emerald-400 to-green-600"
-  btnBg="bg-emerald-600 shadow-emerald-500/20"
+  iconBg="from-emerald-450 to-green-600"
+  btnBg="bg-[#0a355c]"
   confirmLabel="D'accord"
   [showCancel]="false"
   (onConfirm)="showSuccessModal = false"
   (onCancel)="showSuccessModal = false">
   <div modal-icon>
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
     </svg>
   </div>
   <div modal-body>
-    <p class="text-sm font-medium text-slate-600 text-center">
+    <p class="text-sm font-medium text-slate-650 text-center">
       L'action a été traitée avec succès par le système.
     </p>
   </div>

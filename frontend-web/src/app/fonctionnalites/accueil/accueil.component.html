@@ -1,6 +1,6 @@
 <main class="max-w-[1800px] mx-auto p-4 lg:p-6 w-full">
     
-    <div class="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 mb-6 w-full">
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 w-full">
         <div class="flex flex-wrap lg:flex-nowrap items-center gap-4">
             <div class="relative flex-grow min-w-[250px]">
                 <i class="fa-solid fa-magnifying-glass absolute left-4 top-[18px] text-slate-400"></i>
@@ -9,7 +9,7 @@
                     (ngModelChange)="onFilterChange()"
                     (keyup.enter)="rechercher()"
                     placeholder="Quel commerce recherchez-vous ?" 
-                    class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-12 text-sm focus:ring-2 focus:ring-[#034d92] transition-all outline-none">
+                    class="w-full bg-slate-50 border-none rounded-lg py-3.5 px-12 text-sm focus:ring-2 focus:ring-[#0a355c] transition-all outline-none">
             </div>
             
             <div class="relative min-w-[200px]">
@@ -18,19 +18,19 @@
                     [(ngModel)]="filtres.idCategorie"
                     (ngModelChange)="onFilterChange()"
                     (change)="rechercher()"
-                    class="w-full bg-slate-50 border-none rounded-2xl py-3.5 px-10 text-sm focus:ring-2 focus:ring-[#034d92] appearance-none outline-none text-slate-600 font-medium">
+                    class="w-full bg-slate-50 border-none rounded-lg py-3.5 px-10 text-sm focus:ring-2 focus:ring-[#0a355c] appearance-none outline-none text-slate-600 font-medium">
                     <option value="">Toutes catégories</option>
                     <option *ngFor="let cat of categories" [value]="cat.idcategorie">{{ cat.nom }}</option>
                 </select>
             </div>
 
-            <div class="flex items-center bg-slate-50 rounded-2xl px-4 py-1 space-x-3 border border-slate-100 h-[52px]">
+            <div class="flex items-center bg-slate-50 rounded-lg px-4 py-1 space-x-3 border border-gray-100 h-[52px]">
                 <span class="text-[10px] font-black text-slate-400 uppercase">Rayon</span>
                 <input type="number" 
                     [(ngModel)]="filtres.rayon"
                     (ngModelChange)="onFilterChange()"
                     (change)="rechercher()"
-                    class="w-12 bg-transparent font-bold text-[#034d92] outline-none text-center appearance-none m-0 p-0">
+                    class="w-12 bg-transparent font-bold text-[#0a355c] outline-none text-center appearance-none m-0 p-0">
                 <span class="text-xs font-bold text-slate-400">km</span>
             </div>
 
@@ -43,10 +43,10 @@
         <div class="lg:w-3/4 w-full">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xs font-black uppercase tracking-[0.2em] text-slate-400 flex items-center">
-                    <i class="fa-solid fa-store mr-2 text-[#034d92]"></i> {{ commerces.length }} commerces à proximité
+                    <i class="fa-solid fa-store mr-2 text-[#0a355c]"></i> {{ commerces.length }} commerces à proximité
                 </h2>
                 <button (click)="showMapOnMobile = !showMapOnMobile" 
-                        class="lg:hidden bg-white border border-slate-200 text-[#034d92] px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
+                        class="lg:hidden bg-white border border-gray-100 text-[#0a355c] px-4 py-2 rounded-lg text-xs font-bold shadow-sm">
                   <i [class]="showMapOnMobile ? 'fa-solid fa-list' : 'fa-solid fa-map'"></i>
                   {{ showMapOnMobile ? 'Vue Liste' : 'Vue Carte' }}
                 </button>
@@ -54,7 +54,7 @@
 
             <div [class.hidden]="showMapOnMobile" class="grid lg:grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 custom-scroll overflow-y-auto pr-4" style="max-height: calc(100vh - 320px);">
                 
-                <div *ngFor="let commerce of commerces; let i = index" class="shop-card bg-white rounded-[2.5rem] border border-slate-100 overflow-hidden flex flex-col group relative h-full">
+                <div *ngFor="let commerce of commerces; let i = index" class="shop-card bg-white rounded-xl border border-gray-100 overflow-hidden flex flex-col group relative h-full">
                     <div class="relative h-44 overflow-hidden bg-slate-100 shrink-0">
                         <ng-container *ngIf="commerce.images && commerce.images.length > 0; else placeholder">
                             <img [src]="commerce.images[commerce.currentImg || 0].url" 
@@ -66,7 +66,7 @@
                         </ng-template>
 
                         <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-                            <span class="text-[10px] font-black uppercase text-[#034d92]">{{ commerce.categorie?.nom || 'Commerce' }}</span>
+                            <span class="text-[10px] font-black uppercase text-[#0a355c]">{{ commerce.categorie?.nom || 'Commerce' }}</span>
                         </div>
                         <button class="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-300 hover:text-red-500 transition shadow-md">
                             <i class="fa-solid fa-heart"></i>
@@ -80,12 +80,12 @@
                                 <span class="ml-1 font-bold text-slate-600">{{ (commerce.noteGlobale | number:'1.1-1') || 'N/A' }}</span>
                             </div>
                         </div>
-                        <p class="text-slate-500 text-sm mb-6 italic"><i class="fa-solid fa-location-dot mr-1 text-[#034d92]/70 hidden"></i> {{ commerce.ville || 'Littoral' }}, Douala</p>
+                        <p class="text-slate-500 text-sm mb-6 italic"><i class="fa-solid fa-location-dot mr-1 text-[#0a355c]/70 hidden"></i> {{ commerce.ville || 'Littoral' }}, Douala</p>
                         
                         <div class="mt-auto pt-4">
                             <button [routerLink]="['/commerce', commerce.idcommerce]" 
-                                    [ngClass]="i === 0 ? 'bg-[#034d92] text-white hover:bg-[#023a6e]' : 'bg-[#034d92]/10 text-[#034d92] hover:bg-[#034d92] hover:text-white'"
-                                    class="w-full py-3 rounded-2xl text-xs font-bold uppercase tracking-widest transition">
+                                    [ngClass]="i === 0 ? 'bg-[#0a355c] text-white hover:bg-[#134673]' : 'bg-[#0a355c]/10 text-[#0a355c] hover:bg-[#0a355c] hover:text-white'"
+                                    class="w-full py-3 rounded-lg text-xs font-bold uppercase tracking-widest transition">
                                 Détails
                             </button>
                         </div>
@@ -96,11 +96,11 @@
         </div>
 
         <div [class.hidden]="!showMapOnMobile" class="lg:block lg:w-1/4 w-full sticky top-28 z-30">
-            <div class="bg-white p-2 rounded-[3rem] shadow-xl border border-slate-50 h-[580px] w-full">
-                <div class="w-full h-full rounded-[2.5rem] bg-slate-200 relative overflow-hidden">
+            <div class="bg-white p-2 rounded-xl shadow-sm border border-gray-100 h-[580px] w-full">
+                <div class="w-full h-full rounded-lg bg-slate-200 relative overflow-hidden">
                     <app-carte [points]="pointsCarte" class="w-full h-full absolute inset-0"></app-carte>
                     
-                    <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur p-4 rounded-2xl shadow-lg border border-white z-40 pointer-events-none">
+                    <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur p-4 rounded-lg shadow-sm border border-gray-100 z-40 pointer-events-none">
                         <p class="text-[10px] font-black text-slate-400 uppercase mb-1">Zone Actuelle</p>
                         <p class="text-sm font-bold text-slate-800 line-clamp-1">Littoral, Douala</p>
                     </div>

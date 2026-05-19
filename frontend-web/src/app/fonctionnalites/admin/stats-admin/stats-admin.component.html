@@ -1,119 +1,119 @@
-<div class="space-y-12">
+<div class="space-y-6 md:space-y-8">
     <!-- Row 1: Small Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500 cursor-pointer">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between group hover:shadow-md transition-all duration-300 cursor-pointer">
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Utilisateurs Totaux</p>
-                <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ stats.totalUtilisateurs | number }}</h3>
+                <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ stats.totalUtilisateurs | number }}</h3>
             </div>
-            <div class="h-12 w-12 bg-blue-50 rounded-2xl flex items-center justify-center text-[var(--brand-color)]">
-                <i class="fa-solid fa-users text-lg"></i>
+            <div class="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center text-[#0a355c] shrink-0">
+                <i class="fa-solid fa-users text-sm"></i>
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500 cursor-pointer">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between group hover:shadow-md transition-all duration-300 cursor-pointer">
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nombre Commerçants</p>
-                <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ stats.totalCommerces | number }}</h3>
+                <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ stats.totalCommerces | number }}</h3>
             </div>
-            <div class="h-12 w-12 bg-blue-50 rounded-2xl flex items-center justify-center text-[var(--brand-color)]">
-                <i class="fa-solid fa-store text-lg"></i>
+            <div class="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center text-[#0a355c] shrink-0">
+                <i class="fa-solid fa-store text-sm"></i>
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-orange-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500 cursor-pointer">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-orange-100 flex items-center justify-between group hover:shadow-md transition-all duration-300 cursor-pointer">
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-orange-400 uppercase tracking-widest mb-1">En Validation</p>
-                <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ stats.commercesEnAttente | number }}</h3>
+                <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ stats.commercesEnAttente | number }}</h3>
             </div>
-            <div class="h-12 w-12 bg-orange-50 rounded-2xl flex items-center justify-center text-orange-500">
-                <i class="fa-solid fa-check-double text-lg"></i>
+            <div class="h-10 w-10 bg-orange-50 rounded-full flex items-center justify-center text-orange-500 shrink-0">
+                <i class="fa-solid fa-check-double text-sm"></i>
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex items-center justify-between group hover:shadow-xl transition-all duration-500 cursor-pointer">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between group hover:shadow-md transition-all duration-300 cursor-pointer">
             <div class="flex-1">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Catégories</p>
-                <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ stats.totalCategories | number }}</h3>
+                <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ stats.totalCategories | number }}</h3>
             </div>
-            <div class="h-12 w-12 bg-blue-50 rounded-2xl flex items-center justify-center text-[var(--brand-color)]">
-                <i class="fa-solid fa-layer-group text-lg"></i>
+            <div class="h-10 w-10 bg-blue-50 rounded-full flex items-center justify-center text-[#0a355c] shrink-0">
+                <i class="fa-solid fa-layer-group text-sm"></i>
             </div>
         </div>
     </div>
 
     <!-- Row 2: Medium/Large Stats -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex flex-col justify-between h-48 group hover:shadow-xl transition-all duration-500">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between h-40 group hover:shadow-md transition-all duration-300">
             <div>
-                <i class="fa-solid fa-eye text-[var(--brand-color)] text-xl mb-4 opacity-50"></i>
+                <i class="fa-solid fa-eye text-[#0a355c] text-lg mb-3 opacity-60"></i>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vues Totales</p>
             </div>
-            <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ stats.totalVues | number }}</h3>
+            <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ stats.totalVues | number }}</h3>
         </div>
 
-        <div class="bg-[var(--brand-color)] p-8 rounded-[40px] shadow-2xl shadow-blue-900/40 flex flex-col justify-between h-48 group hover:-translate-y-1 transition-all duration-500 text-white">
+        <div class="bg-[#0a355c] p-6 rounded-xl shadow-md flex flex-col justify-between h-40 group hover:-translate-y-0.5 transition-all duration-300 text-white">
             <div>
-                <i class="fa-solid fa-wallet text-white/50 text-xl mb-4"></i>
-                <p class="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-1">Revenus Totaux</p>
+                <i class="fa-solid fa-wallet text-blue-200/60 text-lg mb-3"></i>
+                <p class="text-[10px] font-bold text-blue-200/80 uppercase tracking-widest mb-1">Revenus Totaux</p>
             </div>
             <div class="flex items-baseline gap-2">
-                <h3 class="text-3xl font-bold tabular-nums">{{ stats.totalRevenus | number }}</h3>
-                <span class="text-[10px] font-bold text-white/40">CFA</span>
+                <h3 class="text-2xl font-bold tabular-nums">{{ stats.totalRevenus | number }}</h3>
+                <span class="text-[10px] font-bold text-blue-300">CFA</span>
             </div>
         </div>
 
-        <div class="bg-white p-8 rounded-[40px] shadow-sm border border-slate-50 flex flex-col justify-between h-48 group hover:shadow-xl transition-all duration-500">
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between h-40 group hover:shadow-md transition-all duration-300">
             <div>
-                <i class="fa-solid fa-user-check text-[var(--brand-color)] text-xl mb-4 opacity-50"></i>
+                <i class="fa-solid fa-user-check text-[#0a355c] text-lg mb-3 opacity-60"></i>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Revenu Abos</p>
             </div>
             <div class="flex items-baseline gap-2">
-                <h3 class="text-3xl font-bold text-slate-800 tabular-nums">{{ (stats.totalRevenus * 0.4) | number:'1.0-0' }}</h3>
+                <h3 class="text-2xl font-bold text-gray-800 tabular-nums">{{ (stats.totalRevenus * 0.4) | number:'1.0-0' }}</h3>
                 <span class="text-[10px] font-bold text-slate-400 uppercase">CFA</span>
             </div>
         </div>
 
-        <div class="bg-slate-900 p-8 rounded-[40px] shadow-2xl flex flex-col justify-between h-48 group hover:-translate-y-1 transition-all duration-500 text-white">
+        <div class="bg-slate-900 p-6 rounded-xl shadow-md flex flex-col justify-between h-40 group hover:-translate-y-0.5 transition-all duration-300 text-white">
             <div>
-                <i class="fa-solid fa-bolt text-orange-400 text-xl mb-4"></i>
+                <i class="fa-solid fa-bolt text-orange-400 text-lg mb-3"></i>
                 <p class="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-1">Vues / Période</p>
             </div>
-            <h3 class="text-3xl font-bold text-orange-400 tabular-nums">{{ (stats.totalVues / 30) | number:'1.0-0' }}</h3>
+            <h3 class="text-2xl font-bold text-orange-400 tabular-nums">{{ (stats.totalVues / 30) | number:'1.0-0' }}</h3>
         </div>
     </div>
 
     <!-- Row 3: Analysis Blocks -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <!-- Abonnements -->
-        <div class="xl:col-span-2 bg-white p-10 rounded-[40px] shadow-sm border border-slate-50">
-            <div class="flex items-center gap-3 mb-10">
-                <i class="fa-solid fa-award text-blue-500"></i>
+        <div class="xl:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-award text-blue-600 text-sm"></i>
                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Abonnements par Forfait</h4>
             </div>
-            <div class="space-y-10">
+            <div class="space-y-6">
                 <div *ngFor="let item of [
                     { label: 'Basique', val: stats.countBasique, color: 'bg-slate-300' },
-                    { label: 'Premium', val: stats.countPremium, color: 'bg-[var(--brand-color)]' },
+                    { label: 'Premium', val: stats.countPremium, color: 'bg-[#0a355c]' },
                     { label: 'Gold', val: stats.countGold, color: 'bg-orange-500' }
-                ]" class="flex items-center gap-8 group">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest w-20">{{ item.label }}</span>
-                    <div class="flex-1 h-3 bg-slate-50 rounded-full overflow-hidden">
+                ]" class="flex items-center gap-6 group">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest w-20 shrink-0">{{ item.label }}</span>
+                    <div class="flex-1 h-2 bg-slate-50 rounded-full overflow-hidden">
                         <div [style.width.%]="(item.val / stats.totalCommerces) * 100" [class]="item.color + ' h-full rounded-full transition-all duration-1000 group-hover:opacity-100 opacity-90'"></div>
                     </div>
-                    <span class="text-sm font-bold text-slate-800 tabular-nums w-12 text-right">{{ item.val }}</span>
+                    <span class="text-xs font-bold text-gray-800 tabular-nums w-12 text-right shrink-0">{{ item.val }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Secteurs -->
-        <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-50 flex flex-col">
-            <div class="flex items-center gap-3 mb-10">
-                <i class="fa-solid fa-chart-simple text-blue-500"></i>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+            <div class="flex items-center gap-3 mb-6">
+                <i class="fa-solid fa-chart-simple text-blue-600 text-sm"></i>
                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Secteurs d'activité</h4>
             </div>
-            <div class="space-y-8 flex-1">
-                <div *ngFor="let s of secteurs" class="space-y-3">
+            <div class="space-y-4 flex-1">
+                <div *ngFor="let s of secteurs" class="space-y-2">
                     <div class="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-500">
                         <div class="flex items-center gap-2 text-slate-600">
                              <i class="fa-solid fa-utensils text-[8px]" *ngIf="s.nom === 'Alimentation'"></i>
@@ -123,7 +123,7 @@
                         <span class="text-slate-400">{{ s.percent }}%</span>
                     </div>
                     <div class="h-2 bg-slate-50 rounded-full overflow-hidden">
-                        <div [style.width.%]="s.percent" class="h-full bg-[var(--brand-color)] rounded-full"></div>
+                        <div [style.width.%]="s.percent" class="h-full bg-[#0a355c] rounded-full"></div>
                     </div>
                 </div>
             </div>
@@ -131,58 +131,64 @@
     </div>
 
     <!-- Tables Row -->
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Inscriptions -->
-        <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-50 overflow-hidden">
-            <div class="flex items-center gap-3 mb-8">
-                <i class="fa-solid fa-history text-blue-500"></i>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="flex items-center gap-3 mb-4">
+                <i class="fa-solid fa-history text-blue-600 text-sm"></i>
                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Inscriptions Récentes</h4>
             </div>
-            <table class="w-full text-left">
-                <thead class="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em]">
-                    <tr>
-                        <th class="pb-6">Commerce</th>
-                        <th class="pb-6">Plan</th>
-                        <th class="pb-6 text-right">Statut</th>
-                    </tr>
-                </thead>
-                <tbody class="text-xs font-bold text-slate-600">
-                    <tr *ngFor="let c of topCommercesVues.slice(0, 3)" class="border-t border-slate-50 hover:bg-slate-50 transition-colors">
-                        <td class="py-6">{{ c.nom }}</td>
-                        <td class="py-6"><span class="text-orange-500 bg-orange-50 px-2 py-0.5 rounded-lg text-[10px]">{{ c.abonnement?.type || 'BASIQUE' }}</span></td>
-                        <td class="py-6 text-right">
-                            <span class="inline-flex items-center gap-1.5">
-                                <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                                Actif
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="text-xs font-semibold text-gray-400 border-b border-gray-100 uppercase tracking-wider">
+                        <tr>
+                            <th class="pb-3">Commerce</th>
+                            <th class="pb-3">Plan</th>
+                            <th class="pb-3 text-right">Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700">
+                        <tr *ngFor="let c of topCommercesVues.slice(0, 3)" class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-3 font-medium text-gray-800">{{ c.nom }}</td>
+                            <td class="py-3">
+                                <span class="text-orange-600 bg-orange-50 px-2 py-0.5 rounded text-[10px] font-semibold">{{ c.abonnement?.type || 'BASIQUE' }}</span>
+                            </td>
+                            <td class="py-3 text-right">
+                                <span class="inline-flex items-center gap-1.5 text-xs text-emerald-600 font-medium">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                    Actif
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Top Commerces -->
-        <div class="bg-white p-10 rounded-[40px] shadow-sm border border-slate-50 overflow-hidden">
-            <div class="flex items-center gap-3 mb-8">
-                <i class="fa-solid fa-trophy text-orange-500"></i>
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="flex items-center gap-3 mb-4">
+                <i class="fa-solid fa-trophy text-orange-500 text-sm"></i>
                 <h4 class="text-xs font-bold text-slate-400 uppercase tracking-[0.2em]">Top Commerces</h4>
             </div>
-            <table class="w-full text-left">
-                <thead class="text-[9px] font-bold text-slate-300 uppercase tracking-[0.2em]">
-                    <tr>
-                        <th class="pb-6">Commerce</th>
-                        <th class="pb-6">Vues</th>
-                        <th class="pb-6 text-right">Tendance</th>
-                    </tr>
-                </thead>
-                <tbody class="text-xs font-bold text-slate-600">
-                    <tr *ngFor="let c of topCommercesVues.slice(0, 3)" class="border-t border-slate-50 hover:bg-slate-50 transition-colors">
-                        <td class="py-6">{{ c.nom }}</td>
-                        <td class="py-6 tabular-nums">{{ c.nombreVues | number }}</td>
-                        <td class="py-6 text-right text-emerald-500"><i class="fa-solid fa-arrow-trend-up mr-2"></i>12%</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead class="text-xs font-semibold text-gray-400 border-b border-gray-100 uppercase tracking-wider">
+                        <tr>
+                            <th class="pb-3">Commerce</th>
+                            <th class="pb-3">Vues</th>
+                            <th class="pb-3 text-right">Tendance</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100 text-gray-700">
+                        <tr *ngFor="let c of topCommercesVues.slice(0, 3)" class="hover:bg-slate-50/50 transition-colors">
+                            <td class="py-3 font-medium text-gray-800">{{ c.nom }}</td>
+                            <td class="py-3 tabular-nums text-gray-600">{{ c.nombreVues | number }}</td>
+                            <td class="py-3 text-right text-emerald-600 font-semibold"><i class="fa-solid fa-arrow-trend-up mr-1 text-xs"></i>12%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>

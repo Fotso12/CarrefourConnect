@@ -1,45 +1,46 @@
-<div class="flex h-screen bg-[#F0F4F8] relative overflow-hidden font-['Plus_Jakarta_Sans']">
+<div class="flex h-screen bg-[#f4f6f9] relative overflow-hidden font-sans">
   
   <!-- Sidebar -->
-  <aside class="w-80 bg-[#0a192f] text-slate-300 flex flex-col shadow-2xl z-50 transition-all duration-300 shrink-0">
+  <aside class="w-20 lg:w-72 bg-[#0a355c] text-slate-300 flex flex-col shadow-lg z-50 transition-all duration-300 shrink-0 border-r border-blue-950">
     <!-- Header Sidebar -->
-    <div class="h-28 flex items-center px-10 gap-3 shrink-0">
-        <h1 class="text-2xl font-black tracking-tighter">
-            <span class="text-white">Carrefour</span><span class="text-[#f97316]">Connect</span>
+    <div class="h-20 flex items-center justify-center lg:justify-start px-4 lg:px-8 gap-3 shrink-0 border-b border-blue-900">
+        <h1 class="text-xl font-bold tracking-tight text-center lg:text-left">
+            <span class="inline lg:hidden text-white font-extrabold italic">CC</span>
+            <span class="hidden lg:inline text-white">Carrefour</span><span class="hidden lg:inline text-[#f97316]">Connect</span>
         </h1>
     </div>
 
-    <nav class="flex-1 py-4 px-6 space-y-3 overflow-y-auto">
+    <nav class="flex-1 py-4 px-3 lg:px-6 space-y-1.5 overflow-y-auto">
       <a *ngFor="let item of menuItems" 
          [routerLink]="[item.link]" 
-         routerLinkActive="bg-[#f97316] text-white shadow-lg shadow-orange-900/20"
+         routerLinkActive="bg-[#134673] text-white shadow-sm border border-blue-900"
          #rla="routerLinkActive"
          [routerLinkActiveOptions]="{exact: true}"
-         class="flex items-center gap-4 px-6 py-4 rounded-3xl transition-all duration-300 group hover:bg-white/5">
-        <div class="flex items-center justify-center w-6 h-6">
+         class="flex items-center justify-center lg:justify-start gap-4 px-4 lg:px-6 py-3.5 rounded-lg transition-all duration-300 group hover:bg-white/5">
+        <div class="flex items-center justify-center w-6 h-6 shrink-0">
             <i [class]="item.icon + ' text-lg opacity-70 transition-all'" [class.opacity-100]="rla.isActive"></i>
         </div>
-        <span class="font-bold text-sm tracking-tight">{{ item.label }}</span>
-        <div *ngIf="((unreadCount$ | async) ?? 0) > 0 && item.label === 'Notifications'" class="ml-auto bg-red-500 text-white text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center">
+        <span class="hidden lg:inline font-bold text-sm tracking-tight">{{ item.label }}</span>
+        <div *ngIf="((unreadCount$ | async) ?? 0) > 0 && item.label === 'Notifications'" class="ml-auto hidden lg:flex bg-red-500 text-white text-[10px] font-black h-5 w-5 rounded-full items-center justify-center">
             {{ unreadCount$ | async }}
         </div>
       </a>
     </nav>
 
     <!-- Footer Sidebar (Profile) -->
-    <div class="p-8 border-t border-slate-800/50 space-y-4">
-      <div (click)="goToProfile()" class="flex items-center gap-4 p-4 rounded-[28px] bg-slate-800/30 border border-slate-700/30 cursor-pointer hover:bg-slate-800/40">
-        <div class="h-12 w-12 rounded-[18px] bg-[#f97316] flex items-center justify-center font-black text-white shadow-lg">
+    <div class="p-3 lg:p-6 border-t border-blue-900/60 space-y-4">
+      <div (click)="goToProfile()" class="flex items-center justify-center lg:justify-start gap-3 p-2 lg:p-3 rounded-lg bg-slate-900/20 border border-blue-950 cursor-pointer hover:bg-slate-900/30">
+        <div class="h-10 w-10 rounded-lg bg-[#f97316] flex items-center justify-center font-black text-white shadow-sm shrink-0">
             {{ (currentUser.prenom?.charAt(0) || 'C') }}
         </div>
-        <div class="flex-1 min-w-0">
+        <div class="hidden lg:block flex-1 min-w-0">
           <p class="text-[13px] font-bold text-white truncate">{{ displayName || 'Mon Compte' }}</p>
-          <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Commerçant</p>
+          <p class="text-[10px] font-bold text-blue-300 uppercase tracking-widest mt-0.5">Commerçant</p>
         </div>
       </div>
-      <button (click)="showLogoutConfirm = true" class="w-full flex items-center justify-center gap-3 px-6 py-4 rounded-[20px] text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-400/10 transition-all border border-red-400/10">
-          <i class="fa-solid fa-power-off"></i>
-          Deconnexion
+      <button (click)="showLogoutConfirm = true" class="w-full flex items-center justify-center gap-3 px-3 py-3.5 rounded-lg text-xs font-bold uppercase tracking-widest text-red-300 hover:bg-red-400/10 transition-all border border-red-400/10">
+          <i class="fa-solid fa-power-off shrink-0"></i>
+          <span class="hidden lg:inline">Deconnexion</span>
       </button>
     </div>
   </aside>
@@ -48,48 +49,48 @@
   <div class="flex-1 flex flex-col overflow-hidden relative">
     
     <!-- Top Bar -->
-    <header class="h-28 bg-white/70 backdrop-blur-md border-b border-slate-100 flex items-center justify-between px-12 shrink-0">
+    <header class="h-20 bg-white border-b border-gray-100 flex items-center justify-between px-6 lg:px-12 shrink-0 shadow-sm">
       <div class="flex items-center gap-12">
-          <h2 class="text-xl font-bold text-slate-800 tracking-tight">Espace Commerçant</h2>
+          <h2 class="text-lg font-bold text-gray-800 tracking-tight">Espace Commerçant</h2>
           <nav class="hidden md:flex items-center gap-8">
               <a routerLink="/" class="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[#f97316] transition-colors">Accueil</a>
               <a routerLink="/a-propos" class="text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[#f97316] transition-colors">À Propos</a>
           </nav>
       </div>
 
-      <div class="flex items-center gap-6">
-          <div class="flex items-center gap-4">
-              <button routerLink="/commercant/notifications" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all relative">
-                  <i class="fa-solid fa-bell text-lg"></i>
-                  <div *ngIf="((unreadCount$ | async) ?? 0) > 0" class="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full border-2 border-white text-[10px] font-black text-white flex items-center justify-center shadow-lg animate-bounce">
+      <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3">
+              <button routerLink="/commercant/notifications" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all relative">
+                  <i class="fa-solid fa-bell"></i>
+                  <div *ngIf="((unreadCount$ | async) ?? 0) > 0" class="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full border-2 border-white text-[9px] font-bold text-white flex items-center justify-center shadow animate-bounce">
                     {{ unreadCount$ | async }}
                   </div>
               </button>
           </div>
-            <!-- Profile icon on navbar -->
-            <button (click)="goToProfile()" class="w-12 h-12 rounded-2xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all">
-              <i class="fa-solid fa-user text-lg"></i>
-            </button>
+          <!-- Profile icon on navbar -->
+          <button (click)="goToProfile()" class="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-slate-400 hover:text-[#f97316] hover:border-[#f97316] transition-all">
+            <i class="fa-solid fa-user"></i>
+          </button>
       </div>
     </header>
 
     <!-- Zone de Contenu Dynamique -->
-    <main class="flex-1 overflow-y-auto p-12 bg-[#F8FAFC]">
+    <main class="flex-1 overflow-y-auto p-6 lg:p-10 bg-[#f4f6f9]">
       <router-outlet></router-outlet>
     </main>
   </div>
 
   <!-- Logout Confirmation Modal -->
-  <div *ngIf="showLogoutConfirm" class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-6">
-    <div class="bg-white rounded-[40px] p-10 w-full max-w-md shadow-2xl border border-slate-100 animate-in zoom-in duration-300">
-      <div class="h-16 w-16 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center mb-6 text-2xl">
+  <div *ngIf="showLogoutConfirm" class="fixed inset-0 z-[200] flex items-center justify-center bg-slate-900/60 backdrop-blur-xs p-6">
+    <div class="bg-white rounded-xl p-8 w-full max-w-md shadow-lg border border-gray-100 animate-in zoom-in duration-300">
+      <div class="h-12 w-12 bg-red-50 text-red-500 rounded-lg flex items-center justify-center mb-5 text-xl">
           <i class="fa-solid fa-power-off"></i>
       </div>
-      <h3 class="text-2xl font-black text-slate-800 mb-2">Déconnexion ?</h3>
-      <p class="text-slate-500 text-sm leading-relaxed mb-10">Êtes-vous sûr de vouloir vous déconnecter de votre espace commerçant ?</p>
+      <h3 class="text-xl font-bold text-slate-800 mb-2">Déconnexion ?</h3>
+      <p class="text-slate-500 text-sm leading-relaxed mb-6">Êtes-vous sûr de vouloir vous déconnecter de votre espace commerçant ?</p>
       <div class="flex gap-4">
-        <button (click)="showLogoutConfirm = false" class="flex-1 py-4 bg-slate-50 text-slate-800 rounded-2xl font-bold transition-all hover:bg-slate-100">Annuler</button>
-        <button (click)="logout()" class="flex-1 py-4 bg-red-600 text-white rounded-2xl font-bold transition-all hover:bg-red-700 shadow-xl shadow-red-600/20">Quitter</button>
+        <button (click)="showLogoutConfirm = false" class="flex-1 py-3 bg-slate-50 text-slate-800 rounded-lg font-bold transition-all hover:bg-slate-100">Annuler</button>
+        <button (click)="logout()" class="flex-1 py-3 bg-red-600 text-white rounded-lg font-bold transition-all hover:bg-red-700 shadow">Quitter</button>
       </div>
     </div>
   </div>
