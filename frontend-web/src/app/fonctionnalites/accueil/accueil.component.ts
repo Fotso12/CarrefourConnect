@@ -79,12 +79,75 @@ export class AccueilComponent implements OnInit {
   rechercher(): void {
     this.commerceService.rechercher(this.filtres).subscribe({
       next: (data) => {
+        // Tri discret des commerces selon leur niveau d'abonnement (Gold > Premium > Basique > Free)
+        const sortedData = [...data].sort((a: any, b: any) => {
+          const getWeight = (c: any) => {
+            if (!c.abonnement) return 0;
+            const type = c.abonnement.type?.toUpperCase();
+            if (type === 'GOLD') return 3;
+            if (type === 'PREMIUM') return 2;
+            if (type === 'BASIQUE') return 1;
+            return 0;
+          };
+          return getWeight(b) - getWeight(a);
+        });
+
         // Initialise l'index de l'image courante pour le carrousel
-        this.commerces = data.map(c => ({ ...c, currentImg: 0 }));
-        this.actualiserCarte(data);
+        this.commerces = sortedData.map(c => ({ ...c, currentImg: 0 }));
+        this.actualiserCarte(sortedData);
       },
       error: (err) => console.error("Erreur de recherche:", err)
     });
+  }
+
+  /**
+   * Nettoie et valide un numéro de téléphone camerounais (9 chiffres, commençant par 6)
+   */
+  getTelephoneFormatte(commerce: any): string | null {
+    if (!commerce || !commerce.telephone) return null;
+    let tel = commerce.telephone.toString().replace(/\D/g, '');
+    
+    if (tel.length > 9 && tel.startsWith('237')) {
+      tel = tel.substring(tel.length - 9);
+    }
+    
+    if (tel.length === 9 && tel.startsWith('6')) {
+      return tel;
+    }
+    
+    if (tel.length < 9) {
+      if (!tel.startsWith('6')) {
+        tel = '6' + tel;
+      }
+      while (tel.length < 9) {
+        tel += '0';
+      }
+      return tel.substring(0, 9);
+    }
+    
+    if (tel.length === 9 && !tel.startsWith('6')) {
+      tel = '6' + tel.substring(1);
+      return tel;
+    }
+    
+    return tel.substring(0, 9);
+  }
+
+  getTelephoneUrl(commerce: any): string {
+    const tel = this.getTelephoneFormatte(commerce);
+    return tel ? `tel:+237${tel}` : '';
+  }
+
+  getWhatsAppUrl(commerce: any): string {
+    const tel = this.getTelephoneFormatte(commerce);
+    if (!tel) return '';
+    return `https://wa.me/237${tel}`;
+  }
+
+  isEligibleWhatsApp(commerce: any): boolean {
+    if (!commerce || !commerce.abonnement) return false;
+    const type = commerce.abonnement.type?.toUpperCase();
+    return type === 'GOLD' || type === 'PREMIUM';
   }
 
   /**

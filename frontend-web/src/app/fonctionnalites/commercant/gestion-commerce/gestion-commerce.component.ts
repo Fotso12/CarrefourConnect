@@ -38,7 +38,10 @@ export class GestionCommerceComponent implements OnInit {
 
   refresh(): void {
     const user = this.authService.getUser();
-    if (!user) return;
+    if (!user) {
+      this.loading = false;
+      return;
+    }
 
     this.loading = true;
     this.commerceService.getByCommercant(user.id).subscribe({
