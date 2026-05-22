@@ -69,7 +69,13 @@ export class DetailCommerceComponent implements OnInit {
 
       // 3. Charger les offres
       this.offreService.getByCommerce(id).subscribe(data => {
-        this.offres = data;
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); // Clean time comparison
+        this.offres = data.filter((o: any) => {
+          if (!o.dateFin) return true;
+          const dateFin = new Date(o.dateFin);
+          return dateFin >= now;
+        });
       });
 
       // 4. Charger les avis

@@ -78,99 +78,105 @@
     </div>
 
     <!-- Formules d'Abonnement Disponibles -->
-    <div class="mb-10">
+    <div class="mb-10" *ngIf="availablePlans && availablePlans.length > 0">
       <div class="mb-6">
         <h2 class="text-xl font-bold text-gray-800">Formules d'Abonnement Disponibles</h2>
         <p class="text-slate-400 text-xs font-semibold uppercase mt-1 tracking-wider">Consultez nos tarifs et boostez la visibilité de vos points de vente</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-        <!-- BASIQUE -->
-        <div class="bg-white border border-gray-150 rounded-xl p-8 flex flex-col shadow-sm hover:shadow-md transition-all duration-300">
-          <div class="text-center mb-6">
-            <div class="text-4xl mb-3">🥉</div>
-            <h3 class="text-lg font-bold text-orange-500 uppercase tracking-widest mb-4">Basique</h3>
-            <div class="flex items-baseline justify-center gap-1">
-              <span class="text-4xl font-bold text-[#0a355c]">0</span>
-              <span class="text-sm font-bold text-gray-400">CFA</span>
-            </div>
-            <p class="text-gray-400 text-xs mt-2">L'essentiel pour apparaître sur la carte.</p>
+        <div *ngFor="let plan of availablePlans" 
+             [ngClass]="{
+               'bg-white border border-gray-150 rounded-xl p-8 flex flex-col shadow-sm hover:shadow-md transition-all duration-300 relative': plan.type !== 'PREMIUM',
+               'bg-[#0a355c] border border-transparent rounded-xl p-8 flex flex-col shadow-md relative text-white': plan.type === 'PREMIUM'
+             }">
+          
+          <!-- Badge spécial -->
+          <div *ngIf="plan.type === 'PREMIUM'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 py-1 px-4 rounded-full text-[9px] font-bold text-white uppercase tracking-widest shadow-sm">
+            ✦ Plus Populaire
           </div>
-          <ul class="space-y-3 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-orange-400">📍</span> Référencement standard (Nom & GPS)
-            </li>
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-orange-400">🏷️</span> 1 catégorie de commerce
-            </li>
-            <li class="flex items-center gap-2 text-sm text-slate-350 line-through">
-              <span>🖼️</span> Jusqu'à 3 photos
-            </li>
-          </ul>
-          <button (click)="changerDePlan()" class="w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white text-center">
-            Choisir ce plan
-          </button>
-        </div>
+          <div *ngIf="plan.type === 'GOLD'" class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 py-1 px-4 rounded-full text-[9px] font-bold text-white uppercase tracking-widest shadow-sm">
+            👑 Meilleure Valeur
+          </div>
 
-        <!-- PREMIUM -->
-        <div class="bg-[#0a355c] border border-transparent rounded-xl p-8 flex flex-col shadow-md relative text-white">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 py-1 px-4 rounded-full text-[9px] font-bold text-white uppercase tracking-widest shadow-sm">✦ Plus Populaire</div>
-          <div class="text-center mb-6 mt-2">
-            <div class="text-4xl mb-3">🏅</div>
-            <h3 class="text-lg font-bold text-blue-300 uppercase tracking-widest mb-4">Premium</h3>
-            <div class="flex items-baseline justify-center gap-1">
-              <span class="text-4xl font-bold text-white">10 000</span>
-              <span class="text-sm font-bold text-blue-300">CFA</span>
+          <div class="text-center mb-6" [class.mt-2]="plan.type === 'PREMIUM' || plan.type === 'GOLD'">
+            <div class="text-4xl mb-3">
+              {{ plan.type === 'GOLD' ? '🏆' : (plan.type === 'PREMIUM' ? '🏅' : '🥉') }}
             </div>
-            <p class="text-blue-200 text-xs mt-2">Le meilleur rapport visibilité / prix.</p>
+            <h3 class="text-lg font-bold uppercase tracking-widest mb-4" 
+                [ngClass]="{
+                  'text-amber-500': plan.type === 'GOLD',
+                  'text-blue-300': plan.type === 'PREMIUM',
+                  'text-orange-500': plan.type === 'BASIQUE'
+                }">
+              {{ plan.nomAffiche }}
+            </h3>
+            <div class="flex items-baseline justify-center gap-1">
+              <span class="text-4xl font-bold" [class.text-white]="plan.type === 'PREMIUM'" [class.text-[#0a355c]]="plan.type !== 'PREMIUM'">
+                {{ plan.prixAffiche | number:'1.0-0' }}
+              </span>
+              <span class="text-sm font-bold" [class.text-blue-300]="plan.type === 'PREMIUM'" [class.text-gray-400]="plan.type !== 'PREMIUM'">
+                CFA
+              </span>
+            </div>
+            <p class="text-xs mt-2" [class.text-blue-200]="plan.type === 'PREMIUM'" [class.text-gray-400]="plan.type !== 'PREMIUM'">
+              {{ plan.descriptionPlan || 'Bénéficiez de la visibilité sur notre carte.' }}
+            </p>
           </div>
+
           <ul class="space-y-3 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-blue-100">
-              <span>📈</span> Mise en avant
+            <!-- Position & Référencement -->
+            <li class="flex items-center gap-2 text-sm" [ngClass]="{'text-blue-100': plan.type === 'PREMIUM', 'text-slate-650': plan.type !== 'PREMIUM'}">
+              <span [class.text-amber-500]="plan.type === 'GOLD'" [class.text-orange-400]="plan.type === 'BASIQUE'">
+                {{ plan.type === 'GOLD' ? '⭐' : '📍' }}
+              </span> 
+              {{ plan.type === 'GOLD' ? 'Position VIP & Badge' : (plan.type === 'PREMIUM' ? 'Mise en avant' : 'Référencement standard') }}
             </li>
-            <li class="flex items-center gap-2 text-sm text-blue-100">
-              <span>🖼️</span> Jusqu'à 10 photos / mois
+
+            <!-- Photos -->
+            <li class="flex items-center gap-2 text-sm" [ngClass]="{'text-blue-100': plan.type === 'PREMIUM', 'text-slate-650': plan.type !== 'PREMIUM'}">
+              <span [class.text-amber-500]="plan.type === 'GOLD'" [class.text-orange-400]="plan.type === 'BASIQUE'">
+                {{ plan.type === 'GOLD' ? '📸' : '🖼️' }}
+              </span> 
+              {{ plan.maxPhotos === -1 || plan.maxPhotos >= 100 ? 'Photos illimitées' : 'Jusqu\'à ' + plan.maxPhotos + ' photos' }}
             </li>
-            <li class="flex items-center gap-2 text-sm text-blue-100">
+
+            <!-- WhatsApp -->
+            <li class="flex items-center gap-2 text-sm" [ngClass]="{
+                  'text-blue-100': plan.type === 'PREMIUM', 
+                  'text-slate-650': plan.type !== 'PREMIUM' && plan.lienWhatsapp,
+                  'text-slate-350 line-through': plan.type !== 'PREMIUM' && !plan.lienWhatsapp
+                }">
               <span>💬</span> Lien WhatsApp direct
             </li>
-            <li class="flex items-center gap-2 text-sm text-blue-100">
+
+            <!-- Offres Spéciales -->
+            <li class="flex items-center gap-2 text-sm" [ngClass]="{
+                  'text-blue-100': plan.type === 'PREMIUM', 
+                  'text-slate-650': plan.type !== 'PREMIUM' && plan.offreSpecialeAutorisee,
+                  'text-slate-350 line-through': plan.type !== 'PREMIUM' && !plan.offreSpecialeAutorisee
+                }">
               <span>🏷️</span> Offres spéciales activées
             </li>
-          </ul>
-          <button (click)="changerDePlan()" class="w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all bg-white text-[#0a355c] hover:bg-blue-50 text-center">
-            Choisir ce plan
-          </button>
-        </div>
 
-        <!-- GOLD -->
-        <div class="bg-white border border-gray-150 rounded-xl p-8 flex flex-col shadow-sm hover:shadow-md transition-all duration-300 relative">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 py-1 px-4 rounded-full text-[9px] font-bold text-white uppercase tracking-widest shadow-sm">👑 Meilleure Valeur</div>
-          <div class="text-center mb-6 mt-2">
-            <div class="text-4xl mb-3">🏆</div>
-            <h3 class="text-lg font-bold text-amber-500 uppercase tracking-widest mb-4">Gold</h3>
-            <div class="flex items-baseline justify-center gap-1">
-              <span class="text-4xl font-bold text-[#0a355c]">25 000</span>
-              <span class="text-sm font-bold text-gray-400">CFA</span>
-            </div>
-            <p class="text-gray-400 text-xs mt-2">Performance maximale pour les pros.</p>
-          </div>
-          <ul class="space-y-3 mb-8 flex-1">
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-amber-500">⭐</span> Position VIP & Badge
-            </li>
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-amber-500">📊</span> Photos illimitées
-            </li>
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-amber-500">🔔</span> Notifications Push
-            </li>
-            <li class="flex items-center gap-2 text-sm text-slate-650">
-              <span class="text-amber-500">💬</span> WhatsApp + Offres spéciales
+            <!-- Notifications Push -->
+            <li class="flex items-center gap-2 text-sm" [ngClass]="{
+                  'text-blue-100': plan.type === 'PREMIUM', 
+                  'text-slate-650': plan.type !== 'PREMIUM' && plan.notificationPush,
+                  'text-slate-350 line-through': plan.type !== 'PREMIUM' && !plan.notificationPush
+                }">
+              <span>🔔</span> Notifications Push favoris
             </li>
           </ul>
-          <button (click)="changerDePlan()" class="w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white text-center">
-            Passer Gold
+
+          <button (click)="changerDePlan()" 
+                  [ngClass]="{
+                    'w-full py-3 rounded-lg font-bold text-xs uppercase tracking-widest transition-all text-center': true,
+                    'bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white': plan.type === 'BASIQUE',
+                    'bg-white text-[#0a355c] hover:bg-blue-50': plan.type === 'PREMIUM',
+                    'bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white': plan.type === 'GOLD'
+                  }">
+            {{ plan.type === 'GOLD' ? 'Passer Gold' : 'Choisir ce plan' }}
           </button>
         </div>
       </div>

@@ -64,6 +64,7 @@ export class AjouterCommerceComponent implements OnInit {
   // Offre Spéciale
   hasSpecialOffer = false;
   offreSpeciale = {
+    idoffre: '',
     titre: '',
     description: '',
     type: 'PROMOTION',
@@ -139,6 +140,7 @@ export class AjouterCommerceComponent implements OnInit {
               if (spec) {
                 this.hasSpecialOffer = true;
                 this.offreSpeciale = {
+                  idoffre: spec.idoffre || spec.id || '',
                   titre: spec.titre,
                   description: spec.description,
                   type: spec.type,
@@ -442,21 +444,48 @@ export class AjouterCommerceComponent implements OnInit {
           });
         }
         
-        // Traitement de l'Offre Spéciale
-        if (this.hasSpecialOffer && commerceId) {
-          const offrePayload = {
-            idcommerce: commerceId,
-            titre: this.offreSpeciale.titre,
-            description: this.offreSpeciale.description,
-            type: this.offreSpeciale.type,
-            reduction: this.offreSpeciale.reduction,
-            dateDebut: this.offreSpeciale.dateDebut ? this.offreSpeciale.dateDebut + 'T00:00:00' : null,
-            dateFin: this.offreSpeciale.dateFin ? this.offreSpeciale.dateFin + 'T23:59:59' : null
-          };
-          this.offreService.create(offrePayload).subscribe({
-            next: () => console.log("Offre spéciale créée"),
-            error: (e) => console.error("Erreur création offre:", e)
-          });
+        // Traitement de l'Offre Spéciale (Création, Modification ou Suppression)
+        if (commerceId) {
+          const hasExistingOffer = !!this.offreSpeciale.idoffre;
+          
+          if (this.hasSpecialOffer && this.droitsAbonnement.offreSpecialeAutorisee) {
+            const offrePayload: any = {
+              idcommerce: commerceId,
+              titre: this.offreSpeciale.titre,
+              description: this.offreSpeciale.description,
+              type: this.offreSpeciale.type,
+              reduction: this.offreSpeciale.reduction,
+              dateDebut: this.offreSpeciale.dateDebut ? this.offreSpeciale.dateDebut + 'T00:00:00' : null,
+              dateFin: this.offreSpeciale.dateFin ? this.offreSpeciale.dateFin + 'T23:59:59' : null
+            };
+            
+            if (hasExistingOffer) {
+              // Mettre à jour l'offre existante
+              offrePayload.idoffre = this.offreSpeciale.idoffre;
+              this.offreService.update(this.offreSpeciale.idoffre, offrePayload).subscribe({
+                next: () => console.log("Offre spéciale mise à jour avec succès"),
+                error: (e) => console.error("Erreur de mise à jour de l'offre:", e)
+              });
+            } else {
+              // Créer une nouvelle offre
+              this.offreService.create(offrePayload).subscribe({
+                next: (newOffre) => {
+                  console.log("Offre spéciale créée avec succès");
+                  if (newOffre) this.offreSpeciale.idoffre = newOffre.idoffre || newOffre.id;
+                },
+                error: (e) => console.error("Erreur de création de l'offre:", e)
+              });
+            }
+          } else if (hasExistingOffer) {
+            // L'utilisateur a désactivé ou retiré l'offre spéciale : suppression
+            this.offreService.delete(this.offreSpeciale.idoffre).subscribe({
+              next: () => {
+                console.log("Offre spéciale supprimée avec succès");
+                this.offreSpeciale.idoffre = '';
+              },
+              error: (e) => console.error("Erreur lors de la suppression de l'offre:", e)
+            });
+          }
         }
 
         this.showSuccessModal = true;

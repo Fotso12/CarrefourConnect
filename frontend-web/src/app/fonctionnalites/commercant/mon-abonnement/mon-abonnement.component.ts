@@ -19,6 +19,7 @@ import { forkJoin } from 'rxjs';
 export class MonAbonnementComponent implements OnInit {
   abonnements: any[] = [];
   commerces: any[] = [];
+  availablePlans: any[] = [];
   loading = true;
   error = '';
 
@@ -52,14 +53,33 @@ export class MonAbonnementComponent implements OnInit {
 
     this.loading = true;
     
-    // Charger l'historique des abonnements et la liste des commerces en parallèle
+    // Charger l'historique des abonnements, les commerces et tous les plans de référence en parallèle
     forkJoin({
       history: this.abonnementService.getHistoryByCommercant(userId),
-      commerces: this.commerceService.getByCommercant(userId)
+      commerces: this.commerceService.getByCommercant(userId),
+      allPlans: this.abonnementService.getAll()
     }).subscribe({
       next: (result) => {
         this.abonnements = result.history;
         this.commerces = result.commerces;
+
+        // Filtrer et dédupliquer les abonnements de référence (REF-...)
+        const seenTypes = new Set<string>();
+        this.availablePlans = result.allPlans
+          .filter(ab => ab.reference && ab.reference.startsWith('REF-'))
+          .filter(ab => {
+            const key = (ab.type || '').toUpperCase();
+            if (seenTypes.has(key)) return false;
+            seenTypes.add(key);
+            return true;
+          })
+          .map(ab => ({
+            ...ab,
+            nomAffiche: ab.nomAffiche || ab.type,
+            prixAffiche: ab.montant != null ? Number(ab.montant) : 0
+          }))
+          .sort((a, b) => a.prixAffiche - b.prixAffiche); // Basique < Premium < Gold
+
         this.calculerStats();
         this.loading = false;
       },
