@@ -18,7 +18,9 @@ import java.util.Date;
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${carrefourconnect.app.jwtSecret:carrefourConnectSecretKeyMustBeVeryLongAndSecureForHS512Algorithm}")
+    // Aucune valeur par défaut : sans clé fournie (variable JWT_SECRET), l'application
+    // refuse de démarrer au lieu d'utiliser une clé connue de tous.
+    @Value("${carrefourconnect.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${carrefourconnect.app.jwtExpirationMs:86400000}")
