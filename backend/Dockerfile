@@ -1,5 +1,5 @@
 # Étape 1 : Phase de construction (build)
-FROM eclipse-temurin:17-jdk-focal AS build
+FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 
 # Copie de l'exécutable Maven et du fichier pom.xml
@@ -15,7 +15,7 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # Étape 2 : Phase d'exécution (runtime)
-FROM eclipse-temurin:17-jre-focal
+FROM eclipse-temurin:25-jre
 WORKDIR /app
 
 # Copie de l'artefact construit depuis la phase build
