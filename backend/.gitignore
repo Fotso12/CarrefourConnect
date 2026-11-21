@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Données d'exécution (jamais versionnées) ###
+# Journaux écrits par logback et fichiers envoyés par les utilisateurs.
+# Déjà couverts par le .gitignore racine, répétés ici pour être explicites.
+logs/
+uploads/
+.env
