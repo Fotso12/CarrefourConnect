@@ -2,7 +2,7 @@ package com.carrefourconnect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import com.carrefourconnect.services.interfaces.NotificationService;
 import org.springframework.test.context.ActiveProfiles;
@@ -19,10 +19,10 @@ import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 @DisabledIfEnvironmentVariable(named = "GITHUB_ACTIONS", matches = "true")
 class CarrefourconnectApplicationTests {
 
-	@MockBean
+	@MockitoBean
 	private JavaMailSender javaMailSender;
 
-	@MockBean
+	@MockitoBean
 	private NotificationService notificationService;
 
 	@Test
