@@ -1,0 +1,13 @@
+# ============================================================
+# Namespace : un "dossier" logique dans le cluster.
+# Toutes les ressources de l'application y vivent : on peut les lister
+# (kubectl get all -n carrefourconnect), leur donner des droits ou des quotas,
+# et tout supprimer d'un coup (kubectl delete namespace carrefourconnect)
+# sans toucher aux composants système (namespace kube-system).
+# ============================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: carrefourconnect
+  labels:
+    app.kubernetes.io/part-of: carrefourconnect

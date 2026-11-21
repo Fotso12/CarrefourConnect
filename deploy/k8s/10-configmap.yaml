@@ -1,0 +1,36 @@
+# ============================================================
+# ConfigMap : la configuration NON sensible, sous forme de paires clé/valeur.
+# Elle est injectée comme variables d'environnement dans les conteneurs
+# (envFrom dans les Deployments). Changer une valeur ici ne demande pas de
+# reconstruire l'image : on applique le fichier puis on redémarre les pods
+# (kubectl rollout restart deployment/backend -n carrefourconnect).
+# Tout ce qui est secret (mots de passe, clés) va dans le Secret, PAS ici :
+# une ConfigMap est lisible en clair par quiconque a accès au namespace.
+# ============================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: carrefourconnect-config
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/part-of: carrefourconnect
+data:
+  # --- Base de données ---
+  POSTGRES_DB: carrefourconnect
+  POSTGRES_USER: carrefourconnect
+  # "postgis" = nom du Service headless de la base : CoreDNS le traduit en
+  # adresse IP du pod postgis-0. Aucune IP n'est jamais écrite en dur.
+  SPRING_DATASOURCE_URL: jdbc:postgresql://postgis:5432/carrefourconnect
+
+  # --- Email (Mailjet) : partie non secrète ---
+  MAILJET_SMTP_HOST: smtp.mailjet.com
+  MAILJET_SMTP_PORT: "587"            # les valeurs d'une ConfigMap sont toujours des chaînes
+  MAILJET_FROM_EMAIL: no-reply@example.com
+  ADMIN_EMAIL: admin@example.com
+
+  # --- Cloudinary : nom du compte (non secret) ---
+  CLOUDINARY_CLOUD_NAME: factice
+
+  # --- Application ---
+  # URL publique de l'application (utilisée pour construire les liens et les URL d'images)
+  APP_BASE_URL: http://localhost
