@@ -83,6 +83,9 @@ public class SecurityConfig {
                                 .requestMatchers("/api/medias", "/api/medias/**").permitAll()
                                 .requestMatchers("/api/utilisateurs/inscription/**").permitAll()
                                 .requestMatchers("/uploads/**", "/swagger-ui/**", "/v3/api-docs/**", "/ws/**", "/error").permitAll()
+                                // Sondes Kubernetes et scraping Prometheus : appelés sans jeton JWT.
+                                // Seuls health et prometheus sont exposés (voir application.properties).
+                                .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/health/**", "/actuator/prometheus").permitAll()
                                 .anyRequest().authenticated()
                 );
 
