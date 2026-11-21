@@ -13,32 +13,49 @@
         </layout>
     </appender>
 
-    <!-- Configuration du fichier avec rotation journalière -->
-    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
-        </encoder>
+    <!-- ===== Profil "container" (Docker, Kubernetes) =====
+         En conteneur, on écrit UNIQUEMENT sur la sortie standard : c'est Docker/Kubernetes
+         qui collecte les logs (docker logs, kubectl logs). Écrire dans un fichier à
+         l'intérieur du conteneur remplirait son disque et les logs disparaîtraient
+         avec lui. Activé par SPRING_PROFILES_ACTIVE=container (défini dans le Dockerfile). -->
+    <springProfile name="container">
+        <root level="INFO">
+            <appender-ref ref="Console" />
+        </root>
+        <logger name="com.carrefourconnect" level="DEBUG" additivity="false">
+            <appender-ref ref="Console" />
+        </logger>
+    </springProfile>
 
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- Création d'un fichier par jour -->
-            <fileNamePattern>${LOGS}/carrefourconnect-%d{yyyy-MM-dd}.log</fileNamePattern>
-            <!-- Garder 30 jours d'historique -->
-            <maxHistory>30</maxHistory>
-            <!-- Limite totale de taille des archives -->
-            <totalSizeCap>3GB</totalSizeCap>
-        </rollingPolicy>
-    </appender>
+    <!-- ===== Hors conteneur (poste de développement) : console + fichiers journaliers ===== -->
+    <springProfile name="!container">
+        <!-- Configuration du fichier avec rotation journalière -->
+        <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </encoder>
 
-    <!-- Niveau de log pour l'application -->
-    <root level="INFO">
-        <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
-    </root>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- Création d'un fichier par jour -->
+                <fileNamePattern>${LOGS}/carrefourconnect-%d{yyyy-MM-dd}.log</fileNamePattern>
+                <!-- Garder 30 jours d'historique -->
+                <maxHistory>30</maxHistory>
+                <!-- Limite totale de taille des archives -->
+                <totalSizeCap>3GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
 
-    <!-- Log spécifique pour le package com.carrefourconnect -->
-    <logger name="com.carrefourconnect" level="DEBUG" additivity="false">
-        <appender-ref ref="RollingFile" />
-        <appender-ref ref="Console" />
-    </logger>
+        <!-- Niveau de log pour l'application -->
+        <root level="INFO">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="Console" />
+        </root>
+
+        <!-- Log spécifique pour le package com.carrefourconnect -->
+        <logger name="com.carrefourconnect" level="DEBUG" additivity="false">
+            <appender-ref ref="RollingFile" />
+            <appender-ref ref="Console" />
+        </logger>
+    </springProfile>
 
 </configuration>

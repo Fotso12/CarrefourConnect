@@ -1,11 +1,21 @@
+# Fichiers exclus du "contexte de build" envoyé à Docker :
+# build plus rapide, et aucun secret ni fichier local ne peut finir dans l'image.
 target/
 mvnw.cmd
 .git/
 .gitignore
+.github/
 *.md
 .gemini/
+.idea/
+.vscode/
 Dockerfile
 .dockerignore
 logs/
+uploads/
 bin/
 obj/
+# Secrets locaux : ne doivent JAMAIS entrer dans une image
+.env
+.env.*
+!.env.example
