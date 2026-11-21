@@ -6,9 +6,9 @@ import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 /**
- * Service pour la gestion des notifications (Port 8084)
+ * Service pour la gestion des notifications (URL de base : environment.apiUrl)
  */
-const API_URL = 'http://localhost:8084/api/notifications';
+const API_URL = `${environment.apiUrl}/api/notifications`;
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,8 @@ export class NotificationService {
     if (!userId) return;
     if (this.stompClient && this.stompClient.connected) return;
 
-    const brokerURL = (environment.wsUrl || 'http://localhost:8084') + '/ws';
+    // wsUrl vide en production : SockJS se connecte alors à /ws sur le même domaine
+    const brokerURL = `${environment.wsUrl}/ws`;
     this.stompClient = new Client({
       webSocketFactory: () => new SockJS(brokerURL)
     });
