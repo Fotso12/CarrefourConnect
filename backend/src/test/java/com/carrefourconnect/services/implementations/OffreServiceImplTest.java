@@ -1,9 +1,12 @@
 package com.carrefourconnect.testservices;
 
 import com.carrefourconnect.dtos.OffreDTO;
+import com.carrefourconnect.entities.Commerce;
 import com.carrefourconnect.entities.Offre;
 import com.carrefourconnect.mappers.OffreMapper;
+import com.carrefourconnect.repositories.CommerceRepository;
 import com.carrefourconnect.repositories.OffreRepository;
+import com.carrefourconnect.services.implementations.FcmService;
 import com.carrefourconnect.services.implementations.OffreServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +27,11 @@ class OffreServiceImplTest {
     @Mock
     private OffreRepository repository;
     @Mock
+    private CommerceRepository commerceRepository;
+    @Mock
     private OffreMapper mapper;
+    @Mock
+    private FcmService fcmService;
 
     @InjectMocks
     private OffreServiceImpl service;
@@ -58,9 +65,21 @@ class OffreServiceImplTest {
 
     @Test
     void testSave() {
+        // Depuis l'ajout de la règle métier, une offre doit être rattachée à un commerce existant
+        UUID idCommerce = UUID.randomUUID();
+        Commerce commerce = new Commerce();
+        commerce.setIdcommerce(idCommerce);
+        dto.setIdcommerce(idCommerce);
+        when(commerceRepository.findById(idCommerce)).thenReturn(Optional.of(commerce));
         when(mapper.toEntity(dto)).thenReturn(entity);
         when(repository.save(entity)).thenReturn(entity);
         when(mapper.toDto(entity)).thenReturn(dto);
         assertNotNull(service.save(dto));
+    }
+
+    @Test
+    void testSaveSansCommerceRefuse() {
+        when(mapper.toEntity(dto)).thenReturn(entity);
+        assertThrows(IllegalArgumentException.class, () -> service.save(dto));
     }
 }
