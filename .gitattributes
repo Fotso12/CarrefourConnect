@@ -1,0 +1,2 @@
+# Scripts shell : toujours en fins de ligne LF (sinon erreur /bin/bash^M sous Linux et dans la CI)
+*.sh text eol=lf

@@ -32,7 +32,10 @@ Ce fichier récapitule tous les outils nécessaires au déploiement de Carrefour
 | Angular CLI | 21.x | dépendance du projet (`npx ng`), pas d'installation globale | 0 | `npx ng version` |
 | Docker Desktop | 29.9.3 (moteur WSL2) | déjà présent (sinon `winget install --id Docker.DockerDesktop -e`) | 1 | `docker run --rm hello-world` |
 | Docker Compose | v5.7.0 | inclus dans Docker Desktop (`docker compose`, sans tiret) | 1 | `docker compose version` |
-| kubectl, k3d, Helm | *à installer à l'étape 2* | — | 2 | — |
+| kubectl | 1.36.1 (client) | fourni par Docker Desktop (sinon `winget install --id Kubernetes.kubectl -e`) | 2 | `kubectl version --client` |
+| k3d | 5.9.0 | `winget install --id k3d.k3d -e --source winget` | 2 | `k3d version` |
+| Helm | 4.3.2 | `winget install --id Helm.Helm -e --source winget` | 2 | `helm version` |
+| k3s (dans le cluster) | 1.36.6 (figé dans `cluster-up.ps1`) | image `rancher/k3s:v1.36.6-k3s1` | 2 | `kubectl get nodes` |
 
 ---
 
@@ -205,6 +208,46 @@ Voir le [README](../README.md#lancer-lapplication-en-local-avec-docker-compose).
 
 ---
 
+## Étape 2 : kubectl, k3d, Helm et cluster local
+
+### 1. Installer et vérifier
+
+```powershell
+winget install --id k3d.k3d -e --source winget
+winget install --id Helm.Helm -e --source winget
+# fermer / rouvrir PowerShell
+k3d version                 # attendu : k3d version v5.9.0
+helm version                # attendu : Version:"v4.3.2"
+kubectl version --client    # attendu : Client Version: v1.36.1 (celui de Docker Desktop)
+where.exe kubectl           # un seul kubectl, celui de Docker Desktop
+```
+
+> kubectl et le cluster doivent avoir au plus **une version mineure d'écart** (politique de Kubernetes) : on fige donc k3s en 1.36 pour un kubectl 1.36.
+
+### 2. Créer, arrêter, supprimer le cluster
+
+```powershell
+.\deploy\scripts\cluster-up.ps1               # crée (ou redémarre) le cluster : ~1 minute
+kubectl get nodes                             # attendu : 2 nœuds "Ready" (server-0 et agent-0)
+.\deploy\scripts\cluster-down.ps1 -StopOnly   # arrête les nœuds, garde les données (libère la RAM)
+.\deploy\scripts\cluster-down.ps1             # supprime tout le cluster
+```
+
+Options de `cluster-up.ps1` : `-Agents 0` (un seul nœud, moins de RAM), `-HttpPort 8081` (si le port 80 est pris), `-K3sImage rancher/k3s:<version>`.
+
+Mémoire constatée cluster vide : nœud server ~680 Mo, nœud agent ~180 Mo, load balancer ~9 Mo.
+
+### 3. Ce que k3s installe tout seul (namespace `kube-system`)
+
+| Composant | Rôle |
+|---|---|
+| Traefik | Ingress Controller : reçoit le trafic de http://localhost (404 tant qu'aucun Ingress n'existe) |
+| CoreDNS | DNS interne : un pod joint un Service par son nom (`backend`, `postgis`...) |
+| metrics-server | CPU/RAM des pods (`kubectl top`), nécessaire au HPA |
+| local-path-provisioner | Crée les volumes persistants (PVC) sur le disque du nœud |
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -219,4 +262,8 @@ Voir le [README](../README.md#lancer-lapplication-en-local-avec-docker-compose).
 | `docker info` affiche 12 CPU / 16 Go | `.wslconfig` pas relu | `wsl --shutdown` puis redémarrer Docker Desktop |
 | `required variable JWT_SECRET is missing a value` au `docker compose up` | `deploy/.env` absent ou incomplet | `Copy-Item deploy\.env.example deploy\.env` puis le remplir |
 | `bind: address already in use` sur 8080 | Un autre programme utilise le port | `Get-NetTCPConnection -LocalPort 8080` pour le trouver, ou changer `"8080:80"` dans le compose |
+| `k3d` / `helm` « n'est pas reconnu » juste après winget | PATH lu à l'ouverture du terminal | Rouvrir PowerShell (winget l'indique : « redémarrez votre interpréteur de commandes ») |
+| `Le port 80 est déjà utilisé` (cluster-up) | IIS, Skype, un autre serveur web... | `Get-NetTCPConnection -LocalPort 80 -State Listen` pour trouver le processus, ou `cluster-up.ps1 -HttpPort 8081` |
+| `http://localhost` répond 404 | Normal tant qu'aucun Ingress n'est déployé : c'est Traefik qui répond | — |
+| `The connection to the server ... was refused` (kubectl) | Cluster arrêté ou mauvais contexte | `.\deploy\scripts\cluster-up.ps1`, puis `kubectl config current-context` (attendu : `k3d-carrefourconnect`) |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |
