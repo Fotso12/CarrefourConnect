@@ -26,8 +26,10 @@ Ce fichier récapitule tous les outils nécessaires au déploiement de Carrefour
 | Git | 2.56.1 | `winget install --id Git.Git -e --source winget` | Préliminaire | `git --version` |
 | GitHub CLI (`gh`) | 2.105.0 | `winget install --id GitHub.cli -e` | Préliminaire | `gh --version` |
 | VS Code | 1.147.0 | déjà présent | Préliminaire | `code --version` |
-| JDK | *à valider à l'étape 0* | — | 0 | `java -version` |
-| Node.js / npm | *à valider à l'étape 0* | — | 0 | `node --version` |
+| JDK | Oracle JDK 25 (LTS) | déjà présent (`JAVA_HOME=C:\Program Files\Java\jdk-25`) | 0 | `java -version` |
+| Maven | 3.9.12 | wrapper du projet (`backend\mvnw.cmd`), rien à installer | 0 | `.\mvnw.cmd -v` |
+| Node.js / npm | 24.22.3 / 11.19.1 | `winget install --id OpenJS.NodeJS.24 -e --source winget` | 0 | `node --version` |
+| Angular CLI | 21.x | dépendance du projet (`npx ng`), pas d'installation globale | 0 | `npx ng version` |
 | Docker Desktop | *à valider à l'étape 1* | — | 1 | `docker run hello-world` |
 | kubectl, k3d, Helm | *à installer à l'étape 2* | — | 2 | — |
 
@@ -100,6 +102,65 @@ git push -u origin feat/kubernetes    # attendu : branch 'feat/kubernetes' set u
 
 ---
 
+## Étape 0 : JDK, Maven, Node.js
+
+### Versions compatibles (vérifiées dans la documentation officielle)
+
+| Composant | Exigence officielle | Source |
+|---|---|---|
+| Spring Boot 4.2.0 | Java 17 à 27, Maven 3.6.3+ | docs.spring.io/spring-boot/system-requirements.html |
+| Angular 21 | Node `^20.19.0 \|\| ^22.12.0 \|\| ^24.0.0`, TypeScript 5.9 | angular.dev/reference/versions |
+
+> **Node 26 n'est PAS supporté par Angular 21** (il l'est par Angular 22). On utilise Node 24, la même version que l'image Docker `node:24-alpine` et que la CI.
+
+### 1. JDK 25
+
+```powershell
+java -version                       # attendu : java version "25" ... LTS
+$env:JAVA_HOME                      # attendu : C:\Program Files\Java\jdk-25
+```
+
+S'il fallait le réinstaller, la distribution Temurin (la même que dans les images Docker) :
+
+```powershell
+winget install --id EclipseAdoptium.Temurin.25.JDK -e --source winget
+```
+
+Le JDK 17 (`C:\Program Files\Java\jdk-17`) n'a servi qu'à mesurer la base de référence avant migration. Pour lancer une commande ponctuellement avec un autre JDK, sans toucher à la configuration globale :
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Java\jdk-17'; $env:Path="$env:JAVA_HOME\bin;$env:Path"
+```
+
+### 2. Maven (via le wrapper, rien à installer)
+
+```powershell
+cd C:\dev\CarrefourConnect\backend
+.\mvnw.cmd -v                                         # télécharge Maven 3.9.12 au premier lancement
+.\mvnw.cmd test "-Dspring.profiles.active=test"       # tests backend (H2 en mémoire)
+```
+
+### 3. Node.js 24
+
+```powershell
+node --version                                        # si v26.x : désinstaller d'abord
+winget uninstall --id OpenJS.NodeJS.LTS -e            # Node 26 occupe le même dossier que Node 24
+winget install --id OpenJS.NodeJS.24 -e --source winget
+# fermer / rouvrir PowerShell
+node --version                                        # attendu : v24.22.x
+```
+
+### 4. Build et tests du frontend
+
+```powershell
+cd C:\dev\CarrefourConnect\frontend-web
+npm ci --legacy-peer-deps            # installe exactement les versions de package-lock.json
+npx ng build                         # build de production -> dist\carrefourconnect-web\browser
+npx ng test --watch=false            # tests unitaires (Vitest)
+```
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -108,3 +169,6 @@ git push -u origin feat/kubernetes    # attendu : branch 'feat/kubernetes' set u
 | `git --version` affiche toujours l'ancienne version | Même problème de PATH, ou deux Git installés | Rouvrir le terminal ; `where.exe git` pour voir lequel passe en premier ; désinstaller l'ancien |
 | `fatal: a branch named 'feat/kubernetes' already exists` | La branche avait déjà été créée | Rien à faire : `git switch feat/kubernetes` pour s'y placer |
 | `Permission denied (publickey)` avec `ssh -T` | Clé SSH absente de GitHub | Copier `id_ed25519.pub` dans GitHub > Settings > SSH and GPG keys |
+| `Fatal error compiling: java.lang.ExceptionInInitializerError: com.sun.tools.javac.code.TypeTag :: UNKNOWN` | Ancienne version de Lombok (celle de Spring Boot 3.4) incompatible avec le compilateur de Java 25 | Compiler avec le JDK 17, ou mettre à jour Lombok (fait par la migration vers Spring Boot 4.2) |
+| `'mvnw.cmd' n'est pas reconnu` | Commande lancée hors du dossier `backend`, ou sans `.\` devant | `cd backend` puis `.\mvnw.cmd ...` |
+| `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |
