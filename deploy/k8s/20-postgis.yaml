@@ -1,0 +1,117 @@
+# ============================================================
+# Base de données PostgreSQL + PostGIS
+#   - Service headless : donne un nom DNS stable ("postgis", "postgis-0.postgis")
+#   - StatefulSet      : un pod à identité fixe (postgis-0) avec SON propre disque
+# ============================================================
+
+# ---------- Service headless ----------
+# "clusterIP: None" = pas d'IP virtuelle ni de répartition de charge : le nom DNS
+# "postgis" renvoie directement l'IP du pod. C'est ce qu'exige un StatefulSet
+# (champ serviceName) pour donner à chaque pod un nom DNS stable : postgis-0.postgis.
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgis
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  clusterIP: None
+  selector:
+    app.kubernetes.io/name: postgis       # envoie vers les pods portant ce label
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+---
+# ---------- StatefulSet ----------
+# Différence avec un Deployment : les pods ont un nom FIXE (postgis-0, et non
+# postgis-7f9c-xk2p), sont créés et supprimés dans l'ordre, et chacun garde le
+# MÊME volume persistant même s'il est recréé sur un autre nœud ou après un crash.
+# Indispensable pour une base de données.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgis
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: postgis
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  serviceName: postgis          # le Service headless ci-dessus
+  replicas: 1                   # PostgreSQL ne se réplique pas en ajoutant des pods :
+                                # plusieurs réplicas demanderaient un opérateur (CloudNativePG...)
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: postgis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: postgis
+        app.kubernetes.io/component: database
+        app.kubernetes.io/part-of: carrefourconnect
+    spec:
+      terminationGracePeriodSeconds: 60   # laisse PostgreSQL écrire ses données avant l'arrêt
+      containers:
+        - name: postgis
+          image: postgis/postgis:17-3.7-alpine
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef: { name: carrefourconnect-config, key: POSTGRES_DB }
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef: { name: carrefourconnect-config, key: POSTGRES_USER }
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: POSTGRES_PASSWORD }
+            # Les données dans un SOUS-dossier du volume : PostgreSQL refuse un
+            # dossier de données non vide (fichiers créés par le système de stockage).
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          # Ressources : "requests" = ce que Kubernetes RÉSERVE sur le nœud pour placer
+          # le pod ; "limits" = le maximum autorisé (au-delà de la mémoire : pod tué).
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }   # 100m = 0,1 cœur
+            limits:   { cpu: 500m, memory: 512Mi }
+          # Sondes : pg_isready vérifie que PostgreSQL accepte des connexions.
+          startupProbe:          # premier démarrage : initialisation de la base (~10-30 s)
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 5
+            failureThreshold: 30            # 30 x 5 s = 2 min 30 max
+          readinessProbe:        # prêt à recevoir des connexions ?
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:         # bloqué ? -> redémarrage
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6             # 2 min d'échecs avant de redémarrer la base
+  # volumeClaimTemplates : le StatefulSet crée UN PersistentVolumeClaim PAR pod
+  # (ici "data-postgis-0"). Ce PVC survit à la suppression du pod ET du StatefulSet :
+  # les données ne sont perdues que si on supprime le PVC lui-même (ou le cluster).
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          app.kubernetes.io/name: postgis
+          app.kubernetes.io/part-of: carrefourconnect
+      spec:
+        accessModes: ["ReadWriteOnce"]      # monté en lecture/écriture par UN seul nœud
+        storageClassName: local-path        # fourni par k3s : un dossier sur le disque du nœud
+        resources:
+          requests:
+            storage: 2Gi

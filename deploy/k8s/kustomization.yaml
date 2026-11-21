@@ -1,0 +1,17 @@
+# ============================================================
+# Kustomize (intégré à kubectl) : liste les manifests à appliquer ensemble.
+#   kubectl apply -k deploy/k8s        # crée ou met à jour tout
+#   kubectl delete -k deploy/k8s       # supprime tout (sauf le Secret et les PVC de PostGIS)
+#
+# secret.example.yaml n'est PAS listé : le vrai Secret (secret.yaml, ignoré par Git)
+# s'applique à part, une fois, avec : kubectl apply -f deploy/k8s/secret.yaml
+# ============================================================
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - 00-namespace.yaml
+  - 10-configmap.yaml
+  - 20-postgis.yaml
+  - 30-backend.yaml
+  - 40-frontend.yaml
+  - 50-ingress.yaml

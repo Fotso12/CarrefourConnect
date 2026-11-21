@@ -248,6 +248,14 @@ Mémoire constatée cluster vide : nœud server ~680 Mo, nœud agent ~180 Mo, lo
 
 ---
 
+## Étape 3 : manifests Kubernetes
+
+Aucun nouvel outil. Commandes de déploiement, exercices et diagnostic : [deploy/k8s/README.md](k8s/README.md).
+
+Mémoire constatée avec l'application déployée : backend ~380 Mo par pod (x2), PostGIS ~75 Mo, frontend ~6 Mo, plus ~870 Mo pour le cluster lui-même.
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -266,4 +274,7 @@ Mémoire constatée cluster vide : nœud server ~680 Mo, nœud agent ~180 Mo, lo
 | `Le port 80 est déjà utilisé` (cluster-up) | IIS, Skype, un autre serveur web... | `Get-NetTCPConnection -LocalPort 80 -State Listen` pour trouver le processus, ou `cluster-up.ps1 -HttpPort 8081` |
 | `http://localhost` répond 404 | Normal tant qu'aucun Ingress n'est déployé : c'est Traefik qui répond | — |
 | `The connection to the server ... was refused` (kubectl) | Cluster arrêté ou mauvais contexte | `.\deploy\scripts\cluster-up.ps1`, puis `kubectl config current-context` (attendu : `k3d-carrefourconnect`) |
+| Pods backend bloqués en `Init:0/1`, logs « PostGIS pas encore prêt... » alors que postgis-0 est prêt | `pg_isready` lancé avec l'UID 1001, inconnu dans l'image PostGIS : sans `-U`, il abandonne (code 3 « no attempt ») | Passer `-U "$POSTGRES_USER"` à `pg_isready` (corrigé dans `30-backend.yaml`) |
+| `ErrImagePull` / `ImagePullBackOff` sur les pods | Image locale non importée dans le cluster | `k3d image import <image>:<tag> -c carrefourconnect` |
+| `kubectl apply --dry-run=server` : `namespaces "carrefourconnect" not found` | Un dry-run ne crée rien, donc le namespace n'existe pas pour les autres objets | Créer d'abord le namespace (`kubectl apply -f deploy/k8s/00-namespace.yaml`) |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |

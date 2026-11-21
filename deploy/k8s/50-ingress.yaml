@@ -1,0 +1,55 @@
+# ============================================================
+# Ingress : les règles de routage HTTP de l'extérieur vers les Services.
+# C'est Traefik (Ingress Controller fourni par k3s) qui les applique ; il reçoit le
+# trafic de http://localhost via le load balancer de k3d (port 80, voir cluster-up).
+#
+#   http://localhost/api/...      -> Service backend:8084  (API REST)
+#   http://localhost/ws/...       -> Service backend:8084  (WebSocket STOMP/SockJS)
+#   http://localhost/uploads/...  -> Service backend:8084  (images envoyées)
+#   http://localhost/...          -> Service frontend:80   (application Angular)
+#
+# /actuator n'est volontairement PAS routé : les sondes (kubelet) et Prometheus
+# parlent directement aux pods, à l'intérieur du cluster.
+# ============================================================
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: carrefourconnect
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  ingressClassName: traefik
+  rules:
+    # Pas de "host:" : la règle s'applique à tous les noms (localhost, 127.0.0.1, IP du PC...).
+    - http:
+        paths:
+          # pathType Prefix : /api correspond à /api, /api/ et /api/commerces/12,
+          # mais PAS à /apiculture (correspondance par segments de chemin).
+          # La règle la plus longue gagne : "/" ne sert que si aucune autre ne correspond.
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port: { name: http }
+          # Traefik transmet nativement les en-têtes "Upgrade: websocket" et
+          # "Connection: Upgrade" : aucune annotation nécessaire pour la WebSocket.
+          - path: /ws
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port: { name: http }
+          - path: /uploads
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port: { name: http }
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port: { name: http }
