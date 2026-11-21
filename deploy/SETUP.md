@@ -30,7 +30,8 @@ Ce fichier récapitule tous les outils nécessaires au déploiement de Carrefour
 | Maven | 3.9.12 | wrapper du projet (`backend\mvnw.cmd`), rien à installer | 0 | `.\mvnw.cmd -v` |
 | Node.js / npm | 24.22.3 / 11.19.1 | `winget install --id OpenJS.NodeJS.24 -e --source winget` | 0 | `node --version` |
 | Angular CLI | 21.x | dépendance du projet (`npx ng`), pas d'installation globale | 0 | `npx ng version` |
-| Docker Desktop | *à valider à l'étape 1* | — | 1 | `docker run hello-world` |
+| Docker Desktop | 29.9.3 (moteur WSL2) | déjà présent (sinon `winget install --id Docker.DockerDesktop -e`) | 1 | `docker run --rm hello-world` |
+| Docker Compose | v5.7.0 | inclus dans Docker Desktop (`docker compose`, sans tiret) | 1 | `docker compose version` |
 | kubectl, k3d, Helm | *à installer à l'étape 2* | — | 2 | — |
 
 ---
@@ -161,6 +162,49 @@ npx ng test --watch=false            # tests unitaires (Vitest)
 
 ---
 
+## Étape 1 : Docker Desktop et Docker Compose
+
+### 1. Mémoire et CPU alloués à WSL2 (donc à Docker)
+
+Avec le moteur WSL2, Docker Desktop n'a pas de réglage de mémoire : c'est le fichier `%USERPROFILE%\.wslconfig` qui décide.
+
+```powershell
+notepad $env:USERPROFILE\.wslconfig
+```
+
+```ini
+[wsl2]
+memory=8GB          # la moitié des 16 Go du PC
+processors=6        # 6 threads sur 12
+swap=4GB
+
+[experimental]
+autoMemoryReclaim=gradual   # rend à Windows la mémoire inutilisée
+```
+
+```powershell
+wsl --shutdown      # obligatoire pour relire le fichier, puis redémarrer Docker Desktop
+```
+
+### 2. Démarrer et vérifier Docker
+
+Lancer **Docker Desktop** (menu Démarrer), attendre « Engine running », puis :
+
+```powershell
+docker info --format "{{.ServerVersion}} | {{.OperatingSystem}} | {{.NCPU}} CPU | {{.MemTotal}} octets"
+# attendu : 29.9.3 | Docker Desktop | 6 CPU | ~8 300 000 000 octets
+docker run --rm hello-world          # attendu : "Hello from Docker!"
+docker compose version               # attendu : Docker Compose version v5.7.0
+```
+
+Réglages conseillés (Settings > General) : « Use the WSL 2 based engine » coché ; « Start Docker Desktop when you sign in » au choix.
+
+### 3. Lancer l'application
+
+Voir le [README](../README.md#lancer-lapplication-en-local-avec-docker-compose). Mémoire constatée avec la stack démarrée : backend ~410 Mo (limite 768 Mo), PostGIS ~65 Mo, Nginx ~7 Mo.
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -171,4 +215,8 @@ npx ng test --watch=false            # tests unitaires (Vitest)
 | `Permission denied (publickey)` avec `ssh -T` | Clé SSH absente de GitHub | Copier `id_ed25519.pub` dans GitHub > Settings > SSH and GPG keys |
 | `Fatal error compiling: java.lang.ExceptionInInitializerError: com.sun.tools.javac.code.TypeTag :: UNKNOWN` | Ancienne version de Lombok (celle de Spring Boot 3.4) incompatible avec le compilateur de Java 25 | Compiler avec le JDK 17, ou mettre à jour Lombok (fait par la migration vers Spring Boot 4.2) |
 | `'mvnw.cmd' n'est pas reconnu` | Commande lancée hors du dossier `backend`, ou sans `.\` devant | `cd backend` puis `.\mvnw.cmd ...` |
+| `failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine` | Docker Desktop n'est pas démarré | Lancer Docker Desktop et attendre « Engine running » |
+| `docker info` affiche 12 CPU / 16 Go | `.wslconfig` pas relu | `wsl --shutdown` puis redémarrer Docker Desktop |
+| `required variable JWT_SECRET is missing a value` au `docker compose up` | `deploy/.env` absent ou incomplet | `Copy-Item deploy\.env.example deploy\.env` puis le remplir |
+| `bind: address already in use` sur 8080 | Un autre programme utilise le port | `Get-NetTCPConnection -LocalPort 8080` pour le trouver, ou changer `"8080:80"` dans le compose |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |
