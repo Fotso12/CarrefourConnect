@@ -1,5 +1,7 @@
 # CarrefourConnect
 
+[![CI/CD](https://github.com/Fotso12/CarrefourConnect/actions/workflows/ci-cd.yml/badge.svg?branch=main)](https://github.com/Fotso12/CarrefourConnect/actions/workflows/ci-cd.yml)
+
 Annuaire numérique interactif des commerces : recherche par catégorie et par proximité (carte), fiches commerces, avis, offres, abonnements des commerçants et notifications en temps réel.
 
 | Module | Technologies |
