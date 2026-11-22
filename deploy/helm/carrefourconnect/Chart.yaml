@@ -1,0 +1,24 @@
+# ============================================================
+# Carte d'identité du chart Helm.
+# - version    : version du CHART (le paquet de déploiement). À incrémenter à
+#                chaque modification des templates ou des valeurs par défaut.
+# - appVersion : version de l'APPLICATION déployée ; sert de tag d'image par défaut.
+# Les deux évoluent indépendamment : on peut corriger le chart sans changer l'appli.
+# ============================================================
+apiVersion: v2                      # format Helm 3/4
+name: carrefourconnect
+description: Annuaire numérique des commerces (Spring Boot + Angular + PostgreSQL/PostGIS)
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+# preStop "sleep" natif et autres champs utilisés demandent Kubernetes 1.30 ou plus
+kubeVersion: ">=1.30.0-0"
+keywords:
+  - spring-boot
+  - angular
+  - postgis
+home: https://github.com/Fotso12/CarrefourConnect
+sources:
+  - https://github.com/Fotso12/CarrefourConnect
+maintainers:
+  - name: Fotso12

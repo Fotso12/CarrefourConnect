@@ -1,6 +1,8 @@
 # Manifests Kubernetes bruts
 
-Déploiement de CarrefourConnect sur le cluster k3d local (namespace `carrefourconnect`), avec des fichiers YAML écrits à la main. L'étape suivante les transformera en chart Helm.
+Déploiement de CarrefourConnect sur le cluster k3d local (namespace `carrefourconnect`), avec des fichiers YAML écrits à la main.
+
+> **Référence pédagogique.** Le déploiement se fait désormais avec le chart Helm [`deploy/helm/carrefourconnect`](../helm/carrefourconnect/README.md), qui génère ces mêmes objets (avec des noms préfixés `carrefourconnect-`). Ne pas déployer les deux dans le même namespace.
 
 | Fichier | Contenu |
 |---|---|
