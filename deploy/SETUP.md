@@ -256,6 +256,12 @@ Mémoire constatée avec l'application déployée : backend ~380 Mo par pod (x2)
 
 ---
 
+## Étape 4 : chart Helm
+
+Aucun nouvel outil (Helm 4.3.2 installé à l'étape 2). Commandes : [deploy/helm/carrefourconnect/README.md](helm/carrefourconnect/README.md).
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -277,4 +283,8 @@ Mémoire constatée avec l'application déployée : backend ~380 Mo par pod (x2)
 | Pods backend bloqués en `Init:0/1`, logs « PostGIS pas encore prêt... » alors que postgis-0 est prêt | `pg_isready` lancé avec l'UID 1001, inconnu dans l'image PostGIS : sans `-U`, il abandonne (code 3 « no attempt ») | Passer `-U "$POSTGRES_USER"` à `pg_isready` (corrigé dans `30-backend.yaml`) |
 | `ErrImagePull` / `ImagePullBackOff` sur les pods | Image locale non importée dans le cluster | `k3d image import <image>:<tag> -c carrefourconnect` |
 | `kubectl apply --dry-run=server` : `namespaces "carrefourconnect" not found` | Un dry-run ne crée rien, donc le namespace n'existe pas pour les autres objets | Créer d'abord le namespace (`kubectl apply -f deploy/k8s/00-namespace.yaml`) |
+| `UPGRADE FAILED: resource Deployment/... not ready` | Un pod de la nouvelle révision ne devient jamais prêt | `kubectl get pods`, puis `kubectl logs <pod> --previous` ; revenir en arrière avec `helm rollback <release> <révision>` |
+| Nouveau pod backend en `CrashLoopBackOff` : `Query did not return a unique result: 2 results` | Doublons créés par deux pods initialisant la base en même temps (corrigé : contraintes uniques) | Repartir d'une base propre : `helm uninstall`, `kubectl -n carrefourconnect delete pvc --all`, `helm install` |
+| Tests Maven : `Unresolved compilation problem` / `declared package ... does not match` | L'extension Java de VS Code (compilateur Eclipse) écrit aussi dans `target/` | `.\mvnw.cmd clean test` (et package des tests aligné sur leur dossier) |
+| `secrets.jwtSecret est obligatoire` au `helm install` | Fichier `values-secret.yaml` absent ou non passé avec `-f` | Le créer depuis `values-secret.example.yaml` et l'ajouter à la commande |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |

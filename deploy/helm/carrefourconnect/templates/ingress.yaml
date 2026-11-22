@@ -1,0 +1,49 @@
+{{- /*
+Ingress : backendPaths (/api, /ws, /uploads) -> backend, tout le reste -> frontend.
+*/ -}}
+{{- if .Values.ingress.enabled }}
+{{- $backend := include "carrefourconnect.componentName" (dict "root" . "component" "backend") }}
+{{- $frontend := include "carrefourconnect.componentName" (dict "root" . "component" "frontend") }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "carrefourconnect.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.ingress.className }}
+  ingressClassName: {{ . }}
+  {{- end }}
+  {{- with .Values.ingress.tls }}
+  tls:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    {{- if .Values.ingress.host }}
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+    {{- else }}
+    # Pas de host : la règle s'applique à toutes les adresses (localhost, IP du PC...)
+    - http:
+    {{- end }}
+        paths:
+          {{- range .Values.ingress.backendPaths }}
+          - path: {{ . }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $backend }}
+                port: { name: http }
+          {{- end }}
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $frontend }}
+                port: { name: http }
+{{- end }}

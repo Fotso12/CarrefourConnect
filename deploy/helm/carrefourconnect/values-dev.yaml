@@ -1,0 +1,26 @@
+# ============================================================
+# Valeurs pour le cluster k3d LOCAL (s'ajoutent par-dessus values.yaml).
+#   helm upgrade --install carrefourconnect deploy/helm/carrefourconnect `
+#     -n carrefourconnect --create-namespace `
+#     -f deploy/helm/carrefourconnect/values-dev.yaml `
+#     -f deploy/helm/carrefourconnect/values-secret.yaml
+# On n'écrit ici QUE ce qui diffère des valeurs par défaut.
+# ============================================================
+
+config:
+  appBaseUrl: http://localhost
+  cloudinary:
+    cloudName: factice
+
+backend:
+  image:
+    # Image construite en local puis importée avec "k3d image import" (pas de registre)
+    repository: carrefourconnect-backend
+    tag: dev
+    pullPolicy: IfNotPresent
+
+frontend:
+  image:
+    repository: carrefourconnect-frontend
+    tag: dev
+    pullPolicy: IfNotPresent

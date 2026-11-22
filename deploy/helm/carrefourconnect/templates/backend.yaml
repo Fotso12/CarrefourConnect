@@ -1,0 +1,178 @@
+{{- /*
+Backend Spring Boot : PVC des images envoyées + Deployment + Service ClusterIP.
+*/ -}}
+{{- $name := include "carrefourconnect.componentName" (dict "root" . "component" "backend") }}
+{{- $ctx := dict "root" . "component" "backend" }}
+{{- $secretName := include "carrefourconnect.secretName" . }}
+{{- if .Values.backend.uploads.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ $name }}-uploads
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+  annotations:
+    # "keep" : helm uninstall ne supprime PAS ce volume (les images envoyées survivent).
+    # Pour vraiment l'effacer : kubectl delete pvc <nom> -n <namespace>
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - {{ .Values.backend.uploads.persistence.accessMode }}
+  {{- with .Values.backend.uploads.persistence.storageClass }}
+  storageClassName: {{ . }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.backend.uploads.persistence.size }}
+---
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  revisionHistoryLimit: {{ .Values.backend.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      {{- include "carrefourconnect.selectorLabels" $ctx | nindent 6 }}
+  strategy:
+    {{- toYaml .Values.backend.strategy | nindent 4 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrefourconnect.componentLabels" $ctx | nindent 8 }}
+      annotations:
+        # Empreintes de la ConfigMap et du Secret : si leur contenu change lors d'un
+        # "helm upgrade", l'empreinte change, donc le modèle de pod change, donc
+        # Kubernetes lance un rolling update. Sans ça, les pods garderaient l'ancienne
+        # configuration (les variables d'environnement ne sont lues qu'au démarrage).
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.backend.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.backend.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.backend.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.backend.terminationGracePeriodSeconds }}
+      {{- if .Values.postgis.enabled }}
+      # Attend que PostGIS accepte des connexions (équivalent du depends_on de Compose)
+      initContainers:
+        - name: attendre-postgis
+          image: {{ include "carrefourconnect.image" (dict "image" .Values.postgis.image "root" .) }}
+          imagePullPolicy: {{ .Values.postgis.image.pullPolicy }}
+          # -U obligatoire : l'UID 1001 n'existe pas dans l'image PostGIS
+          command:
+            - sh
+            - -c
+            - until pg_isready -h {{ include "carrefourconnect.postgisHost" . }} -p 5432 -U {{ .Values.postgis.username }} -q; do echo "PostGIS pas encore prêt..."; sleep 2; done
+          securityContext:
+            {{- toYaml .Values.backend.securityContext | nindent 12 }}
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits: { cpu: 100m, memory: 64Mi }
+      {{- end }}
+      containers:
+        - name: backend
+          image: {{ include "carrefourconnect.image" (dict "image" .Values.backend.image "root" .) }}
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.backend.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "carrefourconnect.configMapName" . }}
+          env:
+            - name: PORT
+              value: {{ .Values.backend.port | quote }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: POSTGRES_PASSWORD }
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: JWT_SECRET }
+            - name: MAILJET_API_KEY
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: MAILJET_API_KEY }
+            - name: MAILJET_API_SECRET
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: MAILJET_API_SECRET }
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: CLOUDINARY_API_KEY }
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: CLOUDINARY_API_SECRET }
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          startupProbe:
+            {{- toYaml .Values.backend.startupProbe | nindent 12 }}
+          livenessProbe:
+            {{- toYaml .Values.backend.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.backend.readinessProbe | nindent 12 }}
+          {{- if .Values.backend.preStopSleepSeconds }}
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: {{ .Values.backend.preStopSleepSeconds }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.backend.securityContext | nindent 12 }}
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: uploads
+          {{- if .Values.backend.uploads.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ $name }}-uploads
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi
+      {{- with .Values.backend.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.backend.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.backend.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+  {{- with .Values.backend.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  type: {{ .Values.backend.service.type }}
+  selector:
+    {{- include "carrefourconnect.selectorLabels" $ctx | nindent 4 }}
+  ports:
+    - name: http
+      port: {{ .Values.backend.port }}
+      targetPort: http
