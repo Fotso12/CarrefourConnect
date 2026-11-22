@@ -1,4 +1,4 @@
-package com.carrefourconnect.testservices;
+package com.carrefourconnect.services.implementations;
 
 import com.carrefourconnect.dtos.LocalisationDTO;
 import com.carrefourconnect.entities.Localisation;
