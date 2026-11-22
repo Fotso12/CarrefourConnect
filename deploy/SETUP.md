@@ -262,6 +262,19 @@ Aucun nouvel outil (Helm 4.3.2 installé à l'étape 2). Commandes : [deploy/hel
 
 ---
 
+## Étape 5 : CI/CD GitHub Actions
+
+Rien à installer : le pipeline tourne sur les serveurs de GitHub. GitHub CLI (installé à l'étape préliminaire) sert à le suivre depuis le terminal : `gh run list`, `gh run watch`, `gh run view <id> --log-failed`. Détails : [deploy/CI-CD.md](CI-CD.md).
+
+Pour un jour pousser des images à la main sur GHCR (normalement fait par la CI), le jeton `gh` doit avoir la permission `write:packages` :
+
+```powershell
+gh auth refresh -s write:packages
+gh auth token | docker login ghcr.io -u Fotso12 --password-stdin
+```
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -287,4 +300,7 @@ Aucun nouvel outil (Helm 4.3.2 installé à l'étape 2). Commandes : [deploy/hel
 | Nouveau pod backend en `CrashLoopBackOff` : `Query did not return a unique result: 2 results` | Doublons créés par deux pods initialisant la base en même temps (corrigé : contraintes uniques) | Repartir d'une base propre : `helm uninstall`, `kubectl -n carrefourconnect delete pvc --all`, `helm install` |
 | Tests Maven : `Unresolved compilation problem` / `declared package ... does not match` | L'extension Java de VS Code (compilateur Eclipse) écrit aussi dans `target/` | `.\mvnw.cmd clean test` (et package des tests aligné sur leur dossier) |
 | `secrets.jwtSecret est obligatoire` au `helm install` | Fichier `values-secret.yaml` absent ou non passé avec `-f` | Le créer depuis `values-secret.example.yaml` et l'ajouter à la commande |
+| CI : `./mvnw: Permission denied` | `mvnw` enregistré sans le bit exécutable dans Git (créé sous Windows) | `git update-index --chmod=+x backend/mvnw` puis commit |
+| CI : `flutter analyze` échoue avec un seul `warning` | Les warnings sont bloquants par défaut (les `info` ne le sont pas avec `--no-fatal-infos`) | Corriger le warning (ici un `catchError` renvoyant `null` sur un `Future<Position>`) |
+| CI : `No files were found ... lcov.info` | Le builder de tests Angular ne produit pas de lcov par défaut | `"coverageReporters": ["html", "lcovonly", "text-summary"]` dans `angular.json` |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |
