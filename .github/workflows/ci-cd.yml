@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: web-coverage
-          path: frontend-web/coverage/lcov.info
+          path: frontend-web/coverage/carrefourconnect-web/lcov.info
           if-no-files-found: warn
 
   # ============================================================
