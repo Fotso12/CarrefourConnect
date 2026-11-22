@@ -6,7 +6,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import com.carrefourconnect.services.interfaces.NotificationService;
 import org.springframework.test.context.ActiveProfiles;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 /**
  * Test de démarrage du contexte applicatif.
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 // configuration web (servlet), elle a besoin d'un contexte web pour démarrer.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")
-@DisabledIfEnvironmentVariable(named = "GITHUB_ACTIONS", matches = "true")
 class CarrefourconnectApplicationTests {
 
 	@MockitoBean
