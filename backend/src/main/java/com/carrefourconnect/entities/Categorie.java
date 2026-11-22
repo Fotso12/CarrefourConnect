@@ -22,7 +22,9 @@ public class Categorie {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID idcategorie;
 
-    @Column(length = 128, nullable = false)
+    // unique : findByNomIgnoreCase suppose un seul résultat ; évite aussi le double
+    // "Général" quand plusieurs instances initialisent la base en même temps.
+    @Column(length = 128, nullable = false, unique = true)
     private String nom;
 
     @Column(columnDefinition = "TEXT")
