@@ -79,7 +79,8 @@ public class SecurityConfig {
                                 .requestMatchers("/api/offres", "/api/offres/**").permitAll()
                                 .requestMatchers("/api/avis", "/api/avis/**").permitAll()
                                 .requestMatchers("/api/categories", "/api/categories/**").permitAll()
-                                .requestMatchers("/api/notifications/**").permitAll()
+                                // /api/notifications/** n'est plus public : connexion obligatoire, puis
+                                // contrôle fin dans NotificationController (propriétaire ou ADMIN)
                                 .requestMatchers("/api/medias", "/api/medias/**").permitAll()
                                 .requestMatchers("/api/utilisateurs/inscription/**").permitAll()
                                 .requestMatchers("/uploads/**", "/swagger-ui/**", "/v3/api-docs/**", "/ws/**", "/error").permitAll()

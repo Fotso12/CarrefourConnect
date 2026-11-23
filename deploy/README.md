@@ -170,4 +170,5 @@ kubectl -n carrefourconnect top pods
 - **Redis** : une seule instance (pas de réplication ni de Sentinel) ; s'il est indisponible, les notifications temps réel sont interrompues et la vérification des jetons révoqués est ignorée (choix *fail-open* documenté dans le code), sans retirer les pods du trafic.
 - **Images envoyées** sur un volume `ReadWriteOnce` : tous les pods backend sont sur le même nœud. En production : stockage objet (S3/MinIO).
 - **Schéma de base** géré par `ddl-auto=update` : pas de migrations versionnées (Flyway serait la solution de production).
+- **Abonnements WebSocket** : la connexion STOMP n'est pas authentifiée ; un client qui connaît l'identifiant d'un utilisateur peut s'abonner à `/topic/notifications/{id}`. Les routes REST des notifications, elles, sont protégées (propriétaire ou administrateur).
 - **Historique Git** : une ancienne clé JWT par défaut figure dans les commits antérieurs à la v0.2.0. Elle a été retirée du code, n'est utilisée nulle part et doit être considérée comme compromise ; la clé vient désormais obligatoirement d'un Secret (`JWT_SECRET`).
