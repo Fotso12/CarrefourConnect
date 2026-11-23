@@ -394,11 +394,19 @@ jobs:
   apk:
     name: APK Android
     needs: mobile
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    # Sur main, ou à la demande (bouton "Run workflow" / gh workflow run) sur n'importe quelle branche
+    if: (github.ref == 'refs/heads/main' && github.event_name != 'pull_request') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
+      # Le runner fournit Java 25 par défaut, que Gradle 8.14 (projet Android) ne supporte
+      # pas. Le projet Android cible Java 17 (android/app/build.gradle.kts) : on l'impose.
+      - name: Java 17 pour Gradle / Android
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "17"
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
