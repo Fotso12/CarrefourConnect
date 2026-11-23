@@ -9,8 +9,8 @@ apiVersion: v2                      # format Helm 3/4
 name: carrefourconnect
 description: Annuaire numérique des commerces (Spring Boot + Angular + PostgreSQL/PostGIS)
 type: application
-version: 0.4.0
-appVersion: "0.4.0"
+version: 0.4.1
+appVersion: "0.4.1"
 # preStop "sleep" natif et autres champs utilisés demandent Kubernetes 1.30 ou plus
 kubeVersion: ">=1.30.0-0"
 keywords:

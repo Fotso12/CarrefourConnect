@@ -4,6 +4,16 @@ Toutes les évolutions notables du projet sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/) : `MAJEUR.MINEUR.CORRECTIF`.
 Tant que la version commence par `0.`, l'application n'est pas considérée comme stable en production.
 
+## [0.4.1] - 2026-11-23
+
+Correctif de sécurité.
+
+### Sécurité
+- Les routes `/api/notifications/**` étaient accessibles sans connexion : n'importe qui pouvait envoyer une notification à n'importe quel utilisateur, lire ses notifications ou les marquer comme lues en changeant l'identifiant dans l'URL (IDOR). Désormais : envoi réservé aux administrateurs ; lecture, compteur et marquage réservés au destinataire (ou à un administrateur).
+
+### Limites connues
+- L'abonnement WebSocket à `/topic/notifications/{id}` n'est pas encore authentifié : un client qui connaît l'identifiant d'un utilisateur peut recevoir ses notifications en temps réel. Correction prévue : authentifier la connexion STOMP (jeton JWT dans le CONNECT) et n'autoriser que son propre sujet.
+
 ## [0.4.0] - 2026-11-23
 
 Redis : notifications temps réel entre les pods et vraie déconnexion.
@@ -75,6 +85,7 @@ Mise en production conteneurisée : Docker Compose, Kubernetes, Helm, CI/CD et s
 
 Version initiale de l'application, avant le travail de conteneurisation : API Spring Boot (Java 17, Spring Boot 3.4), frontend Angular 21, application mobile Flutter.
 
+[0.4.1]: https://github.com/Fotso12/CarrefourConnect/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.1.0...v0.2.0
