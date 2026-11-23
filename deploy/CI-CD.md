@@ -23,13 +23,30 @@ flowchart LR
 | `security-scan` | `main`, après `build-push` | **Trivy** : échec si une vulnérabilité CRITICAL a un correctif ; les HIGH sont listées sans bloquer |
 | `sonarcloud` | `main` | Qualité de code et couverture (backend, web, mobile) |
 | `apk` | `main` | APK Android en artefact téléchargeable |
+| `release` | tag `v*.*.*` | Après `deploy-test` et `security-scan` : vérifie que le tag correspond à `Chart.yaml`, empaquette le chart Helm et crée la **GitHub Release** (notes tirées de `CHANGELOG.md`, chart en pièce jointe) |
 
-Déclencheurs : `push` sur `main` et `feat/**`, `pull_request` vers `main`, et le bouton **Run workflow** (`workflow_dispatch`). Un nouveau push sur une branche annule l'exécution précédente encore en cours (`concurrency`).
+Déclencheurs : `push` sur `main` et `feat/**`, `push` d'un tag `v*.*.*`, `pull_request` vers `main`, et le bouton **Run workflow** (`workflow_dispatch`).
+
+## Publier une version
+
+Numérotation [SemVer](https://semver.org/lang/fr/) `MAJEUR.MINEUR.CORRECTIF` : CORRECTIF pour une correction, MINEUR pour une fonctionnalité compatible, MAJEUR pour un changement incompatible (en `0.x`, l'API n'est pas encore figée).
+
+1. Sur une branche : mettre la même version dans `backend/pom.xml`, `frontend-web/package.json` (`npm version X.Y.Z --no-git-tag-version`) et `deploy/helm/carrefourconnect/Chart.yaml` (`version` et `appVersion`), et ajouter la section `## [X.Y.Z]` dans `CHANGELOG.md`.
+2. Pull request, pipeline vert, fusion dans `main`.
+3. Poser le tag sur le commit de `main` et le pousser :
+
+   ```powershell
+   git switch main; git pull
+   git tag -a vX.Y.Z -m "CarrefourConnect vX.Y.Z"
+   git push origin vX.Y.Z
+   ```
+
+4. Le pipeline publie les images `ghcr.io/fotso12/carrefourconnect-*:X.Y.Z` (et `X.Y`), puis la release apparaît dans l'onglet **Releases** du dépôt. Un nouveau push sur une branche annule l'exécution précédente encore en cours (`concurrency`).
 
 ## Choix techniques
 
 - **`GITHUB_TOKEN`** : jeton temporaire créé par GitHub pour chaque exécution, détruit à la fin. Rien à stocker pour GHCR. Par défaut il ne peut que lire le dépôt (`permissions: contents: read`) ; seul `build-push` reçoit `packages: write` (principe du moindre privilège).
-- **Tag SHA + `latest`** : le SHA dit exactement quel commit tourne et ne change jamais (rollback fiable) ; `latest` est pratique mais mobile. En production, on déploie toujours un tag immuable.
+- **Tags d'images** : le SHA court dit exactement quel commit tourne et ne change jamais (rollback fiable) ; `0.2.0` nomme une version publiée ; `latest` (dernière version de `main`) est pratique mais mobile. En production, on déploie toujours un tag immuable (SHA ou version).
 - **Images construites deux fois** (dans `deploy-test` et `build-push`) : `deploy-test` doit aussi tourner sur les pull requests, qui n'ont pas le droit de pousser sur le registre. Le cache BuildKit partagé (`type=gha`) rend le second build quasi instantané.
 - **kind dans la CI, k3d en local** : deux façons de faire tourner Kubernetes dans Docker. kind est l'outil de référence des tests en CI (utilisé pour tester Kubernetes lui-même) ; même version de Kubernetes (1.36) et même chart Helm dans les deux cas.
 - **Actions tierces épinglées par SHA** (`aquasecurity/trivy-action@ed142fd…  # v0.36.0`) : un tag peut être déplacé par un attaquant qui compromet le dépôt de l'action ; un SHA de commit, non.
