@@ -19,6 +19,16 @@ backend:
     tag: dev
     pullPolicy: IfNotPresent
 
+  # Démonstration de l'autoscaling avec le test de charge (deploy/load-test)
+  autoscaling:
+    enabled: true
+
+metrics:
+  serviceMonitor:
+    enabled: true
+  grafanaDashboard:
+    enabled: true
+
 frontend:
   image:
     repository: carrefourconnect-frontend

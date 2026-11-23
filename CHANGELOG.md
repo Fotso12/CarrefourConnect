@@ -4,6 +4,13 @@ Toutes les évolutions notables du projet sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/) : `MAJEUR.MINEUR.CORRECTIF`.
 Tant que la version commence par `0.`, l'application n'est pas considérée comme stable en production.
 
+## [Non publié]
+
+### Ajouté
+- **Supervision** avec kube-prometheus-stack (`deploy/monitoring/`) : Prometheus (rétention 24 h), Grafana, Alertmanager, kube-state-metrics, node-exporter, ressources limitées pour un PC.
+- Chart Helm : **ServiceMonitor** du backend (créé seulement si le Prometheus Operator est présent), **dashboard Grafana** versionné et chargé automatiquement (débit, latence p95, erreurs 5xx, CPU, heap JVM, pauses GC, réplicas), **HorizontalPodAutoscaler** activable (`backend.autoscaling`).
+- **Test de charge k6** (`deploy/load-test/charge.js`) sur les endpoints publics, lançable via Docker sans installation.
+
 ## [0.2.0] - 2026-11-23
 
 Mise en production conteneurisée : Docker Compose, Kubernetes, Helm, CI/CD et socle de supervision.
@@ -47,5 +54,6 @@ Mise en production conteneurisée : Docker Compose, Kubernetes, Helm, CI/CD et s
 
 Version initiale de l'application, avant le travail de conteneurisation : API Spring Boot (Java 17, Spring Boot 3.4), frontend Angular 21, application mobile Flutter.
 
+[Non publié]: https://github.com/Fotso12/CarrefourConnect/compare/v0.2.0...HEAD
 [0.2.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Fotso12/CarrefourConnect/releases/tag/v0.1.0

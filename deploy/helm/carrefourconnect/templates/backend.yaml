@@ -35,7 +35,11 @@ metadata:
   labels:
     {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
 spec:
+  {{- if not .Values.backend.autoscaling.enabled }}
+  # Avec le HPA, c'est LUI qui fixe le nombre de réplicas : on n'écrit pas "replicas",
+  # sinon chaque "helm upgrade" le remettrait à replicaCount et contredirait le HPA.
   replicas: {{ .Values.backend.replicaCount }}
+  {{- end }}
   revisionHistoryLimit: {{ .Values.backend.revisionHistoryLimit }}
   selector:
     matchLabels:

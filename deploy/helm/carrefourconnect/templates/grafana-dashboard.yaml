@@ -1,0 +1,20 @@
+{{- /*
+Dashboard Grafana versionné avec l'application : une ConfigMap contenant le JSON du
+dashboard, avec le label que le "sidecar" de Grafana surveille (grafana_dashboard: "1").
+Grafana le charge automatiquement, sans import manuel.
+*/ -}}
+{{- if .Values.metrics.grafanaDashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "carrefourconnect.fullname" . }}-grafana-dashboard
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.labels" . | nindent 4 }}
+    grafana_dashboard: "1"
+  annotations:
+    grafana_folder: CarrefourConnect      # dossier dans lequel Grafana le range
+data:
+  carrefourconnect.json: |-
+{{ .Files.Get "dashboards/carrefourconnect.json" | indent 4 }}
+{{- end }}

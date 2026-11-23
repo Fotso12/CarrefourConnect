@@ -199,6 +199,7 @@ jobs:
             jwtSecret: "$JWT_SECRET"
           backend:
             image: { repository: carrefourconnect-backend, tag: "$TAG", pullPolicy: Never }
+            autoscaling: { enabled: false }   # pas de metrics-server dans kind
           frontend:
             image: { repository: carrefourconnect-frontend, tag: "$TAG", pullPolicy: Never }
           ingress:
