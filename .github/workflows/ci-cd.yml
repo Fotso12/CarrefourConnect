@@ -34,6 +34,7 @@ env:
   REGISTRY: ghcr.io
   # GHCR exige des noms en minuscules (le compte s'appelle Fotso12)
   IMAGE_PREFIX: ghcr.io/fotso12/carrefourconnect
+  FLUTTER_VERSION: "3.38.10"
 
 jobs:
 
@@ -108,6 +109,10 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
+          # Version FIGÉE : celle du projet (frontend-mobile/.metadata : 3.38.3), dernier
+          # correctif de la série. "stable" seul installerait la dernière version (3.50+),
+          # qui exige Gradle 9.3 alors que le projet Android utilise Gradle 8.14.
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
       - run: flutter pub get
       - name: Analyse statique
@@ -410,6 +415,10 @@ jobs:
       - uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2.23.0
         with:
           channel: stable
+          # Version FIGÉE : celle du projet (frontend-mobile/.metadata : 3.38.3), dernier
+          # correctif de la série. "stable" seul installerait la dernière version (3.50+),
+          # qui exige Gradle 9.3 alors que le projet Android utilise Gradle 8.14.
+          flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
       - name: Build APK release
         working-directory: frontend-mobile
