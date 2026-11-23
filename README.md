@@ -39,9 +39,37 @@ docker compose -f deploy/docker-compose.yml down              # arrêter (les do
 docker compose -f deploy/docker-compose.yml down -v           # arrêter ET effacer la base et les uploads
 ```
 
+## Déploiement Kubernetes
+
+L'application se déploie aussi sur un **cluster Kubernetes local** (k3d) avec un **chart Helm**, supervisée par **Prometheus et Grafana**, et chaque modification est testée par un pipeline **GitHub Actions** qui la déploie sur un cluster jetable.
+
+- 2 à 4 pods backend selon la charge (**HPA**), mises à jour **sans coupure** (rolling update + sondes Actuator)
+- PostgreSQL/PostGIS en **StatefulSet** avec volume persistant ; configuration par **ConfigMap** et **Secret**
+- **Ingress** Traefik : une seule adresse, `/api` et WebSocket `/ws` vers le backend
+- Images publiées sur **GHCR**, scannées par **Trivy**, releases versionnées (SemVer) avec le chart Helm
+
+```powershell
+.\deploy\scripts\cluster-up.ps1
+helm install carrefourconnect deploy\helm\carrefourconnect -n carrefourconnect --create-namespace `
+  -f deploy\helm\carrefourconnect\values-dev.yaml -f deploy\helm\carrefourconnect\values-secret.yaml --wait
+```
+
+➡️ **Guide complet** (architecture, démarrage pas à pas, Grafana, pipeline, dépannage) : **[deploy/README.md](deploy/README.md)**
+
+### Captures
+
+| | |
+|---|---|
+| ![Pods de l'application dans le cluster](docs/captures/01-pods.png) | ![Pipeline GitHub Actions vert](docs/captures/02-pipeline.png) |
+| *`kubectl get pods` : backend, frontend, PostGIS* | *Pipeline CI/CD vert, test de déploiement sur kind inclus* |
+| ![Grafana pendant le test de charge](docs/captures/03-grafana-charge.png) | ![Le HPA ajoute des pods](docs/captures/04-hpa.png) |
+| *Grafana pendant le test de charge k6* | *Le HPA passe de 2 à 4 pods sous la charge* |
+
 ## Documentation
 
+- [deploy/README.md](deploy/README.md) : déploiement (Docker Compose, Kubernetes, Helm, supervision, CI/CD)
 - [deploy/SETUP.md](deploy/SETUP.md) : installation du poste de travail (outils, versions, commandes)
+- [CHANGELOG.md](CHANGELOG.md) : journal des versions
 - [GUIDE_DEMARRAGE.md](GUIDE_DEMARRAGE.md) : structure du projet, modèle de données, création du premier administrateur
 - [GUIDE_DEPLOIEMENT.md](GUIDE_DEPLOIEMENT.md) : déploiement
 - [architecture_technique.md](architecture_technique.md) : architecture technique
