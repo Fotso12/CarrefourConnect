@@ -1,0 +1,35 @@
+{{- /*
+ServiceMonitor : objet du Prometheus Operator qui dit à Prometheus QUOI collecter.
+"Prends tous les Services portant ces labels, et lis /actuator/prometheus sur leur
+port http toutes les 15 s." Prometheus découvre lui-même les pods derrière le Service :
+quand le HPA ajoute un pod, il est collecté automatiquement, sans rien reconfigurer.
+
+Créé seulement si demandé ET si le type ServiceMonitor existe dans le cluster
+(kube-prometheus-stack installé). Sur le cluster kind de la CI, sans Prometheus,
+le chart s'installe donc toujours.
+*/ -}}
+{{- if and .Values.metrics.serviceMonitor.enabled (.Capabilities.APIVersions.Has "monitoring.coreos.com/v1/ServiceMonitor") }}
+{{- $ctx := dict "root" . "component" "backend" }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "carrefourconnect.componentName" $ctx }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+    {{- with .Values.metrics.serviceMonitor.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "carrefourconnect.selectorLabels" $ctx | nindent 6 }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  endpoints:
+    - port: http                          # nom du port dans le Service backend
+      path: /actuator/prometheus
+      interval: {{ .Values.metrics.serviceMonitor.interval }}
+      scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+{{- end }}

@@ -275,6 +275,19 @@ gh auth token | docker login ghcr.io -u Fotso12 --password-stdin
 
 ---
 
+## Étape 6 : supervision et test de charge
+
+Aucun nouvel outil installé sur le poste :
+
+| Outil | Version | Comment | Vérification |
+|---|---|---|---|
+| kube-prometheus-stack | chart 93.9.0 | `helm upgrade --install monitoring prometheus-community/kube-prometheus-stack --version 93.9.0 -n monitoring --create-namespace -f deploy/monitoring/kube-prometheus-stack-values.yaml` | `kubectl -n monitoring get pods` |
+| k6 | 2.4.0 | **conteneur Docker** `grafana/k6:2.4.0` (rien à installer). Natif possible : `winget install --id GrafanaLabs.k6 -e` | `docker run --rm grafana/k6:2.4.0 version` |
+
+Mémoire constatée : ~1 Go pour la supervision (Prometheus ~400 Mo, Grafana ~400 Mo avec ses sidecars, le reste < 30 Mo chacun). Détails et lecture des graphiques : [deploy/monitoring/README.md](monitoring/README.md).
+
+---
+
 ## Erreurs rencontrées et solutions
 
 | Symptôme | Cause | Solution |
@@ -303,4 +316,7 @@ gh auth token | docker login ghcr.io -u Fotso12 --password-stdin
 | CI : `./mvnw: Permission denied` | `mvnw` enregistré sans le bit exécutable dans Git (créé sous Windows) | `git update-index --chmod=+x backend/mvnw` puis commit |
 | CI : `flutter analyze` échoue avec un seul `warning` | Les warnings sont bloquants par défaut (les `info` ne le sont pas avec `--no-fatal-infos`) | Corriger le warning (ici un `catchError` renvoyant `null` sur un `Future<Position>`) |
 | CI : `No files were found ... lcov.info` | Le builder de tests Angular ne produit pas de lcov par défaut | `"coverageReporters": ["html", "lcovonly", "text-summary"]` dans `angular.json` |
+| `kubectl` : `Unable to connect to the server: dial tcp 0.0.0.0:xxxxx` après un redémarrage du PC | Les conteneurs du cluster k3d sont arrêtés | `.\deploy\scripts\cluster-up.ps1` (redémarre le cluster existant, données conservées) |
+| HPA : `cpu: <unknown>/70%` | metrics-server n'a pas encore de mesure (1re minute) ou pas de `requests.cpu` sur le conteneur | Attendre une minute ; vérifier `kubectl top pods` |
+| Le dashboard n'apparaît pas dans Grafana | ConfigMap sans le label `grafana_dashboard: "1"`, ou sidecar limité au namespace `monitoring` | `metrics.grafanaDashboard.enabled: true` et `sidecar.dashboards.searchNamespace: ALL` |
 | `npm warn install-scripts ... not yet covered by allowScripts` | Nouveauté de npm 11 : il demande d'approuver les scripts d'installation | Sans effet sur le build ici ; à examiner avec `npm install-scripts ls` |

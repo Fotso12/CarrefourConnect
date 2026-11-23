@@ -67,7 +67,14 @@ externalDatabase:
 
 # ---------- Backend Spring Boot ----------
 backend:
-  replicaCount: 2
+  replicaCount: 2               # ignoré si autoscaling.enabled=true (le HPA décide)
+  # HorizontalPodAutoscaler : nombre de pods ajusté selon le CPU (metrics-server requis)
+  autoscaling:
+    enabled: false
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 70   # % de resources.requests.cpu (250m -> 175m)
+    scaleDownStabilizationSeconds: 120
   image:
     repository: ghcr.io/fotso12/carrefourconnect-backend
     tag: ""                   # "" = appVersion du Chart.yaml
@@ -169,6 +176,19 @@ ingress:
   tls: []
   #  - secretName: carrefourconnect-tls
   #    hosts: [carrefourconnect.example.com]
+
+# ---------- Supervision (kube-prometheus-stack) ----------
+metrics:
+  serviceMonitor:
+    # Crée un ServiceMonitor pour que Prometheus collecte /actuator/prometheus.
+    # Sans effet si le Prometheus Operator n'est pas installé dans le cluster.
+    enabled: false
+    interval: 15s
+    scrapeTimeout: 10s
+    labels: {}
+  grafanaDashboard:
+    # ConfigMap du dashboard, chargée automatiquement par le sidecar de Grafana
+    enabled: false
 
 # ---------- helm test ----------
 tests:

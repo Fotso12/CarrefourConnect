@@ -1,0 +1,107 @@
+# ============================================================
+# Valeurs de kube-prometheus-stack pour le cluster k3d LOCAL (PC de 16 Go).
+#
+#   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#   helm upgrade --install monitoring prometheus-community/kube-prometheus-stack `
+#     --version 93.9.0 -n monitoring --create-namespace `
+#     -f deploy/monitoring/kube-prometheus-stack-values.yaml --wait
+#
+# Ce chart installe :
+#   - Prometheus Operator : un "opérateur" Kubernetes qui gère Prometheus à partir
+#     d'objets dédiés (ServiceMonitor, PrometheusRule...) au lieu d'un fichier de config ;
+#   - Prometheus  : collecte et stocke les métriques (base de séries temporelles) ;
+#   - Alertmanager: reçoit les alertes de Prometheus et les route (mail, Slack...) ;
+#   - Grafana     : tableaux de bord ;
+#   - kube-state-metrics : métriques sur les OBJETS Kubernetes (réplicas, pods prêts...) ;
+#   - node-exporter : métriques des NŒUDS (CPU, mémoire, disque).
+# Tout reste interne au cluster : accès uniquement via kubectl port-forward (localhost).
+# ============================================================
+
+# --- Composants internes de k3s ---------------------------------------------
+# k3s regroupe le plan de contrôle (etcd, scheduler, controller-manager, proxy) dans un
+# seul processus qui n'expose pas ces métriques comme un cluster "classique". Les laisser
+# activés ferait apparaître des cibles en erreur et des alertes permanentes.
+kubeEtcd:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeProxy:
+  enabled: false
+
+# --- Prometheus --------------------------------------------------------------
+prometheus:
+  prometheusSpec:
+    # Rétention de 24 h : suffisant pour une démo, et le disque ne se remplit pas.
+    retention: 24h
+    retentionSize: 1GB
+    # Fréquence de collecte par défaut (un ServiceMonitor peut la redéfinir)
+    scrapeInterval: 15s
+    # IMPORTANT : par défaut, Prometheus ne lit que les ServiceMonitor portant le label
+    # de CETTE release Helm. On lui demande de prendre tous ceux du cluster, dont celui
+    # du chart carrefourconnect.
+    serviceMonitorSelectorNilUsesHelmValues: false
+    podMonitorSelectorNilUsesHelmValues: false
+    ruleSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    resources:
+      requests: { cpu: 200m, memory: 512Mi }
+      limits: { cpu: "1", memory: 1Gi }
+    # Pas de volume persistant : les métriques sont perdues si le pod redémarre.
+    # Acceptable en local (24 h de données de toute façon).
+
+# --- Alertmanager ------------------------------------------------------------
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests: { cpu: 10m, memory: 32Mi }
+      limits: { cpu: 100m, memory: 128Mi }
+
+# --- Grafana -----------------------------------------------------------------
+grafana:
+  # Le mot de passe admin est généré aléatoirement par le chart et stocké dans le Secret
+  # "monitoring-grafana" (jamais dans ce fichier). Pour le lire :
+  #   kubectl -n monitoring get secret monitoring-grafana -o jsonpath="{.data.admin-password}"
+  # puis décoder le base64 (voir deploy/monitoring/README.md).
+  defaultDashboardsTimezone: browser
+  resources:
+    requests: { cpu: 50m, memory: 128Mi }
+    limits: { cpu: 500m, memory: 384Mi }
+  sidecar:
+    dashboards:
+      enabled: true
+      # Le "sidecar" surveille les ConfigMaps portant ce label et les charge comme
+      # dashboards, dans TOUS les namespaces : le chart carrefourconnect fournit ainsi
+      # son propre dashboard, versionné avec l'application.
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: ALL
+      folderAnnotation: grafana_folder
+      provider:
+        foldersFromFilesStructure: true
+  # Pas d'Ingress : Grafana n'est accessible que par port-forward, depuis ce PC.
+  ingress:
+    enabled: false
+
+# --- Prometheus Operator -----------------------------------------------------
+prometheusOperator:
+  resources:
+    requests: { cpu: 20m, memory: 64Mi }
+    limits: { cpu: 200m, memory: 256Mi }
+
+# --- kube-state-metrics ------------------------------------------------------
+kube-state-metrics:
+  resources:
+    requests: { cpu: 10m, memory: 32Mi }
+    limits: { cpu: 100m, memory: 128Mi }
+
+# --- node-exporter -----------------------------------------------------------
+prometheus-node-exporter:
+  # Les nœuds k3d sont des conteneurs Docker : le système de fichiers racine de l'hôte
+  # n'y est pas monté en mode "partagé", ce qui empêcherait node-exporter de démarrer.
+  hostRootFsMount:
+    enabled: false
+  resources:
+    requests: { cpu: 10m, memory: 24Mi }
+    limits: { cpu: 100m, memory: 64Mi }
