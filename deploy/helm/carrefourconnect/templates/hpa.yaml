@@ -1,0 +1,47 @@
+{{- /*
+HorizontalPodAutoscaler : ajuste AUTOMATIQUEMENT le nombre de pods backend selon la
+charge CPU. Toutes les 15 s, il lit la consommation (via metrics-server, fourni par
+k3s) et calcule : réplicas voulus = réplicas actuels x (CPU moyen / CPU cible).
+Le CPU est exprimé en % de la "request" du conteneur (250m) : une cible de 70 %
+signifie qu'on ajoute des pods quand ils consomment en moyenne plus de 175m.
+*/ -}}
+{{- if .Values.backend.autoscaling.enabled }}
+{{- $ctx := dict "root" . "component" "backend" }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "carrefourconnect.componentName" $ctx }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "carrefourconnect.componentName" $ctx }}
+  minReplicas: {{ .Values.backend.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.backend.autoscaling.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.backend.autoscaling.targetCPUUtilizationPercentage }}
+  behavior:
+    scaleUp:
+      # Ajout rapide : jusqu'à 2 pods toutes les 30 s si la charge l'exige
+      stabilizationWindowSeconds: 0
+      policies:
+        - type: Pods
+          value: 2
+          periodSeconds: 30
+    scaleDown:
+      # Retrait prudent : on attend 2 min de charge basse avant de supprimer des pods,
+      # pour ne pas faire "yo-yo" à chaque creux de trafic
+      stabilizationWindowSeconds: {{ .Values.backend.autoscaling.scaleDownStabilizationSeconds }}
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60
+{{- end }}

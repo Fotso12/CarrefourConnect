@@ -16,6 +16,9 @@ carrefourconnect/
     ├── backend.yaml              # PVC uploads + Deployment + Service
     ├── frontend.yaml             # Deployment + Service
     ├── ingress.yaml              # /api, /ws, /uploads -> backend ; / -> frontend
+    ├── servicemonitor.yaml       # collecte Prometheus (si le Prometheus Operator est installé)
+    ├── grafana-dashboard.yaml    # dashboard Grafana (dashboards/carrefourconnect.json)
+    ├── hpa.yaml                  # autoscaling CPU (backend.autoscaling.enabled)
     ├── NOTES.txt                 # message affiché après install/upgrade
     └── tests/test-connexion.yaml # helm test : readiness backend, API, page d'accueil
 ```
