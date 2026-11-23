@@ -13,6 +13,7 @@ carrefourconnect/
     ├── configmap.yaml            # configuration non sensible
     ├── secret.yaml               # Secret (sauf si secrets.existingSecret)
     ├── postgis.yaml              # Service headless + StatefulSet (désactivable : postgis.enabled)
+    ├── redis.yaml                # Redis : notifications entre pods + jetons révoqués (redis.enabled)
     ├── backend.yaml              # PVC uploads + Deployment + Service
     ├── frontend.yaml             # Deployment + Service
     ├── ingress.yaml              # /api, /ws, /uploads -> backend ; / -> frontend

@@ -104,6 +104,11 @@ spec:
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef: { name: {{ $secretName }}, key: JWT_SECRET }
+            {{- if .Values.redis.enabled }}
+            - name: SPRING_DATA_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: {{ $secretName }}, key: REDIS_PASSWORD }
+            {{- end }}
             - name: MAILJET_API_KEY
               valueFrom:
                 secretKeyRef: { name: {{ $secretName }}, key: MAILJET_API_KEY }

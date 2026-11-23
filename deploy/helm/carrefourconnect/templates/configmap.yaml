@@ -19,6 +19,12 @@ data:
   ADMIN_EMAIL: {{ .Values.config.adminEmail | quote }}
   CLOUDINARY_CLOUD_NAME: {{ .Values.config.cloudinary.cloudName | quote }}
   APP_BASE_URL: {{ .Values.config.appBaseUrl | quote }}
+  # Notifications entre pods et liste noire des jetons via Redis
+  APP_REDIS_ENABLED: {{ .Values.redis.enabled | quote }}
+  {{- if .Values.redis.enabled }}
+  SPRING_DATA_REDIS_HOST: {{ include "carrefourconnect.componentName" (dict "root" . "component" "redis") | quote }}
+  SPRING_DATA_REDIS_PORT: "6379"
+  {{- end }}
   {{- range $key, $value := .Values.config.extraEnv }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}

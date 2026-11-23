@@ -1,0 +1,109 @@
+{{- /*
+Redis : diffusion des notifications entre les pods backend (pub/sub) et liste noire des
+jetons JWT révoqués. StatefulSet + volume : le journal AOF conserve les révocations si le
+pod redémarre. Désactivable avec redis.enabled=false (le backend repasse alors en mode
+"une instance" : diffusion et liste noire en mémoire).
+*/ -}}
+{{- if .Values.redis.enabled }}
+{{- $name := include "carrefourconnect.componentName" (dict "root" . "component" "redis") }}
+{{- $ctx := dict "root" . "component" "redis" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "carrefourconnect.selectorLabels" $ctx | nindent 4 }}
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  serviceName: {{ $name }}
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "carrefourconnect.selectorLabels" $ctx | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrefourconnect.componentLabels" $ctx | nindent 8 }}
+      annotations:
+        # Mot de passe Redis modifié par un helm upgrade -> le pod est recréé pour le relire
+        checksum/redis-password: {{ .Values.secrets.redisPassword | sha256sum }}
+    spec:
+      # Utilisateur "redis" (UID 999) de l'image officielle : jamais root
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        runAsGroup: 999
+        fsGroup: 999
+        seccompProfile: { type: RuntimeDefault }
+      containers:
+        - name: redis
+          image: {{ include "carrefourconnect.image" (dict "image" .Values.redis.image "root" .) }}
+          imagePullPolicy: {{ .Values.redis.image.pullPolicy }}
+          command: ["sh", "-c"]
+          # --requirepass : mot de passe obligatoire (lu dans le Secret)
+          # --appendonly  : journal sur disque, les révocations survivent à un redémarrage
+          # noeviction    : au plafond mémoire, Redis refuse d'écrire plutôt que d'effacer une révocation
+          args:
+            - >-
+              exec redis-server
+              --requirepass "$REDIS_PASSWORD"
+              --appendonly yes
+              --maxmemory {{ .Values.redis.maxmemory }}
+              --maxmemory-policy noeviction
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "carrefourconnect.secretName" . }}
+                  key: REDIS_PASSWORD
+          ports:
+            - name: redis
+              containerPort: 6379
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "redis-cli -a \"$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "redis-cli -a \"$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+            periodSeconds: 15
+            failureThreshold: 4
+          resources:
+            {{- toYaml .Values.redis.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true   # Redis n'écrit que dans /data (le volume)
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          {{- include "carrefourconnect.selectorLabels" $ctx | nindent 10 }}
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        {{- with .Values.redis.persistence.storageClass }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.redis.persistence.size }}
+{{- end }}

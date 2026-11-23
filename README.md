@@ -46,6 +46,7 @@ L'application se déploie aussi sur un **cluster Kubernetes local** (k3d) avec u
 - 2 à 4 pods backend selon la charge (**HPA**), mises à jour **sans coupure** (rolling update + sondes Actuator)
 - PostgreSQL/PostGIS en **StatefulSet** avec volume persistant ; configuration par **ConfigMap** et **Secret**
 - **Ingress** Traefik : une seule adresse, `/api` et WebSocket `/ws` vers le backend
+- **Redis** : notifications temps réel partagées entre les pods (pub/sub) et vraie déconnexion (liste noire des JWT)
 - Images publiées sur **GHCR**, scannées par **Trivy**, releases versionnées (SemVer) avec le chart Helm
 
 ```powershell

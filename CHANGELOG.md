@@ -4,6 +4,21 @@ Toutes les évolutions notables du projet sont consignées ici.
 Format inspiré de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), numérotation [SemVer](https://semver.org/lang/fr/) : `MAJEUR.MINEUR.CORRECTIF`.
 Tant que la version commence par `0.`, l'application n'est pas considérée comme stable en production.
 
+## [0.4.0] - 2026-11-23
+
+Redis : notifications temps réel entre les pods et vraie déconnexion.
+
+### Ajouté
+- **Notifications partagées entre les pods** via Redis pub/sub : chaque instance publie dans le canal `carrefourconnect:notifications` et relaie à ses propres clients WebSocket. Une notification déclenchée sur n'importe quel pod atteint tous les navigateurs connectés.
+- **Déconnexion réelle** : `POST /api/auth/logout` place le jeton JWT dans une liste noire (empreinte SHA-256, durée de vie = temps restant avant expiration) ; un jeton révoqué est refusé par tous les pods. Le frontend appelle cette route à la déconnexion.
+- **Redis** dans Docker Compose et dans le chart Helm (`redis.enabled`, StatefulSet, mot de passe dans le Secret, journal AOF, `noeviction`).
+- Tests contre un vrai Redis avec Testcontainers ; parcours complet de déconnexion.
+
+### Corrigé
+- Notifications temps réel limitées aux clients du pod émetteur avec plusieurs réplicas (limite connue de la 0.2.0).
+- Régression de la migration vers Jackson 3 : un JSON sans un champ primitif (`boolean`, `int`) était refusé (erreur 400) pour `AbonnementDTO`, `PlanConfigDTO`, `MediaDTO` et `NotificationDTO`.
+- Activer ou désactiver un secret sans rapport (Redis) ne redémarre plus PostgreSQL.
+
 ## [0.3.0] - 2026-11-23
 
 Supervision, autoscaling et documentation du déploiement.
@@ -60,6 +75,7 @@ Mise en production conteneurisée : Docker Compose, Kubernetes, Helm, CI/CD et s
 
 Version initiale de l'application, avant le travail de conteneurisation : API Spring Boot (Java 17, Spring Boot 3.4), frontend Angular 21, application mobile Flutter.
 
+[0.4.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/Fotso12/CarrefourConnect/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/Fotso12/CarrefourConnect/releases/tag/v0.1.0

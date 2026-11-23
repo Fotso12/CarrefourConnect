@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.carrefourconnect.services.temps_reel.NotificationBroadcaster;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,7 +25,8 @@ public class NotificationServiceImpl implements NotificationService {
     private final NotificationRepository repository;
     private final NotificationMapper mapper;
     private final UtilisateurRepository utilisateurRepository;
-    private final SimpMessagingTemplate messagingTemplate;
+    // Diffusion temps réel : locale (1 instance) ou via Redis (plusieurs pods), selon app.redis.enabled
+    private final NotificationBroadcaster broadcaster;
 
     @Override
     public NotificationDTO send(NotificationDTO dto) {
@@ -40,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
         // Push via WebSocket to the specific user topic
         try {
             if (saved.getDestinataire() != null && saved.getDestinataire().getIduser() != null) {
-                messagingTemplate.convertAndSend("/topic/notifications/" + saved.getDestinataire().getIduser(), savedDto);
+                broadcaster.broadcast("/topic/notifications/" + saved.getDestinataire().getIduser(), savedDto);
             }
         } catch (Exception e) {
             log.warn("Impossible d'envoyer la notification via WebSocket: {}", e.getMessage());
@@ -64,8 +65,8 @@ public class NotificationServiceImpl implements NotificationService {
             NotificationDTO savedDto = mapper.toDto(saved);
             // Push to admin via a general admin topic and also individual topics
             try {
-                messagingTemplate.convertAndSend("/topic/admin/notifications", savedDto);
-                messagingTemplate.convertAndSend("/topic/notifications/" + admin.getIduser(), savedDto);
+                broadcaster.broadcast("/topic/admin/notifications", savedDto);
+                broadcaster.broadcast("/topic/notifications/" + admin.getIduser(), savedDto);
             } catch (Exception e) {
                 log.warn("Impossible d'envoyer la notification admin via WebSocket: {}", e.getMessage());
             }

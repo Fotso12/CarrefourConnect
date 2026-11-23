@@ -32,12 +32,13 @@ config:
 #     ci-dessous, fournies dans un fichier values-secret.yaml NON versionné ;
 #  2. existingSecret: "mon-secret" : le chart utilise un Secret déjà présent dans le
 #     namespace (créé à la main, par la CI, ou par un outil comme Sealed Secrets).
-#     Il doit contenir les mêmes clés : POSTGRES_PASSWORD, JWT_SECRET, MAILJET_API_KEY,
+#     Il doit contenir les mêmes clés : POSTGRES_PASSWORD, JWT_SECRET, REDIS_PASSWORD, MAILJET_API_KEY,
 #     MAILJET_API_SECRET, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.
 secrets:
   existingSecret: ""
   postgresPassword: ""        # obligatoire si le chart crée le Secret
   jwtSecret: ""               # obligatoire, 64 caractères minimum (HS512)
+  redisPassword: ""           # obligatoire si redis.enabled
   mailjetApiKey: ""
   mailjetApiSecret: ""
   cloudinaryApiKey: ""
@@ -59,6 +60,22 @@ postgis:
   resources:
     requests: { cpu: 100m, memory: 256Mi }
     limits: { cpu: 500m, memory: 512Mi }
+
+# ---------- Redis (notifications entre pods + jetons révoqués) ----------
+redis:
+  # false = le backend garde notifications et liste noire en mémoire (correct avec 1 seul pod)
+  enabled: true
+  image:
+    repository: redis
+    tag: 8.10.3-alpine
+    pullPolicy: IfNotPresent
+  maxmemory: 64mb               # plafond de mémoire de Redis (politique noeviction)
+  persistence:
+    size: 256Mi
+    storageClass: ""
+  resources:
+    requests: { cpu: 20m, memory: 32Mi }
+    limits: { cpu: 200m, memory: 128Mi }
 
 externalDatabase:
   # Utilisé seulement si postgis.enabled=false (ex. base managée dans le cloud)

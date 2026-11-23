@@ -75,6 +75,14 @@ export class AuthService {
   }
 
   logout(): void {
+    const token = this.getToken();
+    if (token) {
+      // Révoque le jeton côté serveur (liste noire) : même copié ailleurs, il ne servira plus.
+      // On se déconnecte localement quoi qu'il arrive (serveur injoignable, jeton déjà expiré...).
+      this.http.post(`${AUTH_API}/logout`, {}, {
+        headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
+      }).subscribe({ error: () => { /* déconnexion locale suffisante */ } });
+    }
     window.sessionStorage.clear();
     this.currentUserSubject.next({});
   }

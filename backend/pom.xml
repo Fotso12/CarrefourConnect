@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.carrefourconnect</groupId>
 	<artifactId>carrefourconnect</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0</version>
 	<name>carrefourconnect</name>
 	<description>Projet d&apos;annuaire numérique interactif des commerces</description>
 	<url/>
@@ -91,6 +91,27 @@
 			<artifactId>spring-boot-starter-micrometer-metrics-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- Tests d'intégration contre un VRAI Redis lancé dans un conteneur Docker -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>testcontainers-junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.redis</groupId>
+			<artifactId>testcontainers-redis</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -112,6 +133,12 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<!-- Redis : diffusion des notifications entre les pods (pub/sub) et liste noire des
+		     jetons JWT révoqués. Activé par app.redis.enabled=true. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
 		<!-- Sécurité -->
 		<dependency>

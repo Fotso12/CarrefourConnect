@@ -28,6 +28,7 @@ flowchart TB
           be["Deployment backend<br/>Spring Boot · 2 à 4 pods (HPA)"]
           pvc[("PVC images<br/>ReadWriteOnce")]
           db["StatefulSet PostGIS<br/>postgis-0"]
+          redis["StatefulSet Redis<br/>pub/sub + jetons révoqués"]
           pvcdb[("PVC données")]
           cfg["ConfigMap + Secret"]
         end
@@ -42,6 +43,7 @@ flowchart TB
     ing --> fe
     ing --> be
     be --> db
+    be <-->|"notifications entre pods<br/>liste noire JWT"| redis
     be --> pvc
     db --> pvcdb
     cfg -.variables d'env.-> be
@@ -58,6 +60,7 @@ flowchart TB
 
 - Le navigateur ne connaît qu'**une adresse** (`http://localhost`) : l'Ingress envoie `/api`, `/ws` (WebSocket) et `/uploads` au backend, le reste au frontend. Le frontend appelle donc l'API en **chemins relatifs**, sans CORS.
 - Le **backend** est sans état (authentification par JWT) : ses pods sont interchangeables et le HPA peut en ajouter. La **base** est dans un StatefulSet avec son propre volume.
+- **Redis** partage entre les pods ce qui ne doit pas rester dans la mémoire d'un seul : les **notifications temps réel** (pub/sub : chaque pod relaie à ses propres clients WebSocket une notification émise par n'importe quel pod) et la **liste noire des jetons révoqués** à la déconnexion (clés à durée de vie, supprimées à l'expiration du jeton). Avec `redis.enabled=false`, le backend repasse en mode « une instance » (mémoire locale).
 - `/actuator` n'est pas exposé à l'extérieur : seuls Kubernetes (sondes) et Prometheus l'interrogent, depuis l'intérieur du cluster.
 
 ## Prérequis
@@ -148,6 +151,7 @@ gh run view <id> --log-failed
 | `http://localhost` répond 404 | Aucun Ingress déployé (Traefik répond seul) | `helm list -n carrefourconnect` ; `kubectl -n carrefourconnect get ingress` |
 | `helm upgrade` échoue (`not ready`) | Un pod de la nouvelle version ne démarre pas | Diagnostiquer avec `logs` / `describe`, puis `helm rollback carrefourconnect <révision>` |
 | Images envoyées en erreur | Volume des uploads absent ou pod sur un autre nœud | `kubectl -n carrefourconnect get pvc` ; les pods backend doivent être sur le même nœud |
+| Notifications temps réel absentes avec plusieurs pods | Redis désactivé ou injoignable | `kubectl -n carrefourconnect get pods` (pod `...-redis-0`) ; `kubectl -n carrefourconnect exec carrefourconnect-redis-0 -- sh -c 'redis-cli -a "$REDIS_PASSWORD" --no-auth-warning PUBSUB NUMSUB carrefourconnect:notifications'` doit afficher le nombre de pods backend |
 | Grafana vide | Application installée avant la supervision, ou namespace non sélectionné | `helm upgrade` de l'application ; choisir le namespace `carrefourconnect` en haut du dashboard |
 | Tout est lent | RAM de WSL saturée | `docker stats` ; `cluster-down.ps1 -StopOnly` pour libérer la mémoire ; voir `.wslconfig` dans SETUP.md |
 
@@ -163,7 +167,7 @@ kubectl -n carrefourconnect top pods
 
 ## Limites connues
 
-- **Notifications WebSocket** : le broker STOMP de Spring est en mémoire dans chaque pod ; une notification n'est poussée en temps réel qu'aux clients connectés au même pod (elle reste visible au rafraîchissement). Évolution prévue : broker partagé (Redis pub/sub).
+- **Redis** : une seule instance (pas de réplication ni de Sentinel) ; s'il est indisponible, les notifications temps réel sont interrompues et la vérification des jetons révoqués est ignorée (choix *fail-open* documenté dans le code), sans retirer les pods du trafic.
 - **Images envoyées** sur un volume `ReadWriteOnce` : tous les pods backend sont sur le même nœud. En production : stockage objet (S3/MinIO).
 - **Schéma de base** géré par `ddl-auto=update` : pas de migrations versionnées (Flyway serait la solution de production).
 - **Historique Git** : une ancienne clé JWT par défaut figure dans les commits antérieurs à la v0.2.0. Elle a été retirée du code, n'est utilisée nulle part et doit être considérée comme compromise ; la clé vient désormais obligatoirement d'un Secret (`JWT_SECRET`).

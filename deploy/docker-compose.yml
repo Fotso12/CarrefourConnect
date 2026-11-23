@@ -42,6 +42,32 @@ services:
         limits:
           memory: 512m
 
+  # ---------- Redis : notifications entre instances + jetons révoqués ----------
+  redis:
+    image: redis:8.10.3-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?définir REDIS_PASSWORD dans deploy/.env}
+    # --requirepass   : mot de passe obligatoire (Redis n'en a aucun par défaut)
+    # --appendonly    : journal sur disque, les jetons révoqués survivent à un redémarrage
+    # --maxmemory / noeviction : plafond de mémoire, et Redis refuse d'écrire plutôt que
+    #   d'effacer des clés au hasard (une révocation ne doit jamais disparaître avant l'heure)
+    command:
+      - sh
+      - -c
+      - exec redis-server --requirepass "$$REDIS_PASSWORD" --appendonly yes --maxmemory 64mb --maxmemory-policy noeviction
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep -q PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          memory: 128m
+
   # ---------- Backend Spring Boot ----------
   backend:
     build: ../backend
@@ -50,6 +76,8 @@ services:
     depends_on:
       db:
         condition: service_healthy   # attend que PostgreSQL soit prêt, pas juste démarré
+      redis:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
       SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
@@ -63,6 +91,10 @@ services:
       CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-factice}
       CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-factice}
       APP_BASE_URL: http://localhost:8080
+      # Notifications et déconnexion partagées via Redis
+      APP_REDIS_ENABLED: "true"
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD}
     volumes:
       # Les images envoyées par les commerçants sont écrites dans /app/uploads.
       - uploads:/app/uploads
@@ -118,3 +150,4 @@ services:
 volumes:
   pgdata:
   uploads:
+  redisdata:

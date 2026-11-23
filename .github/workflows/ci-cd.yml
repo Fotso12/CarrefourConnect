@@ -183,7 +183,7 @@ jobs:
       - name: Lint du chart
         run: |
           FAUX_JWT=$(printf 'x%.0s' {1..64})   # 64 caractères, juste pour passer la validation
-          helm lint "$CHART" -f "$CHART/values-dev.yaml"             --set secrets.postgresPassword=x --set "secrets.jwtSecret=$FAUX_JWT" --strict
+          helm lint "$CHART" -f "$CHART/values-dev.yaml"             --set secrets.postgresPassword=x --set "secrets.jwtSecret=$FAUX_JWT" --set secrets.redisPassword=x --strict
 
       # Secrets factices générés à chaque exécution : rien n'est stocké nulle part.
       # "::add-mask::" les masque (***) s'ils apparaissaient dans les logs.
@@ -191,12 +191,15 @@ jobs:
         run: |
           PG_PASSWORD=$(openssl rand -hex 16)
           JWT_SECRET=$(openssl rand -hex 48)        # 96 caractères (>= 64 exigés)
+          REDIS_PASSWORD=$(openssl rand -hex 16)
           echo "::add-mask::$PG_PASSWORD"
           echo "::add-mask::$JWT_SECRET"
+          echo "::add-mask::$REDIS_PASSWORD"
           cat > "$RUNNER_TEMP/values-ci.yaml" <<EOF
           secrets:
             postgresPassword: "$PG_PASSWORD"
             jwtSecret: "$JWT_SECRET"
+            redisPassword: "$REDIS_PASSWORD"
           backend:
             image: { repository: carrefourconnect-backend, tag: "$TAG", pullPolicy: Never }
             autoscaling: { enabled: false }   # pas de metrics-server dans kind
