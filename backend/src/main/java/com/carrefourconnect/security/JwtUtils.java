@@ -57,6 +57,19 @@ public class JwtUtils {
     }
 
     /**
+     * Date d'expiration du token (sert à fixer la durée de vie de sa révocation).
+     */
+    public java.time.Instant getExpirationFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration()
+                .toInstant();
+    }
+
+    /**
      * Valide le format et la signature du token JWT.
      */
     public boolean validateJwtToken(String authToken) {

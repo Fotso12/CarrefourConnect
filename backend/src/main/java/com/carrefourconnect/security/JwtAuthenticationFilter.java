@@ -26,6 +26,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
+    @Autowired
+    private TokenRevocationService tokenRevocationService;
+
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
@@ -34,6 +37,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
+                // Jeton valide mais révoqué (l'utilisateur s'est déconnecté) : on n'authentifie pas.
+                // La requête continue comme anonyme et les routes protégées répondent 401.
+                if (tokenRevocationService.isRevoked(jwt)) {
+                    logger.info("Jeton JWT révoqué refusé");
+                    filterChain.doFilter(request, response);
+                    return;
+                }
                 String email = jwtUtils.getUserNameFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);

@@ -5,6 +5,7 @@ import com.carrefourconnect.dtos.LoginRequest;
 import com.carrefourconnect.services.interfaces.UtilisateurService;
 import com.carrefourconnect.services.implementations.EmailService;
 import com.carrefourconnect.security.JwtUtils;
+import com.carrefourconnect.security.TokenRevocationService;
 import com.carrefourconnect.security.UserDetailsImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ import com.carrefourconnect.services.interfaces.PasswordResetService;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    private TokenRevocationService tokenRevocationService;
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -62,6 +66,21 @@ public class AuthController {
      * @return 200 OK avec un {@link JwtResponse} contenant le token Bearer et les infos utilisateur,
      *         ou 401 Unauthorized si les identifiants sont invalides.
      */
+        /**
+         * Déconnexion : le jeton présenté est ajouté à la liste noire jusqu'à son expiration.
+         * Idempotent : répond 204 même sans jeton ou avec un jeton déjà invalide.
+         */
+        @PostMapping("/logout")
+        public ResponseEntity<Void> logout(@RequestHeader(value = "Authorization", required = false) String authorization) {
+            if (authorization != null && authorization.startsWith("Bearer ")) {
+                String token = authorization.substring(7);
+                if (jwtUtils.validateJwtToken(token)) {
+                    tokenRevocationService.revoke(token, jwtUtils.getExpirationFromJwtToken(token));
+                }
+            }
+            return ResponseEntity.noContent().build();
+        }
+
         @PostMapping(value = {"/login", "/signin"})
         public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
