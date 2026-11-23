@@ -72,9 +72,16 @@ class _MapScreenState extends State<MapScreen> {
 
     if (permission == LocationPermission.deniedForever) return null;
 
-    return await Geolocator.getCurrentPosition(
-      timeLimit: const Duration(seconds: 5),
-    ).catchError((_) => null);
+    // try/catch plutôt que .catchError((_) => null) : getCurrentPosition renvoie un
+    // Future<Position> (non nullable), et y renvoyer null provoquait une erreur de type
+    // à l'exécution en cas de délai dépassé ou de GPS indisponible.
+    try {
+      return await Geolocator.getCurrentPosition(
+        timeLimit: const Duration(seconds: 5),
+      );
+    } catch (_) {
+      return null; // pas de position : la carte garde son centre par défaut
+    }
   }
 
   Future<void> _loadCommerces() async {

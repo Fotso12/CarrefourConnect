@@ -1,0 +1,24 @@
+{{- /*
+ConfigMap : configuration NON sensible, injectée en variables d'environnement
+dans le backend (envFrom). Les valeurs viennent de .Values.config.
+*/ -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "carrefourconnect.configMapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.labels" . | nindent 4 }}
+data:
+  SPRING_DATASOURCE_URL: {{ include "carrefourconnect.datasourceUrl" . | quote }}
+  SPRING_DATASOURCE_USERNAME: {{ include "carrefourconnect.datasourceUsername" . | quote }}
+  MAILJET_SMTP_HOST: {{ .Values.config.mailjet.smtpHost | quote }}
+  # "quote" : une ConfigMap n'accepte que des chaînes, 587 doit devenir "587"
+  MAILJET_SMTP_PORT: {{ .Values.config.mailjet.smtpPort | quote }}
+  MAILJET_FROM_EMAIL: {{ .Values.config.mailjet.fromEmail | quote }}
+  ADMIN_EMAIL: {{ .Values.config.adminEmail | quote }}
+  CLOUDINARY_CLOUD_NAME: {{ .Values.config.cloudinary.cloudName | quote }}
+  APP_BASE_URL: {{ .Values.config.appBaseUrl | quote }}
+  {{- range $key, $value := .Values.config.extraEnv }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

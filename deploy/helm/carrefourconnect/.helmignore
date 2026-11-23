@@ -1,0 +1,14 @@
+# Fichiers exclus du paquet (helm package) : ils ne font pas partie du chart.
+.DS_Store
+.git/
+.gitignore
+.vscode/
+.idea/
+*.swp
+*.bak
+*.tmp
+*.orig
+# Les fichiers de valeurs secrètes ne doivent JAMAIS être embarqués dans le paquet
+values-secret.yaml
+values-secret.example.yaml
+README.md

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../../environments/environment';
 
 /**
- * URL de base de l'API pour les commerces (Port 8084)
+ * URL de base de l'API pour les commerces (URL de base : environment.apiUrl)
  */
-const API_URL = 'http://localhost:8084/api/commerces';
+const API_URL = `${environment.apiUrl}/api/commerces`;
 
 @Injectable({
   providedIn: 'root'
@@ -92,7 +93,7 @@ export class CommerceService {
     formData.append('file', file);
     formData.append('commerceId', commerceId);
     formData.append('estPrincipale', estPrincipale.toString());
-    return this.http.post<any>(`http://localhost:8084/api/medias/upload`, formData);
+    return this.http.post<any>(`${environment.apiUrl}/api/medias/upload`, formData);
   }
 
   /**

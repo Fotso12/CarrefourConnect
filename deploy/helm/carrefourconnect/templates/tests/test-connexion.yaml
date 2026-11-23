@@ -1,0 +1,46 @@
+{{- /*
+Test du chart, lancé à la demande par "helm test <release>" (jamais pendant install).
+Un pod éphémère vérifie, depuis l'intérieur du cluster, que le backend est prêt
+(base de données comprise) et que le frontend sert l'application.
+Le test réussit si le pod se termine avec le code 0.
+*/ -}}
+{{- $backend := include "carrefourconnect.componentName" (dict "root" . "component" "backend") }}
+{{- $frontend := include "carrefourconnect.componentName" (dict "root" . "component" "frontend") }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "carrefourconnect.fullname" . }}-test-connexion
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    # Supprime le pod de test précédent avant d'en lancer un nouveau
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 65534          # utilisateur "nobody"
+    seccompProfile: { type: RuntimeDefault }
+  containers:
+    - name: test
+      image: "{{ .Values.tests.image.repository }}:{{ .Values.tests.image.tag }}"
+      command:
+        - sh
+        - -c
+        - |
+          set -e
+          echo "Backend : /actuator/health/readiness"
+          wget -qO- http://{{ $backend }}:{{ .Values.backend.port }}/actuator/health/readiness | grep '"status":"UP"'
+          echo "Backend : /api/categories"
+          wget -qO- http://{{ $backend }}:{{ .Values.backend.port }}/api/categories > /dev/null
+          echo "Frontend : page d'accueil"
+          wget -qO- http://{{ $frontend }}:{{ .Values.frontend.port }}/ | grep -qi '<app-root'
+          echo "Tous les tests sont passés"
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities: { drop: ["ALL"] }
+      resources:
+        requests: { cpu: 10m, memory: 8Mi }
+        limits: { cpu: 100m, memory: 32Mi }

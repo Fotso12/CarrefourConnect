@@ -1,0 +1,72 @@
+# ============================================================
+# Frontend : Nginx qui sert les fichiers compilés d'Angular.
+# Ici Nginx ne fait PAS de reverse proxy (contrairement à Docker Compose) : c'est
+# l'Ingress qui envoie /api, /ws et /uploads au backend. L'image utilise donc sa
+# configuration d'origine (frontend-web/nginx.conf), une simple SPA.
+# ============================================================
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  replicas: 1                     # fichiers statiques, très léger (~7 Mo de RAM)
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0           # le nouveau pod doit être prêt avant de couper l'ancien
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: frontend
+        app.kubernetes.io/component: web
+        app.kubernetes.io/part-of: carrefourconnect
+    spec:
+      containers:
+        - name: frontend
+          image: carrefourconnect-frontend:dev
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits:   { cpu: 200m, memory: 64Mi }
+          # Nginx démarre en une fraction de seconde : pas besoin de startupProbe.
+          readinessProbe:
+            httpGet: { path: /, port: http }
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /, port: http }
+            periodSeconds: 15
+          securityContext:
+            # L'image nginx:alpine démarre en root pour ouvrir le port 80 puis délègue
+            # le travail à des processus "nginx" non privilégiés.
+            allowPrivilegeEscalation: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 /**
- * URL de base de l'API d'authentification (Port 8084 configuré)
+ * URL de base de l'API d'authentification (URL de base : environment.apiUrl)
  */
-const AUTH_API = 'http://localhost:8084/api/auth';
+const AUTH_API = `${environment.apiUrl}/api/auth`;
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
 
@@ -42,7 +43,7 @@ export class AuthService {
    * Inscription d'un nouveau commerçant
    */
   registerCommercant(userData: any): Observable<any> {
-    return this.http.post<any>(`http://localhost:8084/api/utilisateurs/inscription/commercant`, userData);
+    return this.http.post<any>(`${environment.apiUrl}/api/utilisateurs/inscription/commercant`, userData);
   }
 
   /**

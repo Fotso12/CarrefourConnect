@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,12 @@ import java.time.LocalDateTime;
 
 /**
  * Initialisation des données de base au démarrage de l'application.
+ *
+ * Plusieurs instances peuvent démarrer EN MÊME TEMPS (2 pods dans Kubernetes) : le schéma
+ * "si absent alors insérer" n'est pas atomique, les deux instances peuvent voir "absent" et
+ * insérer la même ligne. Les contraintes uniques (role.nom, categorie.nom,
+ * abonnement.reference) garantissent qu'une seule insertion réussit ; l'autre instance
+ * reçoit une DataIntegrityViolationException, qu'on ignore ici car la donnée existe bien.
  */
 @Configuration
 @Profile("!test")
@@ -48,7 +55,7 @@ public class DataInitializer {
                         .nom("Général")
                         .description("Catégorie par défaut pour tous les commerces")
                         .build();
-                categorieRepository.save(cat);
+                saveIgnoringConcurrentInsert(() -> categorieRepository.save(cat), "catégorie Général");
             }
 
             // Abonnements de référence (un par type) avec leurs droits
@@ -115,7 +122,20 @@ public class DataInitializer {
                     .nom(nom)
                     .description(description)
                     .build();
-            repository.save(role);
+            saveIgnoringConcurrentInsert(() -> repository.save(role), "rôle " + nom);
+        }
+    }
+
+    /**
+     * Exécute une insertion de donnée de référence. Si une autre instance du backend vient
+     * d'insérer la même ligne (violation de contrainte unique), on continue normalement :
+     * l'objectif "la donnée existe" est atteint.
+     */
+    static void saveIgnoringConcurrentInsert(Runnable insertion, String libelle) {
+        try {
+            insertion.run();
+        } catch (DataIntegrityViolationException e) {
+            log.info("{} déjà créé(e) par une autre instance, on continue.", libelle);
         }
     }
 
@@ -151,7 +171,7 @@ public class DataInitializer {
                     .nomAffiche(nomAffiche)
                     .descriptionPlan(descriptionPlan)
                     .build();
-            repository.save(abo);
+            saveIgnoringConcurrentInsert(() -> repository.save(abo), "abonnement de référence " + type);
         } else {
             // Mise à jour des champs de droits sur l'abonnement de référence existant
             // (au cas où l'abonnement existait avant l'ajout des nouveaux champs)

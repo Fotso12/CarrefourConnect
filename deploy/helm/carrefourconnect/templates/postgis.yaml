@@ -1,0 +1,99 @@
+{{- /*
+PostgreSQL + PostGIS : Service headless + StatefulSet (un disque par pod via
+volumeClaimTemplates). Rien n'est créé si postgis.enabled=false (base externe).
+*/ -}}
+{{- if .Values.postgis.enabled }}
+{{- $name := include "carrefourconnect.postgisHost" . }}
+{{- $ctx := dict "root" . "component" "postgis" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  clusterIP: None             # headless : le nom DNS pointe directement sur le pod
+  selector:
+    {{- include "carrefourconnect.selectorLabels" $ctx | nindent 4 }}
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "carrefourconnect.componentLabels" $ctx | nindent 4 }}
+spec:
+  serviceName: {{ $name }}
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "carrefourconnect.selectorLabels" $ctx | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "carrefourconnect.componentLabels" $ctx | nindent 8 }}
+      annotations:
+        # Si le mot de passe change (helm upgrade), le pod est recréé pour le relire
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+    spec:
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: postgis
+          image: {{ include "carrefourconnect.image" (dict "image" .Values.postgis.image "root" .) }}
+          imagePullPolicy: {{ .Values.postgis.image.pullPolicy }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: {{ .Values.postgis.database | quote }}
+            - name: POSTGRES_USER
+              value: {{ .Values.postgis.username | quote }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "carrefourconnect.secretName" . }}
+                  key: POSTGRES_PASSWORD
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+          resources:
+            {{- toYaml .Values.postgis.resources | nindent 12 }}
+          startupProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U \"$POSTGRES_USER\" -d \"$POSTGRES_DB\" -h 127.0.0.1"]
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+        labels:
+          {{- include "carrefourconnect.selectorLabels" $ctx | nindent 10 }}
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        {{- with .Values.postgis.persistence.storageClass }}
+        storageClassName: {{ . }}
+        {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.postgis.persistence.size }}
+{{- end }}

@@ -2,25 +2,25 @@ package com.carrefourconnect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.mail.javamail.JavaMailSender;
 import com.carrefourconnect.services.interfaces.NotificationService;
 import org.springframework.test.context.ActiveProfiles;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 /**
  * Test de démarrage du contexte applicatif.
  * Utilise le profil 'test' qui configure une base H2 en mémoire.
  */
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+// MOCK (et non NONE) : la configuration Spring Security de l'application est une
+// configuration web (servlet), elle a besoin d'un contexte web pour démarrer.
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @ActiveProfiles("test")
-@DisabledIfEnvironmentVariable(named = "GITHUB_ACTIONS", matches = "true")
 class CarrefourconnectApplicationTests {
 
-	@MockBean
+	@MockitoBean
 	private JavaMailSender javaMailSender;
 
-	@MockBean
+	@MockitoBean
 	private NotificationService notificationService;
 
 	@Test
