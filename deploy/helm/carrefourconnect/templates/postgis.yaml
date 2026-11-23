@@ -39,8 +39,10 @@ spec:
       labels:
         {{- include "carrefourconnect.componentLabels" $ctx | nindent 8 }}
       annotations:
-        # Si le mot de passe change (helm upgrade), le pod est recréé pour le relire
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        # Empreinte du SEUL mot de passe PostgreSQL : s'il change (helm upgrade), le pod est
+        # recréé pour le relire ; un changement d'un autre secret (Redis, JWT...) ne redémarre
+        # pas la base inutilement.
+        checksum/postgres-password: {{ .Values.secrets.postgresPassword | sha256sum }}
     spec:
       terminationGracePeriodSeconds: 60
       containers:
