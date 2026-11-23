@@ -1,0 +1,177 @@
+# ============================================================
+# Valeurs PAR DÉFAUT du chart carrefourconnect.
+# Chaque valeur peut être remplacée :
+#   - par un autre fichier :   helm install ... -f values-dev.yaml -f values-secret.yaml
+#   - en ligne de commande :   helm upgrade ... --set backend.replicaCount=3
+# Le dernier fichier / --set l'emporte. Les templates lisent ces valeurs via
+# {{ .Values.xxx }} (ex. {{ .Values.backend.replicaCount }}).
+# Les défauts visent un "vrai" cluster (images sur GHCR) ; values-dev.yaml adapte à k3d.
+# ============================================================
+
+# Remplace le nom de base des ressources (par défaut : nom de la release Helm)
+nameOverride: ""
+fullnameOverride: ""
+
+# ---------- Configuration commune (devient la ConfigMap) ----------
+config:
+  # URL publique de l'application (liens et URL d'images construites par le backend)
+  appBaseUrl: http://localhost
+  mailjet:
+    smtpHost: smtp.mailjet.com
+    smtpPort: 587
+    fromEmail: no-reply@example.com
+  adminEmail: admin@example.com
+  cloudinary:
+    cloudName: ""
+  # Variables d'environnement supplémentaires, non sensibles (clé: valeur)
+  extraEnv: {}
+
+# ---------- Secrets ----------
+# Deux façons de fournir les secrets :
+#  1. existingSecret vide (défaut) : le chart crée le Secret à partir des valeurs
+#     ci-dessous, fournies dans un fichier values-secret.yaml NON versionné ;
+#  2. existingSecret: "mon-secret" : le chart utilise un Secret déjà présent dans le
+#     namespace (créé à la main, par la CI, ou par un outil comme Sealed Secrets).
+#     Il doit contenir les mêmes clés : POSTGRES_PASSWORD, JWT_SECRET, MAILJET_API_KEY,
+#     MAILJET_API_SECRET, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET.
+secrets:
+  existingSecret: ""
+  postgresPassword: ""        # obligatoire si le chart crée le Secret
+  jwtSecret: ""               # obligatoire, 64 caractères minimum (HS512)
+  mailjetApiKey: ""
+  mailjetApiSecret: ""
+  cloudinaryApiKey: ""
+  cloudinaryApiSecret: ""
+
+# ---------- Base de données PostgreSQL + PostGIS ----------
+postgis:
+  # false = utiliser une base externe (externalDatabase.url), aucun StatefulSet n'est créé
+  enabled: true
+  image:
+    repository: postgis/postgis
+    tag: 17-3.7-alpine
+    pullPolicy: IfNotPresent
+  database: carrefourconnect
+  username: carrefourconnect
+  persistence:
+    size: 2Gi
+    storageClass: ""          # "" = classe de stockage par défaut du cluster (local-path sur k3s)
+  resources:
+    requests: { cpu: 100m, memory: 256Mi }
+    limits: { cpu: 500m, memory: 512Mi }
+
+externalDatabase:
+  # Utilisé seulement si postgis.enabled=false (ex. base managée dans le cloud)
+  url: ""                     # jdbc:postgresql://hote:5432/base
+  username: ""
+
+# ---------- Backend Spring Boot ----------
+backend:
+  replicaCount: 2
+  image:
+    repository: ghcr.io/fotso12/carrefourconnect-backend
+    tag: ""                   # "" = appVersion du Chart.yaml
+    pullPolicy: IfNotPresent
+  # Secret Docker pour un registre privé (ex. GHCR privé) : [{ name: ghcr-credentials }]
+  imagePullSecrets: []
+  port: 8084
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1             # 1 pod de la nouvelle version en plus...
+      maxUnavailable: 0       # ...et aucun ancien pod supprimé avant que le nouveau soit prêt
+  resources:
+    requests: { cpu: 250m, memory: 512Mi }
+    limits: { cpu: "1", memory: 768Mi }
+  # Les trois sondes, écrites telles quelles dans le Deployment (toYaml)
+  startupProbe:
+    httpGet: { path: /actuator/health/liveness, port: http }
+    periodSeconds: 5
+    failureThreshold: 36      # jusqu'à 3 min pour démarrer
+  livenessProbe:
+    httpGet: { path: /actuator/health/liveness, port: http }
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  readinessProbe:
+    httpGet: { path: /actuator/health/readiness, port: http }
+    periodSeconds: 5
+    timeoutSeconds: 3
+    failureThreshold: 3
+  # Pause avant l'arrêt, le temps que le pod soit retiré du Service et de l'Ingress
+  preStopSleepSeconds: 5
+  terminationGracePeriodSeconds: 30
+  podSecurityContext:
+    runAsNonRoot: true
+    runAsUser: 1001
+    runAsGroup: 1001
+    fsGroup: 1001
+    seccompProfile: { type: RuntimeDefault }
+  securityContext:
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: true
+    capabilities: { drop: ["ALL"] }
+  # Volume des images envoyées (/app/uploads), partagé par tous les pods backend
+  uploads:
+    persistence:
+      enabled: true           # false = emptyDir : fichiers perdus à chaque redémarrage
+      size: 1Gi
+      storageClass: ""
+      accessMode: ReadWriteOnce
+  service:
+    type: ClusterIP
+    annotations:
+      # Sessions "sticky" Traefik, nécessaires aux modes de repli de SockJS
+      traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+      traefik.ingress.kubernetes.io/service.sticky.cookie.name: cc_backend
+      traefik.ingress.kubernetes.io/service.sticky.cookie.httponly: "true"
+      traefik.ingress.kubernetes.io/service.sticky.cookie.samesite: lax
+  podAnnotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# ---------- Frontend Angular (Nginx) ----------
+frontend:
+  replicaCount: 1
+  image:
+    repository: ghcr.io/fotso12/carrefourconnect-frontend
+    tag: ""
+    pullPolicy: IfNotPresent
+  imagePullSecrets: []
+  port: 80
+  revisionHistoryLimit: 5
+  resources:
+    requests: { cpu: 10m, memory: 16Mi }
+    limits: { cpu: 200m, memory: 64Mi }
+  service:
+    type: ClusterIP
+    annotations: {}
+  podAnnotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+# ---------- Ingress ----------
+ingress:
+  enabled: true
+  className: traefik
+  annotations: {}
+  # host vide = toutes les adresses (localhost, IP du PC...). Ex. : carrefourconnect.example.com
+  host: ""
+  # Chemins envoyés au backend ; tout le reste ("/") va au frontend.
+  # /actuator n'en fait volontairement pas partie.
+  backendPaths:
+    - /api
+    - /ws
+    - /uploads
+  tls: []
+  #  - secretName: carrefourconnect-tls
+  #    hosts: [carrefourconnect.example.com]
+
+# ---------- helm test ----------
+tests:
+  image:
+    repository: busybox
+    tag: "1.37"

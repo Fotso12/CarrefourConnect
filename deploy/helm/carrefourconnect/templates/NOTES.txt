@@ -1,0 +1,25 @@
+CarrefourConnect {{ .Chart.AppVersion }} est déployé (release "{{ .Release.Name }}", révision {{ .Release.Revision }}, namespace "{{ .Release.Namespace }}").
+
+1. Suivre le démarrage (Spring Boot met ~30 s) :
+   kubectl -n {{ .Release.Namespace }} get pods -w
+   kubectl -n {{ .Release.Namespace }} rollout status deployment/{{ include "carrefourconnect.componentName" (dict "root" . "component" "backend") }}
+
+2. Ouvrir l'application :
+{{- if .Values.ingress.enabled }}
+   {{ if .Values.ingress.tls }}https{{ else }}http{{ end }}://{{ .Values.ingress.host | default "localhost" }}
+{{- else }}
+   kubectl -n {{ .Release.Namespace }} port-forward svc/{{ include "carrefourconnect.componentName" (dict "root" . "component" "frontend") }} 8080:{{ .Values.frontend.port }}
+   puis http://localhost:8080
+{{- end }}
+
+3. Vérifier le déploiement avec les tests du chart :
+   helm test {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+4. Historique et retour arrière :
+   helm history {{ .Release.Name }} -n {{ .Release.Namespace }}
+   helm rollback {{ .Release.Name }} <révision> -n {{ .Release.Namespace }}
+{{- if .Values.backend.uploads.persistence.enabled }}
+
+Note : le volume des images envoyées est conservé après "helm uninstall"
+(helm.sh/resource-policy: keep).
+{{- end }}

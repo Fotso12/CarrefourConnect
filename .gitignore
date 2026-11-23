@@ -34,3 +34,7 @@ backend/uploads/
 # Environment
 .env
 .env.local
+
+# Secrets Kubernetes / Helm (seuls les fichiers *.example.yaml sont versionnés)
+deploy/k8s/secret.yaml
+**/values-secret.yaml

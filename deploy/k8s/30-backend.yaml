@@ -1,0 +1,230 @@
+# ============================================================
+# Backend Spring Boot
+#   - PersistentVolumeClaim : disque partagé pour les images envoyées (/app/uploads)
+#   - Deployment            : 2 réplicas interchangeables, mises à jour sans coupure
+#   - Service ClusterIP     : une adresse interne stable devant les 2 pods
+# ============================================================
+
+# ---------- Volume des images envoyées ----------
+# ReadWriteOnce (RWO) = montable par UN SEUL NŒUD à la fois, mais par plusieurs pods
+# sur ce nœud. Le stockage local-path de k3s crée ce volume sur le disque d'un nœud
+# et y "épingle" le volume (nodeAffinity) : Kubernetes place donc automatiquement
+# les 2 pods backend sur ce nœud, et ils voient les mêmes fichiers.
+# Limite assumée : si ce nœud tombe, les 2 pods tombent avec lui. En production on
+# utiliserait un stockage objet (S3, MinIO) ou un volume ReadWriteMany.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: backend-uploads
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  accessModes: ["ReadWriteOnce"]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+# ---------- Deployment ----------
+# Un Deployment gère des pods SANS ÉTAT et interchangeables : peu importe lequel
+# répond, ils ont des noms aléatoires, et Kubernetes peut en tuer ou en créer à tout
+# moment (mise à jour, panne, mise à l'échelle).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: carrefourconnect
+spec:
+  replicas: 2
+  revisionHistoryLimit: 5           # garde 5 anciennes versions pour "kubectl rollout undo"
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  # Mise à jour progressive (rolling update) :
+  #  - maxSurge: 1        -> on crée d'abord 1 pod de la nouvelle version en plus ;
+  #  - maxUnavailable: 0  -> on ne supprime un ancien pod qu'une fois le nouveau PRÊT
+  #                          (readinessProbe OK). On a donc toujours 2 pods qui répondent.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backend
+        app.kubernetes.io/component: api
+        app.kubernetes.io/part-of: carrefourconnect
+    spec:
+      # Sécurité au niveau du pod : on refuse de démarrer si l'image tourne en root.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001                 # l'utilisateur "spring" créé dans le Dockerfile
+        runAsGroup: 1001
+        fsGroup: 1001
+        seccompProfile:
+          type: RuntimeDefault          # filtre les appels système dangereux
+      # Laisse 30 s à Spring pour finir les requêtes en cours (arrêt "graceful").
+      terminationGracePeriodSeconds: 30
+
+      # Conteneur d'initialisation : il s'exécute AVANT le backend et doit se terminer
+      # avec succès. Il attend que PostgreSQL accepte des connexions : c'est l'équivalent
+      # du "depends_on: condition: service_healthy" de Docker Compose. Sans lui, Spring
+      # échouerait au démarrage et le pod redémarrerait en boucle (CrashLoopBackOff).
+      initContainers:
+        - name: attendre-postgis
+          image: postgis/postgis:17-3.7-alpine   # déjà téléchargée pour la base : contient pg_isready
+          # -U est obligatoire ici : le pod tourne avec l'UID 1001 (securityContext), qui
+          # n'existe pas dans l'image PostGIS ; sans nom d'utilisateur explicite, pg_isready
+          # abandonne sans même essayer (code 3 "no attempt"). Il n'authentifie pas : il
+          # vérifie seulement que le serveur accepte des connexions.
+          command:
+            - sh
+            - -c
+            - until pg_isready -h postgis -p 5432 -U "$POSTGRES_USER" -q; do echo "PostGIS pas encore prêt..."; sleep 2; done
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef: { name: carrefourconnect-config, key: POSTGRES_USER }
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities: { drop: ["ALL"] }
+          resources:
+            requests: { cpu: 10m, memory: 16Mi }
+            limits:   { cpu: 100m, memory: 64Mi }
+
+      containers:
+        - name: backend
+          # Image construite en local puis importée dans k3d (k3d image import).
+          image: carrefourconnect-backend:dev
+          # IfNotPresent : utilise l'image déjà présente sur le nœud sans chercher un
+          # registre (il n'y en a pas en local). Avec le tag "latest", Kubernetes
+          # tenterait Always par défaut et échouerait (ErrImagePull).
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8084
+          # Configuration non sensible : TOUTES les clés de la ConfigMap deviennent
+          # des variables d'environnement.
+          envFrom:
+            - configMapRef:
+                name: carrefourconnect-config
+          # Secrets : clé par clé, depuis le Secret.
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef: { name: carrefourconnect-config, key: POSTGRES_USER }
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: POSTGRES_PASSWORD }
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: JWT_SECRET }
+            - name: MAILJET_API_KEY
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: MAILJET_API_KEY }
+            - name: MAILJET_API_SECRET
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: MAILJET_API_SECRET }
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: CLOUDINARY_API_KEY }
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef: { name: carrefourconnect-secrets, key: CLOUDINARY_API_SECRET }
+
+          # Ressources pensées pour un PC de 16 Go (2 réplicas = 1 Go réservé).
+          # La JVM se cale sur la limite mémoire : tas max = 75 % de 768 Mi (Dockerfile).
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"          # une limite trop basse ralentit beaucoup le démarrage de Spring
+              memory: 768Mi     # au-delà : le pod est tué (OOMKilled) et redémarré
+
+          # ---- Les 3 sondes (endpoints Actuator ajoutés à l'étape 0) ----
+          # startupProbe : "as-tu fini de démarrer ?". Tant qu'elle n'a pas réussi, les
+          # deux autres sondes sont suspendues. Spring met 20 à 60 s à démarrer : sans elle,
+          # la livenessProbe tuerait le pod avant la fin du démarrage, en boucle.
+          startupProbe:
+            httpGet: { path: /actuator/health/liveness, port: http }
+            periodSeconds: 5
+            failureThreshold: 36          # 36 x 5 s = jusqu'à 3 min pour démarrer
+          # livenessProbe : "es-tu encore vivant ?". En cas d'échecs répétés (blocage,
+          # deadlock), Kubernetes REDÉMARRE le conteneur. Ne vérifie PAS la base de données.
+          livenessProbe:
+            httpGet: { path: /actuator/health/liveness, port: http }
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          # readinessProbe : "peux-tu recevoir du trafic ?" (inclut la base de données).
+          # En cas d'échec, le pod est seulement RETIRÉ du Service (plus de requêtes),
+          # sans redémarrage ; il y revient dès que la sonde repasse au vert.
+          readinessProbe:
+            httpGet: { path: /actuator/health/readiness, port: http }
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+          # Avant l'arrêt : 5 s de pause, le temps que le pod soit retiré du Service et
+          # de Traefik. Sans ça, quelques requêtes pourraient encore arriver sur un pod
+          # en train de s'arrêter pendant un rolling update (erreurs 502).
+          lifecycle:
+            preStop:
+              sleep:
+                seconds: 5
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true    # le conteneur ne peut écrire QUE dans les volumes montés
+            capabilities: { drop: ["ALL"] }
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+            - name: tmp                     # Tomcat et la JVM ont besoin d'écrire dans /tmp
+              mountPath: /tmp
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: backend-uploads
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi                # disque temporaire, effacé à chaque redémarrage du pod
+---
+# ---------- Service ClusterIP ----------
+# Les pods changent d'IP à chaque recréation. Le Service fournit un nom DNS ("backend")
+# et une IP virtuelle stables, et répartit les requêtes entre les pods PRÊTS (readiness).
+# ClusterIP = joignable seulement depuis l'intérieur du cluster ; l'extérieur passe par l'Ingress.
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: carrefourconnect
+  labels:
+    app.kubernetes.io/name: backend
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: carrefourconnect
+  annotations:
+    # Sessions "collantes" (sticky) dans Traefik : un même navigateur reste sur le
+    # même pod grâce à un cookie. Nécessaire pour SockJS : quand la WebSocket n'est
+    # pas disponible, il simule une connexion avec PLUSIEURS requêtes HTTP qui doivent
+    # toutes arriver au même pod (la session SockJS n'existe que dans ce pod).
+    traefik.ingress.kubernetes.io/service.sticky.cookie: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.name: cc_backend
+    traefik.ingress.kubernetes.io/service.sticky.cookie.httponly: "true"
+    traefik.ingress.kubernetes.io/service.sticky.cookie.samesite: lax
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: backend
+  ports:
+    - name: http
+      port: 8084
+      targetPort: http

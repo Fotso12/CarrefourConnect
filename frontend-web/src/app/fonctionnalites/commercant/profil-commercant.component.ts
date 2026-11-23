@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../coeur/services/auth.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-profil-commercant',
@@ -23,7 +24,7 @@ export class ProfilCommercantComponent {
   private pendingAction: (() => void) | null = null;
   editModel: any = {};
 
-  private apiBase = 'http://localhost:8084/api';
+  private apiBase = `${environment.apiUrl}/api`;
   private currentUserId: string | null = null;
 
   constructor(private auth: AuthService, private router: Router, private http: HttpClient) {

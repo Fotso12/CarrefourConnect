@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 /**
- * Service pour la gestion des utilisateurs (Port 8084)
+ * Service pour la gestion des utilisateurs (URL de base : environment.apiUrl)
  */
-const API_URL = 'http://localhost:8084/api/utilisateurs';
+const API_URL = `${environment.apiUrl}/api/utilisateurs`;
 
 @Injectable({
   providedIn: 'root'
