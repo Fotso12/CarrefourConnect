@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.carrefourconnect</groupId>
 	<artifactId>carrefourconnect</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0</version>
 	<name>carrefourconnect</name>
 	<description>Projet d&apos;annuaire numérique interactif des commerces</description>
 	<url/>
